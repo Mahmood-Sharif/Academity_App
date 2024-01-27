@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:academity_app/models/academy.dart';
+import 'package:academity_app/models/class.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
   final String baseUrl =
-      "http://192.168.28.119/Academity_App/api_academity"; // Your API base URL
+      "http://192.168.28.119/Academity_App/Academity/api_academity"; // Your API base URL
 
   // Constructor
   ApiService();
@@ -45,6 +46,26 @@ class ApiService {
           jsonResponse.map((model) => Academy.fromJson(model)));
     } else {
       throw Exception('Failed to load academies');
+    }
+  }
+
+  Future<List<Classes>> fetchClassesForAcademy(int academyId) async {
+    final url =
+        '$baseUrl/fetch_classes.php?academy_id=$academyId'; // Changed parameter name
+
+    print('Fetching classes from: $url'); // Debug statement
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        Iterable list = json.decode(response.body);
+        return list.map((model) => Classes.fromJson(model)).toList();
+      } else {
+        print('Failed to load classes. Status code: ${response.statusCode}');
+        throw Exception('Failed to load classes');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+      throw Exception('Error occurred: $e');
     }
   }
 }

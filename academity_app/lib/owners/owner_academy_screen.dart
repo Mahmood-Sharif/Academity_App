@@ -1,4 +1,5 @@
 import 'package:academity_app/models/academy.dart';
+import 'package:academity_app/owners/widgets/academy_list.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/api_connection/api_service.dart';
 
@@ -57,33 +58,3 @@ class _OwnerAcademyScreenState extends State<OwnerAcademyScreen> {
   }
 }
 
-class AcademyListItem extends StatelessWidget {
-  final Academy academy;
-
-  const AcademyListItem({super.key, required this.academy});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20.0), // Adjust the radius to control the roundness
-          child: SizedBox(
-            width: 380.0, // Adjust the width as needed
-            height: 150.0, // Adjust the height as needed
-            child: Image.asset(
-              'lib/images/about-slider.jpg', // Replace with your static image path
-              fit: BoxFit.cover, // Adjust the fit as needed
-            ),
-          ),
-        ),
-        ListTile(
-          title: Text(academy.name),
-          subtitle: Text(academy.location),
-        ),
-        const Divider(height: 20,),
-      ],
-    );
-  }
-}
