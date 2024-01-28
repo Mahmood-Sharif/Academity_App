@@ -1,32 +1,26 @@
 <?php
 include 'connection.php';
 
-function fetchAcademiesByOwnerId($ownerId) {
-    $connection = getDbConnection(); // Use your database connection function
+$sportId = $_GET['sportId'] ?? '';
 
-    $sql = "SELECT * FROM academies WHERE owner_id = ?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("i", $ownerId);
-
+if ($sportId) {
+    $conn = getDbConnection();
+    $sql = "SELECT * FROM academies WHERE sports_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $sportId);
     $stmt->execute();
     $result = $stmt->get_result();
+
     $academies = array();
 
-    while($row = $result->fetch_assoc()) {
-        array_push($academies, $row);
+    while ($row = $result->fetch_assoc()) {
+        $academies[] = $row;
     }
 
-    $stmt->close();
-    $connection->close();
-
-    return $academies;
+    echo json_encode($academies);
+} else {
+    echo json_encode([]);
 }
 
-// Fetching ownerId from the request
-$ownerId = isset($_GET['ownerId']) ? $_GET['ownerId'] : 0;
-$academies = fetchAcademiesByOwnerId($ownerId);
-
-// Returning the result as JSON
-header('Content-Type: application/json');
-echo json_encode($academies);
-
+$conn->close();
+?>

@@ -27,7 +27,6 @@ class AcademyListItem extends StatelessWidget {
               );
             } catch (e) {
               // Handle the error appropriately
-              print('Error fetching classes: $e');
             }
           },
           child: ClipRRect(

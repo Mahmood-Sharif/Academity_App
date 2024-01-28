@@ -1,5 +1,5 @@
 import 'package:academity_app/api_connection/api_service.dart';
-import 'package:academity_app/owners/owner_academy_screen.dart';
+import 'package:academity_app/users/browse_sports_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,22 +23,21 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    var response = await _apiService.loginOwner(email, password);
+    var response = await _apiService.loginUser(email, password);
 
-    print('LoginScreen response: $response'); // Debug statement
 
     setState(() {
       _isLoading = false;
     });
 
-   if (response['status'] == "Login successful") {
-  int ownerId = response['ownerId']; // Correctly retrieve ownerId from response
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) => OwnerAcademyScreen(ownerId: ownerId),
-    ),
-  );
+    if (response['status'] == "Login successful") {
+// Correctly retrieve ownerId from response
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>  const BrowseSportsScreen(),
+        ),
+      );
     } else {
       _showErrorDialog(response['message'] ?? 'Login Failed');
     }

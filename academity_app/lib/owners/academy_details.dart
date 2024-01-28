@@ -4,6 +4,7 @@ import 'package:academity_app/models/academy.dart';
 import 'package:academity_app/models/class.dart';
 import 'package:academity_app/owners/widgets/classes_list.dart';
 
+
 class AcademyDetails extends StatefulWidget {
   final Academy academy;
 
@@ -32,7 +33,6 @@ class _AcademyDetailsState extends State<AcademyDetails> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Error fetching classes: $e');
       setState(() => _isLoading = false);
     }
   }
