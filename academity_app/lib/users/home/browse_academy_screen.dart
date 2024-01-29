@@ -1,3 +1,4 @@
+import 'package:academity_app/users/home/academy_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/api_connection/api_service.dart';
 
@@ -30,10 +31,17 @@ class BrowseAcademyScreen extends StatelessWidget {
                 var academy = snapshot.data![index];
                 var baseUrl = 'http://192.168.28.119/';
                 var imageUrl = '$baseUrl${academy['image_url']}';
+                // Inside ListView.builder of BrowseAcademyScreen
                 return ListTile(
                   leading: Image.network(imageUrl, fit: BoxFit.cover),
                   title: Text(academy['name']),
                   subtitle: Text(academy['location']),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AcademyDetailsScreen(
+                          academyId: academy['academy_id'].toString()),
+                    ));
+                  },
                 );
               },
             );

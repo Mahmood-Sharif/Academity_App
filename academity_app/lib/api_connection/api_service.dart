@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:academity_app/models/class.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -63,25 +62,29 @@ class ApiService {
         throw Exception('Failed to load academies');
       }
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
-  Future<List<Classes>> fetchClassesForAcademy(int academyId) async {
-    final url =
-        '$baseUrl/fetch_classes.php?academy_id=$academyId'; // Changed parameter name
+  Future<dynamic> fetchAcademyDetails(String academyId) async {
+    final response = await http.get(
+        Uri.parse("$baseUrl/fetch_academy_details.php?academyId=$academyId"));
 
-    // Debug statement
-    try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        Iterable list = json.decode(response.body);
-        return list.map((model) => Classes.fromJson(model)).toList();
-      } else {
-        throw Exception('Failed to load classes');
-      }
-    } catch (e) {
-      throw Exception('Error occurred: $e');
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load academy details');
+    }
+  }
+
+  Future<List<dynamic>> fetchClasses(String academyId) async {
+    final response = await http
+        .get(Uri.parse("$baseUrl/fetch_classes.php?academyId=$academyId"));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load classes');
     }
   }
 }

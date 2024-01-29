@@ -1,4 +1,4 @@
-import 'package:academity_app/users/browse_sports_screen.dart';
+import 'package:academity_app/users/home/browse_sports_screen.dart';
 import 'package:flutter/material.dart';
 
 

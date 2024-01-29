@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 23, 2024 at 07:17 PM
+-- Generation Time: Jan 29, 2024 at 03:18 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -34,18 +34,19 @@ CREATE TABLE `academies` (
   `phone` int(20) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `image_url` varchar(255) DEFAULT NULL,
-  `owner_id` int(50) DEFAULT NULL
+  `owner_id` int(50) NOT NULL,
+  `sports_id` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `academies`
 --
 
-INSERT INTO `academies` (`academy_id`, `location`, `name`, `phone`, `description`, `image_url`, `owner_id`) VALUES
-(1, 'Los Angeles', 'Sports Excellence Academy', 555, 'Training champions in various sports disciplines', 'https://example.com/sports_excellence.jpg', 3),
-(2, 'Barcelona', 'Barca Soccer Academy', 333, 'Developing future soccer stars with Barca style', 'https://example.com/barca_soccer.jpg', 3),
-(3, 'Melbourne', 'Grand Slam Tennis Center', 777, 'Unleashing the potential of tennis enthusiasts', 'https://example.com/tennis_center.jpg', 3),
-(4, 'Los Angeles', 'Sports Excellence Academy', 555, 'Training champions in various sports disciplines', 'https://example.com/sports_excellence.jpg', 3);
+INSERT INTO `academies` (`academy_id`, `location`, `name`, `phone`, `description`, `image_url`, `owner_id`, `sports_id`) VALUES
+(1, 'Los Angeles', 'Sports Excellence Academy', 555, 'Training champions in various sports disciplines', 'Academity_App/Academity/images/Academy.jpg', 3, 13),
+(2, 'Barcelona', 'Barca Soccer Academy', 333, 'Developing future soccer stars with Barca style', 'Academity_App/Academity/images/Academy.jpg', 3, 13),
+(3, 'Melbourne', 'Grand Slam Tennis Center', 777, 'Unleashing the potential of tennis enthusiasts', 'Academity_App/Academity/images/Academy.jpg', 3, 15),
+(4, 'Los Angeles', 'Sports Excellence Academy', 101010, 'Training champions in various sports disciplines', 'Academity_App/Academity/images/Academy.jpg', 3, 13);
 
 -- --------------------------------------------------------
 
@@ -64,6 +65,27 @@ CREATE TABLE `classes` (
   `min_age` int(5) NOT NULL,
   `max_age` int(5) NOT NULL,
   `academy_id` int(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `classes`
+--
+
+INSERT INTO `classes` (`class_id`, `class_name`, `day_of_week`, `end_time`, `instructor`, `price`, `start_time`, `min_age`, `max_age`, `academy_id`) VALUES
+(1, 'Male U8', 'Sunday, Tuesday', '06:00:00', 'John Doe', 40.00, '04:30:00', 3, 8, 1),
+(2, 'Male U12', 'Monday, Wednesday', '05:30:00', 'John Joe', 100.00, '04:00:00', 9, 12, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coaches`
+--
+
+CREATE TABLE `coaches` (
+  `coach_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -94,9 +116,22 @@ INSERT INTO `owners` (`owner_id`, `email`, `name`, `password`, `academy_id`) VAL
 --
 
 CREATE TABLE `sports` (
-  `sport_name` int(50) NOT NULL,
-  `image_url` varchar(255) DEFAULT NULL
+  `sports_id` int(50) NOT NULL,
+  `sport_name` varchar(255) NOT NULL,
+  `image_url` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sports`
+--
+
+INSERT INTO `sports` (`sports_id`, `sport_name`, `image_url`) VALUES
+(13, 'Football', 'Academity_App/Academity/images/Football.jpg'),
+(14, 'Basketball', 'Academity_App/Academity/images/Basketball.jpg'),
+(15, 'Tennis', 'Academity_App/Academity/images/Tennis.jpg'),
+(16, 'Fencing', 'Academity_App/Academity/images/Fencing.jpg'),
+(17, 'Taekwondo', 'Academity_App/Academity/images/Taekwondo.jpg'),
+(18, 'Boxing', 'Academity_App/Academity/images/Boxing.jpg');
 
 -- --------------------------------------------------------
 
@@ -141,6 +176,7 @@ CREATE TABLE `users` (
   `user_id` int(50) NOT NULL,
   `age` int(11) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
+  `password` varchar(50) NOT NULL,
   `first_name` varchar(25) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -149,8 +185,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `age`, `email`, `first_name`, `last_name`) VALUES
-(1, 16, 'm@m.com', 'Mahmood', 'Fareed');
+INSERT INTO `users` (`user_id`, `age`, `email`, `password`, `first_name`, `last_name`) VALUES
+(1, 16, 'm', '1', 'Mahmood', 'Fareed');
 
 --
 -- Indexes for dumped tables
@@ -161,7 +197,8 @@ INSERT INTO `users` (`user_id`, `age`, `email`, `first_name`, `last_name`) VALUE
 --
 ALTER TABLE `academies`
   ADD PRIMARY KEY (`academy_id`),
-  ADD KEY `owner_id` (`owner_id`);
+  ADD KEY `owner_id` (`owner_id`),
+  ADD KEY `sports_id` (`sports_id`);
 
 --
 -- Indexes for table `classes`
@@ -169,6 +206,12 @@ ALTER TABLE `academies`
 ALTER TABLE `classes`
   ADD PRIMARY KEY (`class_id`),
   ADD KEY `academy_id` (`academy_id`);
+
+--
+-- Indexes for table `coaches`
+--
+ALTER TABLE `coaches`
+  ADD PRIMARY KEY (`coach_id`);
 
 --
 -- Indexes for table `owners`
@@ -181,7 +224,7 @@ ALTER TABLE `owners`
 -- Indexes for table `sports`
 --
 ALTER TABLE `sports`
-  ADD PRIMARY KEY (`sport_name`);
+  ADD PRIMARY KEY (`sports_id`) USING BTREE;
 
 --
 -- Indexes for table `studentenrollments`
@@ -217,13 +260,25 @@ ALTER TABLE `academies`
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-  MODIFY `class_id` int(50) NOT NULL AUTO_INCREMENT;
+  MODIFY `class_id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `coaches`
+--
+ALTER TABLE `coaches`
+  MODIFY `coach_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `owners`
 --
 ALTER TABLE `owners`
   MODIFY `owner_id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `sports`
+--
+ALTER TABLE `sports`
+  MODIFY `sports_id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `studentenrollments`

@@ -5,19 +5,17 @@ $academyId = $_GET['academyId'] ?? '';
 
 if ($academyId) {
     $conn = getDbConnection();
-    $sql = "SELECT * FROM classes WHERE academy_id = ?";
+    $sql = "SELECT * FROM academies WHERE academy_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $academyId);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    $classes = array();
-
-    while ($row = $result->fetch_assoc()) {
-        $classes[] = $row;
+    if ($row = $result->fetch_assoc()) {
+        echo json_encode($row);
+    } else {
+        echo json_encode(["error" => "Academy not found"]);
     }
-
-    echo json_encode($classes);
 } else {
     echo json_encode(["error" => "Academy ID not provided"]);
 }

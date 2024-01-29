@@ -1,5 +1,5 @@
 import 'package:academity_app/api_connection/api_service.dart';
-import 'package:academity_app/users/browse_sports_screen.dart';
+import 'package:academity_app/users/home/browse_sports_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
