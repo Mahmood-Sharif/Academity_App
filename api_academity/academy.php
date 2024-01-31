@@ -74,9 +74,3 @@ function deleteAcademy($academyId)
     $stmt->close();
     $connection->close();
 }
-
-// Usage examples (uncomment to test)
-// createAcademy("Location", "Academy Name", 1234567890, "Description", "image_url", 1);
-// readAcademy(1);
-// updateAcademy(1, "New Location", "New Name", 987654321, "New Description", "new_image_url", 2);
-// deleteAcademy(1);
