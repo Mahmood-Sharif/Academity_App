@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:academity_app/models/student.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -31,7 +32,7 @@ class ApiService {
       return {'status': 'Error', 'message': e.toString()};
     }
   }
-
+  
   Future<List<dynamic>> fetchSports() async {
     try {
       final url = Uri.parse("$baseUrl/fetch_sports.php");
@@ -87,4 +88,24 @@ class ApiService {
       throw Exception('Failed to load classes');
     }
   }
+
+Future<Map<String, dynamic>> registerStudent(Student student) async {
+  Uri apiUrl = Uri.parse('$baseUrl/register_student.php');
+  try {
+    final response = await http.post(
+      apiUrl,
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(student.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      return {'status': 'error', 'message': 'Failed to register student, status code: ${response.statusCode}'};
+    }
+  } catch (e) {
+    return {'status': 'error', 'message': e.toString()};
+  }
+}
+
 }

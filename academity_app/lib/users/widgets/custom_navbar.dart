@@ -1,4 +1,5 @@
 import 'package:academity_app/users/home/browse_sports_screen.dart';
+import 'package:academity_app/users/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -21,12 +22,12 @@ class _CustomNavBarState extends State<CustomNavBar> {
           MaterialPageRoute(builder: (context) => const BrowseSportsScreen()), // Update here
         );
         break;
-      // case 1:
-      //   Navigator.pushReplacement(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => ),
-      //   );
-      //   break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfileScreen()),
+        );
+        break;
       // Add more cases for other tabs
     }
   }
