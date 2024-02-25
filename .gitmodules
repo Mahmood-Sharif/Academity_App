@@ -1,0 +1,3 @@
+[submodule "admin_portal"]
+	path = admin_portal
+	url = git@github.com:HyzenB/Academity-admin-portal.git
