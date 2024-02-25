@@ -117,6 +117,34 @@ class InitialMigration extends Migration
         $this->forge->addForeignKey('academy_id', 'academies', 'academy_id');
         $this->forge->createTable('classes', true);
 
+        // Class Timings table
+        $this->forge->addField([
+          'timing_id' => [
+            'type' => 'INT',
+            'unsigned' => true,
+            'auto_increment' => true,
+          ],
+          'class_id' => [
+            'type' => 'INT',
+            'unsigned' => true,
+          ],
+          'day_of_week' => [
+            'type' => ($this->db->getPlatform() == 'SQLite3')
+              ? 'VARCHAR(3) CHECK( day_of_week IN ("SAT", "SUN", "MON", "TUE", "WED", "THU", "FRI") )'
+              : 'ENUM("SAT", "SUN", "MON", "TUE", "WED", "THU", "FRI")'
+          ],
+          'start_time' => [
+            'type' => 'TIME',
+          ],
+          'end_time' => [
+            'type' => 'TIME',
+          ],
+        ]);
+        $this->forge->addPrimaryKey('timing_id');
+        $this->forge->addForeignKey('class_id', 'classes', 'class_id');
+        $this->forge->createTable('class_timings');
+        $this->db->simpleQuery('CREATE INDEX class_timings_class_id ON class_timings (class_id, start_time)');
+
         // Offers table
         $this->forge->addField([
           'offer_id' => [
@@ -155,6 +183,10 @@ class InitialMigration extends Migration
             'unsigned'       => true,
             'auto_increment' => true,
           ],
+          'class_id' => [
+            'type'     => 'INT',
+            'unsigned' => true,
+          ],
           'start_time' => [
             'type' => 'DATETIME',
           ],
@@ -172,8 +204,10 @@ class InitialMigration extends Migration
           ]
         ]);
         $this->forge->addPrimaryKey('price_id');
+        $this->forge->addForeignKey('class_id', 'classes', 'class_id');
         $this->forge->addForeignKey('offer_id', 'offers', 'offer_id');
         $this->forge->createTable('prices', true);
+        $this->db->simpleQuery('CREATE INDEX prices_class_timed ON prices (class_id, start_time)');
 
         // Sports table
         $this->forge->addField([
@@ -217,8 +251,11 @@ class InitialMigration extends Migration
             'type'       => 'VARCHAR',
             'constraint' => '50'
           ],
-          'gender' => [
-            'type' => 'ENUM("Male","Female")',
+          'gender' =>
+          [
+            'type' => ($this->db->getPlatform() == 'SQLite3')
+              ? 'VARCHAR(7) CHECK( gender IN ("Male", "Female") )'
+              : 'ENUM("Male", "Female")',
             'null' => true
           ],
           'medical_condition' => [
@@ -287,6 +324,41 @@ class InitialMigration extends Migration
         $this->forge->addForeignKey('student_id', 'students', 'student_id');
         $this->forge->addForeignKey('class_id', 'classes', 'class_id');
         $this->forge->createTable('enrollments', true);
+
+        // Transactions table
+        $this->forge->addField([
+          'transaction_id' => [
+            'type'           => 'INT',
+            'unsigned'       => true,
+            'auto_increment' => true
+          ],
+          'timestamp' => [
+            'type' => 'DATETIME',
+          ],
+          'amount' => [
+            'type' => 'DECIMAL'
+          ],
+          'transaction_method' =>
+          [
+            'type' => ($this->db->getPlatform() == 'SQLite3')
+              ? 'VARCHAR(6) CHECK( transaction_method IN ("Debit", "Credit", "Tap") )'
+              : 'ENUM("Debit", "Credit", "Tap")',
+          ],
+          'transaction_status' =>
+          [
+            'type' => ($this->db->getPlatform() == 'SQLite3')
+              ? 'VARCHAR(10) CHECK( transaction_status IN ("Pending", "Processing", "Success", "Failure", "Refunded") )'
+              : 'ENUM("Pending", "Processing", "Success", "Failure", "Refunded")',
+          ],
+          'enrollment_id' => [
+            'type' => 'INT',
+            'unsigned' => true
+          ],
+        ]);
+        $this->forge->addPrimaryKey('transaction_id');
+        $this->forge->addForeignKey('enrollment_id', 'enrollments', 'enrollment_id');
+        $this->forge->createTable('transactions');
+        $this->db->simpleQuery('CREATE INDEX transaction_time ON transactions (timestamp)');
     }
 
     public function down(): void
