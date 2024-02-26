@@ -9,6 +9,9 @@ use CodeIgniter\Router\RouteCollection;
 // root route
 $routes->get('/', 'Home::index');
 
+$routes->resource('test', ['controller' => 'Api\Test']);
+service('auth')->routes($routes);
+
 // API Routes all routes inside the function are prefixed with 'api'.
 // e.g. /api/test, /api/login
 $routes->group('api', static function ($routes) {
