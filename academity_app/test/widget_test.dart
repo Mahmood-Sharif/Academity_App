@@ -7,7 +7,7 @@
 
 // ignore_for_file: unused_import
 
-import 'package:academity_app/auth/login.dart';
+import 'package:academity_app/views/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,7 +16,7 @@ import 'package:academity_app/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const LoginScreen());
+    await tester.pumpWidget( const LoginScreen());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
