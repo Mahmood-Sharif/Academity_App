@@ -13,7 +13,7 @@ function loginUsers($connection, $email, $password) {
     $stmt->bind_result($userId, $storedPassword);
 
     if ($stmt->fetch() && $password === $storedPassword) {
-        return ['status' => 'Login successful', 'user_id' => $userId];
+        return ['status' => 'Login successful', 'user_id' => $userId, 'email' => $email];
     } else {
         return ['status' => 'Login failed', 'message' => 'Invalid credentials'];
     }
@@ -35,5 +35,4 @@ error_log("Login attempt: " . $jsonOutput); // Log the output
 
 echo $jsonOutput;
 
-// Usage example (uncomment to test)
-// loginOwner("email@example.com", "testPassword");
+

@@ -32,4 +32,18 @@ class Student {
         'medical_condition': medicalCondition,
         'phone': phone,
       };
+
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
+      userId: json['user_id'],
+      age: json['age'],
+      dob: json['dob'],
+      emergencyContact: json['emergency_contact'],
+      firstName: json['first_name'],
+      gender: json['gender'],
+      lastName: json['last_name'],
+      medicalCondition: json['medical_condition'],
+      phone: json['phone'],
+    );
+  }
 }

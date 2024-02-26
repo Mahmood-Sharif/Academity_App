@@ -12,5 +12,7 @@ function getDbConnection() {
     }
 
     return $connection;
+
+    
 }
 ?>
