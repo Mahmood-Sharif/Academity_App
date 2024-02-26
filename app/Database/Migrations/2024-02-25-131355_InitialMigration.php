@@ -286,6 +286,10 @@ class InitialMigration extends Migration
             'type'       => 'VARCHAR',
             'constraint' => '100',
           ],
+          'password' => [
+            'type'       => 'VARCHAR',
+            'constraint' => '100',
+          ],
           'first_name' => [
             'type'       => 'VARCHAR',
             'constraint' => '50'
