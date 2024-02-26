@@ -16,4 +16,6 @@ class ClassModel extends Model
       'academy_id',
     ];
 
+    protected $returnType = \App\Entities\ClassEntity::class;
+
 }

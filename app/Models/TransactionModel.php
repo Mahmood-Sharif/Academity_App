@@ -17,4 +17,6 @@ class TransactionModel extends Model
       'enrollment_id',
     ];
 
+    protected $returnType = \App\Entities\Transaction::class;
+
 }

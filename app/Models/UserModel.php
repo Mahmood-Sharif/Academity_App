@@ -17,4 +17,6 @@ class UserModel extends Model
       'last_name',
     ];
 
+    protected $returnType = \App\Entities\User::class;
+
 }

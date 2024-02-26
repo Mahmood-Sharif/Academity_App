@@ -19,4 +19,6 @@ class StudentModel extends Model
       'medical_condition',
     ];
 
+    protected $returnType = \App\Entities\Student::class;
+
 }
