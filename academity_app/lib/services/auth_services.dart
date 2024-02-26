@@ -10,7 +10,7 @@ final authServicesProvider = Provider<AuthServices>((ref) {
 class AuthServices {
   Future<User?> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('http://192.168.28.119/api/login'), // Replace with your PHP login endpoint
+      Uri.parse('http://192.168.100.15:8080/api/login'), // Replace with your PHP login endpoint
       body: {
         'email': email,
         'password': password,
