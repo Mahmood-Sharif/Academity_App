@@ -13,4 +13,6 @@ class OfferModel extends Model
       'description',
     ];
 
+    protected $returnType = \App\Entities\Offer::class;
+
 }
