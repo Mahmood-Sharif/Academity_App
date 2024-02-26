@@ -16,4 +16,6 @@ class EnrollmentModel extends Model
       'class_id',
     ];
 
+    protected $returnType = \App\Entities\Enrollment::class;
+
 }

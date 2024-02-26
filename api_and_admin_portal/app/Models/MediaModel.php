@@ -14,4 +14,6 @@ class MediaModel extends Model
       'url',
     ];
 
+    protected $returnType = \App\Entities\Media::class;
+
 }

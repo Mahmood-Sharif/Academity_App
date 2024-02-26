@@ -17,13 +17,14 @@ class Login extends ResourceController
         $model = new UserModel();
         // get user with email and password
         // TODO: use password_hash
+
         $user = $model->where('email', $email)->where('password', $password)->first();
 
         if ($user) {
             return $this->respond([
               'status'  => 'Login successful',
-              'user_id' => $user['user_id'],
-              'email'   => $user['email'],
+              'user_id' => $user->user_id,
+              'email'   => $user->email,
             ]);
         } else {
             return $this->respond([

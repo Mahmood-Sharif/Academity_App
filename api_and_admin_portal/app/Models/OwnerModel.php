@@ -15,4 +15,6 @@ class OwnerModel extends Model
       'password',
     ];
 
+    protected $returnType = \App\Entities\Owner::class;
+
 }
