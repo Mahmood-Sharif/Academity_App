@@ -17,17 +17,9 @@ class InitialMigration extends Migration
             'unsigned'       => true,
             'auto_increment' => true
           ],
-          'email' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '100'
-          ],
           'name' => [
             'type'       => 'VARCHAR',
             'constraint' => '100'
-          ],
-          'password' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '60'
           ],
         ]);
         $this->forge->addPrimaryKey('owner_id');

@@ -1,1 +1,4 @@
 api_and_admin_portal/.php-cs-fixer.cache
+
+# Development SQLite3 DB
+api_and_admin_portal/writable/academity

@@ -32,12 +32,12 @@ class Academy {
 
   // Method to convert Academy instance to a map, useful for sending data to the API
   Map<String, dynamic> toJson() => {
-    'academy_id': academyId,
-    'location': location,
-    'name': name,
-    'phone': phone,
-    'description': description,
-    'image_url': imageUrl,
-    'owner_id': ownerId,
-  };
+        'academy_id': academyId,
+        'location': location,
+        'name': name,
+        'phone': phone,
+        'description': description,
+        'image_url': imageUrl,
+        'owner_id': ownerId,
+      };
 }
