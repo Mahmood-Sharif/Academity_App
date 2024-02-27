@@ -70,7 +70,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
     if (!mounted) return;
 
     if (success) {
-      Navigator.pushReplacementNamed(context, '/browseSports');
+      Navigator.pushReplacementNamed(context, '/browseClasses');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login failed')),

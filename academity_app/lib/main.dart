@@ -1,5 +1,5 @@
 import 'package:academity_app/views/auth/login_screen.dart';
-import 'package:academity_app/views/home/browse_sports_screen.dart';
+import 'package:academity_app/views/home/browse_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   initialRoute: '/',
   routes: {
     '/': (context) =>  const LoginScreen(),
-    '/browseSports': (context) => const BrowseSportsScreen(), // Make sure BrowseSportsScreen is imported
+    '/browseClasses': (context) => const BrowseClasses(), // Make sure BrowseSportsScreen is imported
     // other routes...
   },
 );
