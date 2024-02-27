@@ -2,21 +2,23 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use CodeIgniter\Shield\Models\UserModel as CodeIgniterUserModel;
 
-class UserModel extends Model
+class UserModel extends CodeIgniterUserModel
 {
-    protected $table = 'users';
-    protected $primaryKey = 'user_id';
-
-    protected $allowedFields = [
-      'dob',
-      'phone',
-      'email',
-      'first_name',
-      'last_name',
-    ];
-
     protected $returnType = \App\Entities\User::class;
+
+    protected function initialize(): void
+    {
+        parent::initialize();
+
+        $this->allowedFields = [
+          ...$this->allowedFields,
+          'first_name',
+          'last_name',
+          'dob',
+          'phone',
+        ];
+    }
 
 }

@@ -37,6 +37,9 @@ class Filters extends BaseConfig
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
+
+            // Uncomment to enable admin portal authentication
+            /* 'session' => ['except' => ['login*', 'register', 'auth/a/*', 'logout', 'api/*']], */
         ],
         'after' => [
             'toolbar',
@@ -65,5 +68,8 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [];
+    public array $filters = [
+      // Uncomment to enable API authentication
+      /* 'tokens' => ['before' => ['api/*']], */
+    ];
 }
