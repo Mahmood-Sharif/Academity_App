@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:academity_app/models/users.dart';
+import 'package:academity_app/services/academity_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 final authServicesProvider = Provider<AuthServices>((ref) {
   return AuthServices();
@@ -9,13 +9,10 @@ final authServicesProvider = Provider<AuthServices>((ref) {
 
 class AuthServices {
   Future<User?> login(String email, String password) async {
-    final response = await http.post(
-      Uri.parse('http://192.168.28.119/api/login'), // Replace with your PHP login endpoint
-      body: {
-        'email': email,
-        'password': password,
-      },
-    );
+    final response = await AcademityApi.post('login', body: {
+      'email': email,
+      'password': password,
+    });
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
