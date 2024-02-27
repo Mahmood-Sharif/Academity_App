@@ -12,14 +12,14 @@ class Test extends ResourceController
     {
         $model = new UserModel();
         $data = array();
-        $data['hello'] = $model->orderBy('user_id', 'DESC')->findAll();
+        $data['hello'] = $model->orderBy('id', 'DESC')->findAll();
         return $this->respond($data);
     }
 
     public function show($id = null): ResponseInterface
     {
-        $model = new UserModel();
-        $data = $model->find($id);
+        $user = auth()->getProvider()->findById(1);
+        $data = [ 'token' => $user->accessTokens() ];
         if ($data) {
             return $this->respond($data);
         } else {

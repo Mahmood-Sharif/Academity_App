@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\AdminPortal;
+
+use App\Controllers\BaseController;
 
 class Home extends BaseController
 {

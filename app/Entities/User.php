@@ -2,13 +2,17 @@
 
 namespace App\Entities;
 
-use CodeIgniter\Entity\Entity;
+use CodeIgniter\Shield\Entities\User as CodeIgniterUser;
 
-class User extends Entity
+class User extends CodeIgniterUser
 {
     protected $casts = [
-      'user_id' => 'integer',
-      'dob'     => 'datetime',
-      'phone'   => 'integer',
+      'id'          => '?integer',
+      'active'      => 'int_bool',
+      'permissions' => 'array',
+      'groups'      => 'array',
+      'dob'         => 'datetime',
+      'phone'       => 'integer',
     ];
+
 }
