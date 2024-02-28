@@ -30,7 +30,7 @@ class BrowseClasses extends ConsumerWidget {
              AsyncData(value : final classes) => ListView.builder(
               itemCount: classes.length,
               itemBuilder: (context, index) => ListTile(
-                title: Text('Class name: ${classes[index].className}'),
+                title: Text('Class id: ${classes[index].classId}'),
                 //onTap: () => Navigator.pushNamed(context, '/classDetails', arguments: index + 1), // Pass class index to details screen
               ),
             ), 
