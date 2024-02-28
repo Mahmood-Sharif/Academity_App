@@ -7,14 +7,19 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 // Root route. for now redirect to admin portal
-$routes->addRedirect('/', 'admin-portal');
+$routes->addRedirect('/', 'en/admin-portal');
+$routes->addRedirect('admin-portal', 'en/admin-portal');
+
+// Auth routes: login*, register, logout, auth/a*
+$routes->group('{locale}/admin-portal', static function ($routes) {
+    service('auth')->routes($routes);
+});
 
 // Admin portal routes
-$routes->group('admin-portal', static function ($routes) {
-    // Auth routes: login*, register, logout, auth/a*
-    service('auth')->routes($routes);
+$routes->group('{locale}/admin-portal', ['filter' => 'session'], static function ($routes) {
 
-    $routes->get('/', 'AdminPortal\Home::index');
+    $routes->get('/', 'AdminPortal\Controller::dashboard');
+    $routes->presenter('my-academies', ['controller' => 'AdminPortal\Academy']);
 });
 
 // API Routes all routes inside the function are prefixed with 'api'.

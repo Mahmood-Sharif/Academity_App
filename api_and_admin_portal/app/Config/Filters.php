@@ -39,6 +39,7 @@ class Filters extends BaseConfig
             // 'invalidchars',
 
             // Uncomment to enable admin portal authentication
+            // Now set in Routes.php
             /* 'session' => ['except' => ['login*', 'register', 'auth/a/*', 'logout', 'api/*']], */
         ],
         'after' => [

@@ -19,7 +19,7 @@ class Test extends ResourceController
     public function show($id = null): ResponseInterface
     {
         $user = auth()->getProvider()->findById(1);
-        $data = [ 'token' => $user->accessTokens() ];
+        $data = [ 'user' => $user ];
         if ($data) {
             return $this->respond($data);
         } else {
