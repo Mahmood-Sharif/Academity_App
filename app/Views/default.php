@@ -26,7 +26,7 @@ $tab = $this->sections['sidebarTab'][0];
 <body>
 
   <div class="row m-0 p-0">
-    <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4">
+    <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column">
       <div class="nav nav-pills nav-fill flex-column gap-1">
         <span class="fs-2 fw-bold text-center mb-3">
           <?= lang('App.academity_admin_portal') ?>
@@ -57,6 +57,73 @@ $tab = $this->sections['sidebarTab'][0];
         <a href="accounting" class="nav-link <?= $tab == 'accounting' ? 'active' : '' ?>">
           <?=lang('App.accounting')?>
         </a>
+
+      </div>
+      <div class="mt-auto d-flex gap-3">
+        <div class="dropup flex-fill">
+          <button class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
+            <?=lang('App.profile')?>&nbsp;
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-item">
+                <?=lang('App.profile.view')?>
+              </a></li>
+            <li><a href="<?=url_to('logout')?>" class="dropdown-item">
+                <?=lang('App.logout')?>
+              </a></li>
+          </ul>
+        </div>
+        <div id="settingsDropdown" class="dropup flex-fill">
+          <button class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+            aria-expanded="false">
+            <?=lang('App.settings')?>&nbsp;
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <div class="dropend">
+                <button class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <?=lang('App.theme')?>&nbsp;
+                </button>
+                <ul class="dropdown-menu dropdown-menu-start">
+                  <li>
+                    <a href="#" class="dropdown-item">
+                      <?=lang('App.theme.system')?>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="dropdown-item">
+                      <?=lang('App.theme.light')?>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="dropdown-item">
+                      <?=lang('App.theme.dark')?>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <div class="dropend">
+                <button class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <?=lang('App.language')?>&nbsp;
+                </button>
+                <ul class="dropdown-menu dropdown-menu-start">
+                  <li>
+                    <a href="/change-locale/ar" class="dropdown-item <?= $locale == 'ar' ? 'active' : '' ?>">
+                      <?=lang('App.language.arabic')?>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/change-locale/en" class="dropdown-item <?= $locale == 'en' ? 'active' : '' ?>">
+                      <?=lang('App.language.english')?>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col p-4">
