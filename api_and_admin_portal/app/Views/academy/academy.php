@@ -29,7 +29,7 @@ $this->endSection('sidebarTab');
       <div class="ratio ratio-16x9 mb-4">
         <img src="<?=base_url($academy->image_url)?>" alt="" class="object-fit-cover rounded-4">
       </div>
-      <h2>Notifications</h2>
+      <h2><?=lang('App.notifications')?></h2>
       <div class="d-flex flex-column">
         <div class="alert alert-secondary alert-dismissible fade show">Lorem ipsum dolor sit amet
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -44,16 +44,17 @@ $this->endSection('sidebarTab');
     </div>
     <div class="col-4">
       <ul class="list-group mb-3">
-        <li class="list-group-item">Lorem Ipsum</li>
-        <li class="list-group-item">Lorem Ipsum</li>
-        <li class="list-group-item">Lorem Ipsum</li>
-        <li class="list-group-item">Lorem Ipsum</li>
+        <li class="list-group-item"><?=lang('App.academy.num_classes', [0])?> </li>
+        <li class="list-group-item"><?=lang('App.academy.num_classes', [1])?> </li>
+        <li class="list-group-item"><?=lang('App.academy.num_classes', [3])?> </li>
       </ul>
       <div class="d-flex flex-column gap-3">
-        <button class="btn btn-secondary">Manage Lorem</button>
-        <button class="btn btn-secondary">Manage Lorem</button>
-        <button class="btn btn-secondary">Manage Lorem</button>
-        <button class="btn btn-secondary">Manage Lorem</button>
+        <button class="btn btn-secondary"><?=lang('App.manage.classes')?></button>
+        <button class="btn btn-secondary"><?=lang('App.manage.schedule')?></button>
+        <button class="btn btn-secondary"><?=lang('App.manage.students')?></button>
+        <button class="btn btn-secondary"><?=lang('App.manage.announcements')?></button>
+        <button class="btn btn-secondary"><?=lang('App.manage.accounting')?></button>
+        <button class="btn btn-secondary"><?=lang('App.manage.academy')?></button>
       </div>
     </div>
   </div>
