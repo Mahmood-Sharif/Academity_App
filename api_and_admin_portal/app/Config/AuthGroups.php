@@ -76,13 +76,35 @@ class AuthGroups extends ShieldAuthGroups
      * If a permission is not listed here it cannot be used.
      */
     public array $permissions = [
-        'admin.access'        => 'Can access the admin portal',
-        'admin.settings'      => 'Can access the main site settings',
-        'users.manage-admins' => 'Can manage other admins',
-        'users.create'        => 'Can create new non-admin users',
-        'users.edit'          => 'Can edit existing non-admin users',
-        'users.delete'        => 'Can delete existing non-admin users',
-        'beta.access'         => 'Can access beta-level features',
+        'superadmin.settings'  => 'Can access the main site settings',
+        'users.manage-admins'  => 'Can manage other admins',
+        'users.create'         => 'Can create new non-admin users',
+        'users.edit'           => 'Can edit existing non-admin users',
+        'users.delete'         => 'Can delete existing non-admin users',
+        'beta.access'          => 'Can access beta-level features',
+
+        'admin.access'         => 'Can access the admin portal',
+
+        'academies.create'     => 'Can create (register) academies in the system',
+        'academies.access'     => 'Can access (own) academies details',
+        'academies.edit'       => 'Can edit (own) academies details',
+        'academies.delete'     => 'Can delete (own) academies from the system',
+
+        'classes.register'     => 'Can register in classes',
+        'classes.create'       => 'Can create classes in (own) academies',
+        'classes.access'       => 'Can access admin details of classes in (own) academies',
+        'classes.edit'         => 'Can edit classes in (own) academies',
+        'classes.delete'       => 'Can delete classes from (own) academies',
+
+        'students.create'      => 'Can create student profiles',
+        'students.access'      => 'Can access details of student in (own) academies',
+        'students.edit'        => 'Can edit student profiles in (own) academies',
+        'students.delete'      => 'Can delete student profiles from (own) academies',
+
+        'announcements.access' => 'Can access announcements for (own) academies',
+        'analytics.access'     => 'Can access analytics for (own) academies',
+        'offers.access'        => 'Can access offers for (own) academies',
+        'accounting.access'    => 'Can access accounting for (own) academies',
     ];
 
     /**
@@ -98,13 +120,29 @@ class AuthGroups extends ShieldAuthGroups
             'admin.*',
             'users.*',
             'beta.*',
+            'academies.*',
+            'classes.*',
+            'students.*',
+            'announcements.*',
+            'analytics.*',
+            'offers.*',
+            'accounting.*',
         ],
         'admin' => [
             'admin.access',
-            'users.create',
-            'users.edit',
-            'users.delete',
             'beta.access',
+
+            'academy.access',
+            'academy.edit',
+            'academy.delete',
+
+            'classes.*',
+            'students.*',
+
+            'announcements.access',
+            'analytics.access',
+            'offers.access',
+            'accounting.access',
         ],
         'developer' => [
             'admin.access',
@@ -113,7 +151,10 @@ class AuthGroups extends ShieldAuthGroups
             'users.edit',
             'beta.access',
         ],
-        'user' => [],
+        'user' => [
+            'students.create',
+            'classes.register',
+        ],
         'beta' => [
             'beta.access',
         ],
