@@ -1,5 +1,6 @@
 <?php
 
+use CodeIgniter\HTTP\URI;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -10,16 +11,23 @@ use CodeIgniter\Router\RouteCollection;
 $routes->addRedirect('/', 'en/admin-portal');
 $routes->addRedirect('admin-portal', 'en/admin-portal');
 
-// Auth routes: login*, register, logout, auth/a*
+// Admin portal Auth routes: login*, register, logout, auth/a*
 $routes->group('{locale}/admin-portal', static function ($routes) {
     service('auth')->routes($routes);
 });
 
 // Admin portal routes
-$routes->group('{locale}/admin-portal', ['filter' => 'session'], static function ($routes) {
-
-    $routes->get('/', 'AdminPortal\Controller::dashboard');
+$routes->group('{locale}/admin-portal', ['filter' => 'group:admin,superadmin'], static function ($routes) {
+    $routes->get('/', 'AdminPortal\Controller::dashboard', ['as' => 'dashboard']);
     $routes->presenter('my-academies', ['controller' => 'AdminPortal\Academy']);
+});
+
+$routes->get('change-locale/(:segment)', static function ($locale) {
+    $url = new URI(previous_url());
+    if ($url->getSegment(1) == 'en' || $url->getSegment(1) == 'ar') {
+        $url = $url->setSegment(1, $locale);
+    }
+    return redirect()->to($url);
 });
 
 // API Routes all routes inside the function are prefixed with 'api'.
