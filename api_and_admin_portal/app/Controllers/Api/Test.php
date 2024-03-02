@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Api;
 
+use App\Models\AcademyModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -18,8 +19,9 @@ class Test extends ResourceController
 
     public function show($id = null): ResponseInterface
     {
-        $user = auth()->getProvider()->findById(1);
-        $data = [ 'user' => $user ];
+        /* $user = auth()->getProvider()->findById(1); */
+        $m = new AcademyModel();
+        $data = $m->getStatistics(1);
         if ($data) {
             return $this->respond($data);
         } else {

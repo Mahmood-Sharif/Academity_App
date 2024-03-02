@@ -35,4 +35,13 @@ return [
   'manage.students'        => 'Manage Students',
   'manage.announcements'   => 'Make Announcement',
   'manage.academy'         => 'Manage Academy',
+  'academy.edit'           => 'Edit {0} details',
+
+  // forms
+  'submit'              => 'Submit',
+  'reset'               => 'Reset',
+  'academy_name'        => 'Academy Name',
+  'academy_phone'       => 'Academy Phone',
+  'academy_location'    => 'Academy Location',
+  'academy_description' => 'Academy Description',
 ];
