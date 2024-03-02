@@ -1,11 +1,12 @@
+import 'class.dart'; // Import your Class model
+
 class Academy {
-  final int academyId;
+  final String academyId;
   final String location;
   final String name;
-  final int phone;
+  final String phone;
   final String description;
-  final String imageUrl;
-  final int ownerId;
+  final List<Class> classes; // Add a list of Class objects
 
   Academy({
     required this.academyId,
@@ -13,31 +14,36 @@ class Academy {
     required this.name,
     required this.phone,
     required this.description,
-    required this.imageUrl,
-    required this.ownerId,
+    required this.classes, // Add classes to the constructor
   });
 
-  // Factory constructor to create an Academy from a map (e.g., JSON)
   factory Academy.fromJson(Map<String, dynamic> json) {
+    // Parse the 'classes' JSON array into a list of Class objects
+    List<Class> classesList = [];
+    if (json['classes'] != null) {
+      classesList = (json['classes'] as List)
+          .map((classJson) => Class.fromJson(classJson))
+          .toList();
+    }
+
     return Academy(
-      academyId: json['academy_id'],
-      location: json['location'],
-      name: json['name'],
-      phone: json['phone'],
-      description: json['description'],
-      imageUrl: json['image_url'],
-      ownerId: json['owner_id'],
+      academyId: json['academy_id'] as String,
+      location: json['location'] as String,
+      name: json['name'] as String,
+      phone: json['phone'] as String,
+      description: json['description'] as String,
+      classes: classesList,
     );
   }
 
-  // Method to convert Academy instance to a map, useful for sending data to the API
-  Map<String, dynamic> toJson() => {
-        'academy_id': academyId,
-        'location': location,
-        'name': name,
-        'phone': phone,
-        'description': description,
-        'image_url': imageUrl,
-        'owner_id': ownerId,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'academy_id': academyId,
+      'location': location,
+      'name': name,
+      'phone': phone,
+      'description': description,
+      'classes': classes.map((c) => c.toJson()).toList(),
+    };
+  }
 }

@@ -16,6 +16,12 @@ class AcademyModel extends Model
       'description',
       'media_id',
       'owner_id',
+      'sport_id'
     ];
+
+public function getAcademiesBySportId($sportId)
+{
+    return $this->where('sport_id', $sportId)->findAll();
+}
 
 }
