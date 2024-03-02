@@ -19,6 +19,7 @@ $tab = $this->sections['sidebarTab'][0];
   <?php else: ?>
   <link href="/css/academity-bootstrap.min.css" rel="stylesheet">
   <?php endif ?>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="/css/academity-custom.css" rel="stylesheet">
   <script src="/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -127,9 +128,7 @@ $tab = $this->sections['sidebarTab'][0];
       </div>
     </div>
     <div class="col p-4">
-      <div class="container">
-        <?= $this->renderSection('content') ?>
-      </div>
+      <?= $this->renderSection('content') ?>
     </div>
   </div>
 </body>

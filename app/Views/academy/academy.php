@@ -24,12 +24,29 @@ $this->endSection('sidebarTab');
     <?= $academy->name ?>
   </h1>
 
+  <?php if (session('error') !== null) : ?>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <?= session('error') ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif ?>
+
+  <?php if (session('message') !== null) : ?>
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <?= session('message') ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <?php endif ?>
+
   <div class="row">
     <div class="col-8 col-lg-6">
       <div class="ratio ratio-16x9 mb-4">
-        <img src="<?=base_url($academy->image_url)?>" alt="" class="object-fit-cover rounded-4">
+        <img src="<?=base_url($academy->image_url)?>" alt="" class="object-fit-cover rounded-4"
+          style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
-      <h2><?=lang('App.notifications')?></h2>
+      <h2>
+        <?=lang('App.notifications')?>
+      </h2>
       <div class="d-flex flex-column">
         <div class="alert alert-secondary alert-dismissible fade show">Lorem ipsum dolor sit amet
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -44,17 +61,35 @@ $this->endSection('sidebarTab');
     </div>
     <div class="col-4">
       <ul class="list-group mb-3">
-        <li class="list-group-item"><?=lang('App.academy.num_classes', [0])?> </li>
-        <li class="list-group-item"><?=lang('App.academy.num_classes', [1])?> </li>
-        <li class="list-group-item"><?=lang('App.academy.num_classes', [3])?> </li>
+        <li class="list-group-item">
+          <?=lang('App.academy.status.running')?>
+        </li>
+        <li class="list-group-item">
+          <?=lang('App.academy.num_classes', [1])?>
+        </li>
+        <li class="list-group-item">
+          <?=lang('App.academy.num_classes', [3])?>
+        </li>
       </ul>
       <div class="d-flex flex-column gap-3">
-        <button class="btn btn-secondary"><?=lang('App.manage.classes')?></button>
-        <button class="btn btn-secondary"><?=lang('App.manage.schedule')?></button>
-        <button class="btn btn-secondary"><?=lang('App.manage.students')?></button>
-        <button class="btn btn-secondary"><?=lang('App.manage.announcements')?></button>
-        <button class="btn btn-secondary"><?=lang('App.manage.accounting')?></button>
-        <button class="btn btn-secondary"><?=lang('App.manage.academy')?></button>
+        <a href="#" class="btn btn-secondary">
+          <?=lang('App.manage.classes')?>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <?=lang('App.manage.schedule')?>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <?=lang('App.manage.students')?>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <?=lang('App.manage.announcements')?>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          <?=lang('App.manage.accounting')?>
+        </a>
+        <a href="<?=url_to('AdminPortal\Academy::edit', $academy->academy_id)?>" class="btn btn-secondary">
+          <?=lang('App.manage.academy')?>
+        </a>
       </div>
     </div>
   </div>

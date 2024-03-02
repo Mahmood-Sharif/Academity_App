@@ -28,7 +28,10 @@ $this->endSection('sidebarTab');
     <?php foreach ($academies as $academy):  ?>
     <div class="card" style="width: 20rem;">
       <div class="ratio ratio-16x9">
-        <img src="<?= base_url($academy->image_url)?>" alt="" class="card-img object-fit-cover">
+        <img src="<?= base_url($academy->image_url)?>" 
+             alt="" 
+             class="card-img object-fit-cover" 
+             style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
       <div class="card-body">
         <a href="my-academies/<?=$academy->academy_id?>"
