@@ -13,6 +13,10 @@
   view-transition-name: sidebartab;
 }
 
+.nav-fill>.nav-link {
+  text-align: start;
+}
+
 #sidebar {
   height: 100dvh;
 }
