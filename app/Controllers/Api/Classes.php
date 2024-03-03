@@ -12,18 +12,18 @@ class Classes extends ResourceController
     {
         $model = new ClassModel();
         $data = array();
-        $data['classes'] = $model->orderBy('user_id', 'DESC')->findAll();
+        $data['classes'] = $model->orderBy('class_id', 'DESC')->findAll();
         return $this->respond($data);
     }
 
     public function show($id = null): ResponseInterface
     {
-        $model = new UserModel();
+        $model = new ClassModel();
         $data = $model->find($id);
         if ($data) {
             return $this->respond($data);
         } else {
-            return $this->failNotFound('User Not Found');
+            return $this->failNotFound('Class Not Found');
         }
     }
 }

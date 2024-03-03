@@ -26,7 +26,7 @@ $routes->group('api', static function ($routes) {
 
     // login api
     $routes->post('login', 'Api\Login::loginUser');
-
-   // $routes->resource('classes', ['controller' => 'Api\Classes']);
+    // classes api
+    $routes->resource('classes', ['controller' => 'Api\Classes']);
 
 });
