@@ -4,6 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
+/* @method $this selectSubquery(BaseBuilder $subquery, string $as) */
 class AcademyModel extends Model
 {
     protected $table = 'academies';
@@ -23,20 +24,23 @@ class AcademyModel extends Model
     {
         return $this
           ->join('media', 'media.media_id = academies.media_id')
-          ->select('academies.*, media.url as image_url');
+          ->select('academies.*')
+          ->select('media.url as image_url');
     }
-    /**
-     * @return array<string,int>
-     */
-    public function getStatistics(int $id): array
+
+    public function includeStatistics(int $id): AcademyModel
     {
-        $classModel = new ClassModel();
-        return [
-          'num_classes'  => $classModel->where('academy_id', $id)->selectCount('class_id')->find(),
-          'num_students' => $classModel->where('academy_id', $id)
-                                       ->join('enrollments', 'enrollments.class_id = classes.class_id')
-                                       ->selectCount('student_id')->find(),
-        ];
+        $classes = $this->db->table('classes')
+                            ->where('academy_id', $id)
+                            ->selectCount('class_id');
+        $students = $this->db->table('classes')
+                             ->where('academy_id', $id)
+                             ->join('enrollments', 'enrollments.class_id = classes.class_id')
+                             ->selectCount('student_id');
+        return $this
+          ->select('academies.*')
+          ->selectSubquery($classes, 'num_classes')
+          ->selectSubquery($students, 'num_students');
     }
 
     public function findAcademiesForOwner(int $userId): array

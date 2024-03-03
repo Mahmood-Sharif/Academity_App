@@ -24,6 +24,15 @@ return [
   'theme.light'            => 'Light',
   'theme.dark'             => 'Dark',
 
+  // actions
+  'close'                  => 'Close',
+  'back'                   => 'Back',
+  'back.academies'         => 'Back to my academies',
+
+  // errors
+  'not_found.academy'      => 'Academy not found',
+
+
   // manage academies
   'academy.status.running' => 'Status: Running',
   'academy.status.stopped' => 'Status: Stopped',
@@ -38,10 +47,28 @@ return [
   'academy.edit'           => 'Edit {0} details',
 
   // forms
-  'submit'              => 'Submit',
-  'reset'               => 'Reset',
-  'academy_name'        => 'Academy Name',
-  'academy_phone'       => 'Academy Phone',
-  'academy_location'    => 'Academy Location',
-  'academy_description' => 'Academy Description',
+  'submit'                 => 'Submit',
+  'reset'                  => 'Reset',
+  'academy_name'           => 'Academy Name',
+  'academy_phone'          => 'Academy Phone',
+  'academy_location'       => 'Academy Location',
+  'academy_description'    => 'Academy Description',
+  'academy_update.success' => 'Academy details updated successfully.',
+  'academy_update.error'   => 'Could not update Academy details.',
+
+  // danger zone
+  'advanced_options'          => 'Advanced Options',
+  'cancel_classes'            => 'Cancel All Classes',
+  'cancel_classes.desc'       => '',
+  'cancel_classes.btn'        => 'Cancel Classes',
+  'block_registration'        => 'Disallow Registration of Students',
+  'block_registration.desc'   => 'This will hide the academy from users and block new registration for all classes.',
+  'block_registration.btn'    => 'Block Registration',
+  'delete_academy'            => 'Delete Academy Permanently',
+  'delete_academy.desc'       => 'This will delete the academy from the Academity platform. This action can not be reversed.',
+  'delete_academy.btn'        => 'Delete Academy',
+  'delete_academy.confirm'    => 'Are you sure you want to delete the academy <b class = "user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br> To confirm the deletion, please type the academy name:',
+  'delete_academy.success'    => 'Successfully deleted academy <b>{0}</b>.',
+  'delete_academy.error'      => 'Error: could not delete academy.',
+  'delete_academy.name_error' => 'Did not delete academy: name confirmation failed.',
 ];

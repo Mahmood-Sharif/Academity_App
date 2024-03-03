@@ -19,17 +19,35 @@ class Academy extends ResourcePresenter
 
     public function show($id = null): string
     {
-        $academy = $this->model->includeImageUrl()->find($id);
-        $academy->num_classes = $this->model->getStatistics($id);
+        $academy = $this->model
+                        ->includeImageUrl()
+                        ->includeStatistics($id)
+                        ->find($id);
+
+        if (!$academy) {
+            return view('errors/html/error_404', [
+              'message' => lang('App.not_found.academy')
+            ]);
+        }
+
         return view('academy/academy', ['academy' => $academy]);
     }
 
+    // show edit form
     public function edit($id = null): string
     {
         $academy = $this->model->includeImageUrl()->find($id);
+
+        if (!$academy) {
+            return view('errors/html/error_404', [
+              'message' => lang('App.not_found.academy')
+            ]);
+        }
+
         return view('academy/edit', ['academy' => $academy]);
     }
 
+    // perform update
     public function update($id = null): string
     {
         $data = [
@@ -48,5 +66,59 @@ class Academy extends ResourcePresenter
 
         $academy = $this->model->includeImageUrl()->find($id);
         return view('academy/academy', ['academy' => $academy]);
+    }
+
+    /** AJAX remove confirm modal */
+    public function remove($id = null): string
+    {
+        $academy = $this->model->find($id);
+        if (auth()->user()->can('academies.delete') && $academy->owner_id === auth()->user()->id) {
+            return view('academy/ajax_remove_modal', [
+              'error'   => false,
+              'academy' => $academy
+            ]);
+        } else {
+            return view('academy/ajax_remove_modal', [
+              'error' => lang('Security.disallowedAction')
+            ]);
+        }
+    }
+
+    /** AJAX delete and respond with modal */
+    public function delete($id = null): string
+    {
+        $academy = $this->model->find($id);
+
+        if (!auth()->user()->can('academies.delete') || $academy->owner_id !== auth()->user()->id) {
+            // User can not delete academies or academy is not owned by user
+            return view('academy/ajax_message_modal', [
+              'title' => lang('App.delete_academy'),
+              'body'  => lang('Security.disallowedAction')
+            ]);
+        }
+
+        /* @var string $error */ $error;
+        $result = false;
+        if ($this->request->getVar('academyNameConfirm') !== $academy->name) {
+            // user didn't confirm academy name correctly
+            $error = lang('App.delete_academy.name_error');
+        } else {
+            $result = $this->model->delete($id);
+            $error = lang('App.delete_academy.error');
+        }
+
+        if ($result) {
+            return view('academy/ajax_message_modal', [
+              'title'     => lang('App.delete_academy'),
+              'body'      => lang('App.delete_academy.success', [$academy->name]),
+              'action'    => lang('App.back.academies'),
+              'actionUrl' => url_to('AdminPortal\Academy::index'),
+            ]);
+        } else {
+            return view('academy/ajax_message_modal', [
+              'title' => lang('App.delete_academy'),
+              'body'  => $error,
+            ]);
+        }
     }
 }

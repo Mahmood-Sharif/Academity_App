@@ -34,7 +34,7 @@ $this->endSection('sidebarTab');
              style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
       <div class="card-body">
-        <a href="my-academies/<?=$academy->academy_id?>"
+        <a href="<?=url_to('AdminPortal\Academy::show', $academy->academy_id)?>"
           class="stretched-link card-title text-decoration-none fs-6 fw-bold">
           <?= $academy->name ?>
         </a>
