@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   title: 'Flutter Demo',
   initialRoute: '/',
   routes: {
-    '/': (context) =>  const LoginScreen(),
+    '/': (context) =>  const BrowseClasses(),
     '/browseClasses': (context) => const BrowseClasses(), // Make sure BrowseSportsScreen is imported
     // other routes...
   },
