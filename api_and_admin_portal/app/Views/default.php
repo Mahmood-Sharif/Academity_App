@@ -14,16 +14,21 @@ $tab = $this->sections['sidebarTab'][0];
     Academity -
     <?= $this->renderSection('page_title', true) ?>
   </title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..700;1,100..700&display=swap"
+    rel="preload">
   <?php if ($dir == 'rtl'): ?>
   <link href="/css/academity-bootstrap.min.rtl.css" rel="stylesheet">
   <?php else: ?>
   <link href="/css/academity-bootstrap.min.css" rel="stylesheet">
   <?php endif ?>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
   <link href="/css/academity-custom.css" rel="stylesheet">
-  <script src="/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/htmx.org/dist/ext/ajax-header.js"></script>
+  <script defer src="/js/bootstrap.bundle.min.js"></script>
+  <script defer src="https://unpkg.com/htmx.org@1.9.10"
+    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+    crossorigin="anonymous"></script>
+  <script defer src="https://unpkg.com/htmx.org/dist/ext/ajax-header.js"></script>
 </head>
 
 <body hx-ext="ajax-header">
@@ -36,28 +41,36 @@ $tab = $this->sections['sidebarTab'][0];
         </span>
         <a href="<?= url_to('AdminPortal\Controller::dashboard')?>"
           class="nav-link <?= $tab == 'dashboard' ? 'active' : '' ?>">
+          <i class="bi bi-grid fs-5 me-1"></i>
           <?=lang('App.dashboard')?>
         </a>
         <a href="<?= url_to('AdminPortal\Academy::index')?>"
           class="nav-link <?= $tab == 'academies' ? 'active' : '' ?>">
+          <i class="bi bi-mortarboard fs-5 me-1"></i>
           <?=lang('App.my_academies')?>
         </a>
         <a href="analytics" class="nav-link <?= $tab == 'analytics' ? 'active' : '' ?>">
+          <i class="bi bi-clipboard-data fs-5 me-1"></i>
           <?=lang('App.analytics')?>
         </a>
         <a href="announcements" class="nav-link <?= $tab == 'announcements' ? 'active' : '' ?>">
+          <i class="bi bi-megaphone fs-5 me-1"></i>
           <?=lang('App.announcements')?>
         </a>
         <a href="students" class="nav-link <?= $tab == 'students' ? 'active' : '' ?>">
+          <i class="bi bi-person fs-5 me-1"></i>
           <?=lang('App.students')?>
         </a>
         <a href="reviews" class="nav-link <?= $tab == 'reviews' ? 'active' : '' ?>">
+          <i class="bi bi-chat-left-text fs-5 me-1"></i>
           <?=lang('App.reviews')?>
         </a>
         <a href="offers" class="nav-link <?= $tab == 'offers' ? 'active' : '' ?>">
+          <i class="bi bi-tag fs-5 me-1"></i>
           <?=lang('App.offers')?>
         </a>
         <a href="accounting" class="nav-link <?= $tab == 'accounting' ? 'active' : '' ?>">
+          <i class="bi bi-cash-stack fs-5 me-1"></i>
           <?=lang('App.accounting')?>
         </a>
 
