@@ -43,7 +43,7 @@ class Filters extends BaseConfig
              * applications even if the session is authenticated and
              * authorized, otherwise the site will be suceptible to CSRF.
              */
-            'csrf' => ['except' => 'api/*'],
+            'csrf' => ['except' => ['api/*']],
 
             // 'honeypot',
             // 'invalidchars',

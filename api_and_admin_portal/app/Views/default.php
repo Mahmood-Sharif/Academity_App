@@ -22,12 +22,14 @@ $tab = $this->sections['sidebarTab'][0];
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link href="/css/academity-custom.css" rel="stylesheet">
   <script src="/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/ajax-header.js"></script>
 </head>
 
-<body>
+<body hx-ext="ajax-header">
 
   <div class="row m-0 p-0">
-    <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column">
+    <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column sticky-top">
       <div class="nav nav-pills nav-fill flex-column gap-1">
         <span class="fs-2 fw-bold text-center mb-3">
           <?= lang('App.academity_admin_portal') ?>

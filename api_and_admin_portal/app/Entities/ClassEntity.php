@@ -11,5 +11,7 @@ class ClassEntity extends Entity
       'min_age'    => 'integer',
       'max_age'    => 'integer',
       'academy_id' => 'integer',
+
+      'student_id'   => 'integer',
     ];
 }

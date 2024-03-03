@@ -20,9 +20,14 @@ $this->endSection('sidebarTab');
 <?= $this->section('content'); ?>
 
 <div class="container">
-  <h1>
-    <?= $academy->name ?>
-  </h1>
+  <div class="d-flex align-items-center mb-3">
+    <a href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
+      <i class="bi bi-arrow-left-short fs-1"></i>
+    </a>
+    <h1>
+      <?= $academy->name ?>
+    </h1>
+  </div>
 
   <?php if (session('error') !== null) : ?>
     <div class="alert alert-danger alert-dismissible" role="alert">
@@ -65,10 +70,10 @@ $this->endSection('sidebarTab');
           <?=lang('App.academy.status.running')?>
         </li>
         <li class="list-group-item">
-          <?=lang('App.academy.num_classes', [1])?>
+          <?=lang('App.academy.num_classes', [$academy->num_classes])?>
         </li>
         <li class="list-group-item">
-          <?=lang('App.academy.num_classes', [3])?>
+          <?=lang('App.academy.num_students', [$academy->num_students])?>
         </li>
       </ul>
       <div class="d-flex flex-column gap-3">

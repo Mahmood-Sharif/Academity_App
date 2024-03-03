@@ -30,7 +30,15 @@ $this->endSection('sidebarTab');
   </div>
 
   <div class="row">
-    <div class="col-8 col-lg-6">
+    <div class="col col-lg-7 col-md-8 col-sm-12">
+
+      <?php if (session('error') !== null) : ?>
+      <div class="alert alert-danger alert-dismissible" role="alert">
+        <?= session('error') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <?php endif ?>
+
       <div class="ratio ratio-16x9 mb-4">
         <img src="<?=base_url($academy->image_url)?>" alt="" class="object-fit-cover rounded-4"
           style="view-transition-name: academy<?=$academy->academy_id?>">
@@ -82,9 +90,60 @@ $this->endSection('sidebarTab');
 
       </form>
 
+      <div class="accordion mt-4" id="accordionDanger">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <?=lang('App.advanced_options')?>
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionDanger">
+            <div class="accordion-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-start">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold">
+                      <?=lang('App.block_registration')?>
+                    </div>
+                    <?=lang('App.block_registration.desc')?>
+                  </div>
+                  <button class="btn btn-danger">
+                    <?=lang('App.block_registration.btn')?>
+                  </button>
+                </li>
+                <li class="list-group-item d-flex align-items-start">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold">
+                      <?=lang('App.delete_academy')?>
+                    </div>
+                    <?=lang('App.delete_academy.desc')?>
+                  </div>
+                  <button hx-get="<?=url_to('AdminPortal\Academy::remove', $academy->academy_id)?>"
+                    hx-target="#modals-here" hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here"
+                    class="btn btn-danger">
+                    <?=lang('App.delete_academy.btn')?>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
+</div>
+</div>
+</div>
+</div>
 
+</div>
+
+<div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content"></div>
+  </div>
 </div>
 
 <?= $this->endSection('content'); ?>
