@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\UserModel;
+use App\Models\ClassModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
