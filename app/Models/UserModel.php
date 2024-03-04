@@ -14,10 +14,14 @@ class UserModel extends CodeIgniterUserModel
 
         $this->allowedFields = [
           ...$this->allowedFields,
-          'first_name',
-          'last_name',
+
+          'name',
           'dob',
           'phone',
+
+          // student fields
+          'medical_condition',
+          'parent_id',
         ];
     }
 
