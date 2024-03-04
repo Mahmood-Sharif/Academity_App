@@ -12,7 +12,6 @@ class User extends CodeIgniterUser
       'permissions' => 'array',
       'groups'      => 'array',
       'dob'         => 'datetime',
-      'phone'       => 'integer',
     ];
 
 }

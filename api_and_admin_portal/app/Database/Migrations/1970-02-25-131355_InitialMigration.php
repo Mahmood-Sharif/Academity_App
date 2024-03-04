@@ -10,21 +10,6 @@ class InitialMigration extends Migration
     {
         $this->forge->createDatabase('academity', true);
 
-        // Owners table
-        $this->forge->addField([
-          'owner_id' => [
-            'type'           => 'INT',
-            'unsigned'       => true,
-            'auto_increment' => true
-          ],
-          'name' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '100'
-          ],
-        ]);
-        $this->forge->addPrimaryKey('owner_id');
-        $this->forge->createTable('owners', true);
-
         // Media table
         $this->forge->addField([
           'media_id' => [
@@ -60,8 +45,8 @@ class InitialMigration extends Migration
             'constraint' => '100'
           ],
           'phone' => [
-            'type'       => 'INT',
-            'constraint' => '20'
+            'type'       => 'VARCHAR',
+            'constraint' => '15'
           ],
           'description' => [
             'type' => 'TEXT'
@@ -77,7 +62,7 @@ class InitialMigration extends Migration
           ],
         ]);
         $this->forge->addPrimaryKey('academy_id');
-        $this->forge->addForeignKey('owner_id', 'owners', 'owner_id');
+        $this->forge->addForeignKey('owner_id', 'users', 'id');
         $this->forge->addForeignKey('media_id', 'media', 'media_id');
         $this->forge->createTable('academies', true);
 
@@ -216,84 +201,6 @@ class InitialMigration extends Migration
         $this->forge->addForeignKey('media_id', 'media', 'media_id');
         $this->forge->createTable('offer_classes', true);
 
-        // Students table
-        $this->forge->addField([
-          'student_id' => [
-            'type'           => 'INT',
-            'unsigned'       => true,
-            'auto_increment' => true,
-          ],
-          'dob' => [
-            'type' => 'DATE',
-          ],
-          'phone' => [
-            'type'       => 'INT',
-            'constraint' => '20',
-          ],
-          'emergency_contact' => [
-            'type'       => 'INT',
-            'constraint' => '20',
-            'null' => true
-          ],
-          'first_name' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '50'
-          ],
-          'last_name' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '50'
-          ],
-          'gender' =>
-          [
-            'type' => ($this->db->getPlatform() == 'SQLite3')
-              ? 'VARCHAR(7) CHECK( gender IN ("Male", "Female") )'
-              : 'ENUM("Male", "Female")',
-            'null' => true
-          ],
-          'medical_condition' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '50',
-            'null'       => true,
-            'default'    => null,
-          ],
-        ]);
-        $this->forge->addPrimaryKey('student_id');
-        $this->forge->createTable('students', true);
-
-        // Users table
-        $this->forge->addField([
-          'user_id' => [
-            'type'           => 'INT',
-            'unsigned'       => true,
-            'auto_increment' => true,
-          ],
-          'dob' => [
-            'type' => 'DATE',
-          ],
-          'phone' => [
-            'type'       => 'INT',
-            'constraint' => '20',
-          ],
-          'email' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '100',
-          ],
-          'password' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '100',
-          ],
-          'first_name' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '50'
-          ],
-          'last_name' => [
-            'type'       => 'VARCHAR',
-            'constraint' => '50'
-          ],
-        ]);
-        $this->forge->addPrimaryKey('user_id');
-        $this->forge->createTable('users', true);
-
         // Enrollments table
         $this->forge->addField([
           'enrollment_id' => [
@@ -317,7 +224,7 @@ class InitialMigration extends Migration
           ]
         ]);
         $this->forge->addPrimaryKey('enrollment_id');
-        $this->forge->addForeignKey('student_id', 'students', 'student_id');
+        $this->forge->addForeignKey('student_id', 'users', 'id');
         $this->forge->addForeignKey('class_id', 'classes', 'class_id');
         $this->forge->createTable('enrollments', true);
 
