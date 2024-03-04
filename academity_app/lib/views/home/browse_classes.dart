@@ -1,38 +1,42 @@
-import 'package:academity_app/providers/classes_provider.dart';
+import 'package:academity_app/models/class.dart';
+import 'package:academity_app/services/class_service.dart';
+//import 'package:academity_app/views/home/widgets/sport/sports_griview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BrowseClasses extends ConsumerWidget {
-  const BrowseClasses({Key? key}) : super(key: key);
+class ClassesPage extends StatefulWidget {
+  const ClassesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-  final classesAsync = ref.watch(classes_provider);
-    return Scaffold(
-      appBar: AppBar(title: const Text('Browse Classes')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
+  _ClassesPageState createState() => _ClassesPageState();
+}
 
-            const SizedBox(height: 20),
-            // Display a list of available classes
-            const Text('Available Classes'),
-            const SizedBox(height: 10),
-            // Replace with actual data fetching and rendering of classes
-           switch (classesAsync) {
-             AsyncData(value : final classes) => ListView.builder(
-              itemCount: classes.length,
-              itemBuilder: (context, index) => ListTile(
-                title: Text('Class id: ${classes[index].className}'),
-                //onTap: () => Navigator.pushNamed(context, '/classDetails', arguments: index + 1), // Pass class index to details screen
-              ),
-            ), 
-             AsyncError(error: final error) => Text('Could not load classes'),
-             _ => CircularProgressIndicator()
-           },
-          ],
-        ),
+class _ClassesPageState extends State<ClassesPage> {
+  late Future<List<Class>> futureSports;
+
+  @override
+  void initState() {
+    super.initState();
+    futureSports = ClassServices().fetchClasses();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Classes'),
+        
+      ),
+      body: FutureBuilder<List<Class>>(
+        future: futureSports,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return const SportsListWidget();
+          }
+        },
       ),
     );
   }
