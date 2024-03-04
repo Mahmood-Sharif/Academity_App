@@ -11,6 +11,7 @@ class User extends CodeIgniterUser
       'active'      => 'int_bool',
       'permissions' => 'array',
       'groups'      => 'array',
+
       'dob'         => 'datetime',
     ];
 

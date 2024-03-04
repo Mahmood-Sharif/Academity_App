@@ -12,5 +12,6 @@ class Main extends Seeder
         $this->call('SportsSeeder');
         $this->call('AcademySeeder');
         $this->call('ClassSeeder');
+        $this->call('EnrollmentsSeeder');
     }
 }
