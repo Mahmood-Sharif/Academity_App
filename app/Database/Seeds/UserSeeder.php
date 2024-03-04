@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
           'password' => '1',
           'name'     => 'Mahmood Al-Mahmood',
           'dob'      => '2024-01-01',
+          'gender'   => 'Male',
           'phone'    => '33333333',
         ]);
         $users->save($user);
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
           'password' => '1',
           'name'     => 'Coach Ali',
           'dob'      => '1990-01-01',
+          'gender'   => 'Male',
           'phone'    => '33334444',
         ]);
         $users->save($user);
@@ -44,6 +46,7 @@ class UserSeeder extends Seeder
           'password' => 'asdASD123',
           'name'     => 'Anwar Acadi',
           'dob'      => '1980-01-01',
+          'gender'   => 'Male',
           'phone'    => '33337777',
         ]);
         $users->save($user);
@@ -57,6 +60,7 @@ class UserSeeder extends Seeder
           'password' => 'asdASD123',
           'name'     => 'Ameen Al Admin',
           'dob'      => '2024-01-01',
+          'gender'   => 'Male',
           'phone'    => '33335555',
         ]);
         $users->save($user);

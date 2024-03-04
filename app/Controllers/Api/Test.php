@@ -21,7 +21,7 @@ class Test extends ResourceController
     {
         /* $user = auth()->getProvider()->findById(1); */
         $m = new AcademyModel();
-        $data = $m->getStatistics(1);
+        $data = $m->includeStatistics($id)->includeImageUrl()->find($id);
         if ($data) {
             return $this->respond($data);
         } else {

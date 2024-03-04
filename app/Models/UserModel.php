@@ -20,6 +20,7 @@ class UserModel extends CodeIgniterUserModel
           'phone',
 
           // student fields
+          'gender',
           'medical_condition',
           'parent_id',
         ];

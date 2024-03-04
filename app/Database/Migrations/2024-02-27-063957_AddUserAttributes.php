@@ -28,6 +28,12 @@ class AddUserAttributes extends Migration
             'phone' => ['type' => 'INT',     'unsigned'   => true,  'null' => false],
             'dob'   => ['type' => 'DATE',    'null'       => false],
 
+            'gender' => [
+                'type' => $this->db->getPlatform() == 'SQLite3'
+                    ? 'VARCHAR(7) CHECK( gender IN ("Male", "Female") )'
+                    : 'ENUM("Male", "Female")',
+                'null' => true
+            ],
             'medical_condition' => [
               'type' => 'VARCHAR',
               'constraint' => '100',
