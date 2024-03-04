@@ -32,4 +32,10 @@ $routes->group('api', static function ($routes) {
     $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
     // Academy API
     $routes->resource('academies', ['controller' => 'Api\Academy']);
+    // app/Config/Routes.php
+    $routes->resource('academies', ['controller' => 'Api\Academy']);
+    // app/Config/Routes.php
+    $routes->get('academy/(:num)/classes', 'Api\Academy::classes/$1');
+
+
 });

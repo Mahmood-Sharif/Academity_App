@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Models\AcademyModel;
+use App\Models\ClassModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -41,4 +42,16 @@ class Academy extends ResourceController
 
         return $this->respond(['academies' => $academies]);
     }
+    public function classes($academyId)
+    {
+        $model = new ClassModel();
+        $classes = $model->where('academy_id', $academyId)->findAll();
+
+        if (empty($classes)) {
+            return $this->failNotFound('No classes found for this academy.');
+        }
+
+        return $this->respond(['classes' => $classes]);
+    }
+    
 }

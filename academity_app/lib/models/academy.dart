@@ -27,11 +27,11 @@ class Academy {
     }
 
     return Academy(
-      academyId: json['academy_id'] as String,
-      location: json['location'] as String,
-      name: json['name'] as String,
-      phone: json['phone'] as String,
-      description: json['description'] as String,
+      academyId: json['academy_id'],
+      location: json['location'],
+      name: json['name'],
+      phone: json['phone'],
+      description: json['description'],
       classes: classesList,
     );
   }

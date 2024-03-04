@@ -24,6 +24,7 @@ class _SportsPageState extends State<SportsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sports'),
+        
       ),
       body: FutureBuilder<List<Sport>>(
         future: futureSports,
