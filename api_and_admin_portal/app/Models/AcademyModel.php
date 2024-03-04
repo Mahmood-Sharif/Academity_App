@@ -18,6 +18,7 @@ class AcademyModel extends Model
       'description',
       'media_id',
       'owner_id',
+      'sport_id'
     ];
 
     public function includeImageUrl(): AcademyModel
@@ -46,6 +47,11 @@ class AcademyModel extends Model
     public function findAcademiesForOwner(int $userId): array
     {
         return $this->where('owner_id', $userId)->includeImageUrl()->findAll();
+    }
+
+    public function getAcademiesBySportId(int $sportId): array
+    {
+        return $this->where('sport_id', $sportId)->findAll();
     }
 
 }

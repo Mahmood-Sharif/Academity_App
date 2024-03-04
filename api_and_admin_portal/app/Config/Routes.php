@@ -39,5 +39,16 @@ $routes->group('api', static function ($routes) {
 
     // login api
     $routes->post('login', 'Api\Login::loginUser');
+    // sports api
+    $routes->resource('sport', ['controller' => 'Api\Sport']);
+    // New route for fetching academies by sport ID
+    $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
+    // Academy API
+    $routes->resource('academies', ['controller' => 'Api\Academy']);
+    // app/Config/Routes.php
+    $routes->resource('academies', ['controller' => 'Api\Academy']);
+    // app/Config/Routes.php
+    $routes->get('academy/(:num)/classes', 'Api\Academy::classes/$1');
+
 
 });

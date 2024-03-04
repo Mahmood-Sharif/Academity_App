@@ -26,5 +26,4 @@ class ClassModel extends Model
           ->where('prices.start_time < CURRENT_TIMESTAMP')
           ->select('classes.*, prices.price');
     }
-
 }
