@@ -34,11 +34,22 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
+            /* Enable Cross-Site Request Forgery Protection on the admin portal
+             * routes ONLY.
+             *
+             * API routes are excluded on the assumption that the API is
+             * authenticated and authorized with securely stored tokens. And
+             * that means that the api routes MAY NOT be accessed in web
+             * applications even if the session is authenticated and
+             * authorized, otherwise the site will be suceptible to CSRF.
+             */
+            'csrf' => ['except' => ['api/*']],
+
             // 'honeypot',
-            // 'csrf',
             // 'invalidchars',
 
             // Uncomment to enable admin portal authentication
+            // Now set in Routes.php
             /* 'session' => ['except' => ['login*', 'register', 'auth/a/*', 'logout', 'api/*']], */
         ],
         'after' => [

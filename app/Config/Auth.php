@@ -437,10 +437,17 @@ class Auth extends ShieldAuth
      */
     public function loginRedirect(): string
     {
-        $session = session();
-        $url     = $session->getTempdata('beforeLoginUrl') ?? setting('Auth.redirects')['login'];
+        if (auth()->user()->inGroup('admin', 'superadmin')) {
+            $beforeLoginUrl = session()->getTempdata('beforeLoginUrl') ;
+            $locale = request()->getLocale();
+            $defaultUrl = url_to('dashboard', $locale);
+            return $beforeLoginUrl ?? $defaultUrl;
+        } else {
+            auth()->logout();
+            session()->setFlashdata('error', lang('Auth.unauthorized'));
+            return $this->getUrl(setting('Auth.redirects')['logout']);
+        }
 
-        return $this->getUrl($url);
     }
 
     /**

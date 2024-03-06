@@ -24,11 +24,30 @@ class AddUserAttributes extends Migration
     public function up(): void
     {
         $fields = [
-            'first_name' => ['type' => 'VARCHAR', 'constraint' => '50', 'null' => false],
-            'last_name' => ['type' => 'VARCHAR', 'constraint' => '50', 'null' => false],
-            'phone' => ['type' => 'INT', 'unsigned' => true, 'null' => false],
-            'dob' => ['type' => 'DATE', 'null' => false],
+            'name'  => ['type' => 'VARCHAR', 'constraint' => '100', 'null' => false],
+            'phone' => ['type' => 'INT',     'unsigned'   => true,  'null' => false],
+            'dob'   => ['type' => 'DATE',    'null'       => false],
+
+            'gender' => [
+                'type' => $this->db->getPlatform() == 'SQLite3'
+                    ? 'VARCHAR(7) CHECK( gender IN ("Male", "Female") )'
+                    : 'ENUM("Male", "Female")',
+                'null' => true
+            ],
+            'medical_condition' => [
+              'type' => 'VARCHAR',
+              'constraint' => '100',
+              'null' => true,
+              'default' => null
+            ],
+            'parent_id' => [
+              'type' => 'INT',
+              'unsigned' => true ,
+              'null' => true,
+              'default' => null
+            ],
         ];
+        $this->forge->addForeignKey('parent_id', 'users', 'id');
         $this->forge->addColumn($this->tables['users'], $fields);
     }
 
