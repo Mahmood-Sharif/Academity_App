@@ -34,7 +34,7 @@ $tab = $this->sections['sidebarTab'][0];
 <body hx-ext="ajax-header">
 
   <div class="row m-0 p-0">
-    <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column sticky-top">
+    <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column sticky-md-top">
       <div class="nav nav-pills nav-fill flex-column gap-1">
         <span class="fs-2 fw-bold text-center mb-3">
           <?= lang('App.academity_admin_portal') ?>

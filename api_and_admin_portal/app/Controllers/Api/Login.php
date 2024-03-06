@@ -11,8 +11,8 @@ class Login extends ResourceController
     {
         // get data from request
         $credentials = [
-          'email'    => $this->request->getVar('email'),
-          'password' => $this->request->getVar('password'),
+          'email'    => $this->request->getPost('email'),
+          'password' => $this->request->getPost('password'),
         ];
 
         $loginAttempt = auth()->check($credentials);

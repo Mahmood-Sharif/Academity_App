@@ -8,8 +8,8 @@ class Academy extends Entity
 {
     protected $casts = [
       'academy_id' => 'integer',
-      'phone'      => 'integer',
       'owner_id'   => 'integer',
       'media_id'   => 'integer',
+      'sport_id'   => 'integer',
     ];
 }

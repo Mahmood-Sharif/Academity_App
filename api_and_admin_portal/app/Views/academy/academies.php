@@ -20,18 +20,21 @@ $this->endSection('sidebarTab');
 <?= $this->section('content'); ?>
 
 <div class="container">
-  <h1>
-    <?=lang('App.my_academies')?>
-  </h1>
+  <div class="d-flex align-items-center">
+    <h1>
+      <?=lang('App.my_academies')?>
+    </h1>
+    <a href="<?=url_to('AdminPortal\Academy::new')?>" class="btn btn-secondary ms-auto">
+      <?=lang('App.academy.create')?>
+    </a>
+  </div>
 
   <div class="d-flex flex-wrap gap-3">
     <?php foreach ($academies as $academy):  ?>
     <div class="card" style="width: 20rem;">
       <div class="ratio ratio-16x9">
-        <img src="<?= base_url($academy->image_url)?>" 
-             alt="" 
-             class="card-img object-fit-cover" 
-             style="view-transition-name: academy<?=$academy->academy_id?>">
+        <img src="<?= base_url($academy->image_url)?>" alt="" class="card-img object-fit-cover"
+          style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
       <div class="card-body">
         <a href="<?=url_to('AdminPortal\Academy::show', $academy->academy_id)?>"
