@@ -53,5 +53,5 @@ class Academy extends ResourceController
 
         return $this->respond(['classes' => $classes]);
     }
-    
+
 }

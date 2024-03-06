@@ -21,6 +21,14 @@ class AcademyModel extends Model
       'sport_id'
     ];
 
+    protected $validationRules = [
+      'name'        => 'string|required|min_length[3]|max_length[100]',
+      'location'    => 'string|required|min_length[3]|max_length[100]',
+      'phone'       => 'string|required|min_length[3]|max_length[100]',
+      'description' => 'string|required|min_length[3]|max_length[255]',
+      'sport_id'    => 'integer|is_natural_no_zero',
+    ];
+
     public function includeImageUrl(): AcademyModel
     {
         return $this

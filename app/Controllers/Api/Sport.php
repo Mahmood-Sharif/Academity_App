@@ -12,14 +12,14 @@ class Sport extends ResourceController
     {
         $model = new SportModel();
         $data = array();
-        $data['sports'] = $model->orderBy('name')->findAll();
+        $data['sports'] = $model->orderBy('name')->includeImageUrl()->findAll();
         return $this->respond($data);
     }
 
     public function show($id = null): ResponseInterface
     {
         $model = new SportModel();
-        $data = $model->find($id);
+        $data = $model->includeImageUrl()->find($id);
         if ($data) {
             return $this->respond($data);
         } else {

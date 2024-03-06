@@ -132,9 +132,10 @@ class AuthGroups extends ShieldAuthGroups
             'admin.access',
             'beta.access',
 
-            'academy.access',
-            'academy.edit',
-            'academy.delete',
+            'academies.access',
+            'academies.create',
+            'academies.edit',
+            'academies.delete',
 
             'classes.*',
             'students.*',

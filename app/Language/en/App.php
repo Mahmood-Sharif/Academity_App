@@ -45,16 +45,21 @@ return [
   'manage.announcements'   => 'Make Announcement',
   'manage.academy'         => 'Manage Academy',
   'academy.edit'           => 'Edit {0} details',
+  'academy.create'         => 'Create Academy',
+  'academy.create'         => 'Create Academy',
 
   // forms
   'submit'                 => 'Submit',
   'reset'                  => 'Reset',
   'academy_name'           => 'Academy Name',
+  'academy_sport'          => 'Academy Sport',
+  'academy_sport.select'   => 'Select A Sport',
   'academy_phone'          => 'Academy Phone',
   'academy_location'       => 'Academy Location',
   'academy_description'    => 'Academy Description',
   'academy_update.success' => 'Academy details updated successfully.',
   'academy_update.error'   => 'Could not update Academy details.',
+  'change_image'           => 'Change Image',
 
   // danger zone
   'advanced_options'          => 'Advanced Options',
