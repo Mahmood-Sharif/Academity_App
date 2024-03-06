@@ -33,7 +33,7 @@ class Security extends BaseConfig
      *
      * Token name for Cross Site Request Forgery protection.
      */
-    public string $tokenName = 'csrf_test_name';
+    public string $tokenName = 'a_csrf_token';
 
     /**
      * --------------------------------------------------------------------------
@@ -80,7 +80,7 @@ class Security extends BaseConfig
      *
      * Redirect to previous page with error on failure.
      */
-    public bool $redirect = false;
+    public bool $redirect = true;
 
     /**
      * --------------------------------------------------------------------------

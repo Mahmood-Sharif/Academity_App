@@ -2,7 +2,6 @@
 
 namespace App\Database\Seeds;
 
-use App\Entities\ClassTiming;
 use App\Models\ClassModel;
 use App\Models\ClassTimingModel;
 use App\Models\PriceModel;
@@ -10,51 +9,88 @@ use CodeIgniter\Database\Seeder;
 
 class ClassSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // inserted in sports seeder, id = 1
-        // $mediaModel = new MediaModel();
-        // $mediaModel->insert([
-        //     ['mime_type' => 'image/jpeg', 'url' => 'images/Academy.jpg'],
-        // ]);
-
-
-
-        $class = new ClassModel();
-        $class->insertBatch(
+        $classModel = new ClassModel();
+        $classModel->insertBatch(
             [
                 [
-                    'class_id' => 1,
+                    'class_id'   => 1,
                     'class_name' => 'U16 Class',
-                    'min_age' => 12,
-                    'max_age' => 16,
-                    'academy_id' => 4
+                    'min_age'    => 12,
+                    'max_age'    => 16,
+                    'academy_id' => 1
                 ],
                 [
-                    'class_id' => 2,
-                    'class_name' => 'U112 Class',
-                    'min_age' => 18,
-                    'max_age' => 12,
-                    'academy_id' => 4
-                ]
+                    'class_id'   => 2,
+                    'class_name' => 'U12 Class',
+                    'min_age'    => 8,
+                    'max_age'    => 12,
+                    'academy_id' => 1
+                ],
+                [
+                    'class_id'   => 3,
+                    'class_name' => 'U12 Class',
+                    'min_age'    => 8,
+                    'max_age'    => 12,
+                    'academy_id' => 2
+                ],
+                [
+                    'class_id'   => 4,
+                    'class_name' => 'U12 Class',
+                    'min_age'    => 8,
+                    'max_age'    => 12,
+                    'academy_id' => 2
+                ],
+                [
+                    'class_id'   => 5,
+                    'class_name' => 'U12 Class',
+                    'min_age'    => 8,
+                    'max_age'    => 12,
+                    'academy_id' => 3
+                ],
             ]
         );
 
-        $price = new PriceModel();
-        $price->insertBatch(
+
+
+
+        $priceModel = new PriceModel();
+        $priceModel->insertBatch(
             [
                 [
-                    'price' => '40.0',
-                    'class_id' => '1',
-                    'start_time' => '2024-12-10 10:10:10',
+                    'class_id'   => 1,
+                    'price'      => '40.0',
+                    'start_time' => '2024-02-10 10:10:10',
+                    'end_time'   => null,
                 ],
                 [
-                    'price' => '30.0',
-                    'class_id' => '2',
-                    'start_time' => '2020-12-10 10:10:10',
-                ]
+                    'class_id'   => 2,
+                    'price'      => '30.0',
+                    'start_time' => '2020-02-10 10:10:10',
+                    'end_time'   => null,
+                ],
+                [
+                    'class_id'   => 3,
+                    'price'      => '30.0',
+                    'start_time' => '2020-02-10 10:10:10',
+                    'end_time'   => null,
+                ],
+                [
+                    'class_id'   => 4,
+                    'price'      => '50.0',
+                    'start_time' => '2020-02-10 10:10:10',
+                    'end_time'   => '2020-02-12 10:10:10',
+                ],
+                [
+                    'class_id'   => 4,
+                    'price'      => '30.0',
+                    'start_time' => '2020-02-12 10:10:10',
+                    'end_time'   => null,
+                ],
             ]
         );
+
 
         $time = new ClassTimingModel();
         $time->insertBatch(
@@ -82,7 +118,31 @@ class ClassSeeder extends Seeder
                     'day_of_week' => 'TUE',
                     'start_time' => '4:30',
                     'end_time' => '6:00',
-                ]
+                ],
+                [
+                    'class_id' => 3,
+                    'day_of_week' => 'WED',
+                    'start_time' => '5:30',
+                    'end_time' => '7:00',
+                ],
+                [
+                    'class_id' => 3,
+                    'day_of_week' => 'MON',
+                    'start_time' => '4:30',
+                    'end_time' => '6:00',
+                ],
+                [
+                    'class_id' => 4,
+                    'day_of_week' => 'SUN',
+                    'start_time' => '5:30',
+                    'end_time' => '7:00',
+                ],
+                [
+                    'class_id' => 4,
+                    'day_of_week' => 'THU',
+                    'start_time' => '4:30',
+                    'end_time' => '6:00',
+                ],
             ]
         );
     }

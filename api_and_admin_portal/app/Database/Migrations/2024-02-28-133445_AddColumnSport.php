@@ -6,7 +6,7 @@ use CodeIgniter\Database\Migration;
 
 class AddColumnSport extends Migration
 {
-    public function up()
+    public function up(): void
     {
         $this->forge->addColumn('academies', ['sport_id' => [
             'type' => 'INT',
@@ -16,9 +16,9 @@ class AddColumnSport extends Migration
         $this->forge->processIndexes('academies');
     }
 
-    public function down()
+    public function down(): void
     {
-        //
+        $this->forge->dropColumn('academies', ['sport_id']);
     }
 }
- 
+

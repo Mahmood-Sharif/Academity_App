@@ -1,0 +1,22 @@
+.form-control {
+  border: none;
+  border-radius: 0;
+  border-bottom: calc(var(--bs-border-width) * 2) solid var(--bs-border-color);
+  transition: border-radius 0;
+}
+
+.form-control:focus {
+  border-radius: var(--bs-border-radius);
+}
+
+.nav-link.active {
+  view-transition-name: sidebartab;
+}
+
+.nav-fill>.nav-link {
+  text-align: start;
+}
+
+#sidebar {
+  height: 100dvh;
+}

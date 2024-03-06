@@ -14,12 +14,12 @@ class UserSeeder extends Seeder
         // normal user
         $user = new User([
           'username' => null,
-          'email' => 'm',
+          'email'    => 'm',
           'password' => '1',
-          'first_name' => 'Mahmood',
-          'last_name' => 'AlMahmood',
-          'dob' => '2024-01-01',
-          'phone' => 33333333,
+          'name'     => 'Mahmood Al-Mahmood',
+          'dob'      => '2024-01-01',
+          'gender'   => 'Male',
+          'phone'    => '33333333',
         ]);
         $users->save($user);
         $user = $users->findById($users->getInsertID());
@@ -28,26 +28,40 @@ class UserSeeder extends Seeder
         // coach user
         $user = new User([
           'username' => null,
-          'email' => 'coach',
+          'email'    => 'coach',
           'password' => '1',
-          'first_name' => 'Coach',
-          'last_name' => 'Ali',
-          'dob' => '1970-01-01',
-          'phone' => 33334444,
+          'name'     => 'Coach Ali',
+          'dob'      => '1990-01-01',
+          'gender'   => 'Male',
+          'phone'    => '33334444',
         ]);
         $users->save($user);
         $user = $users->findById($users->getInsertID());
         $user->addGroup('user', 'coach');
 
+        // academy owner user
+        $user = new User([
+          'username' => null,
+          'email'    => 'owner@owner.com',
+          'password' => 'asdASD123',
+          'name'     => 'Anwar Acadi',
+          'dob'      => '1980-01-01',
+          'gender'   => 'Male',
+          'phone'    => '33337777',
+        ]);
+        $users->save($user);
+        $user = $users->findById($users->getInsertID());
+        $user->addGroup('user', 'admin');
+
         // super admin
         $user = new User([
           'username' => null,
-          'email' => 'admin@academity.com',
-          'password' => 'aoeAOE123',
-          'first_name' => 'Ameen',
-          'last_name' => 'Al Admin',
-          'dob' => '2024-01-01',
-          'phone' => 33335555,
+          'email'    => 'admin@academity.com',
+          'password' => 'asdASD123',
+          'name'     => 'Ameen Al Admin',
+          'dob'      => '2024-01-01',
+          'gender'   => 'Male',
+          'phone'    => '33335555',
         ]);
         $users->save($user);
         $user = $users->findById($users->getInsertID());

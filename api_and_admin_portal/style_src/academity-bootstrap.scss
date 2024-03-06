@@ -1,0 +1,33 @@
+// Academity Colors
+$red: #bd272c;
+$green: #79b80e;
+$teal: #006837;
+$gray-900: #221f1f;
+$cyan: #75B9BE;
+$yellow: #F0A202;
+
+$primary : $teal;
+$secondary: $gray-900;
+$success : $green;
+$danger : $red;
+$info : $cyan;
+$warning: $yellow;
+$dark: $gray-900;
+
+// Component Style
+// $btn-border-radius: 50rem; // pill buttons 
+
+// make checkboxes, switches, and radios bigger
+$custom-form-indicator-size: 1.5em;
+$form-check-input-width: $custom-form-indicator-size;
+$form-switch-width: $custom-form-indicator-size * 1.75;
+
+// Typography
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..700;1,100..700&display=swap');
+$font-family-base: 'Montserrat', 'Noto Kufi Arabic', sans-serif;
+$headings-font-family: 'Montserrat', 'Noto Kufi Arabic', sans-serif;
+$headings-font-weight: 700;
+$body-color: #000;
+
+
+@import "node_modules/bootstrap/scss/bootstrap";
