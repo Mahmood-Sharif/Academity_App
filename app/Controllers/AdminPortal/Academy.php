@@ -28,6 +28,12 @@ class Academy extends ResourcePresenter
                         ->includeStatistics($id)
                         ->find($id);
 
+        if (! auth()->user()->can('academies.access') || auth()->id() != $academy->owner_id) {
+            return view('errors/html/error_404', [
+              'message' => lang('App.not_found.academy')
+            ]);
+        }
+
         if (!$academy) {
             return view('errors/html/error_404', [
               'message' => lang('App.not_found.academy')
@@ -41,6 +47,12 @@ class Academy extends ResourcePresenter
     public function edit($id = null): string
     {
         $academy = $this->model->includeImageUrl()->find($id);
+
+        if (! auth()->user()->can('academies.edit') || auth()->id() != $academy->owner_id) {
+            return view('errors/html/error_404', [
+              'message' => lang('App.not_found.academy')
+            ]);
+        }
 
         if (!$academy) {
             return view('errors/html/error_404', [
