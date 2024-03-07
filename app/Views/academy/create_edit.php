@@ -54,7 +54,7 @@ $url = match($type) {
         <?= csrf_field() ?>
         <div class="mb-3 d-flex flex-column">
           <div class="ratio ratio-16x9 mb-2">
-            <!-- FIXME: persist 'uploaded' image after form validation -->
+            <!-- TODO: persist 'uploaded' image after form validation -->
             <img id="imagePreview" src="<?=base_url($academy?->image_url ?? 'images/Academy.jpg')?>" alt=""
               class="object-fit-cover rounded-4 border">
           </div>
@@ -69,9 +69,8 @@ $url = match($type) {
           <?=validated_form_input('academyName', 'name', lang('App.academy_name'), $academy?->name ?? set_value('name'))?>
         </div>
 
-        <!-- FIXME: select value validation. i.e. don't allow placeholder selection -->
         <div class="form-floating mb-3">
-          <select class="form-select" id="sportSelect" name="sport_id" aria-label="<?=lang('App.academy_sport')?>">
+          <select class="form-select <?=array_key_exists('sport_id', validation_errors()) ? 'is-invalid' : ''?>" id="sportSelect" name="sport_id" aria-label="<?=lang('App.academy_sport')?>" required>
             <option selected>
               <?=lang('App.academy_sport.select')?>
             </option>
@@ -85,11 +84,12 @@ $url = match($type) {
           <label for="sportSelect">
             <?=lang('App.academy_sport')?>
           </label>
-        </div>
+          <?=validation_show_error('sport_id')?>
+      </div>
 
-        <div class="mb-3">
-          <?=validated_form_input('academyPhone', 'phone', lang('App.academy_phone'), $academy?->phone ?? set_value('phone'), 'tel')?>
-        </div>
+      <div class="mb-3">
+        <?=validated_form_input('academyPhone', 'phone', lang('App.academy_phone'), $academy?->phone ?? set_value('phone'), 'tel')?>
+      </div>
 
         <div class="mb-3">
           <?=validated_form_input('academylocation', 'location', lang('App.academy_location'), $academy?->location ?? set_value('location'))?>
