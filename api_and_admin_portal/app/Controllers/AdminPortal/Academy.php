@@ -71,7 +71,7 @@ class Academy extends ResourcePresenter
         if (! $this->validate([
           ...$this->model->validationRules,
           'image' => 'max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
-        ])) {
+        ], $this->model->validationMessages)) {
             return view('academy/create_edit', [
               'type' => 'edit',
               'academy' => $academy,
@@ -193,7 +193,7 @@ class Academy extends ResourcePresenter
         if (! $this->validate([
           ...$this->model->validationRules,
           'image' => 'uploaded[image]|max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
-        ])) {
+        ], $this->model->validationMessages)) {
             return view('academy/create_edit', [
                 'type' => 'create',
                 'errors' => $this->validator->getErrors(),

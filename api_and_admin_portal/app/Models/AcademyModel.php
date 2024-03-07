@@ -28,6 +28,11 @@ class AcademyModel extends Model
       'description' => 'string|required|min_length[3]|max_length[255]',
       'sport_id'    => 'integer|is_natural_no_zero',
     ];
+    protected $validationMessages = [
+      'sport_id' => [
+        'integer' => 'Rules.academy.sport',
+      ]
+    ];
 
     public function includeImageUrl(): AcademyModel
     {
