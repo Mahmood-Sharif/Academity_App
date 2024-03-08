@@ -30,17 +30,17 @@ $this->endSection('sidebarTab');
   </div>
 
   <?php if (session('error') !== null) : ?>
-    <div class="alert alert-danger alert-dismissible" role="alert">
-      <?= session('error') ?>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <?= session('error') ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
   <?php endif ?>
 
   <?php if (session('message') !== null) : ?>
-    <div class="alert alert-success alert-dismissible" role="alert">
-      <?= session('message') ?>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <?= session('message') ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
   <?php endif ?>
 
   <div class="row">
@@ -67,24 +67,30 @@ $this->endSection('sidebarTab');
     <div class="col-4">
       <ul class="list-group mb-3">
         <li class="list-group-item">
+          <i class="bi bi-check2 fs-5 me-1"></i>
           <?=lang('App.academy.status.running')?>
         </li>
         <li class="list-group-item">
+          <i class="bi bi-book fs-5 me-1"></i>
           <?=lang('App.academy.num_classes', [$academy->num_classes])?>
         </li>
         <li class="list-group-item">
+          <i class="bi bi-person fs-5 me-1"></i>
           <?=lang('App.academy.num_students', [$academy->num_students])?>
         </li>
       </ul>
       <div class="d-flex flex-column gap-3">
-        <a href="#" class="btn btn-secondary">
+        <a href="<?=url_to('AdminPortal\Classes::index', $academy->academy_id)?>" class="btn btn-secondary">
           <?=lang('App.manage.classes')?>
         </a>
         <a href="#" class="btn btn-secondary">
           <?=lang('App.manage.schedule')?>
         </a>
-        <a href="#" class="btn btn-secondary">
+        <a href="<?=url_to('AdminPortal\User::indexStudents') . '?academy=' . $academy->academy_id ?>" class="btn btn-secondary">
           <?=lang('App.manage.students')?>
+        </a>
+        <a href="<?=url_to('AdminPortal\User::indexCoaches') ?>" class="btn btn-secondary">
+          <?=lang('App.manage.coaches')?>
         </a>
         <a href="#" class="btn btn-secondary">
           <?=lang('App.manage.announcements')?>
