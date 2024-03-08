@@ -20,6 +20,12 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
 $routes->group('{locale}/admin-portal', ['filter' => 'group:admin,superadmin'], static function ($routes) {
     $routes->get('/', 'AdminPortal\Controller::dashboard', ['as' => 'dashboard']);
     $routes->presenter('my-academies', ['controller' => 'AdminPortal\Academy']);
+    $routes->get('classes/by-academy/(:num)', 'AdminPortal\Classes::index/$1');
+    $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
+    $routes->get('students/', 'AdminPortal\User::indexStudents');
+    $routes->get('coaches/', 'AdminPortal\User::indexCoaches');
+    $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
+    $routes->view('register-coach/', 'user/register_coach');
 });
 
 $routes->get('change-locale/(:segment)', static function ($locale) {
