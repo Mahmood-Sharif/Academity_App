@@ -10,6 +10,8 @@ class AuthServices {
   }
 
   Future<bool> login(String email, String password) async {
+    // here we are not using AcademityApi.get because we don't have a token
+    // and /api/login does not need one
     final response = await http
         .post(Uri.http(AcademityApi.academityHost, '/api/login'), body: {
       'email': email,
