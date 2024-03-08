@@ -81,6 +81,7 @@ class Filters extends BaseConfig
      */
     public array $filters = [
       // Uncomment to enable API authentication
+      // Now set in Routes.php
       /* 'tokens' => ['before' => ['api/*']], */
     ];
 }
