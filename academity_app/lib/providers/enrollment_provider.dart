@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 
-final classProvider = FutureProvider<List<ClassWithTiming>>((ref) async {
+final enrollmentProvider = FutureProvider<List<ClassWithTiming>>((ref) async {
   final classService = ClassServices();
   return classService.fetchClasses();
 });

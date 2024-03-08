@@ -28,5 +28,12 @@ $routes->group('api', static function ($routes) {
     $routes->post('login', 'Api\Login::loginUser');
     // classes api
     $routes->resource('classes', ['controller' => 'Api\Classes']);
+    // enrollments api
+    $routes->get('enrollments/bci', 'Api\Enrollments::getStudentsByClassId');
+
+    $routes->resource('enrollments', ['controller'=> 'Api\Enrollments']);
+    // students api
+    $routes->resource('students', ['controller'=> 'Api\Students']);
+
 
 });
