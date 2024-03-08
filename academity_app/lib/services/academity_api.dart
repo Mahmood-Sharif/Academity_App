@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class AcademityApi {
   /// The address of the Academity server
   static const academityHost = '192.168.28.119:8080';
+  static const academityUrl = 'http://$academityHost/';
 
   /// Perform an HTTP GET request to the Academity Api.
   ///

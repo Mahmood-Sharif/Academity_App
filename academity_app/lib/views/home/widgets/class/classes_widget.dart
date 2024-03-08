@@ -16,7 +16,7 @@ class ClassesWidget extends ConsumerWidget {
     return classesAsyncValue.when(
       data: (classes) => ListView.builder(
         shrinkWrap: true, // Make ListView take up as much space as its children
-        physics: NeverScrollableScrollPhysics(), // Disable scrolling within the ListView
+        physics: const NeverScrollableScrollPhysics(), // Disable scrolling within the ListView
         itemCount: classes.length,
         itemBuilder: (context, index) {
           final classItem = classes[index];
