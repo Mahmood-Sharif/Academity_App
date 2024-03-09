@@ -45,17 +45,17 @@ class MyApp extends StatelessWidget {
         // Define other static routes here if necessary
         '/browseSports': (context) => const SportsPage(),
       },
-onGenerateRoute: (settings) {
-  if (settings.name == '/browse-academy') {
-    final sportId = settings.arguments as int; // Assuming you pass an int directly
-    return MaterialPageRoute(
-      builder: (context) => BrowseAcademyScreen(sportId: sportId),
-    );
-  }
-  // Handle other dynamic routes or return null for unknown routes
-  return null;
-},
-
+      onGenerateRoute: (settings) {
+        if (settings.name == '/browse-academy') {
+          final sportId =
+              settings.arguments as int; // Assuming you pass an int directly
+          return MaterialPageRoute(
+            builder: (context) => BrowseAcademyScreen(sportId: sportId),
+          );
+        }
+        // Handle other dynamic routes or return null for unknown routes
+        return null;
+      },
     );
   }
 }
