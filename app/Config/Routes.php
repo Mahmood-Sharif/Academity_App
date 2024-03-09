@@ -36,15 +36,18 @@ $routes->get('change-locale/(:segment)', static function ($locale) {
     return redirect()->to($url);
 });
 
-// API Routes all routes inside the function are prefixed with 'api'.
+// API Routes
+$routes->post('api/login', 'Api\Login::loginUser'); // does not require token
+
+// all routes inside the function are prefixed with 'api'.
 // e.g. /api/test, /api/login
-$routes->group('api', static function ($routes) {
+$routes->group('api', /*['filter' => 'tokens'],*/ static function ($routes) {
 
     // example route generates all HTTP verbs (get, post, put, patch, delete)
     $routes->resource('test', ['controller' => 'Api\Test']);
 
     // login api
-    $routes->post('login', 'Api\Login::loginUser');
+    $routes->get('login-test', 'Api\Login::loginTest');
     // sports api
     $routes->resource('sport', ['controller' => 'Api\Sport']);
     // New route for fetching academies by sport ID
@@ -52,7 +55,7 @@ $routes->group('api', static function ($routes) {
     // Academy API
     $routes->resource('academies', ['controller' => 'Api\Academy']);
     // app/Config/Routes.php
-    $routes->resource('academies', ['controller' => 'Api\Academy']);
+    $routes->get('academies', ['controller' => 'Api\Academy']);
     // app/Config/Routes.php
     $routes->get('academy/(:num)/classes', 'Api\Academy::classes/$1');
 
