@@ -1,14 +1,11 @@
 // class_services.dart
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:academity_app/services/academity_api.dart';
 import 'package:academity_app/models/class.dart'; // Adjust path
 
 class ClassServices {
-  final String baseUrl = 'http://192.168.28.119:8080/api';
-
- Future<List<Class>> fetchClasses(int academyId) async {
-    final url = Uri.parse('$baseUrl/academy/$academyId/classes');
-    final response = await http.get(url);
+  Future<List<Class>> fetchClasses(int academyId) async {
+    final response = await AcademityApi.get('academy/$academyId/classes');
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);

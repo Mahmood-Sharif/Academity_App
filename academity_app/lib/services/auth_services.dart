@@ -1,15 +1,19 @@
 import 'dart:convert';
-import 'package:academity_app/models/users.dart';
 import 'package:academity_app/services/academity_api.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final authServicesProvider = Provider<AuthServices>((ref) {
-  return AuthServices();
-});
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
 class AuthServices {
-  Future<User?> login(String email, String password) async {
-    final response = await AcademityApi.post('login', body: {
+  Future<bool> loginTest() async {
+    final response = await AcademityApi.get('login-test');
+    return response.statusCode == 204;
+  }
+
+  Future<bool> login(String email, String password) async {
+    // here we are not using AcademityApi.get because we don't have a token
+    // and /api/login does not need one
+    final response = await http
+        .post(Uri.http(AcademityApi.academityHost, '/api/login'), body: {
       'email': email,
       'password': password,
     });
@@ -17,13 +21,18 @@ class AuthServices {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       if (data['status'] == 'Login successful') {
-        return User.fromJson(data);
+        const secureStorage = FlutterSecureStorage();
+        final apiToken = data['new_token'];
+        await secureStorage.write(key: 'api_token', value: apiToken);
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
-  void logout() {
+  Future<void> logout() async {
     // Handle logout logic, possibly including clearing shared preferences
+    const secureStorage = FlutterSecureStorage();
+    await secureStorage.delete(key: 'api_token');
   }
 }
