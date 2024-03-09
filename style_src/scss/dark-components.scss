@@ -1,0 +1,43 @@
+@include color-mode(dark, true) {
+  $theme-colors-rgb-dark: map-loop($theme-colors-dark, to-rgb, "$value");
+
+  @each $color, $value in $theme-colors-rgb-dark {
+    --#{$prefix}#{$color}-rgb: #{$value};
+  }
+}
+
+@include color-mode(dark) {
+  $component-active-color: $black;
+  $component-active-bg: $primary-dark;
+
+
+  @each $color, $value in $theme-colors-dark {
+    .btn-#{$color} {
+      @include button-variant($value, $value);
+    }
+  }
+
+  @each $color, $value in $theme-colors-dark {
+    .btn-outline-#{$color} {
+      @include button-outline-variant($value);
+    }
+  }
+
+
+  $nav-pills-link-active-color: $component-active-color;
+  $nav-pills-link-active-bg: $component-active-bg;
+
+  .nav-pills {
+    --#{$prefix}nav-pills-link-active-color: #{$nav-pills-link-active-color};
+    --#{$prefix}nav-pills-link-active-bg: #{$nav-pills-link-active-bg};
+  }
+
+  $dropdown-link-active-color: $component-active-color;
+  $dropdown-link-active-bg: $component-active-bg;
+
+  .dropdown-menu {
+    --#{$prefix}dropdown-link-active-color: #{$dropdown-link-active-color};
+    --#{$prefix}dropdown-link-active-bg: #{$dropdown-link-active-bg};
+  }
+
+}

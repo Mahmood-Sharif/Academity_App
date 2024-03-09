@@ -70,7 +70,8 @@ $url = match($type) {
         </div>
 
         <div class="form-floating mb-3">
-          <select class="form-select <?=array_key_exists('sport_id', validation_errors()) ? 'is-invalid' : ''?>" id="sportSelect" name="sport_id" aria-label="<?=lang('App.academy_sport')?>" required>
+          <select class="form-select <?=array_key_exists('sport_id', validation_errors()) ? 'is-invalid' : ''?>"
+            id="sportSelect" name="sport_id" aria-label="<?=lang('App.academy_sport')?>" required>
             <option selected>
               <?=lang('App.academy_sport.select')?>
             </option>
@@ -85,11 +86,11 @@ $url = match($type) {
             <?=lang('App.academy_sport')?>
           </label>
           <?=validation_show_error('sport_id')?>
-      </div>
+        </div>
 
-      <div class="mb-3">
-        <?=validated_form_input('academyPhone', 'phone', lang('App.academy_phone'), $academy?->phone ?? set_value('phone'), 'tel')?>
-      </div>
+        <div class="mb-3">
+          <?=validated_form_input('academyPhone', 'phone', lang('App.academy_phone'), $academy?->phone ?? set_value('phone'), 'tel')?>
+        </div>
 
         <div class="mb-3">
           <?=validated_form_input('academylocation', 'location', lang('App.academy_location'), $academy?->location ?? set_value('location'))?>
@@ -109,6 +110,49 @@ $url = match($type) {
         </div>
 
       </form>
+
+      <?php if ($type === 'edit'): ?>
+      <div class="accordion mt-4" id="accordionDanger">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              <?=lang('App.advanced_options')?>
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionDanger">
+            <div class="accordion-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-start">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold">
+                      <?=lang('App.block_registration')?>
+                    </div>
+                    <?=lang('App.block_registration.desc')?>
+                  </div>
+                  <button class="btn btn-danger">
+                    <?=lang('App.block_registration.btn')?>
+                  </button>
+                </li>
+                <li class="list-group-item d-flex align-items-start">
+                  <div class="ms-2 me-auto">
+                    <div class="fw-bold">
+                      <?=lang('App.delete_academy')?>
+                    </div>
+                    <?=lang('App.delete_academy.desc')?>
+                  </div>
+                  <button hx-get="<?=url_to('AdminPortal\Academy::remove', $academy->academy_id)?>"
+                    hx-target="#modals-here" hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here"
+                    class="btn btn-danger">
+                    <?=lang('App.delete_academy.btn')?>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php endif ?>
 
 
     </div>
