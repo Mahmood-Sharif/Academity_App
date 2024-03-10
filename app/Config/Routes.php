@@ -43,7 +43,8 @@ $routes->get('change-locale/(:segment)', static function ($locale) {
 $routes->group('api', static function ($routes) {
 
     // no token required
-    $routes->post('api/login', 'Api\Login::loginUser');
+    $routes->post('login', 'Api\Login::loginUser');
+    $routes->post('register', 'Api\Login::registerUser');
 
     $routes->group('', /*['filter' => 'tokens'],*/ static function ($routes) {
         // example resource route generates all HTTP verbs (get, post, put, patch, delete)
