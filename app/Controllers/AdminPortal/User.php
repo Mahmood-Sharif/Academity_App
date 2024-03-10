@@ -29,7 +29,7 @@ class User extends ResourcePresenter
         $academyId = $this->request->getGet('academy');
         $classId = $this->request->getGet('class');
 
-        if (! auth()->user()->can('students.access') || ($academyId === null && $classId === null)) {
+        if (! auth()->user()->can('students.access')) {
             return view('errors/html/error_404', [
               'message' => lang('App.not_found.class1')
             ]);
@@ -42,11 +42,10 @@ class User extends ResourcePresenter
         $students = $this->users;
 
         $academy = null;
+        $class = null;
         if ($academyId !== null) {
             $academy = (new AcademyModel())->find($academyId);
-        }
-        $class = null;
-        if ($classId !== null) {
+        } elseif ($classId !== null) {
             $class = (new ClassModel())->includeOwnerId()->find($classId);
         }
 
@@ -57,10 +56,12 @@ class User extends ResourcePresenter
             ]);
         }
 
-        if ($classId === null) {
+        if ($classId !== null) {
+            $students = $students->whereEnrolledInClass($classId);
+        } elseif ($academyId !== null) {
             $students = $students->whereEnrolledInAcademy($academyId);
         } else {
-            $students = $students->whereEnrolledInClass($classId);
+            $students = $students->whereInOwnerAcademies($userId);
         }
 
         $students = $students->findAll();
