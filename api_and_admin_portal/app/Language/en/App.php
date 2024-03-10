@@ -5,6 +5,7 @@ return [
   'academity_admin_portal' => 'Academity Admin Portal',
   'dashboard'              => 'Dashboard',
   'my_academies'           => 'My Academies',
+  'academies'              => 'Academies',
   'analytics'              => 'Analytics',
   'announcements'          => 'Announcements',
   'students'               => 'Students',
@@ -25,12 +26,17 @@ return [
   'theme.dark'             => 'Dark',
 
   // actions
+  'actions'                => 'Actions',
   'close'                  => 'Close',
+  'view'                   => 'View',
+  'edit'                   => 'Edit',
   'back'                   => 'Back',
   'back.academies'         => 'Back to my academies',
 
   // errors
   'not_found.academy'      => 'Academy not found',
+  'not_found.class'        => 'Class not found',
+  'empty.coaches'          => 'No coaches are registered with this academy.',
 
 
   // manage academies
@@ -45,16 +51,54 @@ return [
   'manage.announcements'   => 'Make Announcement',
   'manage.academy'         => 'Manage Academy',
   'academy.edit'           => 'Edit {0} details',
+  'academy.create'         => 'Create Academy',
+  'academy.create'         => 'Create Academy',
+
+  // manage coaches
+  'coaches'                => 'Coaches',
+  'register_coach'         => 'Register Coach',
+  'register_coach.success' => 'Coach "{0}" registered in {1} successfully.',
+  'register_coach.error'   => 'Could not register Coach "{0}" in {1}.',
+  'coach_name'             => 'Coach Name',
+  'coach_email'            => 'Coach Email',
+
+  // manage classes
+  'classes'                => 'Classes',
+  'class_name'             => 'Class Name',
+  'main_coach'             => 'Main Coach',
+  'class_update.success'   => 'Class details updated successfully.',
+  'class_update.error'     => 'Could not update class details.',
+
 
   // forms
   'submit'                 => 'Submit',
   'reset'                  => 'Reset',
   'academy_name'           => 'Academy Name',
+  'academy_sport'          => 'Academy Sport',
+  'academy_sport.select'   => 'Select A Sport',
   'academy_phone'          => 'Academy Phone',
   'academy_location'       => 'Academy Location',
   'academy_description'    => 'Academy Description',
   'academy_update.success' => 'Academy details updated successfully.',
   'academy_update.error'   => 'Could not update Academy details.',
+  'change_image'           => 'Change Image',
+  'select.academy'         => 'Select Academy',
+  'select.coach'           => 'Select Coach',
+
+  'repeat'                 => 'Repeat',
+  'day_of_week'            => 'Day of Week',
+  'day_of_week.sun'        => 'Sun',
+  'day_of_week.mon'        => 'Mon',
+  'day_of_week.tue'        => 'Tue',
+  'day_of_week.wed'        => 'Wed',
+  'day_of_week.thu'        => 'Thu',
+  'day_of_week.fri'        => 'Fri',
+  'day_of_week.sat'        => 'Sat',
+
+  'start_time'             => 'Start Time',
+  'end_time'               => 'End Time',
+
+  'price'                  => 'Price',
 
   // danger zone
   'advanced_options'          => 'Advanced Options',

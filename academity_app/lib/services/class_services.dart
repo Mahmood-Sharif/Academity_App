@@ -1,17 +1,11 @@
 // class_services.dart
 import 'dart:convert';
 import 'package:academity_app/services/academity_api.dart';
-import 'package:http/http.dart' as http;
 import 'package:academity_app/models/class.dart'; // Adjust path
 
 class ClassServices {
-  final String baseUrl = '${AcademityApi.academityUrl}/api';
-  // Consider extracting the host part if you're going to use it for image URL construction
-  final String baseImageUrl = AcademityApi.academityUrl;
-
-  Future<List<Classes>> fetchClasses(int academyId) async {
-    final url = Uri.parse('$baseUrl/academy/$academyId/classes');
-    final response = await http.get(url);
+  Future<List<Class>> fetchClasses(int academyId) async {
+    final response = await AcademityApi.get('academy/$academyId/classes');
 
     if (response.statusCode == 200) {
       // Decode the response body to a dynamic type

@@ -26,4 +26,31 @@ class UserModel extends CodeIgniterUserModel
         ];
     }
 
+    public function whereEnrolledInClass(int $classId): UserModel
+    {
+        return $this
+            ->join('enrollments', 'enrollments.student_id = users.id')
+            ->where('class_id', $classId);
+    }
+
+    public function whereEnrolledInAcademy(int $academyId): UserModel
+    {
+        return $this
+            ->join('enrollments', 'enrollments.student_id = users.id')
+            ->join('classes', 'enrollments.class_id = classes.class_id')
+            ->where('academy_id', $academyId);
+    }
+
+    public function coaches(): UserModel
+    {
+        return $this
+            ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
+            ->join('academy_coaches', 'academy_coaches.coach_id = users.id')
+            ->join('academies', 'academy_coaches.academy_id = academies.academy_id')
+            ->groupBy('users.id')
+            ->select('users.*')
+            ->select('group_concat(academies.name, ", ") as academies')
+            ->where('group', 'coach');
+    }
+
 }

@@ -1,4 +1,4 @@
-import 'package:academity_app/providers/auth_provider.dart';
+import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -61,23 +61,19 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
     );
   }
 
-Future<void> _login() async {
-  // Await the result of the login attempt
-  final bool success = await widget.ref.read(authProvider.notifier).login(
-    emailController.text,
-    passwordController.text,
-  );
+  Future<void> _login() async {
+    final auth = AuthServices();
+    final success =
+        await auth.login(emailController.text, passwordController.text);
 
-  if (success) {
-    // Debug print
-    Navigator.pushReplacementNamed(context, '/browseSports');
-  } else {
-    print('Login failed'); // Debug print
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Login failed')),
-    );
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, '/browseSports');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed')),
+      );
+    }
   }
-}
-
-
 }

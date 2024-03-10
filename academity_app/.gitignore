@@ -1,3 +1,6 @@
+# Private environment
+*.env.dart
+
 # Miscellaneous
 *.class
 *.log

@@ -1,34 +1,49 @@
 import 'dart:convert';
+
+import 'package:academity_app/.env.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+// TODO: insist on HTTPS
 class AcademityApi {
-  static const String academityHost = '192.168.100.15:8080';
-  static const String academityUrl = 'http://$academityHost';
-  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+  /// Perform an HTTP GET request to the Academity Api.
+  ///
+  /// Performs an api request to [path] prefixed with the Academity api
+  /// endpoint. e.g. if [path] is ['login'], the request is made to
+  /// ['http://academityHost/api/login'].
+  ///
+  /// If thei api token does not exist, a blank response with code 401 is
+  /// returned.
+  static Future<http.Response> get(String path,
+      [Map<String, dynamic>? queryParameters]) async {
+    const secureStorage = FlutterSecureStorage();
+    final apiToken = await secureStorage.read(key: 'api_token');
+    if (apiToken == null) return http.Response("", 401);
 
-  static Future<Map<String, String>> _getHeaders() async {
-    final token = await _storage.read(key: 'jwt_token');
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
-    if (token != null) {
-      headers['Authorization'] = 'Bearer $token';
-    }
-
-    return headers;
+    return http.get(Uri.http(Env.academityHost, '/api/$path', queryParameters),
+        headers: {'Authorization': 'Bearer $apiToken'});
   }
 
+  /// Perform an HTTP POST request to the Academity Api.
+  ///
+  /// Performs an api request to [path] prefixed with the Academity api
+  /// endpoint. e.g. if [path] is ['login'], the request is made to
+  /// ['http://academityHost/api/login'].
+  ///
+  /// If thei api token does not exist, a blank response with code 401 is
+  /// returned.
   static Future<http.Response> post(
     String path, {
     Object? body,
     Encoding? encoding,
   }) async {
-    final headers = await _getHeaders();
+    const secureStorage = FlutterSecureStorage();
+    final apiToken = await secureStorage.read(key: 'api_token');
+    if (apiToken == null) return http.Response("", 401);
+
     return http.post(
-      Uri.parse('$academityUrl/api/$path'), // Adjusted to use Uri.parse for full URL
-      headers: headers,
+      Uri.http(Env.academityHost, '/api/$path'),
+      headers: {'Authorization': 'Bearer $apiToken'},
       body: body,
       encoding: encoding,
     );

@@ -13,3 +13,21 @@
  *
  * @see: https://codeigniter.com/user_guide/extending/common.html
  */
+{}
+
+/**
+ * Map an array into an array with key-value pairs using a callback.
+ *
+ * @param callable $callback The callback that takes an element of the array
+ * and returns an array with two elements [key, value].
+ * @param array $array The array to map
+ */
+function key_array(callable $callback, array $array): array
+{
+    $result = [];
+    foreach ($array as $elem) {
+        [$key, $value] = $callback($elem);
+        $result[$key] = $value;
+    }
+    return $result;
+}

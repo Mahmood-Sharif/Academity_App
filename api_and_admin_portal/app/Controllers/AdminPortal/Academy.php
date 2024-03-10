@@ -2,7 +2,11 @@
 
 namespace App\Controllers\AdminPortal;
 
+use App\Controllers\BaseController;
+use App\Entities\Academy as AppAcademy;
 use App\Models\AcademyModel;
+use App\Models\SportModel;
+use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
 
 class Academy extends ResourcePresenter
@@ -24,6 +28,12 @@ class Academy extends ResourcePresenter
                         ->includeStatistics($id)
                         ->find($id);
 
+        if (! auth()->user()->can('academies.access') || auth()->id() != $academy->owner_id) {
+            return view('errors/html/error_404', [
+              'message' => lang('App.not_found.academy')
+            ]);
+        }
+
         if (!$academy) {
             return view('errors/html/error_404', [
               'message' => lang('App.not_found.academy')
@@ -38,34 +48,78 @@ class Academy extends ResourcePresenter
     {
         $academy = $this->model->includeImageUrl()->find($id);
 
+        if (! auth()->user()->can('academies.edit') || auth()->id() != $academy->owner_id) {
+            return view('errors/html/error_404', [
+              'message' => lang('App.not_found.academy')
+            ]);
+        }
+
         if (!$academy) {
             return view('errors/html/error_404', [
               'message' => lang('App.not_found.academy')
             ]);
         }
 
-        return view('academy/edit', ['academy' => $academy]);
+        $sports = (new SportModel())->findAll();
+
+        return view('academy/create_edit', [
+          'type' => 'edit',
+          'academy' => $academy,
+          'sports' => $sports,
+          'errors' => [],
+        ]);
     }
 
     // perform update
-    public function update($id = null): string
+    public function update($id = null): ResponseInterface|string
     {
-        $data = [
-          'name'        => $this->request->getPost('academy_name'),
-          'phone'       => $this->request->getPost('academy_phone'),
-          'location'    => $this->request->getPost('academy_location'),
-          'description' => $this->request->getPost('academy_description'),
-        ];
-
-        $result = $this->model->update($id, $data);
-        if ($result) {
-            session()->setFlashdata('message', lang('App.academy_update.success'));
-        } else {
-            session()->setFlashdata('error', lang('App.academy_update.error'));
+        $academy = $this->model->includeImageUrl()->find($id);
+        if (! auth()->user()->can('academies.edit') || auth()->id() != $academy->owner_id) {
+            return view('errors/html/error_404', [
+              'message' => lang('App.not_found.academy')
+            ]);
         }
 
-        $academy = $this->model->includeImageUrl()->find($id);
-        return view('academy/academy', ['academy' => $academy]);
+        if (! $this->validate([
+          ...$this->model->validationRules,
+          'image' => 'max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
+        ], $this->model->validationMessages)) {
+            return view('academy/create_edit', [
+              'type' => 'edit',
+              'academy' => $academy,
+              'sports' => (new SportModel())->findAll(),
+              'errors' => $this->validator->getErrors(),
+            ]);
+        }
+
+        $editedAcademy = new AppAcademy($this->validator->getValidated());
+
+        if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
+            $uploadedFile = $this->request->getFile('image');
+            $upload = BaseController::uploadMedia($uploadedFile);
+            if (array_key_exists('errors', $upload)) {
+                return view('academy/create_edit', [
+                    'type' => 'create',
+                    'academy' => $academy,
+                    'errors' => ['image' => $upload['errors']],
+                    'sports' => (new SportModel())->findAll(),
+                ]);
+            }
+
+            ['media_id' => $mediaId] = $upload;
+            $editedAcademy->media_id = $mediaId;
+
+        }
+
+        $result = $this->model->update($id, $editedAcademy->toArray());
+        $flashData = [];
+        if ($result) {
+            $flashData = ['message', lang('App.academy_update.success')];
+        } else {
+            $flashData = ['error', lang('App.academy_update.error')];
+        }
+
+        return redirect()->route('AdminPortal\Academy::show', [$id])->with(...$flashData);
     }
 
     /** AJAX remove confirm modal */
@@ -99,7 +153,7 @@ class Academy extends ResourcePresenter
 
         /* @var string $error */ $error;
         $result = false;
-        if ($this->request->getVar('academyNameConfirm') !== $academy->name) {
+        if ($this->request->getPost('academyNameConfirm') !== $academy->name) {
             // user didn't confirm academy name correctly
             $error = lang('App.delete_academy.name_error');
         } else {
@@ -120,5 +174,66 @@ class Academy extends ResourcePresenter
               'body'  => $error,
             ]);
         }
+    }
+
+    // show create form
+    public function new(): string
+    {
+        if (!auth()->user()->can('academies.create')) {
+            // TODO: make proper error page
+            return view('errors/html/error_404');
+        }
+
+        $sports = (new SportModel())->findAll();
+
+        return view('academy/create_edit', [
+          'type' => 'create' ,
+          'sports' => $sports,
+          'errors' => [],
+        ]);
+    }
+
+    // perform create
+    public function create(): ResponseInterface|string
+    {
+        if (! auth()->user()->can('academies.create')) {
+            return view('errors/html/error_404');
+        }
+
+        $sports = (new SportModel())->findAll();
+
+        if (! $this->validate([
+          ...$this->model->validationRules,
+          'image' => 'uploaded[image]|max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
+        ], $this->model->validationMessages)) {
+            return view('academy/create_edit', [
+                'type' => 'create',
+                'errors' => $this->validator->getErrors(),
+                'sports' => (new SportModel())->findAll(),
+            ]);
+        }
+
+        $academy = new AppAcademy($this->validator->getValidated());
+
+        $upload = BaseController::uploadMedia($this->request->getFile('image'));
+
+        if (array_key_exists('errors', $upload)) {
+            return view('academy/create_edit', [
+                'type' => 'create',
+                'errors' => ['image' => $upload['errors']],
+                'sports' => (new SportModel())->findAll(),
+            ]);
+        }
+
+        ['media_id' => $mediaId] = $upload;
+
+        $data = $academy->toArray();
+        $data['owner_id'] = auth()->user()->id;
+        $data['media_id'] = $mediaId;
+
+        $insertId =  $this->model->insert($data, true);
+
+        return redirect()->route('AdminPortal\Academy::show', [$insertId]);
+
     }
 }
