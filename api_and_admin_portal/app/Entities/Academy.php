@@ -11,5 +11,6 @@ class Academy extends Entity
       'phone'      => 'integer',
       'owner_id'   => 'integer',
       'media_id'   => 'integer',
+      'sport_id'   => 'integer',
     ];
 }

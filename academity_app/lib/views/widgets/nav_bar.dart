@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -25,7 +26,7 @@ class CustomBottomNavBar extends StatelessWidget {
           label: 'Academity',
           activeIcon: Icon(Icons.shield_rounded),
         ),
-     BottomNavigationBarItem(
+        BottomNavigationBarItem(
           icon: Container(
             width: 48, // Increase the width for a larger circle
             height: 48, // Increase the height for a larger circle
@@ -49,8 +50,14 @@ class CustomBottomNavBar extends StatelessWidget {
         ),
       ],
       currentIndex: selectedIndex,
-      selectedItemColor:const Color(0xFF8B0000),
+      selectedItemColor: const Color(0xFF8B0000),
       onTap: onItemSelected,
+      selectedLabelStyle: GoogleFonts.montserrat( // Montserrat for selected labels
+        fontWeight: FontWeight.w300,
+      ),
+      unselectedLabelStyle: GoogleFonts.montserrat( // Montserrat for unselected labels
+        fontWeight: FontWeight.w200,
+      ),
     );
   }
 }

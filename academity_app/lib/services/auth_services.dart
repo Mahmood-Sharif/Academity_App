@@ -1,29 +1,30 @@
 import 'dart:convert';
-import 'package:academity_app/models/users.dart';
-import 'package:academity_app/services/academity_api.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final authServicesProvider = Provider<AuthServices>((ref) {
-  return AuthServices();
-});
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'academity_api.dart'; // Ensure this import points to the correct file path
 
 class AuthServices {
-  Future<User?> login(String email, String password) async {
-    final response = await AcademityApi.post('login', body: {
-      'email': email,
-      'password': password,
-    });
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  Future<bool> login(String email, String password) async {
+    final response = await AcademityApi.post(
+      'login', // Fixed to use just the path part
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+      }),
+    );
 
     if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      if (data['status'] == 'Login successful') {
-        return User.fromJson(data);
+      final data = jsonDecode(response.body);
+      if (data['status'] == 'Login successful' && data['token'] != null) {
+        await _storage.write(key: 'jwt_token', value: data['token']);
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
-  void logout() {
-    // Handle logout logic, possibly including clearing shared preferences
+  Future<void> logout() async {
+    await _storage.delete(key: 'jwt_token');
   }
 }

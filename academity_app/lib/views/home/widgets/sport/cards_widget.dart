@@ -13,19 +13,15 @@ class TwoCardsSideBySide extends StatelessWidget {
           children: [
             Expanded(
               child: CardWithShadow(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('Card 1 Content'),
-                ),
+                header: "Upcoming Class",
+                body: "SoccerStars Academy",
               ),
             ),
             SizedBox(width: 16), // Space between the cards
             Expanded(
               child: CardWithShadow(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('Card 2 Content'),
-                ),
+                header: "Subscription Ends",
+                body: "27 Days",
               ),
             ),
           ],
@@ -36,26 +32,52 @@ class TwoCardsSideBySide extends StatelessWidget {
 }
 
 class CardWithShadow extends StatelessWidget {
-  final Widget child;
+  final String header;
+  final String body;
 
-  const CardWithShadow({Key? key, required this.child}) : super(key: key);
+  const CardWithShadow({
+    Key? key,
+    required this.header,
+    required this.body,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white, // Card background color
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.grey.withOpacity(1),
-            spreadRadius: 2,
+            color: Colors.grey,
+            spreadRadius: 1,
             blurRadius: 5,
-            offset: const Offset(0, 2), // Changes position of shadow
+            offset: Offset(0, 2), // Changes position of shadow
           ),
         ],
-        borderRadius: BorderRadius.circular(4), // Rounded corners
+        borderRadius: BorderRadius.circular(8), // Rounded corners
       ),
-      child: child,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              header,
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8.0), // Space between header and body
+            Text(
+              body,
+              style: const TextStyle(
+                fontSize: 14.0,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

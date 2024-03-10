@@ -1,36 +1,33 @@
 import 'dart:convert';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class AcademityApi {
-  /// The address of the Academity server
-  static const academityHost = '192.168.28.119:8080';
-  static const academityUrl = 'http://$academityHost/';
+  static const String academityHost = '192.168.100.15:8080';
+  static const String academityUrl = 'http://$academityHost';
+  static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
-  /// Perform an HTTP GET request to the Academity Api.
-  ///
-  /// Performs an api request to [path] prefixed with the Academity api
-  /// endpoint. e.g. if [path] is ['login'], the request is made to
-  /// ['http://academityHost/api/login'].
-  static Future<http.Response> get(String path,
-      [Map<String, dynamic>? queryParameters]) {
-    return http.get(Uri.http(academityHost, '/api/$path', queryParameters));
+  static Future<Map<String, String>> _getHeaders() async {
+    final token = await _storage.read(key: 'jwt_token');
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token != null) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    return headers;
   }
 
-  /// Perform an HTTP POST request to the Academity Api.
-  ///
-  /// Performs an api request to [path] prefixed with the Academity api
-  /// endpoint. e.g. if [path] is ['login'], the request is made to
-  /// ['http://academityHost/api/login'].
   static Future<http.Response> post(
     String path, {
-    Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
-  }) {
-    // TODO : add access token in headers
+  }) async {
+    final headers = await _getHeaders();
     return http.post(
-      Uri.http(academityHost, '/api/$path'),
+      Uri.parse('$academityUrl/api/$path'), // Adjusted to use Uri.parse for full URL
       headers: headers,
       body: body,
       encoding: encoding,

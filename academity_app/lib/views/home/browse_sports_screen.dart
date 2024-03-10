@@ -33,7 +33,9 @@ class _SportsPageState extends State<SportsPage> {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    appBar: const CustomAppBar(title: 'Home'),
+    appBar: const CustomAppBar(title: 'Home', ),
+    
+    
     body: FutureBuilder<List<Sport>>(
       future: futureSports,
       builder: (context, snapshot) {
@@ -47,7 +49,8 @@ Widget build(BuildContext context) {
             children: [
               const SizedBox(height: 20),
               // SportsListWidget adapted to be non-scrollable
-              SportsListWidget(sports: snapshot.data ?? []), // Assuming you adapt SportsListWidget
+              SportsListWidget(sports: snapshot.data ?? []), // Assuming you adapt SportsListWidget\
+              const SizedBox(height: 20,),
               // TwoCardsSideBySide widget displayed after SportsListWidget
               const TwoCardsSideBySide(),
             ],

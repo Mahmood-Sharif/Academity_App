@@ -1,33 +1,40 @@
-class Class {
+import 'class_timing.dart'; // Ensure this path is correct and points to your ClassTiming model
+
+class Classes {
   final int classId;
   final String className;
   final int minAge;
   final int maxAge;
   final int academyId;
+  final String price; 
+  final List<ClassTiming> timings;
 
-  Class({
+  Classes({
     required this.classId,
     required this.className,
     required this.minAge,
     required this.maxAge,
     required this.academyId,
+    required this.price,
+    required this.timings,
   });
 
-  factory Class.fromJson(Map<String, dynamic> json) {
-    return Class(
-      classId: json['class_id'] as int,
-      className: json['class_name'] as String,
-      minAge: json['min_age'] as int,
-      maxAge: json['max_age'] as int,
-      academyId: json['academy_id'] as int,
+  factory Classes.fromJson(Map<String, dynamic> json) {
+    final String price = json['price'] ?? 'Price Unavailable';
+    List<ClassTiming> timings = [];
+    if (json['timings'] != null) {
+      var timingsJson = json['timings'] as List;
+      timings = timingsJson.map((i) => ClassTiming.fromJson(i)).toList();
+    }
+
+    return Classes(
+      classId: json['class_id'],
+      className: json['class_name'],
+      minAge: json['min_age'],
+      maxAge: json['max_age'],
+      academyId: json['academy_id'],
+      price: price,
+      timings: timings,
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        'class_id': classId,
-        'class_name': className,
-        'min_age': minAge,
-        'max_age': maxAge,
-        'academy_id': academyId,
-      };
 }
