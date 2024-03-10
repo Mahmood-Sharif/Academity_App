@@ -20,6 +20,12 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
 $routes->group('{locale}/admin-portal', ['filter' => 'group:admin,superadmin'], static function ($routes) {
     $routes->get('/', 'AdminPortal\Controller::dashboard', ['as' => 'dashboard']);
     $routes->presenter('my-academies', ['controller' => 'AdminPortal\Academy']);
+    $routes->get('classes/by-academy/(:num)', 'AdminPortal\Classes::index/$1');
+    $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
+    $routes->get('students/', 'AdminPortal\User::indexStudents');
+    $routes->get('coaches/', 'AdminPortal\User::indexCoaches');
+    $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
+    $routes->view('register-coach/', 'user/register_coach');
 });
 
 $routes->get('change-locale/(:segment)', static function ($locale) {
@@ -30,15 +36,18 @@ $routes->get('change-locale/(:segment)', static function ($locale) {
     return redirect()->to($url);
 });
 
-// API Routes all routes inside the function are prefixed with 'api'.
+// API Routes
+$routes->post('api/login', 'Api\Login::loginUser'); // does not require token
+
+// all routes inside the function are prefixed with 'api'.
 // e.g. /api/test, /api/login
-$routes->group('api', static function ($routes) {
+$routes->group('api', /*['filter' => 'tokens'],*/ static function ($routes) {
 
     // example route generates all HTTP verbs (get, post, put, patch, delete)
     $routes->resource('test', ['controller' => 'Api\Test']);
 
     // login api
-    $routes->post('login', 'Api\Login::loginUser');
+    $routes->get('login-test', 'Api\Login::loginTest');
     // sports api
     $routes->resource('sport', ['controller' => 'Api\Sport']);
     // New route for fetching academies by sport ID

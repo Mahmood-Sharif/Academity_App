@@ -26,4 +26,19 @@ class ClassModel extends Model
           ->where('prices.start_time < CURRENT_TIMESTAMP')
           ->select('classes.*, prices.price');
     }
+
+    public function includeOwnerId(): ClassModel
+    {
+        return $this->join('academies', 'classes.academy_id = academies.academy_id')
+                    ->select('classes.*')
+                    ->select('academies.owner_id');
+    }
+
+    public function limitByOwner(int $id): ClassModel
+    {
+        return $this->join('academies', 'classes.academy_id = academies.academy_id')
+                    ->where('academies.owner_id', $id)
+                    ->select('classes.*')
+                    ->select('academies.owner_id');
+    }
 }
