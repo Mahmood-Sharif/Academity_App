@@ -62,7 +62,6 @@ class InitialMigration extends Migration
           ],
         ]);
         $this->forge->addPrimaryKey('academy_id');
-        $this->forge->addForeignKey('owner_id', 'users', 'id');
         $this->forge->addForeignKey('media_id', 'media', 'media_id');
         $this->forge->createTable('academies', true);
 
@@ -224,7 +223,6 @@ class InitialMigration extends Migration
           ]
         ]);
         $this->forge->addPrimaryKey('enrollment_id');
-        $this->forge->addForeignKey('student_id', 'users', 'id');
         $this->forge->addForeignKey('class_id', 'classes', 'class_id');
         $this->forge->createTable('enrollments', true);
 
