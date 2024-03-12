@@ -28,15 +28,10 @@ class Classes extends ResourcePresenter
     {
         $class = $this->model->includeOwnerId()->find($id);
 
-        if (! auth()->user()->can('classes.access') || auth()->id() != $class->owner_id) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class')
-            ]);
-        }
-
-        if (!$class) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class')
+        if (! auth()->user()->can('classes.access') || auth()->id() != $class?->owner_id) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -48,15 +43,10 @@ class Classes extends ResourcePresenter
     {
         $class = $this->model->includeOwnerId()->find($id);
 
-        if (! auth()->user()->can('classes.edit') || auth()->id() != $class->owner_id) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class')
-            ]);
-        }
-
-        if (!$class) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class')
+        if (! auth()->user()->can('classes.edit') || auth()->id() != $class?->owner_id) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -76,9 +66,10 @@ class Classes extends ResourcePresenter
     public function update($id = null): ResponseInterface|string
     {
         $class = $this->model->find($id);
-        if (! auth()->user()->can('classes.edit') || auth()->id() != $class->owner_id) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class')
+        if (! auth()->user()->can('classes.edit') || auth()->id() != $class?->owner_id) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -97,7 +88,10 @@ class Classes extends ResourcePresenter
     public function new(): string
     {
         if (!auth()->user()->can('classes.create')) {
-            return view('errors/html/error_404');
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
         }
 
         $academyId = $this->request->getGet('academy_id');

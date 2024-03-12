@@ -31,9 +31,12 @@ return [
   'view'                   => 'View',
   'edit'                   => 'Edit',
   'back'                   => 'Back',
+  'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
 
   // errors
+  'error'                  => 'Error',
+  'unauthorized'           => 'Unauthorized',
   'not_found.academy'      => 'Academy not found',
   'not_found.class'        => 'Class not found',
   'empty.coaches'          => 'No coaches are registered with this academy.',
