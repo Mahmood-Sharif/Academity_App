@@ -1,20 +1,23 @@
+import 'package:academity_app/models/sport.dart';
 import 'package:academity_app/views/home/widgets/academy/academy_list_widget.dart';
+import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 
 class BrowseAcademyScreen extends StatelessWidget {
-  final int sportId; // Make sportId a dynamic parameter of the class
+  final Sport sport; // Holds the Sport object for the selected sport
 
-  // Require sportId as a parameter in the constructor
-  const BrowseAcademyScreen({Key? key, required this.sportId}) : super(key: key);
+  const BrowseAcademyScreen({
+    Key? key,
+    required this.sport,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Browse Academies'),
+      appBar: CustomAppBar(
+        title: sport.sportName, // Correctly display the sport's name in the app bar
       ),
-      // Directly use AcademiesListWidget with the dynamic sportId
-      body: AcademiesListWidget(sportId: sportId),
+      body: AcademiesListWidget(sportId: sport.sportsId), // Pass the sportId to the list widget
     );
   }
 }

@@ -1,66 +1,39 @@
-import 'package:academity_app/models/sport.dart';
-import 'package:academity_app/services/sports_services.dart';
+import 'package:academity_app/providers/sports_provider.dart';
 import 'package:academity_app/views/home/widgets/sport/cards_widget.dart';
 import 'package:academity_app/views/home/widgets/sport/sports_griview.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
-import 'package:academity_app/views/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SportsPage extends StatefulWidget {
+// Make sure your SportsPage is now a ConsumerWidget or ConsumerStatefulWidget
+class SportsPage extends ConsumerStatefulWidget {
   const SportsPage({super.key});
 
   @override
   _SportsPageState createState() => _SportsPageState();
 }
 
-class _SportsPageState extends State<SportsPage> {
-  late Future<List<Sport>> futureSports;
-
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+class _SportsPageState extends ConsumerState<SportsPage> {
 
   @override
-  void initState() {
-    super.initState();
-    futureSports = SportsService().fetchSports();
+  Widget build(BuildContext context) {
+    // Use Riverpod's ConsumerWidget features
+    final sportsFuture = ref.watch(sportsProvider);
+
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'Home'),
+      body: sportsFuture.when(
+        data: (sports) => ListView(
+          children: [
+            const SizedBox(height: 20),
+            SportsListWidget(sports: sports),
+            const SizedBox(height: 20),
+            const TwoCardsSideBySide(),
+          ],
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('Error: $error')),
+      ),
+    );
   }
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: const CustomAppBar(title: 'Home'),
-    body: FutureBuilder<List<Sport>>(
-      future: futureSports,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          // Use ListView to allow everything to scroll together
-          return ListView(
-            children: [
-              const SizedBox(height: 20),
-              // SportsListWidget adapted to be non-scrollable
-              SportsListWidget(sports: snapshot.data ?? []), // Assuming you adapt SportsListWidget
-              // TwoCardsSideBySide widget displayed after SportsListWidget
-              const TwoCardsSideBySide(),
-            ],
-          );
-        }
-      },
-    ),
-    bottomNavigationBar: CustomBottomNavBar(
-      selectedIndex: _selectedIndex,
-      onItemSelected: _onItemTapped,
-    ),
-  );
-}
-
-
 }
