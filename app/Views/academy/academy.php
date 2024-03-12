@@ -92,10 +92,10 @@ $this->endSection('sidebarTab');
         <a href="<?=url_to('AdminPortal\User::indexCoaches') ?>" class="btn btn-secondary">
           <?=lang('App.manage.coaches')?>
         </a>
-        <a href="#" class="btn btn-secondary">
+        <a href="#" class="btn btn-secondary disabled">
           <?=lang('App.manage.announcements')?>
         </a>
-        <a href="#" class="btn btn-secondary">
+        <a href="#" class="btn btn-secondary disabled">
           <?=lang('App.manage.accounting')?>
         </a>
         <a href="<?=url_to('AdminPortal\Academy::edit', $academy->academy_id)?>" class="btn btn-secondary">

@@ -90,7 +90,7 @@ class Academy extends ResourcePresenter
             $upload = BaseController::uploadMedia($uploadedFile);
             if (array_key_exists('errors', $upload)) {
                 return view('academy/create_edit', [
-                    'type' => 'create',
+                    'type' => 'edit',
                     'academy' => $academy,
                     'errors' => ['image' => $upload['errors']],
                     'sports' => (new SportModel())->findAll(),

@@ -155,18 +155,4 @@ $url = match($type) {
   </div>
 </div>
 
-<script>
-  (() => {
-    window.history.pushState(
-      null,
-      '<?= esc($title, 'js') ?>',
-      '<?= esc($url, 'js') ?>',
-    );
-    document.getElementById('academyImage').onchange = function () {
-      const src = URL.createObjectURL(this.files[0]);
-      document.getElementById('imagePreview').src = src;
-    };
-  })();
-</script>
-
 <?= $this->endSection('content'); ?>

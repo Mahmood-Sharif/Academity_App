@@ -51,6 +51,7 @@ return [
   'manage.classes'         => 'Manage Classes',
   'manage.schedule'        => 'Classes Schedule',
   'manage.students'        => 'Manage Students',
+  'manage.coaches'         => 'Manage Coaches',
   'manage.announcements'   => 'Make Announcement',
   'manage.academy'         => 'Manage Academy',
   'academy.edit'           => 'Edit {0} details',
