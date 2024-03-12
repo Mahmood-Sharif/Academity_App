@@ -4,6 +4,10 @@ namespace App\Entities;
 
 use CodeIgniter\Entity\Entity;
 
+namespace App\Entities;
+
+use CodeIgniter\Entity\Entity;
+
 class ClassEntity extends Entity
 {
     protected $casts = [

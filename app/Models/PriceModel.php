@@ -17,4 +17,5 @@ class PriceModel extends Model
       'end_time',
       'offer_id',
     ];
-}
+
+  }
