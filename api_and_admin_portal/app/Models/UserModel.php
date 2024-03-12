@@ -30,7 +30,8 @@ class UserModel extends CodeIgniterUserModel
     {
         return $this
             ->join('enrollments', 'enrollments.student_id = users.id')
-            ->where('class_id', $classId);
+            ->where('class_id', $classId)
+            ->select('users.*');
     }
 
     public function whereEnrolledInAcademy(int $academyId): UserModel
@@ -38,7 +39,18 @@ class UserModel extends CodeIgniterUserModel
         return $this
             ->join('enrollments', 'enrollments.student_id = users.id')
             ->join('classes', 'enrollments.class_id = classes.class_id')
-            ->where('academy_id', $academyId);
+            ->where('academy_id', $academyId)
+            ->select('users.*');
+    }
+
+    public function whereInOwnerAcademies(int $userId): UserModel
+    {
+        return $this
+            ->join('enrollments', 'enrollments.student_id = users.id')
+            ->join('classes', 'enrollments.class_id = classes.class_id')
+            ->join('academies', 'academies.academy_id = classes.academy_id')
+            ->where('academies.owner_id', $userId)
+            ->select('users.*');
     }
 
     public function coaches(): UserModel

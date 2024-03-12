@@ -139,7 +139,8 @@ $tab = $this->sections['sidebarTab'][0];
           <i class="bi bi-megaphone fs-5 me-1"></i>
           <?=lang('App.announcements')?>
         </a>
-        <a href="students" class="nav-link <?= $tab == 'students' ? 'active' : '' ?>">
+        <a href="<?=url_to('AdminPortal\User::indexStudents')?>"
+          class="nav-link <?= $tab == 'students' ? 'active' : '' ?>">
           <i class="bi bi-person fs-5 me-1"></i>
           <?=lang('App.students')?>
         </a>
