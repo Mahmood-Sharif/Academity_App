@@ -53,31 +53,23 @@ class Validation extends BaseConfig
         ],
       ],
       'phone' => [
-        'label' => 'Mobile Number',
+        'label' => 'Auth.phone',
         'rules' => [
           'required',
           'max_length[20]',
           'min_length[8]',
           'regex_match[/\A[0-9]+\z/]',
-          'is_unique[users.phone]',
         ],
       ],
       'dob' => [
-        'label' => 'Date of Birth',
+        'label' => 'Auth.dob',
         'rules' => [
           'required',
           'valid_date',
         ],
       ],
-      'first_name' => [
-        'label' => 'First Name',
-        'rules' => [
-          'required',
-          'max_length[30]',
-        ],
-      ],
-      'last_name' => [
-        'label' => 'Last Name',
+      'name' => [
+        'label' => 'Auth.name',
         'rules' => [
           'required',
           'max_length[30]',

@@ -14,6 +14,9 @@ class ClassModel extends Model
       'min_age',
       'max_age',
       'academy_id',
+      'max_capacity',
+      'min_duration',
+      'max_duration'
     ];
 
     protected $returnType = \App\Entities\ClassEntity::class;
