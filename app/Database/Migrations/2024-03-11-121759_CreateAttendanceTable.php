@@ -29,7 +29,7 @@ class CreateAttendanceTable extends Migration
         }
 
         $this->db->simpleQuery("
-            CREATE FUNCTION DOW(
+            CREATE OR REPLACE FUNCTION DOW(
                 day_of_week ENUM('SUN','MON','TUE','WED','THU','FRI','SAT')
             ) RETURNS int(11)
             RETURN day_of_week+0;");
