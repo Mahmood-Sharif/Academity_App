@@ -4,7 +4,12 @@ import 'package:academity_app/models/class.dart'; // Adjust path
 
 final classServiceProvider = Provider<ClassServices>((ref) => ClassServices());
 
-final classProvider = FutureProvider.family<List<Class>, int>((ref, academyId) async {
+final classProvider = FutureProvider.family<Classes, int>((ref, classId) async {
+  return ClassServices().fetchClassDetails(classId);
+});
+
+final classProviderwithAcademy =
+    FutureProvider.family<List<Classes>, int>((ref, academyId) async {
   final classService = ref.watch(classServiceProvider);
   return classService.fetchClasses(academyId);
 });

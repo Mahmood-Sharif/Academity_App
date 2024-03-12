@@ -4,12 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 // Provides an instance of AcademyServices
-final academyServiceProvider = Provider<AcademyServices>((ref) {
-  return AcademyServices();
-});
 
 // Fetches and provides academies by sport ID
 final academiesProvider = FutureProvider.family<List<Academy>, int>((ref, sportId) {
-  final academyService = ref.watch(academyServiceProvider);
+  final academyService = AcademyServices();
   return academyService.fetchAcademiesBySportId(sportId);
 });

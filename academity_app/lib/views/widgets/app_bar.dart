@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -16,10 +17,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Transform.translate(
-        offset: const Offset(0, 20), // Adjust the '10' value to lower the text as needed
+        offset: const Offset(0, 10), // Adjust the offset value to lower the text as needed
         child: Text(
           title,
-          style: const TextStyle(color: Colors.white), // Set title text color to white
+          style: GoogleFonts.montserrat( // Use Montserrat font from google_fonts package
+            color: Colors.white,
+            fontWeight: FontWeight.bold // Set title text color to white
+          ),
         ),
       ),
       centerTitle: true, // Centers the AppBar title

@@ -35,14 +35,15 @@ class Academy extends ResourceController
         }
 
         $model = new AcademyModel();
-        $academies = $model->getAcademiesBySportId($sportId);
+        $academies = $model->includeImageUrl()->getAcademiesBySportId($sportId);
         if (empty($academies)) {
             return $this->failNotFound("No academies found for sport ID: $sportId");
         }
 
         return $this->respond(['academies' => $academies]);
     }
-    public function classes($academyId)
+
+    public function getClassDetails($academyId)
     {
         $model = new ClassModel();
         $classes = $model->where('academy_id', $academyId)->findAll();

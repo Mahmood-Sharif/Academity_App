@@ -1,6 +1,7 @@
 // description_widget.dart
 import 'package:flutter/material.dart';
-import 'package:academity_app/models/academy.dart'; // Adjust path
+import 'package:academity_app/models/academy.dart';
+import 'package:google_fonts/google_fonts.dart'; // Adjust path
 
 class DescriptionWidget extends StatelessWidget {
   final Academy academy;
@@ -9,10 +10,11 @@ class DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text('Description: ${academy.description}',
-        style: const TextStyle(fontSize: 16,),
+    return Text(
+      academy.description,
+      style: GoogleFonts.montserrat(
+        fontWeight: FontWeight.w400, // Make text bold
+        fontSize: 14, // Optional: adjus font size as needed
       ),
     );
   }
