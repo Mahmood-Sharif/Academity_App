@@ -28,6 +28,12 @@ class CreateAttendanceTable extends Migration
             return;
         }
 
+        $this->db->simpleQuery("
+            CREATE OR REPLACE FUNCTION DOW(
+                day_of_week ENUM('SUN','MON','TUE','WED','THU','FRI','SAT')
+            ) RETURNS int(11)
+            RETURN day_of_week+0;");
+
         $this->db->simpleQuery(
             "
 CREATE OR REPLACE PROCEDURE getAttendance (
