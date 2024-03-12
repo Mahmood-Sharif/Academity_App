@@ -56,6 +56,7 @@ $routes->group('api', static function ($routes) {
         $routes->resource('academies', ['controller' => 'Api\Academy']);
         $routes->get('academies', ['controller' => 'Api\Academy']);
         $routes->get('academy/(:num)/classes', 'Api\Academy::classes/$1');
+        $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
 
     });
 });

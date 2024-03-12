@@ -7,7 +7,8 @@ use CodeIgniter\Entity\Entity;
 class Attendance extends Entity
 {
     protected $casts = [
-        'student_id'      => 'integer',
-        'date_time'       => 'datetime',
+        'attendance_id' => '?integer',
+        'student_id'    => 'integer',
+        'date_time'     => 'datetime',
     ];
 }
