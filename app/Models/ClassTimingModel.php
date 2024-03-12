@@ -19,9 +19,19 @@ class ClassTimingModel extends Model
 
     protected $returnType = \App\Entities\ClassEntity::class;
 
-    public function getTimingsForClass(int $id)
+    public function getTimingsForClass(int $id): array
     {
         return $this->where('class_id', $id)->findAll();
+    }
+
+    public function getScheduleForStudent(int $id, string $fromDate, string $toDate): array
+    {
+        return $this->db->query('call getStudentSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult();
+    }
+
+    public function getScheduleForCoach(int $id, string $fromDate, string $toDate): array
+    {
+        return $this->db->query('call getCoachSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult();
     }
 
 }

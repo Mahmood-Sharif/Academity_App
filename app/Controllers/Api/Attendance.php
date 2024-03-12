@@ -11,6 +11,8 @@ use DateTimeZone;
 class Attendance extends ResourceController
 {
     protected $modelName = '\App\Models\AttendanceModel';
+    /* @var AttendanceModel $model */
+    protected $model;
 
     public function getAttendanceForClassNow(int $classId): ResponseInterface
     {
