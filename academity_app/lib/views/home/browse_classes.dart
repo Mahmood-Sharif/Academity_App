@@ -1,7 +1,7 @@
 import 'package:academity_app/models/class.dart';
 import 'package:academity_app/models/class_with_timing.dart';
 import 'package:academity_app/services/class_service.dart';
-import 'package:academity_app/views/home/widgets/sport/classes_griview.dart';
+import 'package:academity_app/views/home/widgets/class/classes_griview.dart';
 import 'package:flutter/material.dart';
 
 class ClassesPage extends StatefulWidget {

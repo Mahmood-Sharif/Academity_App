@@ -31,7 +31,7 @@ class ClassListWidget extends ConsumerWidget {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  '/class_students',
+                  '/attendance',
                   arguments: classes[index].classId,
                 );
               },

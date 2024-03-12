@@ -1,6 +1,6 @@
 import 'package:academity_app/views/home/browse_academies.dart';
 import 'package:academity_app/views/home/browse_classes.dart';
-import 'package:academity_app/views/home/class_students.dart';
+import 'package:academity_app/views/home/Attendance.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationPage extends StatefulWidget {

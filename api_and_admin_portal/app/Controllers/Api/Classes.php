@@ -39,4 +39,34 @@ class Classes extends ResourceController
             return $this->failNotFound('Class Not Found');
         }
     }
+
+    public function getByAcademyId(): ResponseInterface
+{
+    $academyId = $this->request->getGet('academy_id');
+    if ($academyId === null) {
+        return $this->fail('Academy ID is required.', 400);
+    }
+
+    $classModel = new ClassModel();
+    $classTimingModel = new ClassTimingModel();
+    $academyModel = new AcademyModel();
+
+    // Fetch classes along with their timings and academy details using a database join
+    $classes = $classModel->select('classes.*, class_timings.day_of_week, class_timings.start_time, class_timings.end_time, academies.name')
+                          ->join('class_timings', 'class_timings.class_id = classes.class_id', 'left')
+                          ->join('academies', 'academies.academy_id = classes.academy_id', 'left')
+                          ->where('classes.academy_id', $academyId)
+                          ->orderBy('classes.class_id', 'DESC')
+                          ->findAll();
+
+    if (empty($classes)) {
+        return $this->failNotFound('No classes found for the provided academy ID.');
+    }
+
+    $data = [
+        'classes' => $classes
+    ];
+
+    return $this->respond($data);
+}
 }

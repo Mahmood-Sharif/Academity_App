@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/models/student.dart';
 import 'package:academity_app/providers/students_provider.dart';
 
-class StudentListWidget extends ConsumerWidget {
-  final int classId;
-  const StudentListWidget({Key? key, required this.classId}) : super(key: key);
+class AttendanceListWidget extends ConsumerWidget {
+  final int classId; 
+  const AttendanceListWidget({Key? key, required this.classId}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Use the `studentsByClassIdProvider` to access the data
+    // Use the `studentsByClassIdProvider` to access the data based on classId
     final AsyncValue<List<Student>> studentsAsyncValue =
         ref.watch(studentsByClassIdProvider(classId));
 
@@ -33,13 +33,27 @@ class StudentListWidget extends ConsumerWidget {
                 'Phone: ${student.phone}',
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
+              trailing: ToggleButtons(
+                children: [
+                  Text('Attended'),
+                  Text('Absent'),
+                ],
+                isSelected: [false, false],
+                onPressed: (index) {
+                  // Handle the toggle button press
+                  if (index == 0) {
+                    // Attended button pressed
+                  } else if (index == 1) {
+                    // Absent button pressed
+                  }
+                },
+                selectedColor: Colors.white,
+                fillColor: Colors.green,
+                borderRadius: BorderRadius.circular(16),
+              ),
               onTap: () {
-              Navigator.pushNamed(
-               context,
-              '/studentDetails',
-               arguments: student, // Pass the student object to the details screen
-               );
-},
+                // Handle the tap event if needed
+              },
             );
           },
         );

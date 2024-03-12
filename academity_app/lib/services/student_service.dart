@@ -20,7 +20,6 @@ class StudentServices {
         throw Exception('Failed to load students for class $classId. Response status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Exception occurred while fetching students: $e');
       throw Exception('An error occurred while fetching students');
     }
   }

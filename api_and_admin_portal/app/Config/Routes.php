@@ -27,6 +27,8 @@ $routes->group('api', static function ($routes) {
     // login api
     $routes->post('login', 'Api\Login::loginUser');
     // classes api
+    $routes->get('classes/bai', 'Api\Classes::getByAcademyId');
+
     $routes->resource('classes', ['controller' => 'Api\Classes']);
     // enrollments api
     $routes->get('enrollments/bci', 'Api\Enrollments::getStudentsByClassId');
@@ -34,6 +36,9 @@ $routes->group('api', static function ($routes) {
     $routes->resource('enrollments', ['controller'=> 'Api\Enrollments']);
     // students api
     $routes->resource('students', ['controller'=> 'Api\Students']);
+    // academies api
+    
+    $routes->resource('academies', ['controller'=> 'Api\Academies']);
 
 
 });

@@ -1,11 +1,11 @@
 class Academy {
-  final int academyId;
+  final String academyId;
   final String location;
   final String name;
-  final int phone;
+  final String phone;
   final String description;
-  final String imageUrl;
-  final int ownerId;
+  final String mediaId;
+  final String ownerId;
 
   Academy({
     required this.academyId,
@@ -13,31 +13,19 @@ class Academy {
     required this.name,
     required this.phone,
     required this.description,
-    required this.imageUrl,
+    required this.mediaId,
     required this.ownerId,
   });
 
-  // Factory constructor to create an Academy from a map (e.g., JSON)
   factory Academy.fromJson(Map<String, dynamic> json) {
     return Academy(
-      academyId: json['academy_id'],
-      location: json['location'],
-      name: json['name'],
-      phone: json['phone'],
-      description: json['description'],
-      imageUrl: json['image_url'],
-      ownerId: json['owner_id'],
+      academyId: json['academy_id'].toString(), // Convert to String
+      location: json['location'].toString(),
+      name: json['name'].toString(),
+      phone: json['phone'].toString(),
+      description: json['description'].toString(),
+      mediaId: json['media_id'].toString(),
+      ownerId: json['owner_id'].toString(),
     );
   }
-
-  // Method to convert Academy instance to a map, useful for sending data to the API
-  Map<String, dynamic> toJson() => {
-        'academy_id': academyId,
-        'location': location,
-        'name': name,
-        'phone': phone,
-        'description': description,
-        'image_url': imageUrl,
-        'owner_id': ownerId,
-      };
 }

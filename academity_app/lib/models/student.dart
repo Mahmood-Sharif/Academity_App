@@ -1,22 +1,30 @@
 class Student {
   final int studentId;
   final DateTime dob;
-  final int phone;
-  final int emergencyContact;
+  final int? phone;
+  final int? emergencyContact;
   final String firstName;
   final String lastName;
   final String gender;
-  final String medicalCondition;
+  final String? medicalCondition;
+  final String enrollmentId; // new field
+  final DateTime? startDate; // new field
+  final DateTime? endDate; // new field
+  final String classId; // new field
 
   Student({
     required this.studentId,
     required this.dob,
-    required this.phone,
-    required this.emergencyContact,
+     this.phone,
+     this.emergencyContact,
     required this.firstName,
     required this.lastName,
     required this.gender,
-    required this.medicalCondition,
+     this.medicalCondition,
+    required this.enrollmentId,
+     this.startDate,
+     this.endDate,
+    required this.classId,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
@@ -29,6 +37,10 @@ class Student {
       lastName: json['last_name'],
       gender: json['gender'],
       medicalCondition: json['medical_condition'],
+      enrollmentId: json['enrollment_id'], // map new fields
+      startDate: DateTime.parse(json['start_date']),
+      endDate: DateTime.parse(json['end_date']),
+      classId: json['class_id'],
     );
   }
 }

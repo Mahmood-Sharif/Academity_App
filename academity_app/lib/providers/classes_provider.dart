@@ -13,3 +13,11 @@ final classProvider = FutureProvider<List<ClassWithTiming>>((ref) async {
   final classService = ClassServices();
   return classService.fetchClasses();
 });
+
+final classServicesProvider = Provider((ref) => ClassServices());
+
+final classesByAcademyIdProvider = FutureProvider.family<List<ClassWithTiming>, int>((ref, academyId) async {
+  final classServices = ref.watch(classServicesProvider);
+  return await classServices.fetchClassesByAcademyId(academyId);
+});
+
