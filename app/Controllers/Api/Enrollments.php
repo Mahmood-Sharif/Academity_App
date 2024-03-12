@@ -33,30 +33,19 @@ class Enrollments extends ResourceController
         // Retrieve the class_id query parameter from the request
         $classId = $this->request->getGet('class_id');
     
-        // Instantiate the EnrollmentModel
-        $enrollmentModel = new EnrollmentModel();
-    
         // If class_id is not provided, return an error
         if ($classId === null) {
             return $this->fail('Class ID is required for filtering.');
         }
     
-        // Retrieve enrollments by class_id
-        $enrollments = $enrollmentModel->where('class_id', $classId)->findAll();
-    
-        // If no enrollments found, return a failure response
-        if (empty($enrollments)) {
-            return $this->failNotFound('No enrollments found for the provided class ID.');
-        }
-    
-        // Extract student IDs from enrollments
-        $studentIds = array_column($enrollments, 'student_id');
-    
         // Instantiate the StudentModel
         $studentModel = new StudentModel();
     
-        // Retrieve students by their IDs
-        $students = $studentModel->whereIn('student_id', $studentIds)->findAll();
+        // Perform a join query to retrieve students and their enrollments
+        $students = $studentModel->select('students.*, enrollments.*')
+                                 ->join('enrollments', 'enrollments.student_id = students.student_id')
+                                 ->where('enrollments.class_id', $classId)
+                                 ->findAll();
     
         // If no students found, return a failure response
         if (empty($students)) {
@@ -65,6 +54,8 @@ class Enrollments extends ResourceController
     
         return $this->respond($students);
     }
+    
+
     
     
     
