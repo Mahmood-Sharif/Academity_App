@@ -13,7 +13,7 @@ echo lang('App.coaches');
 $this->endSection('page_title');
 
 $this->section('sidebarTab');
-echo 'academies';
+echo 'coaches';
 $this->endSection('sidebarTab');
 ?>
 
@@ -21,7 +21,11 @@ $this->endSection('sidebarTab');
 
 <div class="container">
 
-  <div class="d-flex align-items-start">
+  <div class="d-flex align-items-center">
+    <a href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
+      <i class="bi bi-arrow-left-short fs-1"></i>
+    </a>
+
     <div>
       <h1>
         <?=lang('App.coaches')?>

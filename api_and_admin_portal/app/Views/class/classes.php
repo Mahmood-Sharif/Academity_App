@@ -20,7 +20,10 @@ $this->endSection('sidebarTab');
 <?= $this->section('content'); ?>
 
 <div class="container">
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-first-baseline">
+    <a href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
+      <i class="bi bi-arrow-left-short fs-1"></i>
+    </a>
     <div>
       <h1>
         <?=lang('App.classes')?>
