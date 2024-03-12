@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'package:academity_app/.env.dart';
 import 'package:academity_app/models/sport.dart';
 import 'package:academity_app/services/academity_api.dart';
 
 class SportsService {
-  final String baseUrl = '${AcademityApi.academityUrl}/api';
   // Consider extracting the host part if you're going to use it for image URL construction
-  final String baseImageUrl = AcademityApi.academityUrl;
+  final String baseImageUrl = Env.academityUrl;
 
   Future<List<Sport>> fetchSports() async {
     final response = await AcademityApi.get('sport');

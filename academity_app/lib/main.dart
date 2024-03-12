@@ -1,11 +1,14 @@
-import 'package:academity_app/services/auth_services.dart';
-import 'package:academity_app/views/auth/login_screen.dart';
-import 'package:academity_app/views/home/browse_academy_screen.dart';
+import 'package:academity_app/views/My%20Academy/my_academy_screen.dart';
+import 'package:academity_app/views/Profile/profile_screen.dart';
+import 'package:academity_app/views/Schedule/schedule_screen.dart';
 import 'package:academity_app/views/home/browse_sports_screen.dart';
+import 'package:academity_app/views/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:academity_app/services/auth_services.dart';
+import 'package:academity_app/views/auth/login_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -34,31 +37,70 @@ class MyApp extends StatelessWidget {
           iconTheme: const IconThemeData(color: Colors.white),
           titleTextStyle: GoogleFonts.montserrat(
             color: Colors.white,
-            fontSize: 22, // Set your desired size
-            fontWeight: FontWeight.w500, // And weight, if needed
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context) => FutureBuilder(
-            future: isLoggedIn,
-            builder: (context, asyncSnapshot) {
-              // if we don't have the api key, show login screen
-              if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (!asyncSnapshot.hasData ||
-                  (asyncSnapshot.hasData && asyncSnapshot.data == false)) {
-                return const LoginScreen();
-              } else {
-                // else show the main app
-                return const SportsPage();
-              }
-            }),
-
-        // Define other static routes here if necessary
+        '/login': (context) => FutureBuilder<bool>(
+              future: isLoggedIn,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (!snapshot.hasData || snapshot.data == false) {
+                  return const LoginScreen();
+                } else {
+                  return const MainScreen();
+                }
+              },
+            ),
         '/browseSports': (context) => const SportsPage(),
       },
+    );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
+
+  static final List<Widget> _widgetOptions = [
+    const SportsPage(), // Your actual HomePage widget
+    const AcademyPage(), // Your actual AcademyPage widget
+    // QRScannerPage(), // Your actual QRScannerPage widget or handle differently
+    const SchedulePage(), // Your actual SchedulePage widget
+    const ProfilePage(), // Your actual ProfilePage widget
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _widgetOptions,
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemSelected: _onItemTapped,
+      ),
     );
   }
 }

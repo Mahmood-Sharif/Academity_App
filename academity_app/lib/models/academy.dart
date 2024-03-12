@@ -4,9 +4,9 @@ class Academy {
   final int academyId;
   final String location;
   final String name;
-  final int phone;
+  final String phone;
   final String description;
-  final String imageUrl;
+  String imageUrl;
   final List<Classes> classes; // Add a list of Class objects
 
   Academy({

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-// Make sure this path is correct
-import 'package:academity_app/providers/class_provider.dart'; // Ensure this is correctly imported
+import 'package:academity_app/providers/class_provider.dart';
+import 'package:intl/intl.dart'; // Ensure this is correctly imported
 
 void showClassDetails(BuildContext context, int classId, WidgetRef ref) {
   showModalBottomSheet(

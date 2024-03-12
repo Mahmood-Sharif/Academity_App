@@ -4,7 +4,7 @@ import 'package:academity_app/services/academity_api.dart';
 import 'package:academity_app/models/class.dart'; // Adjust path
 
 class ClassServices {
-  Future<List<Class>> fetchClasses(int academyId) async {
+  Future<List<Classes>> fetchClasses(int academyId) async {
     final response = await AcademityApi.get('academy/$academyId/classes');
 
     if (response.statusCode == 200) {
@@ -31,8 +31,7 @@ class ClassServices {
   }
 
   Future<Classes> fetchClassDetails(int classId) async {
-    final url = Uri.parse('$baseUrl/class/prices/$classId');
-    final response = await http.get(url);
+    final response = await AcademityApi.get('class/prices/$classId');
     if (response.statusCode == 200) {
       return Classes.fromJson(jsonDecode(response.body));
     } else {
