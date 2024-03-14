@@ -22,7 +22,7 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 80, // Adjust for thinner appearance
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 15, // Display next 5 days
+              itemCount: 14, // Display next 5 days
               itemBuilder: (context, index) {
                 final date = DateTime.now().add(Duration(days: index));
                 final isSelected = _selectedDay.year == date.year &&

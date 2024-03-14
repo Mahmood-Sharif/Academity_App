@@ -5,17 +5,20 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Color backgroundColor; // Custom background color
   final double height;
+  final bool showBackButton; // Add this line
 
   const CustomAppBar({
     Key? key,
     required this.title,
     this.backgroundColor = const Color(0xFF8B0000), // Default to dark red if not specified
     this.height = kToolbarHeight + 20, // You might adjust this for more space
+    this.showBackButton = true, // Add this line, default is true to show the back button
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: showBackButton, // Use the new parameter
       title: Transform.translate(
         offset: const Offset(0, 10), // Adjust the offset value to lower the text as needed
         child: Text(
@@ -35,6 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => Size.fromHeight(height);
 }
+
 
 class CustomShapeBorder extends ContinuousRectangleBorder {
   @override

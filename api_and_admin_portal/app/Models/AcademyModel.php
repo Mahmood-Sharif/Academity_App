@@ -36,11 +36,12 @@ class AcademyModel extends Model
 
     public function includeImageUrl(): AcademyModel
     {
+      $siteUrl = site_url();
         return $this
           ->join('media', 'media.media_id = academies.media_id')
           ->select('academies.*')
-          ->select('media.url as image_url');
-    }
+          ->select("CONCAT('$siteUrl', url) as image_url");
+        }
 
     public function includeStatistics(int $id): AcademyModel
     {

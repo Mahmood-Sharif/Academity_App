@@ -14,14 +14,16 @@ class SportsPage extends ConsumerStatefulWidget {
 }
 
 class _SportsPageState extends ConsumerState<SportsPage> {
-
   @override
   Widget build(BuildContext context) {
     // Use Riverpod's ConsumerWidget features
     final sportsFuture = ref.watch(sportsProvider);
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Home'),
+      appBar: const CustomAppBar(
+        title: 'Home',
+        showBackButton: false, // Add this line to not show the back button
+      ),
       body: sportsFuture.when(
         data: (sports) => ListView(
           children: [

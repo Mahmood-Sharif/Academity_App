@@ -1,6 +1,8 @@
 import 'package:academity_app/views/My%20Academy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
 import 'package:academity_app/views/Schedule/schedule_screen.dart';
+import 'package:academity_app/views/auth/home_screen.dart';
+import 'package:academity_app/views/auth/signup_screen.dart';
 import 'package:academity_app/views/home/browse_sports_screen.dart';
 import 'package:academity_app/views/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +44,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/login',
+      initialRoute: '/',
       routes: {
+         '/': (context) => const HomeScreen(),
         '/login': (context) => FutureBuilder<bool>(
               future: isLoggedIn,
               builder: (context, snapshot) {
@@ -61,6 +64,7 @@ class MyApp extends StatelessWidget {
               },
             ),
         '/browseSports': (context) => const SportsPage(),
+            '/signup': (context) => const SignupScreen(),
       },
     );
   }

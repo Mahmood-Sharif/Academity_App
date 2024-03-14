@@ -25,7 +25,6 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
         $routes->view('register-coach/', 'user/register_coach');
     });
-
 });
 
 $routes->get('change-locale/(:segment)', static function ($locale) {
@@ -51,12 +50,12 @@ $routes->group('api', static function ($routes) {
         $routes->resource('test', ['controller' => 'Api\Test']);
 
         $routes->get('login-test', 'Api\Login::loginTest');
+        $routes->post('logout', 'Api\Login::logoutUser');
         $routes->resource('sport', ['controller' => 'Api\Sport']);
         $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
         $routes->resource('academies', ['controller' => 'Api\Academy']);
         $routes->get('academies', ['controller' => 'Api\Academy']);
         $routes->get('academy/(:num)/classes', 'Api\Academy::getClassDetails/$1');
         $routes->get('class/prices/(:num)', 'Api\ClassApi::getClassesWithPrices/$1');
-    
     });
 });
