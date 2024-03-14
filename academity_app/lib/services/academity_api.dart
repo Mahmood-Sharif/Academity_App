@@ -6,6 +6,9 @@ import 'package:http/http.dart' as http;
 
 // TODO: insist on HTTPS
 class AcademityApi {
+  /// The address of the Academity server
+  static const academityHost = '192.168.100.15:8080';
+
   /// Perform an HTTP GET request to the Academity Api.
   ///
   /// Performs an api request to [path] prefixed with the Academity api

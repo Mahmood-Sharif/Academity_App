@@ -4,7 +4,7 @@ namespace App\Entities;
 
 use CodeIgniter\Entity\Entity;
 
-class User extends Entity
+class Enrollment extends Entity
 {
     protected $casts = [
       'enrollment_id' => 'integer',

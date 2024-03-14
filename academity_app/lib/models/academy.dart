@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'class.dart'; // Import your Class model
 
 class Academy {
@@ -6,8 +8,10 @@ class Academy {
   final String name;
   final String phone;
   final String description;
-  String imageUrl;
+  String? imageUrl;
   final List<Classes> classes; // Add a list of Class objects
+  final String mediaId;
+  final String ownerId;
 
   Academy({
     required this.academyId,
@@ -15,8 +19,10 @@ class Academy {
     required this.name,
     required this.phone,
     required this.description,
-    required this.imageUrl,
+     this.imageUrl,
     required this.classes, // Add classes to the constructor
+    required this.mediaId,
+    required this.ownerId,
   });
 
   factory Academy.fromJson(Map<String, dynamic> json) {
@@ -35,7 +41,7 @@ class Academy {
       phone: json['phone'],
       description: json['description'],
       imageUrl: json['image_url'],
-      classes: classesList,
+      classes: classesList, mediaId: '', ownerId: '',
     );
   }
 
@@ -51,3 +57,4 @@ class Academy {
     };
   }
 }
+    

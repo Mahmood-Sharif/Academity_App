@@ -44,6 +44,20 @@ $routes->group('api', static function ($routes) {
     // no token required
     $routes->post('login', 'Api\Login::loginUser');
     $routes->post('register', 'Api\Login::registerUser');
+    // classes api
+    $routes->get('classes/bai', 'Api\Classes::getByAcademyId');
+
+    $routes->resource('classes', ['controller' => 'Api\Classes']);
+    // enrollments api
+    $routes->get('enrollments/bci', 'Api\Enrollments::getStudentsByClassId');
+
+    $routes->resource('enrollments', ['controller'=> 'Api\Enrollments']);
+    // students api
+    $routes->resource('students', ['controller'=> 'Api\Students']);
+    // academies api
+    
+    $routes->resource('academies', ['controller'=> 'Api\Academies']);
+
 
     $routes->group('', /*['filter' => 'tokens'],*/ static function ($routes) {
         // example resource route generates all HTTP verbs (get, post, put, patch, delete)

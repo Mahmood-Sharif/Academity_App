@@ -1,49 +1,46 @@
 class Student {
-  final int userId;
-  final int age;
-  final String dob;
-  final int emergencyContact;
+  final int studentId;
+  final DateTime dob;
+  final int? phone;
+  final int? emergencyContact;
   final String firstName;
-  final String gender;
   final String lastName;
-  final String medicalCondition;
-  final int phone;
+  final String gender;
+  final String? medicalCondition;
+  final String enrollmentId; // new field
+  final DateTime? startDate; // new field
+  final DateTime? endDate; // new field
+  final String classId; // new field
 
   Student({
-    required this.userId,
-    required this.age,
+    required this.studentId,
     required this.dob,
-    required this.emergencyContact,
+     this.phone,
+     this.emergencyContact,
     required this.firstName,
-    required this.gender,
     required this.lastName,
-    required this.medicalCondition,
-    required this.phone,
+    required this.gender,
+     this.medicalCondition,
+    required this.enrollmentId,
+     this.startDate,
+     this.endDate,
+    required this.classId,
   });
-
-  Map<String, dynamic> toJson() => {
-        'user_id': userId,
-        'age': age,
-        'dob': dob,
-        'emergency_contact': emergencyContact,
-        'first_name': firstName,
-        'gender': gender,
-        'last_name': lastName,
-        'medical_condition': medicalCondition,
-        'phone': phone,
-      };
 
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
-      userId: json['user_id'],
-      age: json['age'],
-      dob: json['dob'],
+      studentId: json['student_id'],
+      dob: DateTime.parse(json['dob']['date']),
+      phone: json['phone'],
       emergencyContact: json['emergency_contact'],
       firstName: json['first_name'],
-      gender: json['gender'],
       lastName: json['last_name'],
+      gender: json['gender'],
       medicalCondition: json['medical_condition'],
-      phone: json['phone'],
+      enrollmentId: json['enrollment_id'], // map new fields
+      startDate: DateTime.parse(json['start_date']),
+      endDate: DateTime.parse(json['end_date']),
+      classId: json['class_id'],
     );
   }
 }

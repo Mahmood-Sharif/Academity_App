@@ -111,6 +111,10 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
     if (ref.read(authStateProvider)) {
       Navigator.of(context)
           .pushReplacementNamed('/'); // Adjust this route as needed
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.pushReplacementNamed(context, '/browseClasses');
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Login failed')));
