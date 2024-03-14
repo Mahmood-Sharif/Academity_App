@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AllClassListWidget extends ConsumerWidget {
-  const AllClassListWidget({Key? key}) : super(key: key);
+  final int academyId; 
+  const AllClassListWidget({Key? key, required this.academyId}) : super(key: key);
 
   String formatTime(String? time) {
     if (time == null) return '';
@@ -13,7 +14,7 @@ class AllClassListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final classes = ref.watch(classesByAcademyIdProvider(2));
+    final classes = ref.watch(classesByAcademyIdProvider(academyId));
 
     return classes.when(
       data: (classes) => ListView.builder(

@@ -15,7 +15,7 @@ class ClassListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final classes = ref.watch(classProvider);
+    final classes = ref.watch(classesByAcademyIdProvider(2));
 
     return classes.when(
       data: (classes) => ListView.builder(

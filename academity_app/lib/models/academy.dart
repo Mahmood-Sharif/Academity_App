@@ -1,5 +1,5 @@
 class Academy {
-  final String academyId;
+  final int academyId;
   final String location;
   final String name;
   final String phone;
@@ -19,7 +19,7 @@ class Academy {
 
   factory Academy.fromJson(Map<String, dynamic> json) {
     return Academy(
-      academyId: json['academy_id'].toString(), // Convert to String
+      academyId: json['academy_id'] as int, 
       location: json['location'].toString(),
       name: json['name'].toString(),
       phone: json['phone'].toString(),

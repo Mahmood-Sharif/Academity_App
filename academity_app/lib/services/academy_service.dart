@@ -11,17 +11,11 @@ class AcademyServices {
 Future<List<Academy>> fetchAcademies() async {
   final response = await AcademityApi.get('academies');
 
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> data = jsonDecode(response.body);
-    final List<dynamic>? academiesJson = data['hello'];
-
-    if (academiesJson != null) {
-      return academiesJson.map((dynamic item) => Academy.fromJson(item)).toList();
-    } else {
-      throw Exception('Academies data is null');
-    }
-  } else {
-    throw Exception('Failed to load Academies');
-  }
-}
+ if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((dynamic item) => Academy.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to load Academies. Response status code: ${response.statusCode}');
+      }
+    } 
 }

@@ -5,49 +5,28 @@ import 'package:academity_app/views/home/widgets/class/allClasses_griview.dart';
 import 'package:academity_app/views/home/widgets/class/classes_griview.dart';
 import 'package:flutter/material.dart';
 
-class AllClassesPage extends StatefulWidget {
+ class AllClassesPage extends StatelessWidget {
   const AllClassesPage({Key? key}) : super(key: key);
 
   @override
-  _AllClassesPageState createState() => _AllClassesPageState();
-}
-
-class _AllClassesPageState extends State<AllClassesPage> {
-  late Future<List<ClassWithTiming>> futureSports;
-
-  @override
-  void initState() {
-    super.initState();
-    futureSports = ClassServices().fetchClasses();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final academyId = ModalRoute.of(context)?.settings.arguments;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF8B0000), // Set the background color to dark red
-        flexibleSpace: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16), // Adjust the padding as needed
-          alignment: Alignment.center,
-          child: const Text(
-            'My Classes',
-            style: TextStyle(
-              color: Colors.white, // Set the text color to white
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        title: const Text('All classes', style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color(0xFF8B0000),
+        iconTheme: IconThemeData(color: Colors.white), // Set the color of the back button to white
       ),
       body: FutureBuilder<List<ClassWithTiming>>(
-        future: futureSports,
+        future: ClassServices().fetchClassesByAcademyId(2), // Replace 2 with the actual class ID
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            return const AllClassListWidget();
+            final List<ClassWithTiming> students = snapshot.data ?? [];
+            return AllClassListWidget(academyId: academyId as int); // Pass the students data to the StudentListWidget
           }
         },
       ),

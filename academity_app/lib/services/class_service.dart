@@ -21,18 +21,22 @@ class ClassServices {
     }
   }
 
-  Future<List<ClassWithTiming>> fetchClassesByAcademyId(int academyId) async {
-    try {
-      final response = await http.get(Uri.parse('http://192.168.100.15:8080/api/classes/bai?academy_id=2'));
+ Future<List<ClassWithTiming>> fetchClassesByAcademyId(int academyId) async {
+  try {
+    final response = await http.get(Uri.parse('http://192.168.100.15:8080/api/classes/bai?academy_id=$academyId'));
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data.map((dynamic item) => ClassWithTiming.fromJson(item)).toList();
-      } else {
-        throw Exception('Failed to load students for class $academyId. Response status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('An error occurred while fetching classes');
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final List<dynamic> classesJson = responseData['classes']; // Extract 'classes' array from response
+      return classesJson.map((dynamic item) => ClassWithTiming.fromJson(item)).toList();
+    } else {
+      print('Error fetching classes. Response status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to load classes. Response status code: ${response.statusCode}');
     }
+  } catch (e) {
+    print('Error fetching classes: $e');
+    throw Exception('An error occurred while fetching classes: $e');
   }
+}
 }

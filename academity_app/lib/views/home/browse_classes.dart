@@ -1,54 +1,72 @@
 import 'package:academity_app/models/class.dart';
 import 'package:academity_app/models/class_with_timing.dart';
 import 'package:academity_app/services/class_service.dart';
+import 'package:academity_app/views/home/widgets/class/calender_app_bar.dart';
+import 'package:academity_app/views/home/widgets/class/class_list.dart';
 import 'package:academity_app/views/home/widgets/class/classes_griview.dart';
 import 'package:flutter/material.dart';
-
-class ClassesPage extends StatefulWidget {
+import 'package:intl/intl.dart';
+class ClassesPage extends StatelessWidget {
   const ClassesPage({Key? key}) : super(key: key);
 
-  @override
-  _ClassesPageState createState() => _ClassesPageState();
-}
-
-class _ClassesPageState extends State<ClassesPage> {
-  late Future<List<ClassWithTiming>> futureSports;
-
-  @override
-  void initState() {
-    super.initState();
-    futureSports = ClassServices().fetchClasses();
+  // Helper function to get the date for the start of the week (Sunday)
+  DateTime _getStartOfWeek(DateTime date) {
+    return date.subtract(Duration(days: date.weekday - 1));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF8B0000), // Set the background color to dark red
-        flexibleSpace: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16), // Adjust the padding as needed
-          alignment: Alignment.center,
-          child: const Text(
-            'My Schedule',
-            style: TextStyle(
-              color: Colors.white, // Set the text color to white
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+    final today = DateTime.now();
+    final startOfWeek = _getStartOfWeek(today);
+
+    return DefaultTabController(
+      length: 7, // Number of days in a week
+      child: Scaffold(
+        appBar: AppBar(
+  backgroundColor: const Color(0xFF8B0000),
+  elevation: 0, // Remove app bar elevation
+  title: const Text(
+    'My Schedule',
+    style: TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  bottom: TabBar(
+    labelColor: Colors.white,
+    unselectedLabelColor: Colors.grey,
+    indicatorColor: Colors.transparent,
+    tabs: [
+      for (int i = 0; i < 7; i++)
+        Tab(
+          child: Column(
+            children: [
+              Text(
+                DateFormat.E().format(startOfWeek.add(Duration(days: i))),
+                style: const TextStyle(fontSize: 12), // Decrease the font size for day name
+              ),
+              Text(
+                DateFormat.d().format(startOfWeek.add(Duration(days: i))),
+                style: const TextStyle(fontSize: 12), // Decrease the font size for date
+              ),
+            ],
           ),
         ),
-      ),
-      body: FutureBuilder<List<ClassWithTiming>>(
-        future: futureSports,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            return const ClassListWidget();
-          }
-        },
+    ],
+  ),
+),
+        body: TabBarView(
+          children: [
+            ClassesList(dayOfWeek: 'SUN'), // Pass day of the week to display classes for that day
+            ClassesList(dayOfWeek: 'MON'),
+            ClassesList(dayOfWeek: 'TUE'),
+            ClassesList(dayOfWeek: 'WED'),
+            ClassesList(dayOfWeek: 'THU'),
+            ClassesList(dayOfWeek: 'FRI'),
+            ClassesList(dayOfWeek: 'SAT'),
+          ],
+        ),
       ),
     );
   }
