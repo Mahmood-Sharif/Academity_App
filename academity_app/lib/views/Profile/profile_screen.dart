@@ -1,6 +1,6 @@
 // lib/views/profile/profile_page.dart
+import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter/material.dart';
-import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/views/Profile/widgets/section_card.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +9,7 @@ class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   void _logout(BuildContext context, WidgetRef ref) {
-    ref.read(authStateProvider.notifier).logout().then((_) {
+    AuthServices().logout().then((_) {
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
     }).catchError((error) {

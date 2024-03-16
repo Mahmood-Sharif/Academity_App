@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
             Image.asset('lib/assets/images/pattern.jpg'), // Adjusted asset path
             const SizedBox(height: 40), // Adds space between the elements
             // Main Logo Image
-            Image.asset('lib/assets/images/MainLogo.jpg'), // Adjusted asset path
+            Image.asset('lib/assets/images/MainLogo.jpg',width: 350), // Adjusted asset path
             const SizedBox(height: 100), // Adds space between the elements
             
             // Login Button

@@ -1,6 +1,6 @@
+import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:academity_app/providers/auth_provider.dart'; // Make sure this import path is correct
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -44,6 +44,18 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
       builder: (context, ref, child) {
         return Stack(
           children: [
+               Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+                height: 180,
+                width: 200,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("lib/assets/images/logo1.png"),
+                ),
+              ),
+            ),
+          ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -89,15 +101,6 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                 ],
               ),
             ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Image.asset(
-                'lib/assets/images/logo1.jpg',
-                height: 180,
-                width: 200,
-              ),
-            ),
           ],
         );
       },
@@ -106,11 +109,11 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
 
   Future<void> _login(BuildContext context, WidgetRef ref, String email,
       String password) async {
-    await ref.read(authStateProvider.notifier).login(email, password);
+    final result = await AuthServices().login(email, password);
 
-    if (ref.read(authStateProvider)) {
+    if (result) {
       Navigator.of(context)
-          .pushReplacementNamed('/'); // Adjust this route as needed
+          .pushReplacementNamed('/browseSports'); // Adjust this route as needed
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Login failed')));

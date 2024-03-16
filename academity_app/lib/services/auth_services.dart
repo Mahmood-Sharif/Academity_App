@@ -4,6 +4,8 @@ import 'package:academity_app/services/academity_api.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+typedef RegisterResponse = ({bool success, Map<String, dynamic>? errors});
+
 class AuthServices {
   Future<bool> loginTest() async {
     final response = await AcademityApi.get('login-test');
@@ -31,7 +33,9 @@ class AuthServices {
     return false;
   }
 
-  Future<bool> registerUser(Map<String, dynamic> data) async {
+
+
+  Future<RegisterResponse> registerUser(Map<String, dynamic> data) async {
     final response = await http.post(
       Uri.http(Env.academityHost, '/api/register'),
       body: data,
@@ -43,25 +47,14 @@ class AuthServices {
         const secureStorage = FlutterSecureStorage();
         final apiToken = responseData['new_token'];
         await secureStorage.write(key: 'api_token', value: apiToken);
-        return true;
+        return (success: true, errors: null);
       }
     }
-    return false;
+    return (success: false, errors:  json.decode(response.body)['errors'] as  Map<String, dynamic>);
   }
 
   Future<void> logout() async {
-    final response = await AcademityApi.post('logout');
     const secureStorage = FlutterSecureStorage();
-
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      // Successfully logged out, delete the token
-      await secureStorage.delete(key: 'api_token');
-    } else {
-      // Log the response for debugging
-      print(
-          'Logout failed with status code: ${response.statusCode} and body: ${response.body}');
-      throw Exception(
-          'Failed to logout, Server responded with status code: ${response.statusCode}');
-    }
+    await secureStorage.delete(key: 'api_token');
   }
 }

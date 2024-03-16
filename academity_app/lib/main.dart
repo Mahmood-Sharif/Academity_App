@@ -59,11 +59,11 @@ class MyApp extends StatelessWidget {
                 } else if (!snapshot.hasData || snapshot.data == false) {
                   return const LoginScreen();
                 } else {
-                  return const MainScreen();
+                  return  const MainScreen();
                 }
               },
             ),
-        '/browseSports': (context) => const SportsPage(),
+        '/browseSports': (context) => const MainScreen(),
             '/signup': (context) => const SignupScreen(),
       },
     );
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+   const MainScreen({Key? key}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();

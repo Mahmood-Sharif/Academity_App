@@ -13,3 +13,13 @@ final classProviderwithAcademy =
   final classService = ref.watch(classServiceProvider);
   return classService.fetchClasses(academyId);
 });
+
+// Provider for fetching schedule for a student
+final scheduleForStudentProvider = FutureProvider.family<List<Classes>, Map<String, dynamic>>((ref, params) async {
+  final studentId = params['studentId'];
+  final fromDate = params['fromDate'];
+  final toDate = params['toDate'];
+
+  final classService = ref.watch(classServiceProvider);
+  return classService.fetchScheduleForStudent(studentId, fromDate, toDate);
+});

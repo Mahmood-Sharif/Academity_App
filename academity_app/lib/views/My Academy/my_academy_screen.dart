@@ -7,6 +7,10 @@ class AcademyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: CustomAppBar(title: 'My Academy'),);
+      appBar: CustomAppBar(
+        title: 'My Academy',
+        showBackButton: false,
+      ),
+    );
   }
 }

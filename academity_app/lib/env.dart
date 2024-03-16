@@ -4,7 +4,7 @@
 /// your machine only.
 class Env {
   /// The host of the Academity server.
-  static const academityHost = '192.168.100.231:8080';
+  static const academityHost = '192.168.100.15:8080';
 
   /// The base url of the Academity server.
   static const academityUrl = 'http://$academityHost/';

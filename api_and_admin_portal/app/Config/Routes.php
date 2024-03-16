@@ -54,7 +54,7 @@ $routes->group('api', static function ($routes) {
         $routes->resource('sport', ['controller' => 'Api\Sport']);
         $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
         $routes->resource('academies', ['controller' => 'Api\Academy']);
-        $routes->get('academies', ['controller' => 'Api\Academy']);
+        // $routes->get('academies', ['controller' => 'Api\Academy']);
         $routes->get('academy/(:num)/classes', 'Api\Academy::getClassDetails/$1');
         $routes->get('class/prices/(:num)', 'Api\ClassApi::getClassesWithPrices/$1');
         $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');

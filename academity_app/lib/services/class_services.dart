@@ -38,4 +38,20 @@ class ClassServices {
       throw Exception('Failed to load class details');
     }
   }
+
+Future<List<Classes>> fetchScheduleForStudent(int studentId, DateTime fromDate, DateTime toDate) async {
+    final response = await AcademityApi.get('schedule/student', {
+      'student_id': studentId.toString(),
+      'from_date': fromDate.toIso8601String(),
+      'to_date': toDate.toIso8601String(),
+    });
+
+    if (response.statusCode == 200) {
+      final List<dynamic> decodedJson = json.decode(response.body);
+      List<Classes> classSchedule = decodedJson.map<Classes>((json) => Classes.fromJson(json)).toList();
+      return classSchedule;
+    } else {
+      throw Exception('Failed to fetch schedule with status code ${response.statusCode}');
+    }
+  }
 }
