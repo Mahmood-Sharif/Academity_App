@@ -12,6 +12,8 @@ $academies = key_array(
     (new AcademyModel())->findAcademiesForOwner(auth()->id())
 );
 
+$academyId = request()->getGet('academy_id');
+
 $this->extend('default') ;
 
 helper('html');
@@ -22,7 +24,7 @@ echo lang('App.register_coach');
 $this->endSection('page_title');
 
 $this->section('sidebarTab');
-echo 'academies';
+echo 'coaches';
 $this->endSection('sidebarTab');
 ?>
 
@@ -30,12 +32,13 @@ $this->endSection('sidebarTab');
 
 <div class="container">
   <div class="d-flex align-items-start">
+    <a href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
+      <i class="bi bi-arrow-left-short fs-1"></i>
+    </a>
     <div>
       <h1>
         <?=lang('App.register_coach')?>
       </h1>
-      <!-- <h2 class="text-muted">academy name</h2> -->
-      <!-- <h2 class="text-muted">class name</h2> -->
     </div>
   </div>
 
@@ -47,7 +50,7 @@ $this->endSection('sidebarTab');
     </div>
 
     <div class="mb-3">
-      <?=validated_form_select('academy_id', 'academy_id', lang('App.select.academy'), $academies, set_value('academy_id'))?>
+      <?=validated_form_select('academy_id', 'academy_id', lang('App.select.academy'), $academies, $academyId ?? set_value('academy_id'))?>
     </div>
 
     <button class="btn btn-success ms-auto" type="submit">

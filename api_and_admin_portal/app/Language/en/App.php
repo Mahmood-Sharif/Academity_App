@@ -6,6 +6,8 @@ return [
   'dashboard'              => 'Dashboard',
   'my_academies'           => 'My Academies',
   'academies'              => 'Academies',
+  'academy'                => 'Academy',
+  'all_academies'          => 'All Academies',
   'analytics'              => 'Analytics',
   'announcements'          => 'Announcements',
   'students'               => 'Students',
@@ -31,9 +33,13 @@ return [
   'view'                   => 'View',
   'edit'                   => 'Edit',
   'back'                   => 'Back',
+  'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
+  'back.classes'           => 'Back to classes',
 
   // errors
+  'error'                  => 'Error',
+  'unauthorized'           => 'Unauthorized',
   'not_found.academy'      => 'Academy not found',
   'not_found.class'        => 'Class not found',
   'empty.coaches'          => 'No coaches are registered with this academy.',
@@ -48,6 +54,7 @@ return [
   'manage.classes'         => 'Manage Classes',
   'manage.schedule'        => 'Classes Schedule',
   'manage.students'        => 'Manage Students',
+  'manage.coaches'         => 'Manage Coaches',
   'manage.announcements'   => 'Make Announcement',
   'manage.academy'         => 'Manage Academy',
   'academy.edit'           => 'Edit {0} details',
@@ -64,7 +71,16 @@ return [
 
   // manage classes
   'classes'                => 'Classes',
+  'class.view'             => 'Class Details for {0}',
+  'class.edit'             => 'Edit {0}',
+  'class.create'           => 'New Class',
   'class_name'             => 'Class Name',
+  'min_age'                => 'Minimum Age',
+  'max_age'                => 'Maximum Age',
+  'enrol_duration'         => 'Enrollment Duration',
+  'min_duration'           => 'Minimum Enrollment Duration',
+  'max_duration'           => 'Maximum Enrollment Duration',
+  'max_capacity'           => 'Maximum Capacity',
   'main_coach'             => 'Main Coach',
   'class_update.success'   => 'Class details updated successfully.',
   'class_update.error'     => 'Could not update class details.',
@@ -99,6 +115,7 @@ return [
   'end_time'               => 'End Time',
 
   'price'                  => 'Price',
+  'price.help'             => 'Consider changing the price in Offers',
 
   // danger zone
   'advanced_options'          => 'Advanced Options',
@@ -111,8 +128,15 @@ return [
   'delete_academy'            => 'Delete Academy Permanently',
   'delete_academy.desc'       => 'This will delete the academy from the Academity platform. This action can not be reversed.',
   'delete_academy.btn'        => 'Delete Academy',
-  'delete_academy.confirm'    => 'Are you sure you want to delete the academy <b class = "user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br> To confirm the deletion, please type the academy name:',
+  'delete_academy.confirm'    => 'Are you sure you want to delete the academy <b class="user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br> To confirm the deletion, please type the academy name:',
   'delete_academy.success'    => 'Successfully deleted academy <b>{0}</b>.',
   'delete_academy.error'      => 'Error: could not delete academy.',
   'delete_academy.name_error' => 'Did not delete academy: name confirmation failed.',
+
+  'delete_class'              => 'Delete Class Permanently',
+  'delete_class.desc'         => 'This will delete the class from the academy platform and unenrol all students. This action can not be reversed.',
+  'delete_class.btn'          => 'Delete Class',
+  'delete_class.confirm'      => 'Are you sure you want to delete the class <b class="user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br>',
+  'delete_class.success'      => 'Successfully deleted class <b>{0}</b>.',
+  'delete_class.error'        => 'Error: could not delete class.',
 ];

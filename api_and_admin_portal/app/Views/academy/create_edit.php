@@ -45,7 +45,7 @@ $url = match($type) {
   </div>
 
   <div class="row">
-    <div class="col col-lg-7 col-md-8 col-sm-12">
+    <div class="col">
 
       <form action="<?= match($type) {
           'create' => url_to('AdminPortal\Academy::create'),
@@ -172,9 +172,9 @@ $url = match($type) {
 
 <script>
   (() => {
-    window.history.pushState(
+    window.history.replaceState(
       null,
-      '<?= esc($title, 'js') ?>',
+      '',
       '<?= esc($url, 'js') ?>',
     );
     document.getElementById('academyImage').onchange = function () {

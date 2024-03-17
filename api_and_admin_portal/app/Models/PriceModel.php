@@ -18,4 +18,4 @@ class PriceModel extends Model
       'offer_id',
     ];
 
-  }
+}

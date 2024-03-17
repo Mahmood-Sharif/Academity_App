@@ -61,7 +61,7 @@ class UserModel extends CodeIgniterUserModel
             ->join('academies', 'academy_coaches.academy_id = academies.academy_id')
             ->groupBy('users.id')
             ->select('users.*')
-            ->select('group_concat(academies.name, ", ") as academies')
+            ->select('group_concat(academies.name SEPARATOR ", ") as academies')
             ->where('group', 'coach');
     }
 
