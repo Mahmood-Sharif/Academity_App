@@ -37,7 +37,7 @@ function validated_form_textarea(string $id, string $name, string $labelText, st
       '</div>' . "\n";
 }
 
-function validated_form_select(string $id, string $name, string $labelText, array $options, string $selected, string $extraClasses = ''): string
+function validated_form_select(string $id, string $name, string $labelText, array $options, string|null $selected, string $extraClasses = '', string $attributes = ''): string
 {
     $isError = array_key_exists($name, validation_errors()) ? 'is-invalid' : '';
     $optionsDOM = '';
@@ -47,21 +47,10 @@ function validated_form_select(string $id, string $name, string $labelText, arra
     }
     return
       "<div class=\"form-floating $extraClasses\">" .
-      "<select id=\"$id\" name=\"$name\" class=\"form-select $isError\">" .
+      "<select id=\"$id\" name=\"$name\" class=\"form-select $isError\" $attributes>" .
       $optionsDOM .
       '</select>' .
       form_label($labelText, $id, ['class' => 'form-label']) .
       validation_show_error($name) .
       '</div>' . "\n";
 }
-
-/* <div class="mb-3 form-floating"> */
-/*   <select class="form-select" name="academy_id" id="academy_id"> */
-/*     <?php foreach($academies as $academy): ?> */
-/*     <option value="<?=$academy->academy_id?>"><?=$academy->name?></option> */
-/*     <?php endforeach ?> */
-/*   </select> */
-/*   <label for="academy_id"> */
-/*     <?=lang('App.select.academy')?> */
-/*   </label> */
-/* </div> */

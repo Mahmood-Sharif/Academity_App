@@ -84,6 +84,42 @@ class User extends ResourcePresenter
 
         return view('user/coaches', ['coaches' => $coaches]);
     }
+    /**
+     * @param ?int $academyId
+     */
+    public function academyCoachesInput(): string
+    {
+        $academyId = $this->request->getGet('academy_id');
+        $academy = (new AcademyModel())->find($academyId);
+        if (! auth()->user()->can('coaches.access') || $academy?->owner_id !== auth()->id()) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
+        }
+
+        $coaches = key_array(
+            fn ($coach) => [$coach->id, $coach->name],
+            $this->users->coaches()->where('academies.academy_id', $academyId)->findAll()
+        );
+        helper('form');
+        return '<div id="academyCoaches" class="mb-3 d-flex align-items-center gap-3">'
+            . validated_form_select(
+                'coach',
+                'coach_id',
+                lang('App.main_coach'),
+                empty($coaches) ? ['' => lang('App.empty.coaches')] : $coaches,
+                null,
+                'flex-fill'
+            )
+            .
+            (
+                empty($coaches)
+            ? '<a href="'.url_to('register_new_coach') . '?academy_id=' . $academyId . '"
+                class="btn btn-secondary">'.lang('App.register_coach').'</a>'
+            : ''
+            ) .'</div>';
+    }
 
     // POST
     public function registerCoach(): ResponseInterface|string

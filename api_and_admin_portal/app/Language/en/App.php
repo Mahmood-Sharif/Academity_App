@@ -6,6 +6,8 @@ return [
   'dashboard'              => 'Dashboard',
   'my_academies'           => 'My Academies',
   'academies'              => 'Academies',
+  'academy'                => 'Academy',
+  'all_academies'          => 'All Academies',
   'analytics'              => 'Analytics',
   'announcements'          => 'Announcements',
   'students'               => 'Students',
@@ -33,6 +35,7 @@ return [
   'back'                   => 'Back',
   'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
+  'back.classes'           => 'Back to classes',
 
   // errors
   'error'                  => 'Error',
@@ -70,6 +73,7 @@ return [
   'classes'                => 'Classes',
   'class.view'             => 'Class Details for {0}',
   'class.edit'             => 'Edit {0}',
+  'class.create'           => 'New Class',
   'class_name'             => 'Class Name',
   'min_age'                => 'Minimum Age',
   'max_age'                => 'Maximum Age',
@@ -124,8 +128,15 @@ return [
   'delete_academy'            => 'Delete Academy Permanently',
   'delete_academy.desc'       => 'This will delete the academy from the Academity platform. This action can not be reversed.',
   'delete_academy.btn'        => 'Delete Academy',
-  'delete_academy.confirm'    => 'Are you sure you want to delete the academy <b class = "user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br> To confirm the deletion, please type the academy name:',
+  'delete_academy.confirm'    => 'Are you sure you want to delete the academy <b class="user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br> To confirm the deletion, please type the academy name:',
   'delete_academy.success'    => 'Successfully deleted academy <b>{0}</b>.',
   'delete_academy.error'      => 'Error: could not delete academy.',
   'delete_academy.name_error' => 'Did not delete academy: name confirmation failed.',
+
+  'delete_class'              => 'Delete Class Permanently',
+  'delete_class.desc'         => 'This will delete the class from the academy platform and unenrol all students. This action can not be reversed.',
+  'delete_class.btn'          => 'Delete Class',
+  'delete_class.confirm'      => 'Are you sure you want to delete the class <b class="user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br>',
+  'delete_class.success'      => 'Successfully deleted class <b>{0}</b>.',
+  'delete_class.error'        => 'Error: could not delete class.',
 ];

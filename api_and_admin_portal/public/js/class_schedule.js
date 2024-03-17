@@ -2,7 +2,7 @@ const hourStart = 6;
 const hourEnd = 18;
 class ClassScheduleEditor extends HTMLElement {
   createMode = true;
-  timings = { sun: [{ start_time: '9:00', end_time: '10:00' }] };
+  timings = { sun: [{ start_time: '08:00', end_time: '09:00' }] };
   classCounters = [];
 
   /**
