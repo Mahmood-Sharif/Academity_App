@@ -13,7 +13,7 @@ echo lang('App.coaches');
 $this->endSection('page_title');
 
 $this->section('sidebarTab');
-echo 'academies';
+echo 'coaches';
 $this->endSection('sidebarTab');
 ?>
 
@@ -21,7 +21,12 @@ $this->endSection('sidebarTab');
 
 <div class="container">
 
-  <div class="d-flex align-items-start">
+  <div class="d-flex align-items-center">
+        <!-- TODO: only show if there is back page. refer_url -->
+    <a href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
+      <i class="bi bi-arrow-left-short fs-1"></i>
+    </a>
+
     <div>
       <h1>
         <?=lang('App.coaches')?>
@@ -30,7 +35,7 @@ $this->endSection('sidebarTab');
       <!-- <h2 class="text-muted">class name</h2> -->
     </div>
 
-    <a href="<?=url_to('AdminPortal\User::registerCoach')?>" class="ms-auto btn btn-secondary">
+    <a href="<?=url_to('register_new_coach')?>" class="ms-auto btn btn-secondary">
       <?=lang('App.register_coach')?>
     </a>
   </div>

@@ -30,8 +30,9 @@ class User extends ResourcePresenter
         $classId = $this->request->getGet('class');
 
         if (! auth()->user()->can('students.access')) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class1')
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -51,8 +52,9 @@ class User extends ResourcePresenter
 
         $userId = auth()->id();
         if (($class?->owner_id ?? $userId) !== $userId || ($academy?->owner_id ?? $userId) !== $userId) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class2')
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -72,8 +74,9 @@ class User extends ResourcePresenter
     public function indexCoaches(): string
     {
         if (! auth()->user()->can('coaches.access')) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class1')
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -81,22 +84,60 @@ class User extends ResourcePresenter
 
         return view('user/coaches', ['coaches' => $coaches]);
     }
+    /**
+     * @param ?int $academyId
+     */
+    public function academyCoachesInput(): string
+    {
+        $academyId = $this->request->getGet('academy_id');
+        $academy = (new AcademyModel())->find($academyId);
+        if (! auth()->user()->can('coaches.access') || $academy?->owner_id !== auth()->id()) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
+        }
+
+        $coaches = key_array(
+            fn ($coach) => [$coach->id, $coach->name],
+            $this->users->coaches()->where('academies.academy_id', $academyId)->findAll()
+        );
+        helper('form');
+        return '<div id="academyCoaches" class="mb-3 d-flex align-items-center gap-3">'
+            . validated_form_select(
+                'coach',
+                'coach_id',
+                lang('App.main_coach'),
+                empty($coaches) ? ['' => lang('App.empty.coaches')] : $coaches,
+                null,
+                'flex-fill'
+            )
+            .
+            (
+                empty($coaches)
+            ? '<a href="'.url_to('register_new_coach') . '?academy_id=' . $academyId . '"
+                class="btn btn-secondary">'.lang('App.register_coach').'</a>'
+            : ''
+            ) .'</div>';
+    }
 
     // POST
     public function registerCoach(): ResponseInterface|string
     {
         if (! auth()->user()->can('coaches.register')) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class1')
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
         $academyId = $this->request->getPost('academy_id');
         $academy = (new AcademyModel())->find($academyId);
 
-        if (auth()->id() !== $academy->owner_id) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.class1')
+        if (auth()->id() !== $academy?->owner_id) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 

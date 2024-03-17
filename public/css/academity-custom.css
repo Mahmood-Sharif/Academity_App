@@ -1,11 +1,11 @@
-.form-control {
+:not(.input-group)>.form-floating>.form-control {
   border: none;
   border-radius: 0;
   border-bottom: calc(var(--bs-border-width) * 2) solid var(--bs-border-color);
   transition: border-radius 0;
 }
 
-.form-control:focus {
+:not(.input-group)>.form-floating>.form-control:focus {
   border-radius: var(--bs-border-radius);
 }
 

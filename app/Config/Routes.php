@@ -22,8 +22,9 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
         $routes->get('students/', 'AdminPortal\User::indexStudents');
         $routes->get('coaches/', 'AdminPortal\User::indexCoaches');
+        $routes->get('academy-coaches/', 'AdminPortal\User::academyCoachesInput/');
         $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
-        $routes->view('register-coach/', 'user/register_coach');
+        $routes->view('register-coach/', 'user/register_coach', ['as' => 'register_new_coach']);
     });
 });
 

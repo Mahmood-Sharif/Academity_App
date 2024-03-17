@@ -15,7 +15,7 @@ $tab = $this->sections['sidebarTab'][0];
     <?= $this->renderSection('page_title', true) ?>
   </title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..700;1,100..700&display=swap"
-    rel="preload">
+    rel="preload" as="style">
   <?php if ($dir == 'rtl'): ?>
   <link href="/css/academity-bootstrap.min.rtl.css" rel="stylesheet">
   <?php else: ?>
@@ -24,7 +24,7 @@ $tab = $this->sections['sidebarTab'][0];
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <link href="/css/academity-custom.css" rel="stylesheet">
-  <script defer src="/js/bootstrap.bundle.min.js"></script>
+  <script id="bootstrapScript" defer src="/js/bootstrap.bundle.min.js"></script>
   <script defer src="https://unpkg.com/htmx.org@1.9.10"
     integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
     crossorigin="anonymous"></script>
@@ -122,7 +122,7 @@ $tab = $this->sections['sidebarTab'][0];
           <?= lang('App.academity_admin_portal') ?>
         </span>
         <a href="<?= url_to('AdminPortal\Controller::dashboard')?>"
-          class="nav-link <?= $tab == 'dashboard' ? 'active' : '' ?>">
+          class="nav-link disabled <?= $tab == 'dashboard' ? 'active' : '' ?>">
           <i class="bi bi-grid fs-5 me-1"></i>
           <?=lang('App.dashboard')?>
         </a>
@@ -131,28 +131,33 @@ $tab = $this->sections['sidebarTab'][0];
           <i class="bi bi-mortarboard fs-5 me-1"></i>
           <?=lang('App.my_academies')?>
         </a>
-        <a href="analytics" class="nav-link <?= $tab == 'analytics' ? 'active' : '' ?>">
+        <a href="analytics" class="nav-link disabled <?= $tab == 'analytics' ? 'active' : '' ?>">
           <i class="bi bi-clipboard-data fs-5 me-1"></i>
           <?=lang('App.analytics')?>
         </a>
-        <a href="announcements" class="nav-link <?= $tab == 'announcements' ? 'active' : '' ?>">
+        <a href="announcements" class="nav-link disabled <?= $tab == 'announcements' ? 'active' : '' ?>">
           <i class="bi bi-megaphone fs-5 me-1"></i>
           <?=lang('App.announcements')?>
+        </a>
+        <a href="<?=url_to('AdminPortal\User::indexCoaches')?>"
+          class="nav-link <?= $tab == 'coaches' ? 'active' : '' ?>">
+          <i class="bi bi-person fs-5 me-1"></i>
+          <?=lang('App.coaches')?>
         </a>
         <a href="<?=url_to('AdminPortal\User::indexStudents')?>"
           class="nav-link <?= $tab == 'students' ? 'active' : '' ?>">
           <i class="bi bi-person fs-5 me-1"></i>
           <?=lang('App.students')?>
         </a>
-        <a href="reviews" class="nav-link <?= $tab == 'reviews' ? 'active' : '' ?>">
+        <a href="reviews" class="nav-link disabled <?= $tab == 'reviews' ? 'active' : '' ?>">
           <i class="bi bi-chat-left-text fs-5 me-1"></i>
           <?=lang('App.reviews')?>
         </a>
-        <a href="offers" class="nav-link <?= $tab == 'offers' ? 'active' : '' ?>">
+        <a href="offers" class="nav-link disabled <?= $tab == 'offers' ? 'active' : '' ?>">
           <i class="bi bi-tag fs-5 me-1"></i>
           <?=lang('App.offers')?>
         </a>
-        <a href="accounting" class="nav-link <?= $tab == 'accounting' ? 'active' : '' ?>">
+        <a href="accounting" class="nav-link disabled <?= $tab == 'accounting' ? 'active' : '' ?>">
           <i class="bi bi-cash-stack fs-5 me-1"></i>
           <?=lang('App.accounting')?>
         </a>
