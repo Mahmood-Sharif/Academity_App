@@ -136,7 +136,7 @@ class Academy extends ResourcePresenter
 
         if (!auth()->user()->can('academies.delete') || $academy->owner_id !== auth()->user()->id) {
             // User can not delete academies or academy is not owned by user
-            return view('academy/ajax_message_modal', [
+            return view('ajax_message_modal', [
               'title' => lang('App.delete_academy'),
               'body'  => lang('Security.disallowedAction')
             ]);
@@ -153,14 +153,14 @@ class Academy extends ResourcePresenter
         }
 
         if ($result) {
-            return view('academy/ajax_message_modal', [
+            return view('ajax_message_modal', [
               'title'     => lang('App.delete_academy'),
               'body'      => lang('App.delete_academy.success', [$academy->name]),
               'action'    => lang('App.back.academies'),
               'actionUrl' => url_to('AdminPortal\Academy::index'),
             ]);
         } else {
-            return view('academy/ajax_message_modal', [
+            return view('ajax_message_modal', [
               'title' => lang('App.delete_academy'),
               'body'  => $error,
             ]);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use CodeIgniter\Database\RawSql;
 use CodeIgniter\Model;
 
 class ClassModel extends Model
@@ -40,10 +41,31 @@ class ClassModel extends Model
     public function includePrice(): ClassModel
     {
         return $this
-          ->join('prices', 'classes.class_id = prices.class_id')
-          ->where('prices.end_time IS NULL')
-          ->where('prices.start_time < CURRENT_TIMESTAMP')
-          ->select('classes.*, prices.price');
+            ->join('prices', 'classes.class_id = prices.class_id AND prices.end_time IS NULL', 'left')
+            ->where('IFNULL(prices.start_time, 0) < CURRENT_TIMESTAMP')
+            ->select('classes.*')
+            ->select('prices.price');
+    }
+
+    public function upsertPrice(int $classId, string $price, int|null $offerId = null): bool
+    {
+        $this->db->transStart();
+        // close previous price
+        $this->db->table('prices')
+            ->where('class_id', $classId)
+            ->where('end_time', null)
+            ->update(['end_time' => new RawSql('CURRENT_TIMESTAMP')]);
+        // insert new price
+        $this->db->table('prices')->insert([
+            'class_id' => $classId,
+            'price'    => $price,
+            'offer_id' => $offerId,
+            'start_time' => new RawSql('CURRENT_TIMESTAMP'),
+            'end_time' => null,
+        ]);
+        $this->db->transComplete();
+
+        return $this->db->transStatus();
     }
 
     public function includeOwnerId(): ClassModel

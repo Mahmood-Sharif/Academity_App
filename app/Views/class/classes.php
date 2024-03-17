@@ -1,8 +1,13 @@
 <?php
+use App\Entities\Academy;
+
+
 use App\Entities\ClassEntity;
 
 /* @var CodeIgniter\View\View $this */
 /* @var ClassEntity[] $classes */
+/* @var Academy $academy */
+/* @var Academy[] $academies */
 
 $this->extend('default') ;
 
@@ -20,7 +25,7 @@ $this->endSection('sidebarTab');
 <?= $this->section('content'); ?>
 
 <div class="container">
-  <div class="d-flex align-items-first-baseline">
+  <div class="d-flex align-items-start">
     <a href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
       <i class="bi bi-arrow-left-short fs-1"></i>
     </a>
@@ -28,8 +33,14 @@ $this->endSection('sidebarTab');
       <h1>
         <?=lang('App.classes')?>
       </h1>
-      <h2 class="text-muted">academy name</h2>
+      <h2 class="text-muted">
+        <?=$academy?->name ?? lang('App.all_academies') ?>
+      </h2>
     </div>
+    <a href="<?=url_to('AdminPortal\Classes::new') . ($academy !== null ? '?academy_id=' . $academy->academy_id : '') ?>"
+      class="ms-auto btn btn-secondary">
+      <?=lang('App.class.create')?>
+    </a>
   </div>
 
   <!-- TODO: filter by academy -->
@@ -37,7 +48,9 @@ $this->endSection('sidebarTab');
   <ul class="list-group">
     <?php foreach ($classes as $class):  ?>
     <li class="list-group-item d-flex align-items-center">
-      <?= $class->class_name ?>
+      <a href="<?=url_to('AdminPortal\Classes::show', $class->class_id)?>" class="text-decoration-none text-body">
+        <?= $class->class_name ?>
+      </a>
       <a href="#" class="btn btn-outline-success ms-auto">
         <?=lang('App.students')?>
       </a>
