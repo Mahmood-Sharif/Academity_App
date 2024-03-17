@@ -15,45 +15,68 @@ class ClassSeeder extends Seeder
         $classModel->insertBatch(
             [
                 [
-                    'class_id'   => 1,
-                    'class_name' => 'U16 Class',
-                    'min_age'    => 12,
-                    'max_age'    => 16,
-                    'academy_id' => 1
+                    'class_id'     => 1,
+                    'class_name'   => 'U16 Class',
+                    'min_age'      => 12,
+                    'max_age'      => 16,
+                    'academy_id'   => 1,
+                    'max_capacity' => 20,
+                    'min_duration' => 8,
+                    'max_duration' => 8,
+                    'coach_id'     => 2,
                 ],
                 [
-                    'class_id'   => 2,
-                    'class_name' => 'U12 Class',
-                    'min_age'    => 8,
-                    'max_age'    => 12,
-                    'academy_id' => 1
+                    'class_id'     => 2,
+                    'class_name'   => 'U12 Class',
+                    'min_age'      => 8,
+                    'max_age'      => 12,
+                    'academy_id'   => 1,
+                    'max_capacity' => 20,
+                    'min_duration' => 8,
+                    'max_duration' => 8,
+                    'coach_id'     => 2,
                 ],
                 [
-                    'class_id'   => 3,
-                    'class_name' => 'U12 Class',
-                    'min_age'    => 8,
-                    'max_age'    => 12,
-                    'academy_id' => 2
+                    'class_id'     => 3,
+                    'class_name'   => 'U12 Class',
+                    'min_age'      => 8,
+                    'max_age'      => 12,
+                    'academy_id'   => 2,
+                    'max_capacity' => 20,
+                    'min_duration' => 8,
+                    'max_duration' => 8,
+                    'coach_id'     => 3,
                 ],
                 [
-                    'class_id'   => 4,
-                    'class_name' => 'U12 Class',
-                    'min_age'    => 8,
-                    'max_age'    => 12,
-                    'academy_id' => 2
+                    'class_id'     => 4,
+                    'class_name'   => 'U12 Class',
+                    'min_age'      => 8,
+                    'max_age'      => 12,
+                    'academy_id'   => 2,
+                    'max_capacity' => 20,
+                    'min_duration' => 8,
+                    'max_duration' => 8,
+                    'coach_id'     => 3,
                 ],
                 [
-                    'class_id'   => 5,
-                    'class_name' => 'U12 Class',
-                    'min_age'    => 8,
-                    'max_age'    => 12,
-                    'academy_id' => 3
+                    'class_id'     => 5,
+                    'class_name'   => 'U12 Class',
+                    'min_age'      => 8,
+                    'max_age'      => 12,
+                    'academy_id'   => 3,
+                    'max_capacity' => 20,
+                    'min_duration' => 8,
+                    'max_duration' => 8,
+                    'coach_id'     => 4,
                 ],
             ]
         );
 
-
-
+        $classModel->db->table('academy_coaches')->insertBatch([
+            ['academy_id' => 1, 'coach_id' => 2],
+            ['academy_id' => 2, 'coach_id' => 3],
+            ['academy_id' => 3, 'coach_id' => 4],
+        ]);
 
         $priceModel = new PriceModel();
         $priceModel->insertBatch(
