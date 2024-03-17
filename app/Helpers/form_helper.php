@@ -1,15 +1,18 @@
 <?php
 
-function validated_form_input(string $id, string $name, string $labelText, string $value = '', string $type = 'text', array $attributes = []): string
+function validated_form_input(string $id, string $name, string $labelText, string $value = '', string $type = 'text', array $attributes = [], bool $readonly = false): string
 {
     $isError = array_key_exists($name, validation_errors());
+    if ($readonly) {
+        $attributes['readonly'] = 'readonly';
+    }
     return '<div class="form-floating">' .
       form_input([
         'id' => $id,
         'name' => $name,
         'value' => $value,
         'type' => $type,
-        'class' => 'form-control' . ($isError ? ' is-invalid' : ''),
+        'class' => 'form-control' . ($readonly ? '-plaintext' : '') . ($isError ? ' is-invalid' : '') ,
         'placeholder' => '',
         ...$attributes
       ]) .

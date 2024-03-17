@@ -68,6 +68,8 @@ return [
 
   // manage classes
   'classes'                => 'Classes',
+  'class.view'             => 'Class Details for {0}',
+  'class.edit'             => 'Edit {0}',
   'class_name'             => 'Class Name',
   'min_age'                => 'Minimum Age',
   'max_age'                => 'Maximum Age',
