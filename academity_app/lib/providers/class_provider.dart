@@ -1,3 +1,4 @@
+import 'package:academity_app/models/class_schedule.dart';
 import 'package:academity_app/services/class_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/models/class.dart'; // Adjust path
@@ -14,12 +15,10 @@ final classProviderwithAcademy =
   return classService.fetchClasses(academyId);
 });
 
-// Provider for fetching schedule for a student
-final scheduleForStudentProvider = FutureProvider.family<List<Classes>, Map<String, dynamic>>((ref, params) async {
-  final studentId = params['studentId'];
-  final fromDate = params['fromDate'];
-  final toDate = params['toDate'];
 
-  final classService = ref.watch(classServiceProvider);
-  return classService.fetchScheduleForStudent(studentId, fromDate, toDate);
+final scheduleForStudentProvider = FutureProvider.family<List<ClassSchedule>, Map<String, DateTime>>((ref, dateRange) async {
+  final fromDate = dateRange['fromDate']!;
+  final toDate = dateRange['toDate']!;
+
+  return await ClassServices.fetchScheduleForStudent(fromDate: fromDate, toDate: toDate);
 });

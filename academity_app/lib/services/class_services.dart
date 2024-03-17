@@ -1,7 +1,9 @@
 // class_services.dart
 import 'dart:convert';
+import 'package:academity_app/models/class_schedule.dart';
 import 'package:academity_app/services/academity_api.dart';
-import 'package:academity_app/models/class.dart'; // Adjust path
+import 'package:academity_app/models/class.dart';
+import 'package:intl/intl.dart'; // Adjust path
 
 class ClassServices {
   Future<List<Classes>> fetchClasses(int academyId) async {
@@ -39,19 +41,31 @@ class ClassServices {
     }
   }
 
-Future<List<Classes>> fetchScheduleForStudent(int studentId, DateTime fromDate, DateTime toDate) async {
-    final response = await AcademityApi.get('schedule/student', {
-      'student_id': studentId.toString(),
-      'from_date': fromDate.toIso8601String(),
-      'to_date': toDate.toIso8601String(),
-    });
+static Future<List<ClassSchedule>> fetchScheduleForStudent({
+  required DateTime fromDate,
+  required DateTime toDate,
+}) async {
+  print("fetchScheduleForStudent called");
+  final formattedFromDate = DateFormat('yyyy-MM-dd').format(fromDate);
+  final formattedToDate = DateFormat('yyyy-MM-dd').format(toDate);
+  print("Formatted dates: from - $formattedFromDate, to - $formattedToDate");
 
-    if (response.statusCode == 200) {
-      final List<dynamic> decodedJson = json.decode(response.body);
-      List<Classes> classSchedule = decodedJson.map<Classes>((json) => Classes.fromJson(json)).toList();
-      return classSchedule;
-    } else {
-      throw Exception('Failed to fetch schedule with status code ${response.statusCode}');
-    }
+  final response = await AcademityApi.get('schedule/student', {
+    'from_date': formattedFromDate,
+    'to_date': formattedToDate,
+  });
+
+  print("API response status: ${response.statusCode}");
+  if (response.statusCode == 200) {
+    print("API response body: ${response.body}");
+    final List<dynamic> data = json.decode(response.body);
+    print("Decoded data: $data");
+    return data.map((json) => ClassSchedule.fromJson(json as Map<String, dynamic>)).toList();
+  } else {
+    throw Exception('Failed to load schedule');
   }
+}
+
+
+
 }

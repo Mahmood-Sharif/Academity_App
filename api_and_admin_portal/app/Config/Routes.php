@@ -45,7 +45,7 @@ $routes->group('api', static function ($routes) {
     $routes->post('login', 'Api\Login::loginUser');
     $routes->post('register', 'Api\Login::registerUser');
 
-    $routes->group('', /*['filter' => 'tokens'],*/ static function ($routes) {
+    $routes->group('', ['filter' => 'tokens'], static function ($routes) {
         // example resource route generates all HTTP verbs (get, post, put, patch, delete)
         $routes->resource('test', ['controller' => 'Api\Test']);
 

@@ -9,7 +9,7 @@ typedef RegisterResponse = ({bool success, Map<String, dynamic>? errors});
 class AuthServices {
   Future<bool> loginTest() async {
     final response = await AcademityApi.get('login-test');
-    print(response);
+    // print(response.body);
     return response.statusCode == 204;
   }
 

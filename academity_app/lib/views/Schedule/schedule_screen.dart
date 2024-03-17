@@ -1,13 +1,13 @@
 import 'package:academity_app/providers/class_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:academity_app/views/widgets/app_bar.dart';
+import 'package:academity_app/views/widgets/app_bar.dart'; // Adjust the path as needed
 
 class SchedulePage extends ConsumerStatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SchedulePageState();
+  ConsumerState<SchedulePage> createState() => _SchedulePageState();
 }
 
 class _SchedulePageState extends ConsumerState<SchedulePage> {
@@ -15,11 +15,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
+    final endDate = _selectedDay.add(const Duration(days: 13));
     final scheduleAsyncValue = ref.watch(scheduleForStudentProvider({
-      'studentId':
-          1, // Example student ID, replace with actual logic to get the current student's ID
-      'fromDate': _selectedDay,
-      'toDate': _selectedDay,
+      'fromDate': _selectedDay, 
+      'toDate': endDate,
     }));
 
     return Scaffold(
@@ -42,13 +41,11 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     setState(() {
                       _selectedDay = date;
                     });
-                    // Consider adding logic to refresh the schedule based on the new _selectedDay
                   },
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color:
-                          isSelected ? const Color(0xFF008B8B) : Colors.white,
+                      color: isSelected ? const Color(0xFF008B8B) : Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -86,22 +83,19 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           ),
           Expanded(
             child: scheduleAsyncValue.when(
-              data: (schedule) {
-                return ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: schedule.length,
-                  itemBuilder: (context, index) {
-                    final classDetails = schedule[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text(classDetails.className),
-                        subtitle: Text(
-                            'Time: ${classDetails.timings[0].startTime}\nLocation: Sports Hall'), // Adjust as needed
-                      ),
-                    );
-                  },
-                );
-              },
+              data: (schedule) => ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: schedule.length,
+                itemBuilder: (context, index) {
+                  final classDetails = schedule[index];
+                  return Card(
+                    child: ListTile(
+                      title: Text(classDetails.className),
+                      subtitle: Text('Time: ${classDetails.startTime} - ${classDetails.endTime}\nLocation: ${classDetails.location}'),
+                    ),
+                  );
+                },
+              ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(child: Text('Error: $error')),
             ),
@@ -113,22 +107,14 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
   String _getDayOfWeek(int weekday) {
     switch (weekday) {
-      case 1:
-        return 'Mon';
-      case 2:
-        return 'Tue';
-      case 3:
-        return 'Wed';
-      case 4:
-        return 'Thu';
-      case 5:
-        return 'Fri';
-      case 6:
-        return 'Sat';
-      case 7:
-        return 'Sun';
-      default:
-        return '';
+      case 1: return 'Mon';
+      case 2: return 'Tue';
+      case 3: return 'Wed';
+      case 4: return 'Thu';
+      case 5: return 'Fri';
+      case 6: return 'Sat';
+      case 7: return 'Sun';
+      default: return '';
     }
   }
 }
