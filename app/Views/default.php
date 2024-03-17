@@ -24,7 +24,7 @@ $tab = $this->sections['sidebarTab'][0];
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <link href="/css/academity-custom.css" rel="stylesheet">
-  <script defer src="/js/bootstrap.bundle.min.js"></script>
+  <script id="bootstrapScript" defer src="/js/bootstrap.bundle.min.js"></script>
   <script defer src="https://unpkg.com/htmx.org@1.9.10"
     integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
     crossorigin="anonymous"></script>

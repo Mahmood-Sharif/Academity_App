@@ -19,6 +19,20 @@ class ClassModel extends Model
       'max_duration'
     ];
 
+    protected $validationRules = [
+      'class_name'   => 'string|required|min_length[3]|max_length[100]',
+      'min_age'      => 'integer|required|is_natural_no_zero',
+      'max_age'      => 'integer|required|is_natural_no_zero',
+      'max_capacity' => 'integer|required|is_natural_no_zero',
+      'min_duration' => 'integer|required|is_natural_no_zero',
+      // 'max_duration' => 'integer|required|is_natural_no_zero',
+    ];
+    protected $validationMessages = [
+      'timings' => [
+        'valid_json' => 'Rules.class.timings',
+      ]
+    ];
+
     protected $returnType = \App\Entities\ClassEntity::class;
 
     public function includePrice(): ClassModel

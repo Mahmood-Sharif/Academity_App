@@ -1,0 +1,77 @@
+class ClassDurationInput extends HTMLElement {
+  static observedAttributes = ['data-classes-per-week'];
+
+  durId = this.id + '-dur';
+  duration = 0;
+  unit = '';
+  classesPerWeek = 0;
+  value = 0;
+
+  constructor() {
+    super();
+
+    this.unit = this.dataset.unit ?? 'week';
+    this.duration = this.dataset.duration ?? 1;
+    this.classesPerWeek = this.dataset.classesPerWeek;
+
+    this.innerHTML = `
+    <input type="hidden" value="${this.value}" name="${this.getAttribute('name')}" hidden>
+    <div class="input-group">
+      <div class="form-floating">
+        <input type="number" value="${this.duration}" id="${this.durId}" class="form-control" placeholder="">
+        <label for="${this.durId}" class="form-label">${this.dataset.label}</label>
+      </div>
+      <select class="form-select" style="flex: 0.25 0; min-width: fit-content;">
+        <option value="day" ${this.unit == 'day' ? 'selected' : ''}>Days</option>
+        <option value="week" ${this.unit == 'week' ? 'selected' : ''}>Weeks</option>
+        <option value="month" ${this.unit == 'month' ? 'selected' : ''}>Months</option>
+      </select>
+      <div class="input-group-text">${this.numClassesText()}</div>
+    </div>
+    `;
+
+    this.updateNumClasses();
+
+    this.querySelector('#' + this.durId).addEventListener('change', (event) => this.onDurChange(event));
+    this.querySelector('.form-select').addEventListener('change', (event) => this.onUnitChange(event));
+  }
+
+  attributeChangedCallback(name, _oldValue, newValue) {
+    if (name != 'data-classes-per-week') return;
+    this.classesPerWeek = newValue;
+    this.updateNumClasses();
+  }
+
+  numClassesText() {
+    return this.value + (this.value == 1 ? ' Class' : ' Classes');
+  }
+
+  updateNumClasses() {
+    if (this.unit == 'day') {
+      this.value = this.duration;
+    }
+    else if (this.unit == 'week') {
+      this.value = this.duration * this.classesPerWeek;
+    }
+    else if (this.unit == 'month') {
+      this.value = this.duration * 4 * this.classesPerWeek;
+    }
+
+    this.querySelector('input[type="hidden"]').value = this.value;
+    this.querySelector('.input-group-text').innerText = this.numClassesText();
+  }
+
+  /** @param {Event} event */
+  onDurChange(event) {
+    this.duration = event.target.value;
+    this.updateNumClasses();
+  }
+
+  /** @param {Event} event */
+  onUnitChange(event) {
+    this.unit = event.target.value;
+    this.updateNumClasses();
+  }
+}
+
+customElements.define('duration-input', ClassDurationInput);

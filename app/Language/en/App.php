@@ -69,6 +69,12 @@ return [
   // manage classes
   'classes'                => 'Classes',
   'class_name'             => 'Class Name',
+  'min_age'                => 'Minimum Age',
+  'max_age'                => 'Maximum Age',
+  'enrol_duration'         => 'Enrollment Duration',
+  'min_duration'           => 'Minimum Enrollment Duration',
+  'max_duration'           => 'Maximum Enrollment Duration',
+  'max_capacity'           => 'Maximum Capacity',
   'main_coach'             => 'Main Coach',
   'class_update.success'   => 'Class details updated successfully.',
   'class_update.error'     => 'Could not update class details.',
@@ -103,6 +109,7 @@ return [
   'end_time'               => 'End Time',
 
   'price'                  => 'Price',
+  'price.help'             => 'Consider changing the price in Offers',
 
   // danger zone
   'advanced_options'          => 'Advanced Options',
