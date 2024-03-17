@@ -1,6 +1,6 @@
 <?php
 
-function validated_form_input(string $id, string $name, string $labelText, string $value = '', string $type = 'text'): string
+function validated_form_input(string $id, string $name, string $labelText, string $value = '', string $type = 'text', array $attributes = []): string
 {
     $isError = array_key_exists($name, validation_errors());
     return '<div class="form-floating">' .
@@ -11,6 +11,7 @@ function validated_form_input(string $id, string $name, string $labelText, strin
         'type' => $type,
         'class' => 'form-control' . ($isError ? ' is-invalid' : ''),
         'placeholder' => '',
+        ...$attributes
       ]) .
       form_label($labelText, $id, ['class' => 'form-label']) .
       validation_show_error($name) .
@@ -33,16 +34,16 @@ function validated_form_textarea(string $id, string $name, string $labelText, st
       '</div>' . "\n";
 }
 
-function validated_form_select(string $id, string $name, string $labelText, array $options, string $selected): string
+function validated_form_select(string $id, string $name, string $labelText, array $options, string $selected, string $extraClasses = ''): string
 {
     $isError = array_key_exists($name, validation_errors()) ? 'is-invalid' : '';
     $optionsDOM = '';
     foreach ($options as $value => $text) {
-        $isSelected = $selected === $value;
+        $isSelected = $selected == $value ? 'selected' : '';
         $optionsDOM .= "<option value=\"$value\" $isSelected>$text</option>";
     }
     return
-      '<div class="form-floating">' .
+      "<div class=\"form-floating $extraClasses\">" .
       "<select id=\"$id\" name=\"$name\" class=\"form-select $isError\">" .
       $optionsDOM .
       '</select>' .

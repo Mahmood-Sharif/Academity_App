@@ -1,9 +1,9 @@
 <?php
-use App\Entities\ClassEntity;
-
 /* @var CodeIgniter\View\View $this */
 /* @var array $coaches */
 /* @var Class|null $class */
+/* @var string $classTimingsJson */
+/* @var integer $numTimings */
 /* @var string $type 'create' || 'edit' */
 /* @var array $errors */
 
@@ -27,8 +27,7 @@ $this->endSection('sidebarTab');
 $url = match($type) {
     'create' => url_to('AdminPortal\Classes::new'),
     'edit' => url_to('AdminPortal\Classes::edit', $class->class_id),
-}
-
+};
 ?>
 
 <?= $this->section('content'); ?>
@@ -44,91 +43,75 @@ $url = match($type) {
   </div>
 
   <div class="row">
-    <div class="col col-lg-8 col-md-10 col-sm-12">
-
+    <div class="col">
       <form action="<?= match($type) {
-          'create' => url_to('AdminPortal\Academy::create'),
-          'edit' => url_to('AdminPortal\Academy::update', $class->class_id),
-      }?>" method="post" enctype="multipart/form-data">
+          'create' => url_to('AdminPortal\Classes::create'),
+          'edit' => url_to('AdminPortal\Classes::update', $class->class_id),
+      }?>" method="post">
         <?= csrf_field() ?>
 
-        <div class="mb-3">
-          <?=validated_form_input('className', 'class_name', lang('App.class_name'), $class?->class_name ?? set_value('class_name'))?>
+        <!-- <h2> -->
+        <!--   <?=lang('class.details')?> -->
+        <!-- </h2> -->
+
+        <div class="mb-3 row">
+          <div class="col">
+            <?=validated_form_input('className', 'class_name', lang('App.class_name'), $class?->class_name ?? set_value('class_name'))?>
+          </div>
+          <div class="col">
+            <?=validated_form_input('max_capacity', 'max_capacity', lang('App.max_capacity'), $class?->max_capacity ?? set_value('max_capacity') ?? 20, 'number')?>
+          </div>
         </div>
+
+        <div class="mb-3 row">
+          <div class="col">
+            <?=validated_form_input('min_age', 'min_age', lang('App.min_age'), $class?->min_age ?? set_value('min_age'), 'number')?>
+          </div>
+          <div class="col">
+            <?=validated_form_input('max_age', 'max_age', lang('App.max_age'), $class?->max_age ?? set_value('max_age'), 'number')?>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <?=validated_form_input('price', 'price', lang('App.price'), $class?->price ?? set_value('price'), 'number', ['aria-describedby' => 'priceHelp'])?>
+          <div id="priceHelp" class="form-text">
+            <?=lang('App.price.help')?>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <duration-input id="min_duration" name="min_duration" data-classes-per-week="<?=$numTimings?>"
+            data-label="<?=lang('App.enrol_duration')?>">
+          </duration-input>
+        </div>
+
+        <!-- <h2 class="fw-normal"> -->
+        <!--   <?=lang('class.scheduling')?> -->
+        <!-- </h2> -->
 
         <!-- TODO: search select -->
-        <div class="mb-3">
-          <?=validated_form_select('coach', 'coach_id', lang('App.main_coach'), $coaches, $class?->coach_id ?? set_value('coach_id'))?>
+        <div class="mb-3 d-flex align-items-center gap-3">
+          <?=validated_form_select(
+              'coach',
+              'coach_id',
+              lang('App.main_coach'),
+              empty($coaches) ? ['' => lang('App.empty.coaches')] : $coaches,
+              $class?->coach_id ?? set_value('coach_id'),
+              'flex-fill'
+          )?>
+          <?php if(empty($coaches)): ?>
+          <a href="<?=url_to('register_new_coach') . '?academy_id=' . $class->academy_id ?>" class="btn btn-secondary">
+            <?=lang('App.register_coach')?>
+          </a>
+          <?php endif ?>
         </div>
 
-        <?php /*
-        TODO: Class sscheduling
+        <class-schedule-editor name="timings" data-class-counters="min_duration">
+          <?= $classTimingsJson ?>
+        </class-schedule-editor>
 
-        <!-- TODO: time input? -->
 
-        <div class="d-flex gap-2 mb-3">
-          <?=validated_form_input('startTime', 'start_time', lang('App.start_time'), $class?->start_time ?? set_value('start_time'), 'time')?>
-          <?=validated_form_input('endTime', 'end_time', lang('App.end_time'), $class?->end_time ?? set_value('end_time'), 'time')?>
-        </div>
-
-        <!-- TODO: update db for repeat -->
-
-        <div class="mb-2">
-          <label for="???" class="">
-            <?=lang('App.repeat')?>
-          </label>
-        </div>
-        <div class="d-flex gap-2 mb-3">
-          <div class="form-check">
-            <input id="checkSun" type="checkbox" value="" class="form-check-input">
-            <label class="form-check-label" for="checkSun">
-              <?=lang('App.day_of_week.sun')?>
-            </label>
-          </div>
-          <div class="form-check">
-            <input id="checkMon" type="checkbox" value="" class="form-check-input">
-            <label class="form-check-label" for="checkMon">
-              <?=lang('App.day_of_week.mon')?>
-            </label>
-          </div>
-          <div class="form-check">
-            <input id="checkTue" type="checkbox" value="" class="form-check-input">
-            <label class="form-check-label" for="checkTue">
-              <?=lang('App.day_of_week.tue')?>
-            </label>
-          </div>
-          <div class="form-check">
-            <input id="checkWed" type="checkbox" value="" class="form-check-input">
-            <label class="form-check-label" for="checkWed">
-              <?=lang('App.day_of_week.wed')?>
-            </label>
-          </div>
-          <div class="form-check">
-            <input id="checkThu" type="checkbox" value="" class="form-check-input">
-            <label class="form-check-label" for="checkThu">
-              <?=lang('App.day_of_week.thu')?>
-            </label>
-          </div>
-          <div class="form-check">
-            <input id="checkFri" type="checkbox" value="" class="form-check-input">
-            <label class="form-check-label" for="checkFri">
-              <?=lang('App.day_of_week.fri')?>
-            </label>
-          </div>
-          <div class="form-check">
-            <input id="checkSat" type="checkbox" value="" class="form-check-input">
-            <label class="form-check-label" for="checkSat">
-              <?=lang('App.day_of_week.sat')?>
-            </label>
-          </div>
-      </div>
-      */ ?>
-
-        <div class="mb-4">
-          <?=validated_form_input('price', 'price', lang('App.price'), $class?->price ?? set_value('price'))?>
-        </div>
-
-        <div class="d-flex gap-3">
+        <div class="d-flex gap-3 mt-4">
           <button class="btn btn-success ms-auto" type="submit">
             <?=lang('App.submit')?>
           </button>
@@ -139,14 +122,8 @@ $url = match($type) {
 
       </form>
 
-
     </div>
   </div>
-</div>
-</div>
-</div>
-</div>
-
 </div>
 
 <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
@@ -154,5 +131,17 @@ $url = match($type) {
     <div class="modal-content"></div>
   </div>
 </div>
+
+<script src="/js/class_schedule.js"></script>
+<script src="/js/class_duration.js"></script>
+<script>
+  (() => {
+    window.history.replaceState(
+      null,
+      '',
+      '<?= esc($url, 'js') ?>',
+    );
+  })();
+</script>
 
 <?= $this->endSection('content'); ?>
