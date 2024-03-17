@@ -37,7 +37,20 @@ class Classes extends ResourcePresenter
             ]);
         }
 
-        return view('class/class', ['class' => $class]);
+        $coach = auth()->getProvider()->find($class->coach_id);
+        $classTimings = (new ClassTimingModel())->getTimingsForClass($id);
+        $classTimingsMap =
+        array_group_by(array_map(
+            fn ($timing) => [...$timing->toArray(), 'dow' => strtolower($timing->day_of_week)],
+            $classTimings
+        ), ['dow']);
+
+        return view('class/class', [
+            'class' => $class,
+            'coach' => $coach,
+            'classTimingsJson' => json_encode($classTimingsMap),
+            'numTimings' => count($classTimings),
+        ]);
     }
 
     // show edit form

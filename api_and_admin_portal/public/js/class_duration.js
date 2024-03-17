@@ -14,7 +14,21 @@ class ClassDurationInput extends HTMLElement {
     this.duration = this.dataset.duration ?? 1;
     this.classesPerWeek = this.dataset.classesPerWeek;
 
-    this.innerHTML = `
+    if (this.hasAttribute('readonly')) {
+      this.innerHTML = `
+        <div class="d-flex align-items-baseline">
+          <div class="form-floating">
+            <input type="text" value="${this.duration} ${this.unit}" id="${this.durId}" class="form-control-plaintext" readonly placeholder="">
+            <label for="${this.durId}" class="form-label">${this.dataset.label}</label>
+          </div>
+          <div>
+            <span>  =  </span>
+            <span class="numclasses">${this.numClassesText()}</span>
+          </div>
+        </div>
+    `;
+    } else {
+      this.innerHTML = `
     <input type="hidden" value="${this.value}" name="${this.getAttribute('name')}" hidden>
     <div class="input-group">
       <div class="form-floating">
@@ -26,9 +40,10 @@ class ClassDurationInput extends HTMLElement {
         <option value="week" ${this.unit == 'week' ? 'selected' : ''}>Weeks</option>
         <option value="month" ${this.unit == 'month' ? 'selected' : ''}>Months</option>
       </select>
-      <div class="input-group-text">${this.numClassesText()}</div>
+      <div class="numclasses input-group-text">${this.numClassesText()}</div>
     </div>
     `;
+    }
 
     this.updateNumClasses();
 
@@ -57,8 +72,8 @@ class ClassDurationInput extends HTMLElement {
       this.value = this.duration * 4 * this.classesPerWeek;
     }
 
+    this.querySelector('.numclasses').innerText = this.numClassesText();
     this.querySelector('input[type="hidden"]').value = this.value;
-    this.querySelector('.input-group-text').innerText = this.numClassesText();
   }
 
   /** @param {Event} event */

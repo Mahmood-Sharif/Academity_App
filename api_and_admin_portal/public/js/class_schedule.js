@@ -185,15 +185,25 @@ class ClassScheduleEditor extends HTMLElement {
           </div>
         </div>
       </div>
+    </div>
+    `;
+    if (!this.hasAttribute('readonly')) {
+      this.querySelector('.card').innerHTML += `
       <div class="card-footer d-flex gap-2 text-muted">
         <span>Left Click to Create New Timing</span>
         &centerdot;
         <span>Right Click to Remove Timing</span>
       </div>
-    </div>
     `;
+    }
 
     this.updateValue();
+
+    if (this.timings['fri'] || this.timings['sat']) {
+      this.querySelector('#weekendCheck').checked = true;
+      this.querySelector('.day[data-day="fri"]').classList.toggle('d-none', false);
+      this.querySelector('.day[data-day="sat"]').classList.toggle('d-none', false);
+    }
 
     // Render class timings
     for (const [day, timings] of Object.entries(this.timings)) {
@@ -204,6 +214,13 @@ class ClassScheduleEditor extends HTMLElement {
     }
 
     // attach listeners
+    this.querySelector('#weekendCheck').addEventListener('change', (event) => {
+      this.querySelector('.day[data-day="fri"]').classList.toggle('d-none', event.value);
+      this.querySelector('.day[data-day="sat"]').classList.toggle('d-none', event.value);
+    });
+
+    if (this.hasAttribute('readonly')) return;
+
     this.querySelectorAll('.timings').forEach((elem) => {
       elem.addEventListener('click', (event) => {
         if (event.target === elem && this.createMode) {
@@ -234,11 +251,6 @@ class ClassScheduleEditor extends HTMLElement {
         }
       });
     });
-
-    this.querySelector('#weekendCheck').addEventListener('change', (event) => {
-      this.querySelector('.day[data-day="fri"]').classList.toggle('d-none', event.value);
-      this.querySelector('.day[data-day="sat"]').classList.toggle('d-none', event.value);
-    });
   }
 
   appendTimingDOM(elem, timing, day, index) {
@@ -248,7 +260,7 @@ class ClassScheduleEditor extends HTMLElement {
     timingElem.dataset.index = index;
     timingElem.style = this.timingExtents(timing);
     timingElem.innerHTML = `
-      <div type="button" class="" data-bs-toggle="dropdown" aria-expanded="false">
+      <div type="button" class="" ${this.hasAttribute('readonly') ? '' : 'data-bs-toggle="dropdown"'} aria-expanded="false">
         ${this.formatTime(timing)}</div>
       <div class="dropdown-menu">
         <div class="vstack gap-3 p-2">
@@ -268,6 +280,8 @@ class ClassScheduleEditor extends HTMLElement {
     elem.append(timingElem);
 
     // attach timing listeners 
+    if (this.hasAttribute('readonly')) return;
+
     timingElem.querySelector('.fromtime').addEventListener('change', (e) => this.onTimeInputChanged(e.target, 'from'));
     timingElem.querySelector('.totime').addEventListener('change', (e) => this.onTimeInputChanged(e.target, 'to'));
     timingElem.querySelector('.removebtn').addEventListener('click', (e) => this.removeTiming(e.target));
@@ -336,7 +350,6 @@ class ClassScheduleEditor extends HTMLElement {
           day_of_week: day.toUpperCase()
         }))
       ));
-    console.log(JSON.parse(this.querySelector('textarea').innerText));
   }
 
 }

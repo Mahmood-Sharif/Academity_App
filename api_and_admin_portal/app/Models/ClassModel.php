@@ -10,13 +10,14 @@ class ClassModel extends Model
     protected $primaryKey = 'class_id';
 
     protected $allowedFields = [
-      'class_name',
-      'min_age',
-      'max_age',
-      'academy_id',
-      'max_capacity',
-      'min_duration',
-      'max_duration'
+        'class_name',
+        'min_age',
+        'max_age',
+        'academy_id',
+        'max_capacity',
+        'min_duration',
+        'max_duration',
+        'coach_id'
     ];
 
     protected $validationRules = [
@@ -26,6 +27,7 @@ class ClassModel extends Model
       'max_capacity' => 'integer|required|is_natural_no_zero',
       'min_duration' => 'integer|required|is_natural_no_zero',
       // 'max_duration' => 'integer|required|is_natural_no_zero',
+      'coach_id'     => 'integer|required|is_natural_no_zero',
     ];
     protected $validationMessages = [
       'timings' => [
