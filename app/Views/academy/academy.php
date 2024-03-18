@@ -46,7 +46,7 @@ $this->endSection('sidebarTab');
   <div class="row">
     <div class="col-8 col-lg-6">
       <div class="ratio ratio-16x9 mb-4">
-        <img src="<?=base_url($academy->image_url)?>" alt="" class="object-fit-cover rounded-4"
+        <img src="<?=$academy->image_url?>" alt="" class="object-fit-cover rounded-4"
           style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
       <h2>

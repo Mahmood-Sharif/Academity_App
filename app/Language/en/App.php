@@ -85,6 +85,12 @@ return [
   'class_update.success'   => 'Class details updated successfully.',
   'class_update.error'     => 'Could not update class details.',
 
+  // user profiles
+  'profile.view.owner'     => 'View Profile',
+  'profile.view.student'   => 'View Student Profile',
+  'profile.view.coach'     => 'View Coach Profile',
+  'medical_condition'      => 'Medical Condition',
+  'no_medical_condition'   => 'No Medical Condition',
 
   // forms
   'submit'                 => 'Submit',

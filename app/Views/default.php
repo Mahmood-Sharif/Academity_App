@@ -1,7 +1,7 @@
 <?php /* @var CodeIgniter\View\View $this */
 $locale = service('request')->getLocale();
 $dir = $locale == 'ar' ? 'rtl' : 'ltr';
-$tab = $this->sections['sidebarTab'][0];
+$tab = ($this->sections['sidebarTab'] ?? [''])[0];
 ?>
 <!DOCTYPE html>
 <html lang="<?=$locale?>" dir="<?=$dir?>">
@@ -169,7 +169,7 @@ $tab = $this->sections['sidebarTab'][0];
             <?=lang('App.profile')?>&nbsp;
           </button>
           <ul class="dropdown-menu">
-            <li><a href="#" class="dropdown-item">
+                <li><a href="<?=url_to('AdminPortal\User::show', auth()->id())?>" class="dropdown-item">
                 <?=lang('App.profile.view')?>
               </a></li>
             <li><a href="<?=url_to('logout')?>" class="dropdown-item">

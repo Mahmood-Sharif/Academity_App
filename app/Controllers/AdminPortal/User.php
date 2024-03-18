@@ -2,6 +2,7 @@
 
 namespace App\Controllers\AdminPortal;
 
+use App\Entities\User as AppUser;
 use App\Models\AcademyModel;
 use App\Models\ClassModel;
 use App\Models\UserModel;
@@ -178,11 +179,70 @@ class User extends ResourcePresenter
             return view('user/ajax_register_coach', [ 'register' => true, 'coach' => null]);
         }
     }
-
-    public function show($id = null): string
+    /**
+     * @param mixed $id
+     */
+    public function showOwner($id = null): string
     {
-        throw new Exception("Not Implemented", 1);
+        if (auth()->id() != $id) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
+        }
+
+        $user = $this->users->find($id);
+
+        return view('user/profile', [
+            'user' => $user,
+            'type' => 'owner'
+        ]);
     }
 
+    /**
+     * @param mixed $id
+     */
+    public function showStudent($id = null): string
+    {
+        if (! auth()->user()->can('students.access')) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
+        }
+
+        $user = $this->users->find($id);
+
+        return view('user/profile', [
+            'user' => $user,
+            'type' => 'student'
+        ]);
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function showCoach($id = null): string
+    {
+        /** @var AppUser $user */
+        $user = $this->users->coaches()->find($id);
+
+        if (! auth()->user()->can('coaches.access') || !$user->inGroup('coach')) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
+        }
+
+        return view('user/profile', [
+            'user' => $user,
+            'type' => 'coach'
+        ]);
+    }
+
+    public function edit($id = null): string
+    {
+        throw new Exception("Unimplemented", 1);
+    }
 
 }

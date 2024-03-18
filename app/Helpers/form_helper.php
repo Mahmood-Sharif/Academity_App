@@ -21,16 +21,20 @@ function validated_form_input(string $id, string $name, string $labelText, strin
       '</div>' . "\n";
 }
 
-function validated_form_textarea(string $id, string $name, string $labelText, string $value = '', string $type = 'text'): string
+function validated_form_textarea(string $id, string $name, string $labelText, string $value = '', string $type = 'text', array $attributes = [], bool $readonly = false): string
 {
     $isError = array_key_exists($name, validation_errors());
+    if ($readonly) {
+        $attributes['readonly'] = 'readonly';
+    }
     return '<div class="form-floating">' .
       form_textarea([
         'id' => $id,
         'name' => $name,
         'value' => $value,
-        'class' => 'form-control' . ($isError ? ' is-invalid' : ''),
+        'class' => 'form-control' . ($readonly ? '-plaintext' : '') . ($isError ? ' is-invalid' : ''),
         'placeholder' => '',
+        ...$attributes
       ]) .
       form_label($labelText, $id, ['class' => 'form-label']) .
       validation_show_error($name) .

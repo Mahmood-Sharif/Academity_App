@@ -55,7 +55,7 @@ $url = match($type) {
         <div class="mb-3 d-flex flex-column">
           <div class="ratio ratio-16x9 mb-2">
             <!-- TODO: persist 'uploaded' image after form validation -->
-            <img id="imagePreview" src="<?=base_url($academy?->image_url ?? 'images/Academy.jpg')?>" alt=""
+            <img id="imagePreview" src="<?=$academy?->image_url ?? base_url('images/Academy.jpg')?>" alt=""
               class="object-fit-cover rounded-4 border">
           </div>
           <label for="academyImage" class="btn btn-secondary ms-auto">

@@ -79,7 +79,7 @@ $this->endSection('sidebarTab');
         </td>
         <td><?=$coach->academies?></td>
         <td>
-          <a href="#" class="btn btn-outline-success ms-auto">
+          <a href="<?=url_to('AdminPortal\User::showCoach', $coach->id)?>" class="btn btn-outline-success ms-auto">
             <?=lang('App.view')?>
           </a>
         </td>
