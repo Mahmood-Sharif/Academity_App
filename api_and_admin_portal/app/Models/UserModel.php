@@ -56,9 +56,9 @@ class UserModel extends CodeIgniterUserModel
     public function coaches(): UserModel
     {
         return $this
-            ->join('auth_groups_users', 'auth_groups_users.user_id = users.id')
-            ->join('academy_coaches', 'academy_coaches.coach_id = users.id')
-            ->join('academies', 'academy_coaches.academy_id = academies.academy_id')
+            ->join('auth_groups_users', 'auth_groups_users.user_id = users.id', 'left')
+            ->join('academy_coaches', 'academy_coaches.coach_id = users.id', 'left')
+            ->join('academies', 'academy_coaches.academy_id = academies.academy_id', 'left')
             ->groupBy('users.id')
             ->select('users.*')
             ->select('group_concat(academies.name SEPARATOR ", ") as academies')

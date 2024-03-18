@@ -40,7 +40,7 @@ $this->endSection('sidebarTab');
     <?php foreach ($students as $student):  ?>
     <li class="list-group-item d-flex align-items-center">
       <?= $student->name ?>
-      <a href="#" class="btn btn-outline-success ms-auto">
+      <a href="<?=url_to('AdminPortal\User::showStudent', $student->id)?>" class="btn btn-outline-success ms-auto">
         <?=lang('App.view')?>
       </a>
     </li>
