@@ -4,9 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Database\RawSql;
 use CodeIgniter\Model;
+use DateTimeImmutable;
+use DateTimeZone;
 
 class ClassModel extends Model
 {
+    public const BASE36_DIGITS = '0123456789abcdefghijklmnopqrstuvwxyz';
+    public const REG_CODE_ALPHABET = '23456789CFGHJMPQRVWX';
+
+
     protected $table = 'classes';
     protected $primaryKey = 'class_id';
 
@@ -18,8 +24,11 @@ class ClassModel extends Model
         'max_capacity',
         'min_duration',
         'max_duration',
-        'coach_id'
+        'coach_id',
+        'reg_code',
     ];
+
+    protected $beforeInsert = ['insertRegCode'];
 
     protected $validationRules = [
       'class_name'   => 'string|required|min_length[3]|max_length[100]',
@@ -81,5 +90,43 @@ class ClassModel extends Model
                     ->where('academies.owner_id', $id)
                     ->select('classes.*')
                     ->select('academies.owner_id');
+    }
+
+    public function includeClassesPerWeek(): ClassModel
+    {
+        return $this->join('class_timings', 'class_timings.class_id = classes.class_id', 'left')
+            ->groupBy('classes.class_id')
+            ->select('classes.*')
+            ->select('COUNT(DISTINCT class_timings.day_of_week) as classes_per_week');
+    }
+
+    public function includeNumEnrollments(): ClassModel
+    {
+        $date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+        return $this
+            ->join('enrollments', 'enrollments.class_id = classes.class_id', 'left')
+            ->groupBy('classes.class_id')
+            ->select('COUNT(DISTINCT enrollments.enrollment_id) as num_enrollments')
+            ->where("enrollments.end_date > '{$date->format('Y-m-d')}'");
+    }
+
+    public static function generateRegCode(): string
+    {
+        $encBase = strlen(self::REG_CODE_ALPHABET);
+        $minLength = 6;
+        $maxLength = 6;
+        $rand = random_int($encBase ** ($minLength - 1), $encBase ** $maxLength - 1);
+        $baseString = base_convert($rand, 10, $encBase);
+        return strtr($baseString, self::BASE36_DIGITS, self::REG_CODE_ALPHABET);
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     * @return array<string,mixed>
+     */
+    protected function insertRegCode(array $data): array
+    {
+        $data['data']['reg_code'] = ClassModel::generateRegCode();
+        return $data;
     }
 }
