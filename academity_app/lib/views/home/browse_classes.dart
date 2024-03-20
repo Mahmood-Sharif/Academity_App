@@ -11,7 +11,7 @@ class ClassesPage extends StatelessWidget {
 
   // Helper function to get the date for the start of the week (Sunday)
   DateTime _getStartOfWeek(DateTime date) {
-    return date.subtract(Duration(days: date.weekday - 1));
+    return date.subtract(Duration(days: date.weekday ));
   }
 
   @override
@@ -58,14 +58,14 @@ class ClassesPage extends StatelessWidget {
 ),
         body: TabBarView(
           children: [
-            ClassesList(dayOfWeek: 'SUN'), // Pass day of the week to display classes for that day
-            ClassesList(dayOfWeek: 'MON'),
-            ClassesList(dayOfWeek: 'TUE'),
-            ClassesList(dayOfWeek: 'WED'),
-            ClassesList(dayOfWeek: 'THU'),
-            ClassesList(dayOfWeek: 'FRI'),
-            ClassesList(dayOfWeek: 'SAT'),
-          ],
+    ClassesList(dayOfWeek: 'SUN', date: startOfWeek), // Pass startOfWeek as the date for Sunday
+    ClassesList(dayOfWeek: 'MON', date: startOfWeek.add(Duration(days: 1))),
+    ClassesList(dayOfWeek: 'TUE', date: startOfWeek.add(Duration(days: 2))),
+    ClassesList(dayOfWeek: 'WED', date: startOfWeek.add(Duration(days: 3))),
+    ClassesList(dayOfWeek: 'THU', date: startOfWeek.add(Duration(days: 4))),
+    ClassesList(dayOfWeek: 'FRI', date: startOfWeek.add(Duration(days: 5))),
+    ClassesList(dayOfWeek: 'SAT', date: startOfWeek.add(Duration(days: 6))),
+  ],
         ),
       ),
     );

@@ -36,12 +36,12 @@ class AcademiesListWidget extends ConsumerWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
-                    child: Image.network(
+                    /*child: Image.network(
                       academy.imageUrl,
                       width: double.infinity,
                       height: 200,
                       fit: BoxFit.cover,
-                    ),
+                    ),*/
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),

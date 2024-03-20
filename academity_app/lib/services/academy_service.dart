@@ -9,7 +9,8 @@ import 'package:http/http.dart' as http;
 class AcademyServices {
 
 Future<List<Academy>> fetchAcademies() async {
-  final response = await AcademityApi.get('academies');
+        final url = Uri.parse('http://192.168.100.15:8080/api/academies');
+      final response = await http.get(url);
 
  if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);

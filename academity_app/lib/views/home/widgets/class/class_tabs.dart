@@ -73,7 +73,7 @@ class DaySchedule extends StatelessWidget {
               Navigator.pushNamed(
                 context,
                 '/class_students',
-                arguments: classesForDay[index].classId,
+                //arguments: classesForDay[index].classId,
               );
             },
             child: Container(
@@ -110,7 +110,7 @@ class DaySchedule extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          classesForDay[index].name.toString(),
+                          classesForDay[index].className.toString(),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

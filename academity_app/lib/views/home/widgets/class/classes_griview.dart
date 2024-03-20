@@ -32,7 +32,8 @@ class ClassListWidget extends ConsumerWidget {
                 Navigator.pushNamed(
                   context,
                   '/attendance',
-                  arguments: classes[index].classId,
+                   arguments: classes[index],
+                   
                 );
               },
               child: Container(
@@ -69,7 +70,7 @@ class ClassListWidget extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            classes[index].name.toString(),
+                            classes[index].className.toString(),
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

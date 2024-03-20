@@ -1,9 +1,10 @@
+
 import 'dart:convert';
-import 'package:academity_app/models/class.dart';
+
 import 'package:academity_app/models/class_with_timing.dart';
-import 'package:academity_app/providers/classes_provider.dart';
+
 import 'package:academity_app/services/academity_api.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:http/http.dart' as http;
 
 

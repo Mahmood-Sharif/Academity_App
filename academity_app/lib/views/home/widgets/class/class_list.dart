@@ -1,15 +1,13 @@
-
-
-
-
 import 'package:academity_app/providers/classes_provider.dart';
+import 'package:academity_app/views/home/Attendance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class ClassesList extends ConsumerWidget {
   final String dayOfWeek;
-
-  const ClassesList({Key? key, required this.dayOfWeek}) : super(key: key);
+  final DateTime date;
+  const ClassesList({Key? key, required this.dayOfWeek, required this.date}) : super(key: key);
   
   String formatTime(String? time) {
     if (time == null) return '';
@@ -30,18 +28,21 @@ class ClassesList extends ConsumerWidget {
           itemCount: classesForDay.length,
           itemBuilder: (context, index) {
             final startTime = formatTime(classesForDay[index].startTime);
-            final endTime = formatTime(classesForDay[index].endTime);
-            final timeRange = '$startTime - $endTime';
+            final timeRange = '${DateFormat("yyyy-MM-dd").format(date)}T$startTime';
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/attendance',
-                    arguments: classesForDay[index].classId,
-                  );
+                  Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AttendancePage(
+                    classId: classesForDay[index].classId,
+                    timeRange: timeRange,
+                  ),
+                ),
+              );
                 },
                 child: Container(
                   padding: const EdgeInsets.all(16),
@@ -77,25 +78,17 @@ class ClassesList extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              classesForDay[index].name.toString(),
+                              classesForDay[index].dayOfWeek.toString(),
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              classesForDay[index].className.toString(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                //fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8), // Add spacing between class name and subtext
-                            Text(
                               timeRange,
                               style: const TextStyle(
                                 fontSize: 14,
-                                color: Colors.grey,
+                                //fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],

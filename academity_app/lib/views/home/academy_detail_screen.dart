@@ -30,8 +30,8 @@ class AcademyDetailScreen extends ConsumerWidget {
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(
                     bottom: Radius.circular(20.0), top: Radius.circular(20.0)),
-                child: Image.network(academy.imageUrl,
-                    width: double.infinity, height: 250, fit: BoxFit.cover),
+                //child: Image.network(academy.imageUrl,
+                  //  width: double.infinity, height: 250, fit: BoxFit.cover),
               ),
             ),
             Padding(

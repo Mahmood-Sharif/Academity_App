@@ -13,8 +13,8 @@ class BottomNavigationPage extends StatefulWidget {
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
-    ClassesPage(),
-    AcademiesPage(),
+    const ClassesPage(),
+    const AcademiesPage(),
   ];
 
   @override

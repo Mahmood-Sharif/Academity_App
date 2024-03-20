@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/student.dart';
 import 'package:academity_app/services/student_service.dart';
 import 'package:academity_app/views/home/widgets/class/classes_griview.dart';
-
+/*
 class ClassStudentsPage extends StatelessWidget {
   const ClassStudentsPage({Key? key}) : super(key: key);
 
@@ -31,4 +31,4 @@ class ClassStudentsPage extends StatelessWidget {
       ),
     );
   }
-}
+}*/

@@ -1,3 +1,4 @@
+
 class ClassWithTiming {
   final int classId;
   final String className;
