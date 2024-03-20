@@ -43,4 +43,25 @@ class AttendanceModel extends Model
             ->getResult($this->returnType);
     }
 
+    public function insertAttendance(int $studentId, string $dateTime, string $status): bool
+{
+    $data = [
+        'student_id' => $studentId,
+        'date_time' => $dateTime,
+        'status' => $status,
+    ];
+
+    return $this->insert($data);
 }
+
+public function deleteAttendance(int $studentId, string $dateTime): bool
+{
+    $condition = [
+        'student_id' => $studentId,
+        'date_time' => $dateTime,
+    ];
+
+    return $this->where($condition)->delete();
+}
+}
+

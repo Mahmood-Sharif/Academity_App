@@ -29,9 +29,5 @@ class ClassTimingModel extends Model
         return $this->db->query('call getStudentSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult();
     }
 
-    public function getScheduleForCoach(int $id, string $fromDate, string $toDate): array
-    {
-        return $this->db->query('call getCoachSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult();
-    }
-
+   
 }

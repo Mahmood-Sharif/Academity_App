@@ -13,11 +13,12 @@ class Academies extends ResourceController
         $data = $model->orderBy('academy_id', 'DESC')->findAll();
         
         // Convert numeric values to integers
-        foreach ($data as &$row) {
-            $row['academy_id'] = (int) $row['academy_id']; // Example field, replace with your actual field names
+        foreach ($data as $row) {
+            // Access object properties instead of array keys
+            $row->academy_id = (int) $row->academy_id; // Example field, replace with your actual field names
             // Cast other numeric fields as needed
         }
-
+    
         return $this->respond($data);
     }
 

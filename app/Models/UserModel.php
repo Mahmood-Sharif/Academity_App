@@ -15,7 +15,7 @@ class UserModel extends CodeIgniterUserModel
         $this->allowedFields = [
           ...$this->allowedFields,
 
-          'name',
+          'name',   
           'dob',
           'phone',
 
