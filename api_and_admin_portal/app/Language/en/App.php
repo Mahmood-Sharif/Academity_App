@@ -84,6 +84,8 @@ return [
   'main_coach'             => 'Main Coach',
   'class_update.success'   => 'Class details updated successfully.',
   'class_update.error'     => 'Could not update class details.',
+  'registration_code'      => 'Registration Code',
+  'registration_code.help' => 'This is the registration code for this class. Give it to existing students to allow them to register into this class in the app <i>without paying</i>.',
 
   // user profiles
   'profile.view.owner'     => 'View Profile',

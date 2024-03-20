@@ -15,10 +15,11 @@ class ClassDurationInput extends HTMLElement {
     this.classesPerWeek = this.dataset.classesPerWeek;
 
     if (this.hasAttribute('readonly')) {
+      this.normalizeDuration();
       this.innerHTML = `
         <div class="d-flex align-items-baseline">
           <div class="form-floating">
-            <input type="text" value="${this.duration} ${this.unit}" id="${this.durId}" class="form-control-plaintext" readonly placeholder="">
+            <input type="text" value="${this.duration} ${this.unit}s" id="${this.durId}" class="form-control-plaintext" readonly placeholder="">
             <label for="${this.durId}" class="form-label">${this.dataset.label}</label>
           </div>
           <div>
@@ -86,6 +87,15 @@ class ClassDurationInput extends HTMLElement {
   onUnitChange(event) {
     this.unit = event.target.value;
     this.updateNumClasses();
+  }
+
+  normalizeDuration() {
+    this.duration = this.duration / this.classesPerWeek;
+    this.unit = 'week';
+    if (this.duration >= 4) {
+      this.duration = this.duration / 4;
+      this.unit = 'month';
+    }
   }
 }
 

@@ -24,6 +24,7 @@ class ClassSeeder extends Seeder
                     'min_duration' => 8,
                     'max_duration' => 8,
                     'coach_id'     => 2,
+                    'reg_code'     => ClassModel::generateRegCode(),
                 ],
                 [
                     'class_id'     => 2,
@@ -35,6 +36,7 @@ class ClassSeeder extends Seeder
                     'min_duration' => 8,
                     'max_duration' => 8,
                     'coach_id'     => 2,
+                    'reg_code'     => ClassModel::generateRegCode(),
                 ],
                 [
                     'class_id'     => 3,
@@ -46,6 +48,7 @@ class ClassSeeder extends Seeder
                     'min_duration' => 8,
                     'max_duration' => 8,
                     'coach_id'     => 3,
+                    'reg_code'     => ClassModel::generateRegCode(),
                 ],
                 [
                     'class_id'     => 4,
@@ -57,6 +60,7 @@ class ClassSeeder extends Seeder
                     'min_duration' => 8,
                     'max_duration' => 8,
                     'coach_id'     => 3,
+                    'reg_code'     => ClassModel::generateRegCode(),
                 ],
                 [
                     'class_id'     => 5,
@@ -68,6 +72,7 @@ class ClassSeeder extends Seeder
                     'min_duration' => 8,
                     'max_duration' => 8,
                     'coach_id'     => 4,
+                    'reg_code'     => ClassModel::generateRegCode(),
                 ],
             ]
         );

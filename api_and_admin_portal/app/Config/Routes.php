@@ -20,6 +20,7 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->presenter('my-academies', ['controller' => 'AdminPortal\Academy']);
         $routes->get('classes/by-academy/(:num)', 'AdminPortal\Classes::index/$1');
         $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
+        $routes->get('class-reg-code/(:num)', 'AdminPortal\Classes::registrationCode/$1');
         $routes->get('students/', 'AdminPortal\User::indexStudents');
         $routes->get('coaches/', 'AdminPortal\User::indexCoaches');
         $routes->get('academy-coaches/', 'AdminPortal\User::academyCoachesInput');

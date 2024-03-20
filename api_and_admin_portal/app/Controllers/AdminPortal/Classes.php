@@ -147,6 +147,7 @@ class Classes extends ResourcePresenter
             $flashData = ['error', lang('App.class_update.error')];
         }
 
+        sleep(1);
         return redirect()->route('AdminPortal\Classes::show', [$id])->with(...$flashData);
     }
 
@@ -227,7 +228,7 @@ class Classes extends ResourcePresenter
         // insert price
         $result = $result && $this->model->upsertPrice($insertId, $class->price);
 
-        usleep(200000);
+        sleep(1);
         return redirect()->route('AdminPortal\Classes::show', [$insertId]);
     }
 
@@ -235,7 +236,7 @@ class Classes extends ResourcePresenter
     public function remove($id = null): string
     {
         $class = $this->model->includeOwnerId()->find($id);
-        if (auth()->user()->can('classes.delete') && $class->owner_id === auth()->id()) {
+        if (auth()->user()->can('classes.delete') && $class?->owner_id === auth()->id()) {
             return view('class/ajax_remove_modal', [
               'error'   => false,
               'class' => $class
@@ -253,7 +254,7 @@ class Classes extends ResourcePresenter
     {
         $class = $this->model->includeOwnerId()->find($id);
 
-        if (!auth()->user()->can('classes.delete') || $class->owner_id !== auth()->id()) {
+        if (!auth()->user()->can('classes.delete') || $class?->owner_id !== auth()->id()) {
             return view('ajax_message_modal', [
               'title' => lang('App.delete_class'),
               'body'  => lang('Security.disallowedAction')
@@ -272,9 +273,28 @@ class Classes extends ResourcePresenter
             ]);
         } else {
             return view('ajax_message_modal', [
-              'title'  => lang('App.delete_class'),
-                'body' => lang('App.delete_class.error'),
+                'title' => lang('App.delete_class'),
+                'body'  => lang('App.delete_class.error'),
             ]);
         }
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function registrationCode($id = null): string
+    {
+        $class = $this->model->includeOwnerId()->find($id);
+        if (!auth()->user()->can('classes.access') || $class?->owner_id !== auth()->id()) {
+            return view('ajax_message_modal', [
+              'title' => lang('App.registration_code'),
+              'body'  => lang('Security.disallowedAction')
+            ]);
+        }
+
+        return view('ajax_message_modal', [
+            'title' => lang('App.registration_code'),
+            'body'  => view('class/reg_code_modal', ['class' => $class]),
+        ]);
     }
 }

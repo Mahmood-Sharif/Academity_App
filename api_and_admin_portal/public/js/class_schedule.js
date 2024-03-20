@@ -100,7 +100,6 @@ class ClassScheduleEditor extends HTMLElement {
         border-radius: 5px;
         padding: 0.5rem;
         margin: 0 0.5rem;
-        cursor: pointer;
         user-select: none;
         background-color: var(--bs-secondary);
         border-radius: var(--bs-border-radius);
