@@ -24,7 +24,7 @@ class Schedule extends ResourceController
         if ($schedule) {
             return $this->respond($schedule);
         } else {
-            return $this->failNotFound('No schedue');
+            return $this->failNotFound('No schedule');
         }
     }
 

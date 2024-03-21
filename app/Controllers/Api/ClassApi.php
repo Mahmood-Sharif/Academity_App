@@ -14,7 +14,7 @@ class ClassApi extends ResourceController
     {
         $classModel = new ClassModel();
         $timingModel = new ClassTimingModel();
-        
+
         // Fetch class by ID and include price information
         $classWithPrice = $classModel->includePrice()->find($classId);
 
@@ -31,4 +31,3 @@ class ClassApi extends ResourceController
         return $this->respond($classWithPrice);
     }
 }
-
