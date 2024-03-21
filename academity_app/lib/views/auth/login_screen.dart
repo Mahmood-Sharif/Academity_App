@@ -1,3 +1,4 @@
+import 'package:academity_app/main.dart';
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,6 +69,8 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                       labelText: 'Email',
                       border: UnderlineInputBorder(),
                     ),
+                    autofillHints: const [AutofillHints.email],
+
                   ),
                   const SizedBox(height: 20),
                   TextField(
@@ -76,6 +79,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                       labelText: 'Password',
                       border: UnderlineInputBorder(),
                     ),
+                    autofillHints: const [AutofillHints.password],
                     obscureText: true,
                   ),
                   const SizedBox(height: 30),
@@ -112,8 +116,9 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
     final result = await AuthServices().login(email, password);
 
     if (result) {
+      ref.invalidate(isLoggedInProvider);
       Navigator.of(context)
-          .pushReplacementNamed('/browseSports'); // Adjust this route as needed
+          .pushNamedAndRemoveUntil('/browseSports', (route) => false); // Adjust this route as needed
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Login failed')));

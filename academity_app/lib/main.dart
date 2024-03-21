@@ -1,5 +1,6 @@
-import 'package:academity_app/views/My%20Academy/my_academy_screen.dart';
+import 'package:academity_app/views/MyAcademy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
+import 'package:academity_app/views/Profile/users_profile_screen.dart';
 import 'package:academity_app/views/Schedule/schedule_screen.dart';
 import 'package:academity_app/views/auth/home_screen.dart';
 import 'package:academity_app/views/auth/signup_screen.dart';
@@ -9,26 +10,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:academity_app/services/auth_services.dart';
 import 'package:academity_app/views/auth/login_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+final isLoggedInProvider = FutureProvider((ref) async {
+  const secureStorage = FlutterSecureStorage();
+  final isLoggedIn =
+      await secureStorage.read(key: 'api_token').then((apiToken) {
+    if (apiToken == null) return false;
+    // final auth = AuthServices();
+    // return auth.loginTest();
+    return true;
+  });
+  return isLoggedIn;
+});
+
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    const secureStorage = FlutterSecureStorage();
-    final Future<bool> isLoggedIn =
-        secureStorage.read(key: 'api_token').then((apiToken) {
-      if (apiToken == null) return false;
-      final auth = AuthServices();
-      return auth.loginTest();
-    });
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLog = ref.watch(isLoggedInProvider);
+    if (!isLog.hasValue || isLog.isLoading || isLog.hasError) {
+      return const Placeholder();
+    }
+    final isLoggedIn = isLog.requireValue;
     return MaterialApp(
       title: 'Academity',
       theme: ThemeData(
@@ -46,32 +55,24 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-         '/': (context) => const HomeScreen(),
-        '/login': (context) => FutureBuilder<bool>(
-              future: isLoggedIn,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                } else if (!snapshot.hasData || snapshot.data == false) {
-                  return const LoginScreen();
-                } else {
-                  return  const MainScreen();
-                }
-              },
-            ),
+        '/': (context) => const HomeScreen(),
+        '/login': (context) {
+          if (isLoggedIn) {
+            return const MainScreen();
+          } else {
+            return const LoginScreen();
+          }
+        },
         '/browseSports': (context) => const MainScreen(),
-            '/signup': (context) => const SignupScreen(),
+        '/signup': (context) => const SignupScreen(),
+        '/userProfile': (context) => const UserProfileScreen(),
       },
     );
   }
 }
 
 class MainScreen extends StatefulWidget {
-   const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -82,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
 
   static final List<Widget> _widgetOptions = [
     const SportsPage(), // Your actual HomePage widget
-    const AcademyPage(), // Your actual AcademyPage widget
+    const MyAcademyPage(), // Your actual AcademyPage widget
     // QRScannerPage(), // Your actual QRScannerPage widget or handle differently
     const SchedulePage(), // Your actual SchedulePage widget
     const ProfilePage(), // Your actual ProfilePage widget

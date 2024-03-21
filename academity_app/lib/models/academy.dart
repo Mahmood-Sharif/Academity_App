@@ -7,7 +7,7 @@ class Academy {
   final String phone;
   final String description;
   String imageUrl;
-  final List<Classes> classes; // Add a list of Class objects
+  final List<Classes>? classes; // Add a list of Class objects
 
   Academy({
     required this.academyId,
@@ -16,17 +16,25 @@ class Academy {
     required this.phone,
     required this.description,
     required this.imageUrl,
-    required this.classes, // Add classes to the constructor
+    this.classes, // Add classes to the constructor
   });
 
   factory Academy.fromJson(Map<String, dynamic> json) {
     // Parse the 'classes' JSON array into a list of Class objects
-    List<Classes> classesList = [];
-    if (json['classes'] != null) {
-      classesList = (json['classes'])
-          .map((classJson) => Classes.fromJson(classJson))
-          .toList();
+ List<Classes> classesList = [];
+    // Check if 'classes' is not null and is a list
+    if (json['classes'] != null && json['classes'] is List) {
+      // Safely cast json['classes'] to List<dynamic> and parse each element to Classes
+      classesList = (json['classes'] as List).map((classJson) {
+        // Ensure classJson is a Map<String, dynamic> before parsing
+        if (classJson is Map<String, dynamic>) {
+          return Classes.fromJson(classJson);
+        } else {
+          throw Exception("Expected classJson to be of type Map<String, dynamic>");
+        }
+      }).toList();
     }
+
 
     return Academy(
       academyId: json['academy_id'],

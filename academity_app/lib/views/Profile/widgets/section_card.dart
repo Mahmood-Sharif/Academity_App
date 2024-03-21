@@ -27,8 +27,8 @@ class SectionCard extends StatelessWidget {
             ...items.map(
               (item) {
                 return ListTile(
-                  leading: Icon(item['icon'] as IconData),
-                  title: Text(item['title'] as String),
+                  leading: Icon(item['icon']),
+                  title: Text(item['title']),
                   onTap: item.containsKey('onTap')
                       ? item['onTap'] as void Function()?
                       : () {

@@ -1,4 +1,5 @@
 // lib/views/profile/profile_page.dart
+import 'package:academity_app/main.dart';
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/Profile/widgets/section_card.dart';
@@ -10,6 +11,7 @@ class ProfilePage extends ConsumerWidget {
 
   void _logout(BuildContext context, WidgetRef ref) {
     AuthServices().logout().then((_) {
+      ref.invalidate(isLoggedInProvider);
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
     }).catchError((error) {
@@ -19,6 +21,11 @@ class ProfilePage extends ConsumerWidget {
         ),
       );
     });
+  }
+
+    void _navigateToUserProfile(BuildContext context) {
+    // Define navigation logic here. For example:
+    Navigator.of(context).pushNamed('/userProfile'); // Adjust route as necessary
   }
 
   @override
@@ -32,11 +39,13 @@ class ProfilePage extends ConsumerWidget {
         padding: const EdgeInsets.all(15.0),
         child: ListView(
           children: <Widget>[
-            const SectionCard(
+             SectionCard(
               title: 'Account',
               items: [
-                {'title': 'Profile', 'icon': Icons.person},
-                {'title': 'Privacy and Security', 'icon': Icons.lock},
+                {'title': 'Profile', 
+                'icon': Icons.person,
+                'onTap': () => _navigateToUserProfile(context)},
+                const {'title': 'Privacy and Security', 'icon': Icons.lock,},
               ],
             ),
             const SectionCard(

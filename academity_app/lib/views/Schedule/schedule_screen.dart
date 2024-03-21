@@ -15,11 +15,12 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
   @override
   Widget build(BuildContext context) {
-    final endDate = _selectedDay.add(const Duration(days: 13));
-    final scheduleAsyncValue = ref.watch(scheduleForStudentProvider({
-      'fromDate': _selectedDay, 
-      'toDate': endDate,
-    }));
+    final today = DateTime.now();
+    final endDate = today.add(const Duration(days: 13));
+    final scheduleAsyncValue = ref.watch(scheduleForStudentProvider((
+      fromDate: DateTime(today.year, today.month, today.day),
+      toDate: DateTime(endDate.year, endDate.month, endDate.day),
+    )));
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'Schedule'),
@@ -45,7 +46,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF008B8B) : Colors.white,
+                      color:
+                          isSelected ? const Color(0xFF008B8B) : Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
@@ -83,19 +85,23 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           ),
           Expanded(
             child: scheduleAsyncValue.when(
-              data: (schedule) => ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: schedule.length,
-                itemBuilder: (context, index) {
-                  final classDetails = schedule[index];
-                  return Card(
-                    child: ListTile(
-                      title: Text(classDetails.className),
-                      subtitle: Text('Time: ${classDetails.startTime} - ${classDetails.endTime}\nLocation: ${classDetails.location}'),
-                    ),
-                  );
-                },
-              ),
+              data: (schedule) {
+                final filtered = schedule.where((element) => DateTime.parse(element.date)==DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)).toList();
+                return ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: filtered.length,
+                  itemBuilder: (context, index) {
+                    final classDetails = filtered[index];
+                    return Card(
+                      child: ListTile(
+                        title: Text(classDetails.className),
+                        subtitle: Text(
+                            'Time: ${classDetails.startTime} - ${classDetails.endTime}\nLocation: ${classDetails.location}'),
+                      ),
+                    );
+                  },
+                );
+              },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(child: Text('Error: $error')),
             ),
@@ -107,14 +113,22 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
   String _getDayOfWeek(int weekday) {
     switch (weekday) {
-      case 1: return 'Mon';
-      case 2: return 'Tue';
-      case 3: return 'Wed';
-      case 4: return 'Thu';
-      case 5: return 'Fri';
-      case 6: return 'Sat';
-      case 7: return 'Sun';
-      default: return '';
+      case 1:
+        return 'Mon';
+      case 2:
+        return 'Tue';
+      case 3:
+        return 'Wed';
+      case 4:
+        return 'Thu';
+      case 5:
+        return 'Fri';
+      case 6:
+        return 'Sat';
+      case 7:
+        return 'Sun';
+      default:
+        return '';
     }
   }
 }

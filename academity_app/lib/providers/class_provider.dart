@@ -15,10 +15,8 @@ final classProviderwithAcademy =
   return classService.fetchClasses(academyId);
 });
 
-
-final scheduleForStudentProvider = FutureProvider.family<List<ClassSchedule>, Map<String, DateTime>>((ref, dateRange) async {
-  final fromDate = dateRange['fromDate']!;
-  final toDate = dateRange['toDate']!;
-
-  return await ClassServices.fetchScheduleForStudent(fromDate: fromDate, toDate: toDate);
+final scheduleForStudentProvider = FutureProvider.family<List<ClassSchedule>,
+    ({DateTime fromDate, DateTime toDate})>((ref, dateRange) async {
+  return await ClassServices.fetchScheduleForStudent(
+      fromDate: dateRange.fromDate, toDate: dateRange.toDate);
 });

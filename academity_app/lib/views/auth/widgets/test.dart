@@ -50,7 +50,6 @@ class _SignupFormState extends State<SignupForm> {
         'password_confirm': passwordConfirm,
       });
 
-      print(signUpSuccess);
 
       if (signUpSuccess.success) {
         Navigator.of(context).pushReplacementNamed(
