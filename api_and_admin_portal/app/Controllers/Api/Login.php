@@ -28,7 +28,7 @@ class Login extends ResourceController
       $user = auth()->getProvider()->findByCredentials(['email' => $credentials['email']]);
 
       // NOTE: this disallows users to login in multiple devices
-      $user->revokeAllAccessTokens();
+      // $user->revokeAllAccessTokens();
 
       return $this->respond([
         'status'  => 'Login successful',
