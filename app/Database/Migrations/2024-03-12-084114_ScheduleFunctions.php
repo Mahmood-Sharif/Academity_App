@@ -18,8 +18,9 @@ class ScheduleFunctions extends Migration
             return;
         }
 
+        $this->db->simpleQuery("DROP PROCEDURE IF EXISTS getStudentSchedule;");
         $this->db->simpleQuery("
-CREATE OR REPLACE PROCEDURE getStudentSchedule (
+CREATE PROCEDURE getStudentSchedule (
   IN student INTEGER,
   IN from_date DATE,
   IN to_date DATE
@@ -52,8 +53,9 @@ where
     AND ci.d  + INTERVAL DOW(ct.day_of_week) DAY BETWEEN from_date AND to_date;
             ");
 
+        $this->db->simpleQuery("DROP PROCEDURE IF EXISTS getCoachSchedule;");
         $this->db->simpleQuery("
-CREATE OR REPLACE PROCEDURE getCoachSchedule (
+CREATE PROCEDURE getCoachSchedule (
   IN coach INTEGER,
   IN from_date DATE,
   IN to_date DATE

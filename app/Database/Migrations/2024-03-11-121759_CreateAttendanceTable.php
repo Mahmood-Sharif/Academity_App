@@ -28,15 +28,17 @@ class CreateAttendanceTable extends Migration
             return;
         }
 
+        $this->db->simpleQuery("DROP FUNCTION IF EXISTS DOW;");
         $this->db->simpleQuery("
-            CREATE OR REPLACE FUNCTION DOW(
+            CREATE FUNCTION DOW(
                 day_of_week ENUM('SUN','MON','TUE','WED','THU','FRI','SAT')
             ) RETURNS int(11)
             RETURN day_of_week+0;");
 
+        $this->db->simpleQuery("DROP PROCEDURE IF EXISTS getAttendance;");
         $this->db->simpleQuery(
             "
-CREATE OR REPLACE PROCEDURE getAttendance (
+CREATE PROCEDURE getAttendance (
   IN l_class_id INTEGER,
   IN from_date DATE,
   IN to_date DATE
