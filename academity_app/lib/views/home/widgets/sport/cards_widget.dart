@@ -48,7 +48,7 @@ class CardWithShadow extends StatelessWidget {
         color: Colors.white, // Card background color
         boxShadow: const [
           BoxShadow(
-            color: const Color(0xFF008B8B),
+            color: Color(0xFF008B8B),
             spreadRadius: 0,
             blurRadius: 2,
             offset: Offset(0, 1.5), // Changes position of shadow

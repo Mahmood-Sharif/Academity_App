@@ -65,7 +65,7 @@ class MyApp extends ConsumerWidget {
         },
         '/browseSports': (context) => const MainScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/userProfile': (context) => const UserProfileScreen(),
+        '/userProfile': (context) =>  const UserProfileScreen(),
       },
     );
   }

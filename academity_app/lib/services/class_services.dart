@@ -20,7 +20,8 @@ class ClassServices {
 
         // Map each item in the list to a Class object and return the list
         return classesJson
-            .map<Classes>((item) => Classes.fromJson(item as Map<String, dynamic>))
+            .map<Classes>(
+                (item) => Classes.fromJson(item as Map<String, dynamic>))
             .toList();
       } else {
         throw Exception(
@@ -41,26 +42,41 @@ class ClassServices {
     }
   }
 
-static Future<List<ClassSchedule>> fetchScheduleForStudent({
-  required DateTime fromDate,
-  required DateTime toDate,
-}) async {
-  final formattedFromDate = DateFormat('yyyy-MM-dd').format(fromDate);
-  final formattedToDate = DateFormat('yyyy-MM-dd').format(toDate);
+  static Future<List<ClassSchedule>> fetchScheduleForStudent({
+    required DateTime fromDate,
+    required DateTime toDate,
+  }) async {
+    final formattedFromDate = DateFormat('yyyy-MM-dd').format(fromDate);
+    final formattedToDate = DateFormat('yyyy-MM-dd').format(toDate);
 
-  final response = await AcademityApi.get('schedule/student', {
-    'from_date': formattedFromDate,
-    'to_date': formattedToDate,
-  });
+    final response = await AcademityApi.get('schedule/student', {
+      'from_date': formattedFromDate,
+      'to_date': formattedToDate,
+    });
 
-  if (response.statusCode == 200) {
-    final List<dynamic> data = json.decode(response.body);
-    return data.map((json) => ClassSchedule.fromJson(json as Map<String, dynamic>)).toList();
-  } else {
-    throw Exception('Failed to load schedule');
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data
+          .map((json) => ClassSchedule.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw Exception('Failed to load schedule');
+    }
   }
-}
 
+  Future<bool> verifyAndLogAttendance(
+      String scannedData, String studentId) async {
+    final response = await AcademityApi.get('attendance/verifyAndLog', {
+      'scannedData': scannedData,
+      'studentId': studentId,
+    });
 
-
+    if (response.statusCode == 200) {
+      // You can enhance this by also checking the response body if needed
+      return true;
+    } else {
+      // Log error or handle it as needed
+      return false;
+    }
+  }
 }

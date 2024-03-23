@@ -48,12 +48,12 @@ class ProfilePage extends ConsumerWidget {
                 const {'title': 'Privacy and Security', 'icon': Icons.lock,},
               ],
             ),
-            const SectionCard(
-              title: 'Support & About',
-              items: [
-                {'title': 'My Subscriptions', 'icon': Icons.subscriptions},
-              ],
-            ),
+            // const SectionCard(
+            //   title: 'Support & About',
+            //   items: [
+            //     {'title': 'My Subscriptions', 'icon': Icons.subscriptions},
+            //   ],
+            // ),
             SectionCard(
               title: 'Actions',
               items: [

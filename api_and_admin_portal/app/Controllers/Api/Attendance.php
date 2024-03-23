@@ -33,4 +33,41 @@ class Attendance extends ResourceController
             return $this->failNotFound('No attendance for now: ' . $currentDateTime->format(DateTime::ISO8601));
         }
     }
+
+    public function verifyAndLogAttendance(): ResponseInterface
+    {
+        $scannedData = $this->request->getPost('scannedData');
+        $scannedData = $this->request->getPost('scannedData');
+        if (is_null($scannedData) || is_array($scannedData)) {
+            return $this->fail('Invalid scanned data format', 400);
+        }
+
+        // Check if the QR code data is valid
+        $decodedData = json_decode($scannedData, true);
+        if (is_null($decodedData)) {
+            // JSON decode failed or the data is not a valid JSON
+            return $this->fail('Invalid JSON format in scanned data', 400);
+        }
+
+        // Proceed with the rest of the method...
+        if ($this->isQrCodeValid($decodedData)) {
+            $studentId = $this->request->getPost('studentId');
+            $classId = $decodedData['classId'];
+            $sessionDateTime = $decodedData['sessionDateTime'];
+
+            if ($this->model->logAttendance($studentId, $classId, $sessionDateTime)) {
+                return $this->respond(['message' => 'Attendance logged successfully']);
+            } else {
+                return $this->failServerError('Failed to log attendance');
+            }
+        } else {
+            return $this->failNotFound('Invalid QR code');
+        }
+    }
+
+    public function isQrCodeValid($data)
+    {
+        // Validate QR code data, e.g., check if class session exists for given ID and datetime
+        // This validation can include checking the classId and sessionDateTime against stored data
+    }
 }

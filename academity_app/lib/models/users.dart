@@ -1,16 +1,28 @@
 class User {
-  final int userId;
+  final int id;
+  final String name;
   final String email;
+  final String phone;
+  final DateTime dob;
+  final String gender;
 
-  User({required this.userId, required this.email});
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.dob,
+    required this.gender,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) {
-    final userId = json['user_id'];
-    final email = json['email'];
-
     return User(
-      userId: userId,
-      email: email,
+      id: json['user']['id'], // Ensure this matches the JSON structure
+      name: json['user']['name'],
+      email: json['user']['email'],
+      phone: json['user']['phone'],
+      dob: DateTime.parse(json['user']['dob']['date']),
+      gender: json['user']['gender'],
     );
   }
 }
