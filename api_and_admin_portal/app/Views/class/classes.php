@@ -47,20 +47,31 @@ $this->endSection('sidebarTab');
 
   <ul class="list-group mt-3">
     <?php foreach ($classes as $class):  ?>
-    <li class="list-group-item d-flex align-items-center">
+    <li class="list-group-item d-flex align-items-center gap-3">
       <a href="<?=url_to('AdminPortal\Classes::show', $class->class_id)?>" class="">
         <?= $class->class_name ?>
       </a>
-        <a href="<?=url_to('AdminPortal\Enrollment::index') . '?class=' . $class->class_id ?>" class="btn btn-outline-success ms-auto">
+      <button hx-get="<?=url_to('AdminPortal\Classes::registrationCode', $class->class_id)?>" hx-target="#modals-here"
+        data-bs-toggle="modal" data-bs-target="#modals-here" class="btn btn-outline-secondary ms-auto">
+        <?=lang('App.registration_code')?>
+      </button>
+      <a href="<?=url_to('AdminPortal\Enrollment::index') . '?class=' . $class->class_id ?>"
+        class="btn btn-outline-success">
         <?=lang('App.students')?>
       </a>
-      <a href="<?=url_to('AdminPortal\Classes::edit', $class->class_id)?>" class="btn btn-outline-secondary ms-3">
+      <a href="<?=url_to('AdminPortal\Classes::edit', $class->class_id)?>" class="btn btn-outline-secondary">
         <?=lang('App.edit')?>
       </a>
     </li>
     <?php endforeach ?>
   </ul>
 
+</div>
+
+<div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content"></div>
+  </div>
 </div>
 
 <?= $this->endSection('content'); ?>

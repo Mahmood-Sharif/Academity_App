@@ -34,6 +34,8 @@ return [
   'view'                   => 'View',
   'edit'                   => 'Edit',
   'edit.end_date'          => 'Edit End Date',
+  'remove'                 => 'Remove',
+  'remove.from_academy'    => 'Remove from {0}',
   'back'                   => 'Back',
   'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
@@ -69,8 +71,12 @@ return [
   'register_coach'         => 'Register Coach',
   'register_coach.success' => 'Coach "{0}" registered in {1} successfully.',
   'register_coach.error'   => 'Could not register Coach "{0}" in {1}.',
+  'register_coach.help'    => 'A user with this email does not exist. Let the coach create an Academity account first, then try again.',
   'coach_name'             => 'Coach Name',
   'coach_email'            => 'Coach Email',
+  'remove_coach'           => 'Remove Coach',
+  'remove_coach.success'   => 'Coach "{0}" removed from {1} successfully.',
+  'remove_coach.error'     => 'Could not remove Coach "{0}" from {1}.',
 
   // manage classes
   'classes'                => 'Classes',
