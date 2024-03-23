@@ -25,7 +25,7 @@
       </a>
     <?php else: ?>
       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-        <?=lang('App.close')?>
+        <?=lang('App.cancel')?>
       </button>
     <?php endif ?>
     </div>

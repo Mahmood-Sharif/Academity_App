@@ -96,14 +96,19 @@ class AuthGroups extends ShieldAuthGroups
         'classes.edit'         => 'Can edit classes in (own) academies',
         'classes.delete'       => 'Can delete classes from (own) academies',
 
+        'enrollments.create'   => 'Can enrol a student in a class',
+        'enrollments.access'   => 'Can access enrollment details of student in (own) academies',
+        'enrollments.edit'     => 'Can edit enrollment in (own) academies',
+        'enrollments.unenrol'  => 'Can unenrol student from (own) academies',
+
         'students.create'      => 'Can create student profiles',
         'students.access'      => 'Can access details of student in (own) academies',
         'students.edit'        => 'Can edit student profiles in (own) academies',
         'students.delete'      => 'Can delete student profiles from (own) academies',
 
-        'coaches.register'      => 'Can register a coach in (own) academies',
-        'coaches.access'        => 'Can access details of coaches in (own) academies',
-        'coaches.unregister'    => 'Can unregister coaches from (own) academies',
+        'coaches.register'     => 'Can register a coach in (own) academies',
+        'coaches.access'       => 'Can access details of coaches in (own) academies',
+        'coaches.unregister'   => 'Can unregister coaches from (own) academies',
 
         'announcements.access' => 'Can access announcements for (own) academies',
         'analytics.access'     => 'Can access analytics for (own) academies',
@@ -126,6 +131,7 @@ class AuthGroups extends ShieldAuthGroups
             'beta.*',
             'academies.*',
             'classes.*',
+            'enrollments.*',
             'students.*',
             'coaches.*',
             'announcements.*',
@@ -143,6 +149,7 @@ class AuthGroups extends ShieldAuthGroups
             'academies.delete',
 
             'classes.*',
+            'enrollments.*',
             'students.*',
 
             'coaches.*',

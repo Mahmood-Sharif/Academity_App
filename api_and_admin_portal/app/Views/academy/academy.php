@@ -46,7 +46,7 @@ $this->endSection('sidebarTab');
   <div class="row">
     <div class="col-8 col-lg-6">
       <div class="ratio ratio-16x9 mb-4">
-        <img src="<?=base_url($academy->image_url)?>" alt="" class="object-fit-cover rounded-4"
+        <img src="<?=$academy->image_url?>" alt="" class="object-fit-cover rounded-4"
           style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
       <h2>
@@ -86,16 +86,16 @@ $this->endSection('sidebarTab');
         <a href="#" class="btn btn-secondary">
           <?=lang('App.manage.schedule')?>
         </a>
-        <a href="<?=url_to('AdminPortal\User::indexStudents') . '?academy=' . $academy->academy_id ?>" class="btn btn-secondary">
+        <a href="<?=url_to('AdminPortal\Enrollment::index') . '?academy=' . $academy->academy_id ?>" class="btn btn-secondary">
           <?=lang('App.manage.students')?>
         </a>
         <a href="<?=url_to('AdminPortal\User::indexCoaches') ?>" class="btn btn-secondary">
           <?=lang('App.manage.coaches')?>
         </a>
-        <a href="#" class="btn btn-secondary">
+        <a href="#" class="btn btn-secondary disabled">
           <?=lang('App.manage.announcements')?>
         </a>
-        <a href="#" class="btn btn-secondary">
+        <a href="#" class="btn btn-secondary disabled">
           <?=lang('App.manage.accounting')?>
         </a>
         <a href="<?=url_to('AdminPortal\Academy::edit', $academy->academy_id)?>" class="btn btn-secondary">

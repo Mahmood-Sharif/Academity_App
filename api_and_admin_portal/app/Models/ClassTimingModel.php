@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Entities\ClassTiming;
 use CodeIgniter\Model;
+use Exception;
 
 class ClassTimingModel extends Model
 {
@@ -32,6 +34,28 @@ class ClassTimingModel extends Model
     public function getScheduleForCoach(int $id, string $fromDate, string $toDate): array
     {
         return $this->db->query('call getCoachSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult();
+    }
+
+    /**
+     * @param array<string,string> $timings
+     */
+    public function replaceTimings(int $id, array $timings): bool
+    {
+        $db = $this->db;
+        $db->transStart();
+        $db->table('class_timings')->delete(['class_id' => $id]);
+        $db->table('class_timings')->insertBatch(array_map(
+            fn ($timing) => [
+                'timing_id' => isset($timing['timing_id']) ? $timing['timing_id'] : null,
+                'day_of_week' => $timing['day_of_week'],
+                'start_time' => $timing['start_time'],
+                'end_time' => $timing['end_time'],
+                'class_id' => $id,
+            ],
+            $timings
+        ));
+        $db->transComplete();
+        return $db->transStatus();
     }
 
 }
