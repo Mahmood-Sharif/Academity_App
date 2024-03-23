@@ -26,6 +26,16 @@ class UserModel extends CodeIgniterUserModel
         ];
     }
 
+    public function saveUser($user)
+    {
+        // Assuming $user is an entity with an 'id' property
+        if (isset($user->id)) {
+            return $this->userModel->update($user->id, $user);
+        } else {
+            return $this->userModel->insert($user);
+        }
+    }
+
     public function whereEnrolledInClass(int $classId): UserModel
     {
         return $this
