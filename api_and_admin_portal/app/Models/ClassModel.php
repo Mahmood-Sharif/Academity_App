@@ -51,7 +51,7 @@ class ClassModel extends Model
     {
         return $this
             ->join('prices', 'classes.class_id = prices.class_id AND prices.end_time IS NULL', 'left')
-            ->where('IFNULL(prices.start_time, 0) < CURRENT_TIMESTAMP')
+            ->where('IFNULL(prices.start_time, 0) <= CURRENT_TIMESTAMP')
             ->select('classes.*')
             ->select('prices.price');
     }

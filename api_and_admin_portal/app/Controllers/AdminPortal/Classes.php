@@ -137,7 +137,9 @@ class Classes extends ResourcePresenter
         $result = $classTimingsModel->replaceTimings($id, $classTimings);
 
         // update price
-        $this->model->upsertPrice($id, $editedClass->price);
+        if ($class->price != $editedClass->price) {
+            $result = $result && $this->model->upsertPrice($id, $editedClass->price);
+        }
 
         $result = $result && $this->model->update($id, $editedClass);
         $flashData = [];
