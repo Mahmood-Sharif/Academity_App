@@ -81,6 +81,7 @@ class Classes extends ResourcePresenter
         return view('class/create_edit', [
             'type' => 'edit',
             'class' => $class,
+            'academyId' => null,
             'coaches' => key_array(fn ($coach) => [$coach->id, $coach->name], $coaches),
             'classTimingsJson' => json_encode($classTimingsMap),
             'numTimings' => count($classTimings),
@@ -119,6 +120,7 @@ class Classes extends ResourcePresenter
             return view('class/create_edit', [
                 'type' => 'edit',
                 'class' => $class,
+                'academyId' => null,
                 'coaches' => key_array(fn ($coach) => [$coach->id, $coach->name], $coaches),
                 'classTimingsJson' => json_encode($classTimingsMap),
                 'numTimings' => count($classTimings),
@@ -206,7 +208,7 @@ class Classes extends ResourcePresenter
 
             return view('class/create_edit', [
                 'type' => 'create',
-                'academy_id' => $academyId,
+                'academyId' => $academyId,
                 'coaches' => key_array(fn ($coach) => [$coach->id, $coach->name], $coaches),
                 'academies' => key_array(fn ($academy) => [$academy->academy_id, $academy->name], $academies),
                 'class' => null,
@@ -295,7 +297,7 @@ class Classes extends ResourcePresenter
         }
 
         return view('ajax_message_modal', [
-            'title' => lang('App.registration_code'),
+            'title' => lang('App.registration_code') . ' - ' . $class->class_name,
             'body'  => view('class/reg_code_modal', ['class' => $class]),
         ]);
     }

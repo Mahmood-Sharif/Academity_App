@@ -26,6 +26,7 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->get('academy-coaches/', 'AdminPortal\User::academyCoachesInput');
         $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
         $routes->view('register-coach/', 'user/register_coach', ['as' => 'register_new_coach']);
+        $routes->get('remove-coach/', 'AdminPortal\User::removeCoach');
         $routes->get('user-profile/(:num)', 'AdminPortal\User::showOwner/$1');
         $routes->get('student-profile/(:num)', 'AdminPortal\User::showStudent/$1');
         $routes->get('coach-profile/(:num)', 'AdminPortal\User::showCoach/$1');

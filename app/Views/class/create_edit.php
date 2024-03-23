@@ -88,10 +88,10 @@ $url = match($type) {
 
         <div class="mb-3">
           <?=validated_form_input('price', 'price', lang('App.price'), $class?->price ?? set_value('price'), 'number', [
-                                                  'aria-describedby' => 'priceHelp',
-                                                  'min' => '0.100',
-                                                  'step' => '0.001',
-                                        ])?>
+                                                              'aria-describedby' => 'priceHelp',
+                                                              'min' => '0.100',
+                                                              'step' => '0.001',
+                                                    ])?>
           <div id="priceHelp" class="form-text">
             <?=lang('App.price.help')?>
           </div>
