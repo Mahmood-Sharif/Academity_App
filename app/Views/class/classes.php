@@ -45,10 +45,10 @@ $this->endSection('sidebarTab');
 
   <!-- TODO: filter by academy -->
 
-  <ul class="list-group">
+  <ul class="list-group mt-3">
     <?php foreach ($classes as $class):  ?>
     <li class="list-group-item d-flex align-items-center">
-      <a href="<?=url_to('AdminPortal\Classes::show', $class->class_id)?>" class="text-decoration-none text-body">
+      <a href="<?=url_to('AdminPortal\Classes::show', $class->class_id)?>" class="">
         <?= $class->class_name ?>
       </a>
         <a href="<?=url_to('AdminPortal\Enrollment::index') . '?class=' . $class->class_id ?>" class="btn btn-outline-success ms-auto">

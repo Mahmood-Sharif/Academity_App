@@ -287,7 +287,6 @@ class ClassScheduleEditor extends HTMLElement {
     timingElem.querySelector('[type="button"]').addEventListener('contextmenu', (e) => { e.preventDefault(); return false; }, false);
     timingElem.querySelector('[type="button"]').addEventListener('mouseup', (event) => {
       if (event.button == 2) {
-        if (event.target.classList.contains('show')) this.createMode = true;
         this.removeTiming(event.target);
       }
     });
@@ -331,6 +330,7 @@ class ClassScheduleEditor extends HTMLElement {
     delete this.timings[day][index];
     timingElem.remove();
     this.updateClassCounters();
+    this.createMode = true;
   }
 
   updateClassCounters() {
