@@ -43,6 +43,20 @@ $this->endSection('sidebarTab');
       <?=lang('App.edit')?>
     </a>
   </div>
+    
+  <?php if (session('error') !== null) : ?>
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <?= session('error') ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php endif ?>
+
+  <?php if (session('message') !== null) : ?>
+  <div class="alert alert-success alert-dismissible" role="alert">
+    <?= session('message') ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php endif ?>
 
   <div class="row">
     <div class="col">
