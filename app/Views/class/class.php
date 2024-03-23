@@ -37,7 +37,6 @@ $this->endSection('sidebarTab');
     </h1>
     <button hx-get="<?=url_to('AdminPortal\Classes::registrationCode', $class->class_id)?>" hx-target="#modals-here"
       data-bs-toggle="modal" data-bs-target="#modals-here" class="btn btn-secondary ms-auto">
-      <i class="bi bi-qr"></i>
       <?=lang('App.registration_code')?>
     </button>
     <a href="<?=url_to('AdminPortal\Classes::edit', $class->class_id)?>" class="btn btn-outline-secondary ms-3">

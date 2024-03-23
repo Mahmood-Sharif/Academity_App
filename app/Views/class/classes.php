@@ -51,7 +51,7 @@ $this->endSection('sidebarTab');
       <a href="<?=url_to('AdminPortal\Classes::show', $class->class_id)?>" class="text-decoration-none text-body">
         <?= $class->class_name ?>
       </a>
-      <a href="#" class="btn btn-outline-success ms-auto">
+        <a href="<?=url_to('AdminPortal\Enrollment::index') . '?class=' . $class->class_id ?>" class="btn btn-outline-success ms-auto">
         <?=lang('App.students')?>
       </a>
       <a href="<?=url_to('AdminPortal\Classes::edit', $class->class_id)?>" class="btn btn-outline-secondary ms-3">
