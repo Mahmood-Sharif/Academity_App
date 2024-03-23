@@ -2,6 +2,7 @@ import 'package:academity_app/models/class.dart';
 import 'package:academity_app/models/sport.dart';
 import 'package:academity_app/providers/academies_provider.dart';
 import 'package:academity_app/providers/classes_provider.dart';
+import 'package:academity_app/views/home/browse_all_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,11 +23,15 @@ class AcademiesListWidget extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/browse_all_classes',
-                  arguments: academies[index].academyId,
-                );
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AllClassesPage(
+                    academyId: academies[index].academyId,
+                    name: academies[index].name,
+                  ),
+                ),
+              );
               },
               child: Container(
                 padding: const EdgeInsets.all(16),

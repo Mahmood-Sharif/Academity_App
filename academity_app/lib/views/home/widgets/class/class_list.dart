@@ -17,7 +17,7 @@ class ClassesList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final classes = ref.watch(classesByAcademyIdProvider(2));
+    final classes = ref.watch(classesByCoachIdProvider(2));
 
     return classes.when(
       data: (classes) {
@@ -78,14 +78,14 @@ class ClassesList extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              classesForDay[index].dayOfWeek.toString(),
+                              classesForDay[index].name.toString(),
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              timeRange,
+                              classesForDay[index].className.toString(),
                               style: const TextStyle(
                                 fontSize: 14,
                                 //fontWeight: FontWeight.bold,

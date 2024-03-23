@@ -44,14 +44,14 @@ class MyApp extends StatelessWidget {
   routes: {
     
     '/attendance': (context) => AttendancePage(classId: 1, timeRange: '',),
-    '/browse_all_classes': (context) => const AllClassesPage(),
-    //'/class_students': (context) => const ClassStudentsPage(),
-    //'/browseClasses': (context) => const ClassesPage(), // Make sure BrowseSportsScreen is imported
+    '/browse_all_classes': (context) => const AllClassesPage(academyId: 1, name: '',),
+    '/class_students': (context) => const ClassStudentsPage(classId: 0,),
+    '/browseClasses': (context) => const ClassesPage(), // Make sure BrowseSportsScreen is imported
      // ignore: prefer_const_constructors
-     '/studentDetails': (context) {
-  final student = ModalRoute.of(context)!.settings.arguments as Student;
-  return StudentDetailsScreen(student: student);
-},
+   // '/studentDetails': (context) {
+  //final student = ModalRoute.of(context)!.settings.arguments as Student;
+  //return StudentDetailsScreen(student: student);
+//},
 
     // other routes...
   },

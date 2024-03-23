@@ -22,7 +22,8 @@ class _AttendancePageState extends State<AttendancePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF8B0000), // Set the background color to dark red
-        flexibleSpace: Column(
+        iconTheme: IconThemeData(color: Colors.white),
+        flexibleSpace: const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(

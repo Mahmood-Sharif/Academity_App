@@ -40,4 +40,23 @@ class ClassServices {
     throw Exception('An error occurred while fetching classes: $e');
   }
 }
+
+ Future<List<ClassWithTiming>> fetchClassesByCoachId(int coachId) async {
+  try {
+    final response = await http.get(Uri.parse('http://192.168.100.15:8080/api/classes/bci?coach_id=$coachId'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final List<dynamic> classesJson = responseData['classes']; // Extract 'classes' array from response
+      return classesJson.map((dynamic item) => ClassWithTiming.fromJson(item)).toList();
+    } else {
+      print('Error fetching classes. Response status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to load classes. Response status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error fetching classes: $e');
+    throw Exception('An error occurred while fetching classes: $e');
+  }
+}
 }

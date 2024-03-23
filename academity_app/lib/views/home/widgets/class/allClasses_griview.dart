@@ -1,4 +1,5 @@
 import 'package:academity_app/providers/classes_provider.dart';
+import 'package:academity_app/views/home/class_students.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,11 +29,12 @@ class AllClassListWidget extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/class_students',
-                  //arguments: classes[index].classId,
-                );
+                 Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ClassStudentsPage(classId: classes[index].classId),
+                    ),
+                  );
               },
               child: Container(
                 padding: const EdgeInsets.all(16),
@@ -68,7 +70,7 @@ class AllClassListWidget extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            classes[index].className.toString(),
+                            classes[index].name.toString(),
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

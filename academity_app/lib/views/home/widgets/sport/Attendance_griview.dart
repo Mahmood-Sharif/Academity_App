@@ -1,4 +1,3 @@
-
 import 'package:academity_app/models/attendance.dart';
 import 'package:academity_app/models/postAttendance.dart';
 import 'package:academity_app/services/attendance_service.dart';
@@ -8,7 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AttendanceListWidget extends StatefulWidget {
   final List<Attendance> attendanceList;
-final String timeRange;
+  final String timeRange;
+  
   const AttendanceListWidget({Key? key, required this.attendanceList, required this.timeRange}) : super(key: key);
 
   @override
@@ -41,89 +41,109 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                 ],
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align children to the start and end of the row
                 children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        attendance.studentName.toString(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (attendance.isUpdateSuccess != null) // Show message only when isUpdateSuccess is not null
                         Text(
-                          attendance.studentName.toString(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                          attendance.isUpdateSuccess!
+                              ? 'Attendance updated successfully'
+                              : 'Failed to update attendance',
+                          style: TextStyle(
+                            color: attendance.isUpdateSuccess!
+                                ? Colors.green
+                                : Colors.red,
+                            fontStyle: FontStyle.italic,
                           ),
                         ),
-                        Row(
-                          children: [
-                           ElevatedButton(
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton(
   onPressed: () {
     setState(() {
-      // Update the attendance status to 'Present'
-      var postAttendance = PostAttendance(studentId: attendance.studentId, dateTime: widget.timeRange, status: "Present");
-      print('Calling updateAttendance()');
-      attendance.isUpdateSuccess = true;
-      AttendanceServices().updateAttendance(postAttendance);
-      attendance.status = "Present"; // Update the status in the local data
+      if (attendance.status != 'Present') {
+        // Update the attendance status to 'Present'
+        var postAttendance = PostAttendance(studentId: attendance.studentId, dateTime: widget.timeRange, status: "Present");
+        print('Calling updateAttendance()');
+        AttendanceServices().updateAttendance(postAttendance);
+        attendance.status = "Present"; // Update the status in the local data
+      }
     });
   },
   style: ElevatedButton.styleFrom(
-    primary: attendance.status == 'Present'
-      ? Colors.green // Change color if the student is already present
-      : Colors.grey, // Default color
+    backgroundColor: attendance.status == 'Present'
+        ? Colors.green // Change color if the student is already present
+        : Colors.white, // Default color
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(10), // Specify the top-left corner
+        bottomLeft: Radius.circular(10), // Specify the bottom-left corner
+        topRight: Radius.circular(0), // Specify no rounding for the top-right corner
+        bottomRight: Radius.circular(0), // Specify no rounding for the bottom-right corner
+      ),
+    ),
   ),
-  child: const Text('Present'),
-),
-const SizedBox(width: 8),
-ElevatedButton(
-  onPressed: () {
-    setState(() {
-      // Update the attendance status to 'Absent'
-      print('Calling deleteAttendance()');
-      attendance.isUpdateSuccess = true;
-      AttendanceServices().deleteAttendance(attendance.studentId, widget.timeRange);
-      attendance.status = "Absent"; // Update the status in the local data
-    });
-  },
-  style: ElevatedButton.styleFrom(
-    primary: attendance.status == 'Absent'
-      ? Colors.red // Change color if the student is already absent
-      : Colors.grey, // Default color
+  child: Text(
+    'Present',
+    style: TextStyle(
+      color: attendance.status == 'Present'
+          ? Colors.white // Change color if the student is already present
+          : Colors.green, // Set text color to white
+    ),
   ),
-  child: const Text('Absent'),
 ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        if (attendance.isUpdateSuccess != null) // Show message only when isUpdateSuccess is not null
-                          Text(
-                            attendance.isUpdateSuccess!
-                                ? 'Attendance updated successfully'
-                                : 'Failed to update attendance',
-                            style: TextStyle(
-                              color: attendance.isUpdateSuccess!
-                                  ? Colors.green
-                                  : Colors.red,
-                              fontStyle: FontStyle.italic,
+                      //const SizedBox(width: 8), // Add spacing between buttons
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            // Update the attendance status to 'Absent'
+                            print('Calling deleteAttendance()');
+                            //attendance.isUpdateSuccess = true;
+                            AttendanceServices().deleteAttendance(attendance.studentId, widget.timeRange);
+                            attendance.status = "Absent"; // Update the status in the local data
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: attendance.status == 'Absent'
+                            ? Colors.red // Change color if the student is already absent
+                            : Colors.white, // Default color
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0), // Specify no rounding for the top-left corner
+                              bottomLeft: Radius.circular(0), // Specify no rounding for the bottom-left corner
+                              topRight: Radius.circular(10), // Specify the top-right corner
+                              bottomRight: Radius.circular(10), // Specify the bottom-right corner
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                        child: Text(
+                          'Absent',
+                          style: TextStyle(
+                             color: attendance.status == 'Absent'
+                            ? Colors.white // Change color if the student is already present
+                            : Colors.red, // Set text color to white
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                  ],
           ),
-        );
-      },
+        ),
+      ),
     );
-  }
+  },
+);
+}
 }

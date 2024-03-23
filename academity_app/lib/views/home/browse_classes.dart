@@ -1,9 +1,4 @@
-import 'package:academity_app/models/class.dart';
-import 'package:academity_app/models/class_with_timing.dart';
-import 'package:academity_app/services/class_service.dart';
-import 'package:academity_app/views/home/widgets/class/calender_app_bar.dart';
 import 'package:academity_app/views/home/widgets/class/class_list.dart';
-import 'package:academity_app/views/home/widgets/class/classes_griview.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 class ClassesPage extends StatelessWidget {

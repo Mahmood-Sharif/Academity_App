@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/student.dart';
 
 class StudentDetailsScreen extends StatelessWidget {
-  final Student student;
-
-  const StudentDetailsScreen({Key? key, required this.student}) : super(key: key);
+  const   StudentDetailsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final student = ModalRoute.of(context)?.settings.arguments as Student?;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF8B0000), // Setting header color to FF8B0000
@@ -54,7 +53,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${student.firstName} ${student.lastName}',
+                        '${student!.name}',
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
@@ -66,7 +65,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student.phone.toString(),
+                        student!.name.toString(),
                         style: const TextStyle(fontSize: 18.0),
                       ),
                     ],
@@ -88,7 +87,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student.startDate.toString().split(' ')[0],
+                        student!.name.toString().split(' ')[0],
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
@@ -100,7 +99,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student.endDate.toString().split(' ')[0],
+                        student!.name.toString().split(' ')[0],
                         style: const TextStyle(fontSize: 18.0),
                       ),
                     ],
@@ -126,7 +125,7 @@ class StudentDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      student.emergencyContact.toString(),
+                      student.studentId.toString(),
                       style: const TextStyle(fontSize: 18.0),
                     ),
                     const SizedBox(height: 12.0),
@@ -139,7 +138,7 @@ class StudentDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      student.medicalCondition.toString(),
+                      student.name.toString(),
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ],
