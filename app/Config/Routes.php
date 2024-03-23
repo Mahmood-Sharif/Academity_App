@@ -46,7 +46,7 @@
         $routes->post('register', 'Api\Login::registerUser');
         // classes api
         $routes->get('classes/bai', 'Api\Classes::getByAcademyId');
-
+        $routes->get('classes/bci', 'Api\Classes::getByCoachId');
         $routes->resource('classes', ['controller' => 'Api\Classes']);
         // enrollments api
         $routes->get('enrollments/bci', 'Api\Enrollments::getStudentsByClassId');

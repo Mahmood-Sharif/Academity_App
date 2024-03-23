@@ -3,7 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Models\EnrollmentModel;
-use App\Models\StudentModel;
+use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -39,20 +39,20 @@ class Enrollments extends ResourceController
         }
     
         // Instantiate the StudentModel
-        $studentModel = new StudentModel();
+        $userModel = new UserModel();
     
         // Perform a join query to retrieve students and their enrollments
-        $students = $studentModel->select('students.*, enrollments.*')
-                                 ->join('enrollments', 'enrollments.student_id = students.student_id')
+        $users = $userModel->select('users.*, enrollments.*')
+                                 ->join('enrollments', 'enrollments.student_id = users.id')
                                  ->where('enrollments.class_id', $classId)
                                  ->findAll();
     
         // If no students found, return a failure response
-        if (empty($students)) {
+        if (empty($users)) {
             return $this->failNotFound('No students found for the provided class ID.');
         }
     
-        return $this->respond($students);
+        return $this->respond($users);
     }
     
 
