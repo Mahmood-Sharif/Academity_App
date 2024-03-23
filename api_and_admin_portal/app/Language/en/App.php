@@ -30,12 +30,15 @@ return [
   // actions
   'actions'                => 'Actions',
   'close'                  => 'Close',
+  'cancel'                 => 'Cancel',
   'view'                   => 'View',
   'edit'                   => 'Edit',
+  'edit.end_date'          => 'Edit End Date',
   'back'                   => 'Back',
   'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
   'back.classes'           => 'Back to classes',
+  'back.students'          => 'Back to enrollments',
 
   // errors
   'error'                  => 'Error',
@@ -71,6 +74,7 @@ return [
 
   // manage classes
   'classes'                => 'Classes',
+  'class'                  => 'Class',
   'class.view'             => 'Class Details for {0}',
   'class.edit'             => 'Edit {0}',
   'class.create'           => 'New Class',
@@ -86,6 +90,20 @@ return [
   'class_update.error'     => 'Could not update class details.',
   'registration_code'      => 'Registration Code',
   'registration_code.help' => 'This is the registration code for this class. Give it to existing students to allow them to register into this class in the app <i>without paying</i>.',
+
+  // manage enrollments
+  'student_name'           => 'Student Name',
+  'all_classes'            => 'All Classes',
+  'show_past'              => 'Show past enrollments',
+  'enrollment_duration'    => 'Enrollment Duration',
+  'enrollment_start'       => 'Enrollment Start Date',
+  'enrollment_end'         => 'Enrollment End Date',
+  'unenrol'                => 'Unenrol',
+  'unenrol.confirm'        => 'Are you sure you want to unenrol student <b>{0}</b> from the class <b>{1}</b>? <br>',
+  'unenrol.success'        => 'Successfully unenrolled student <b>{0}</b> from the class <b>{1}</b>.',
+  'unenrol.error'          => 'Error: could not unenrol student from class.',
+  'enrollment_upd.success' => 'Enrollment updated successfully.',
+  'enrollment_upd.error'   => 'Could not update enrollment.',
 
   // user profiles
   'profile.view.owner'     => 'View Profile',
@@ -121,6 +139,7 @@ return [
 
   'start_time'             => 'Start Time',
   'end_time'               => 'End Time',
+  'to'                     => 'To',
 
   'price'                  => 'Price',
   'price.help'             => 'Consider changing the price in Offers',

@@ -25,53 +25,6 @@ class User extends ResourcePresenter
         throw new Exception("Not Implemented", 1);
     }
 
-    public function indexStudents(): string
-    {
-        $academyId = $this->request->getGet('academy');
-        $classId = $this->request->getGet('class');
-
-        if (! auth()->user()->can('students.access')) {
-            return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
-            ]);
-        }
-
-        if ($classId !== null) {
-            $academyId = null;
-        }
-
-        $students = $this->users;
-
-        $academy = null;
-        $class = null;
-        if ($academyId !== null) {
-            $academy = (new AcademyModel())->find($academyId);
-        } elseif ($classId !== null) {
-            $class = (new ClassModel())->includeOwnerId()->find($classId);
-        }
-
-        $userId = auth()->id();
-        if (($class?->owner_id ?? $userId) !== $userId || ($academy?->owner_id ?? $userId) !== $userId) {
-            return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
-            ]);
-        }
-
-        if ($classId !== null) {
-            $students = $students->whereEnrolledInClass($classId);
-        } elseif ($academyId !== null) {
-            $students = $students->whereEnrolledInAcademy($academyId);
-        } else {
-            $students = $students->whereInOwnerAcademies($userId);
-        }
-
-        $students = $students->findAll();
-
-        return view('user/students', ['students' => $students]);
-    }
-
     public function indexCoaches(): string
     {
         if (! auth()->user()->can('coaches.access')) {

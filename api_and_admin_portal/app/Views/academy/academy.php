@@ -86,7 +86,7 @@ $this->endSection('sidebarTab');
         <a href="#" class="btn btn-secondary">
           <?=lang('App.manage.schedule')?>
         </a>
-        <a href="<?=url_to('AdminPortal\User::indexStudents') . '?academy=' . $academy->academy_id ?>" class="btn btn-secondary">
+        <a href="<?=url_to('AdminPortal\Enrollment::index') . '?academy=' . $academy->academy_id ?>" class="btn btn-secondary">
           <?=lang('App.manage.students')?>
         </a>
         <a href="<?=url_to('AdminPortal\User::indexCoaches') ?>" class="btn btn-secondary">

@@ -22,6 +22,27 @@ class EnrollmentModel extends Model
 
     protected $returnType = \App\Entities\Enrollment::class;
 
+    public function select($select = 'enrollments.*'): EnrollmentModel
+    {
+        return parent::select($select);
+    }
+
+    public function includeStudentName(): EnrollmentModel
+    {
+        return $this
+            ->join('users', 'enrollments.student_id = users.id')
+            ->select('users.name as student_name')
+        ;
+    }
+
+    public function includeClassName(): EnrollmentModel
+    {
+        return $this
+            ->join('classes', 'enrollments.class_id = classes.class_id')
+            ->select('classes.class_name')
+        ;
+    }
+
     public function enrolWithCode(int $studentId, string $regCode): bool
     {
         $class = (new ClassModel())

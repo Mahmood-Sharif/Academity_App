@@ -21,7 +21,7 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->get('classes/by-academy/(:num)', 'AdminPortal\Classes::index/$1');
         $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
         $routes->get('class-reg-code/(:num)', 'AdminPortal\Classes::registrationCode/$1');
-        $routes->get('students/', 'AdminPortal\User::indexStudents');
+        $routes->presenter('students', ['controller' => 'AdminPortal\Enrollment']);
         $routes->get('coaches/', 'AdminPortal\User::indexCoaches');
         $routes->get('academy-coaches/', 'AdminPortal\User::academyCoachesInput');
         $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
