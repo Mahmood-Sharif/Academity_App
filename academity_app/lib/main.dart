@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:academity_app/views/MyAcademy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
 import 'package:academity_app/views/Profile/users_profile_screen.dart';
 import 'package:academity_app/views/Schedule/schedule_screen.dart';
+import 'package:academity_app/views/attendance/qr_scanner_page.dart';
 import 'package:academity_app/views/auth/signup_screen.dart';
 import 'package:academity_app/views/home/browse_sports_screen.dart';
 import 'package:academity_app/views/landing_page.dart';
@@ -10,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:academity_app/views/auth/login_screen.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -56,18 +60,28 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  MobileScannerController qrController = MobileScannerController(
+    autoStart: false,
+    formats: [BarcodeFormat.qrCode],
+    detectionSpeed: DetectionSpeed.noDuplicates,
+  );
 
-  static final List<Widget> _widgetOptions = [
-    const SportsPage(), // Your actual HomePage widget
-    const MyAcademyPage(), // Your actual AcademyPage widget
-    // QRScannerPage(), // Your actual QRScannerPage widget or handle differently
-    const SchedulePage(), // Your actual SchedulePage widget
-    const ProfilePage(), // Your actual ProfilePage widget
-  ];
+  @override
+  void initState() {
+    super.initState();
+    unawaited(qrController.stop()); // stop the camera on startup
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+
+      // only activate the camera when its page is visible
+      if (_selectedIndex == 2) {
+        unawaited(qrController.start());
+      } else {
+        unawaited(qrController.stop());
+      }
     });
   }
 
@@ -76,12 +90,24 @@ class MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: _widgetOptions,
+        children: [
+          const SportsPage(),
+          const MyAcademyPage(),
+          QRScannerPage(controller: qrController),
+          const SchedulePage(),
+          const ProfilePage(),
+        ],
       ),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemSelected: _onItemTapped,
       ),
     );
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    qrController.dispose();
   }
 }
