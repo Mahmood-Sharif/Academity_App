@@ -18,10 +18,9 @@ class AuthNotifier extends AsyncNotifier<User?> {
     }
   }
 
-  Future<void> loginTest({Function? onComplete}) async {
+  Future<void> loginTest() async {
     final user = await AuthServices.loginTest();
     state = AsyncValue.data(user);
-    onComplete?.call();
   }
 
   Future<void> login(String email, String password) async {

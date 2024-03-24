@@ -57,8 +57,8 @@ $routes->group('api', static function ($routes) {
 
         $routes->get('login-test', 'Api\Login::loginTest');
         $routes->post('logout', 'Api\Login::logoutUser');
-        $routes->get('user-profile','Api\Login::getUserProfile');
-        $routes->put('profile-edit','Api\Login::updateUserProfile');
+        $routes->get('user-profile', 'Api\Login::getUserProfile');
+        $routes->put('profile-edit', 'Api\Login::updateUserProfile');
         $routes->get('sport', 'Api\Sport::index');
         $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
         // $routes->get('academies','Api\Academy::show');

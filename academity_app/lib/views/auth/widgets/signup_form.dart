@@ -71,7 +71,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
     });
 
     if (signUpSuccess.success) {
-      ref.read(authProvider.notifier).loginTest(onComplete: () {
+      ref.read(authProvider.notifier).loginTest().then((_) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Sign up successful! Welcome!')),
