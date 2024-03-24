@@ -41,7 +41,8 @@ class AuthServices {
     return null;
   }
 
-  Future<RegisterResponse> registerUser(Map<String, dynamic> data) async {
+  static Future<RegisterResponse> registerUser(
+      Map<String, dynamic> data) async {
     final response = await http.post(
       Uri.http(Env.academityHost, '/api/register'),
       body: data,
@@ -67,7 +68,7 @@ class AuthServices {
     await secureStorage.delete(key: 'api_token');
   }
 
-  Future<User> getUserProfile() async {
+  static Future<User> getUserProfile() async {
     try {
       final response = await AcademityApi.get(
           'user-profile'); // Use your actual API call mechanism

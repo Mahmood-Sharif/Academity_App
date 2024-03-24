@@ -16,7 +16,7 @@ class UserProfileScreen extends ConsumerWidget {
         title: "User Profile",
       ),
       body: FutureBuilder<User>(
-        future: AuthServices().getUserProfile(), // Implement this method
+        future: AuthServices.getUserProfile(), // Implement this method
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

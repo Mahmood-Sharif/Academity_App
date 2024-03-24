@@ -11,7 +11,7 @@ class SignupScreen extends StatelessWidget {
     // Making the Scaffold's body a Stack to overlay the image over the form.
     return Scaffold(
       resizeToAvoidBottomInset: false, // Add this line
-      
+
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFFFF3200)),
@@ -26,11 +26,11 @@ class SignupScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-             Align(
+          Align(
             alignment: Alignment.bottomRight,
             child: Container(
-                height: 180,
-                width: 200,
+              height: 180,
+              width: 200,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("lib/assets/images/logo1.png"),
@@ -75,7 +75,6 @@ class SignupScreen extends StatelessWidget {
               ),
             ),
           ),
-       
         ],
       ),
     );

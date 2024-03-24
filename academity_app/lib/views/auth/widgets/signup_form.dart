@@ -1,16 +1,18 @@
+import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:academity_app/services/auth_services.dart'; // Ensure this path is correct
+import 'package:academity_app/services/auth_services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Ensure this path is correct
 
 enum Gender { male, female }
 
-class SignupForm extends StatefulWidget {
+class SignupForm extends ConsumerStatefulWidget {
   const SignupForm({Key? key}) : super(key: key);
 
   @override
-  State<SignupForm> createState() => _SignupFormState();
+  ConsumerState<SignupForm> createState() => _SignupFormState();
 }
 
-class _SignupFormState extends State<SignupForm> {
+class _SignupFormState extends ConsumerState<SignupForm> {
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   int _currentStep = 0;
@@ -57,7 +59,7 @@ class _SignupFormState extends State<SignupForm> {
     }
 
     // If both forms are valid, attempt the sign-up process
-    final RegisterResponse signUpSuccess = await AuthServices().registerUser({
+    final RegisterResponse signUpSuccess = await AuthServices.registerUser({
       'email': email,
       'name': name,
       'gender': _gender == Gender.male ? 'Male' : 'Female',
@@ -69,10 +71,12 @@ class _SignupFormState extends State<SignupForm> {
     });
 
     if (signUpSuccess.success) {
-      Navigator.of(context).pushReplacementNamed('/browseSports');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign up successful! Welcome!')),
-      );
+      ref.read(authProvider.notifier).loginTest(onComplete: () {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign up successful! Welcome!')),
+        );
+      });
     } else {
       // Navigate back to Form 1 if the sign-up process fails
       setState(() {
@@ -315,6 +319,7 @@ class _SignupFormState extends State<SignupForm> {
                 child: Column(
                   children: [
                     TextFormField(
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           labelText: 'Email',
                           errorText: emailError,
