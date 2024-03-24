@@ -53,7 +53,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${student!.name}',
+                        student!.name,
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
@@ -65,7 +65,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student!.name.toString(),
+                        student!.phone.toString(),
                         style: const TextStyle(fontSize: 18.0),
                       ),
                     ],
@@ -87,7 +87,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student!.name.toString().split(' ')[0],
+                        student!.startDate.toString().split(' ')[0],
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
@@ -99,7 +99,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student!.name.toString().split(' ')[0],
+                        student!.endDate.toString().split(' ')[0],
                         style: const TextStyle(fontSize: 18.0),
                       ),
                     ],
@@ -110,24 +110,12 @@ class StudentDetailsScreen extends StatelessWidget {
             const SizedBox(height: 24.0),
             
             Card(
-              color: Colors.red[50], // Custom background color for sensitive information section
+              color: Colors.red[200],
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Emergency Contact:',
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      student.studentId.toString(),
-                      style: const TextStyle(fontSize: 18.0),
-                    ),
                     const SizedBox(height: 12.0),
                     const Text(
                       'Medical Condition:',
@@ -138,7 +126,7 @@ class StudentDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      student.name.toString(),
+                      student.medicalCondition.toString(),
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ],

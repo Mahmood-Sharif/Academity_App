@@ -32,7 +32,7 @@ class AllClassListWidget extends ConsumerWidget {
                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ClassStudentsPage(classId: classes[index].classId),
+                      builder: (context) => ClassStudentsPage(classId: classes[index].classId, className: classes[index].className,),
                     ),
                   );
               },

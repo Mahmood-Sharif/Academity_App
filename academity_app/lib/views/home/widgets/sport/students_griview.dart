@@ -30,14 +30,14 @@ class StudentsListWidget extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
               onTap: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => StudentDetailsScreen(),
-      settings: RouteSettings(arguments: students[index]),
-    ),
-  );
-},
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StudentDetailsScreen(),
+                    settings: RouteSettings(arguments: students[index]),
+                  ),
+                );
+              },
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(

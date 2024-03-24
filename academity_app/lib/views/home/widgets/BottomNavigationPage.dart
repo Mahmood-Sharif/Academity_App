@@ -1,3 +1,4 @@
+import 'package:academity_app/views/home/QRCodePage.dart';
 import 'package:academity_app/views/home/browse_academies.dart';
 import 'package:academity_app/views/home/browse_classes.dart';
 import 'package:academity_app/views/home/Attendance.dart';
@@ -15,6 +16,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   final List<Widget> _screens = [
     const ClassesPage(),
     const AcademiesPage(),
+    MyQrCodePage(),
   ];
 
   @override
@@ -40,10 +42,10 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             icon: Icon(Icons.people),
             label: 'Students',
           ),
-          /*BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
-          ),*/
+          ),
         ],
       ),
     );

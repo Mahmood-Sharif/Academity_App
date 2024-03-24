@@ -9,13 +9,14 @@ import 'package:flutter/material.dart';
 
  class ClassStudentsPage extends StatelessWidget {
    final int classId;
-  const ClassStudentsPage({Key? key, required this.classId}) : super(key: key);
+   final String className;
+  const ClassStudentsPage({Key? key, required this.classId, required this.className}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(classId.toString(), style: TextStyle(color: Colors.white)),
+        title:  Text(className.toString(), style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF8B0000),
         iconTheme: IconThemeData(color: Colors.white), // Set the color of the back button to white
       ),

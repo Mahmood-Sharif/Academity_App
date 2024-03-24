@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
     
     '/attendance': (context) => AttendancePage(classId: 1, timeRange: '',),
     '/browse_all_classes': (context) => const AllClassesPage(academyId: 1, name: '',),
-    '/class_students': (context) => const ClassStudentsPage(classId: 0,),
+    '/class_students': (context) => const ClassStudentsPage(classId: 1, className: ""),
     '/browseClasses': (context) => const ClassesPage(), // Make sure BrowseSportsScreen is imported
      // ignore: prefer_const_constructors
    // '/studentDetails': (context) {

@@ -29,6 +29,8 @@ class ClassesList extends ConsumerWidget {
           itemBuilder: (context, index) {
             final startTime = formatTime(classesForDay[index].startTime);
             final timeRange = '${DateFormat("yyyy-MM-dd").format(date)}T$startTime';
+          final endTime = formatTime(classesForDay[index].endTime);
+          final timing = '$startTime - $endTime';
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -86,6 +88,13 @@ class ClassesList extends ConsumerWidget {
                             ),
                             Text(
                               classesForDay[index].className.toString(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                //fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                             Text(
+                              timing.toString(),
                               style: const TextStyle(
                                 fontSize: 14,
                                 //fontWeight: FontWeight.bold,
