@@ -48,7 +48,6 @@ class Attendance extends ResourceController
     public function insertAttendance(): ResponseInterface
     {
         $studentId = $this->request->getVar('student_id');
-        //$studentId = 1;
         $dateTime =  $this->request->getVar('date_time');
         $status = $this->request->getVar('status');
         //$status = "Present";
