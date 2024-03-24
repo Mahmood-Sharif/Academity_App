@@ -10,7 +10,7 @@ class SportsPage extends ConsumerStatefulWidget {
   const SportsPage({super.key});
 
   @override
-  _SportsPageState createState() => _SportsPageState();
+  ConsumerState<SportsPage> createState() => _SportsPageState();
 }
 
 class _SportsPageState extends ConsumerState<SportsPage> {

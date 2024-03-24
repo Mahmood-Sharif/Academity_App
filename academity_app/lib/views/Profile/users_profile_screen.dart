@@ -13,7 +13,7 @@ class UserProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title:  "User Profile",
+        title: "User Profile",
       ),
       body: FutureBuilder<User>(
         future: AuthServices().getUserProfile(), // Implement this method

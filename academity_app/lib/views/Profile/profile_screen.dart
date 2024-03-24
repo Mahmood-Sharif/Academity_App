@@ -1,6 +1,5 @@
 // lib/views/profile/profile_page.dart
-import 'package:academity_app/main.dart';
-import 'package:academity_app/services/auth_services.dart';
+import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/Profile/widgets/section_card.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
@@ -10,11 +9,7 @@ class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   void _logout(BuildContext context, WidgetRef ref) {
-    AuthServices().logout().then((_) {
-      ref.invalidate(isLoggedInProvider);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-    }).catchError((error) {
+    ref.read(authProvider.notifier).logout().catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error logging out: $error'),
@@ -23,9 +18,10 @@ class ProfilePage extends ConsumerWidget {
     });
   }
 
-    void _navigateToUserProfile(BuildContext context) {
+  void _navigateToUserProfile(BuildContext context) {
     // Define navigation logic here. For example:
-    Navigator.of(context).pushNamed('/userProfile'); // Adjust route as necessary
+    Navigator.of(context)
+        .pushNamed('/userProfile'); // Adjust route as necessary
   }
 
   @override
@@ -39,13 +35,18 @@ class ProfilePage extends ConsumerWidget {
         padding: const EdgeInsets.all(15.0),
         child: ListView(
           children: <Widget>[
-             SectionCard(
+            SectionCard(
               title: 'Account',
               items: [
-                {'title': 'Profile', 
-                'icon': Icons.person,
-                'onTap': () => _navigateToUserProfile(context)},
-                const {'title': 'Privacy and Security', 'icon': Icons.lock,},
+                {
+                  'title': 'Profile',
+                  'icon': Icons.person,
+                  'onTap': () => _navigateToUserProfile(context)
+                },
+                const {
+                  'title': 'Privacy and Security',
+                  'icon': Icons.lock,
+                },
               ],
             ),
             // const SectionCard(

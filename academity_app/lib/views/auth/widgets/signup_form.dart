@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:academity_app/services/auth_services.dart'; // Ensure this path is correct
 
@@ -13,7 +7,7 @@ class SignupForm extends StatefulWidget {
   const SignupForm({Key? key}) : super(key: key);
 
   @override
-  _SignupFormState createState() => _SignupFormState();
+  State<SignupForm> createState() => _SignupFormState();
 }
 
 class _SignupFormState extends State<SignupForm> {
@@ -35,8 +29,6 @@ class _SignupFormState extends State<SignupForm> {
   final List<int> years =
       List.generate(101, (index) => DateTime.now().year - index);
 
-
-
   String? emailError;
   String? nameError;
   String? genderError;
@@ -45,58 +37,60 @@ class _SignupFormState extends State<SignupForm> {
   String? passwordError;
   String? passwordConfirmError;
 
-Future<void> attemptSignUp() async {
-  final isForm1Valid = _formKey1.currentState?.validate() ?? false;
-  final isForm2Valid = _formKey2.currentState?.validate() ?? false;
+  Future<void> attemptSignUp() async {
+    final isForm1Valid = _formKey1.currentState?.validate() ?? false;
+    final isForm2Valid = _formKey2.currentState?.validate() ?? false;
 
-  // Early validation checks to ensure we don't proceed with the API call unnecessarily
-  if (!isForm1Valid || !isForm2Valid) {
-    setState(() {
-      // Ensure user is navigated back to the correct form based on where the validation failed
-      _currentStep = !isForm1Valid ? 0 : 1;
+    // Early validation checks to ensure we don't proceed with the API call unnecessarily
+    if (!isForm1Valid || !isForm2Valid) {
+      setState(() {
+        // Ensure user is navigated back to the correct form based on where the validation failed
+        _currentStep = !isForm1Valid ? 0 : 1;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(!isForm1Valid
+                ? 'Please correct the errors in the personal information form.'
+                : 'Please correct the errors in the account information form.')),
+      );
+      return; // Stop the sign-up process here if any form validation fails
+    }
+
+    // If both forms are valid, attempt the sign-up process
+    final RegisterResponse signUpSuccess = await AuthServices().registerUser({
+      'email': email,
+      'name': name,
+      'gender': _gender == Gender.male ? 'Male' : 'Female',
+      'phone': phone,
+      'dob':
+          DateTime(selectedYear, selectedMonth, selectedDay).toIso8601String(),
+      'password': password,
+      'password_confirm': passwordConfirm,
     });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(!isForm1Valid ? 'Please correct the errors in the personal information form.' : 'Please correct the errors in the account information form.')),
-    );
-    return; // Stop the sign-up process here if any form validation fails
+
+    if (signUpSuccess.success) {
+      Navigator.of(context).pushReplacementNamed('/browseSports');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sign up successful! Welcome!')),
+      );
+    } else {
+      // Navigate back to Form 1 if the sign-up process fails
+      setState(() {
+        _currentStep = 0; // Move back to the first form for correction
+        // Update the UI to show server-side validation errors if provided by the API
+        emailError = signUpSuccess.errors?['email'];
+        nameError = signUpSuccess.errors?['name'];
+        phoneError = signUpSuccess.errors?['phone'];
+        passwordError = signUpSuccess.errors?['password'];
+        passwordConfirmError = signUpSuccess.errors?['password_confirm'];
+      });
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Failed to sign up. Please check your information and try again.')),
+      // );
+    }
   }
 
-  // If both forms are valid, attempt the sign-up process
-  final RegisterResponse signUpSuccess = await AuthServices().registerUser({
-    'email': email,
-    'name': name,
-    'gender': _gender == Gender.male ? 'Male' : 'Female',
-    'phone': phone,
-    'dob': DateTime(selectedYear, selectedMonth, selectedDay).toIso8601String(),
-    'password': password,
-    'password_confirm': passwordConfirm,
-  });
-
-  if (signUpSuccess.success) {
-    Navigator.of(context).pushReplacementNamed('/browseSports');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Sign up successful! Welcome!')),
-    );
-  } else {
-    // Navigate back to Form 1 if the sign-up process fails
-    setState(() {
-      _currentStep = 0; // Move back to the first form for correction
-      // Update the UI to show server-side validation errors if provided by the API
-      emailError = signUpSuccess.errors?['email'];
-      nameError = signUpSuccess.errors?['name'];
-      phoneError = signUpSuccess.errors?['phone'];
-      passwordError = signUpSuccess.errors?['password'];
-      passwordConfirmError = signUpSuccess.errors?['password_confirm'];
-    });
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('Failed to sign up. Please check your information and try again.')),
-    // );
-  }
-}
-
-
-
-void _next() {
+  void _next() {
     // Validate Form 1 regardless of the current step, to ensure navigation back if there are errors
     final isForm1Valid = _formKey1.currentState?.validate() ?? false;
 
@@ -112,7 +106,9 @@ void _next() {
         // This handles the case where the user has moved to Form 2 but Form 1 becomes invalid
         setState(() => _currentStep = 0);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please correct the errors in the personal information form.')),
+          const SnackBar(
+              content: Text(
+                  'Please correct the errors in the personal information form.')),
         );
       }
     }
@@ -126,7 +122,7 @@ void _next() {
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData.light().copyWith(
@@ -148,17 +144,21 @@ void _next() {
             final isLastStep = _currentStep == 1;
             return Row(
               children: <Widget>[
-                
                 ElevatedButton(
                   onPressed: details.onStepContinue,
                   style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 0, 139, 139), // Button background color
-                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10), // Makes the button a bit bigger
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4), // Slightly rounded edges
-                ),
-              ),
-                  child: Text(isLastStep ? 'Sign Up' : 'Continue', style: const TextStyle(color: Colors.white)),
+                    backgroundColor: const Color.fromARGB(
+                        255, 0, 139, 139), // Button background color
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 22,
+                        vertical: 10), // Makes the button a bit bigger
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(4), // Slightly rounded edges
+                    ),
+                  ),
+                  child: Text(isLastStep ? 'Sign Up' : 'Continue',
+                      style: const TextStyle(color: Colors.white)),
                 ),
                 const SizedBox(width: 10),
                 if (_currentStep > 0)
@@ -177,16 +177,19 @@ void _next() {
                 child: Column(
                   children: [
                     TextFormField(
-                      decoration:  InputDecoration(labelText: 'Full Name', errorText: nameError,
-                    errorMaxLines: 2),
+                      decoration: InputDecoration(
+                          labelText: 'Full Name',
+                          errorText: nameError,
+                          errorMaxLines: 2),
                       onChanged: (value) => name = value,
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter your full name' : null,
                     ),
                     TextFormField(
-                      decoration:
-                           InputDecoration(labelText: 'Phone Number', errorText: phoneError,
-                    errorMaxLines: 2),
+                      decoration: InputDecoration(
+                          labelText: 'Phone Number',
+                          errorText: phoneError,
+                          errorMaxLines: 2),
                       keyboardType: TextInputType.phone,
                       onChanged: (value) => phone = value,
                       validator: (value) => value!.isEmpty
@@ -313,25 +316,28 @@ void _next() {
                   children: [
                     TextFormField(
                       decoration: InputDecoration(
-                        labelText: 'Email',
-                        errorText: emailError, errorMaxLines: 2
-                      ),
+                          labelText: 'Email',
+                          errorText: emailError,
+                          errorMaxLines: 2),
                       onChanged: (value) => email = value,
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter your email' : null,
                     ),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Password',  errorText: passwordError,
-                    errorMaxLines: 2),
+                      decoration: InputDecoration(
+                          labelText: 'Password',
+                          errorText: passwordError,
+                          errorMaxLines: 2),
                       obscureText: true,
                       onChanged: (value) => password = value,
                       validator: (value) =>
                           value!.isEmpty ? 'Please enter a password' : null,
                     ),
                     TextFormField(
-                      decoration:
-                           InputDecoration(labelText: 'Confirm Password', errorText: passwordConfirmError,
-                    errorMaxLines: 2),
+                      decoration: InputDecoration(
+                          labelText: 'Confirm Password',
+                          errorText: passwordConfirmError,
+                          errorMaxLines: 2),
                       obscureText: true,
                       onChanged: (value) => passwordConfirm = value,
                       validator: (value) =>

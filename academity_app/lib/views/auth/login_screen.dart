@@ -1,5 +1,4 @@
-import 'package:academity_app/main.dart';
-import 'package:academity_app/services/auth_services.dart';
+import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -45,18 +44,18 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
       builder: (context, ref, child) {
         return Stack(
           children: [
-               Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
                 height: 180,
                 width: 200,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("lib/assets/images/logo1.png"),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("lib/assets/images/logo1.png"),
+                  ),
                 ),
               ),
             ),
-          ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -65,12 +64,12 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                   const SizedBox(height: 20),
                   TextField(
                     controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Email',
                       border: UnderlineInputBorder(),
                     ),
                     autofillHints: const [AutofillHints.email],
-
                   ),
                   const SizedBox(height: 20),
                   TextField(
@@ -113,15 +112,11 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
 
   Future<void> _login(BuildContext context, WidgetRef ref, String email,
       String password) async {
-    final result = await AuthServices().login(email, password);
-
-    if (result) {
-      ref.invalidate(isLoggedInProvider);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/browseSports', (route) => false); // Adjust this route as needed
-    } else {
+    ref.read(authProvider.notifier).login(email, password).then((_) {
+      Navigator.of(context).pop();
+    }, onError: (_) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Login failed')));
-    }
+    });
   }
 }

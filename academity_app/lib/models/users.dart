@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+
+@immutable
 class User {
   final int id;
   final String name;
@@ -6,7 +9,7 @@ class User {
   final DateTime dob;
   final String gender;
 
-  User({
+  const User({
     required this.id,
     required this.name,
     required this.email,
@@ -17,12 +20,12 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['user']['id'], // Ensure this matches the JSON structure
-      name: json['user']['name'],
-      email: json['user']['email'],
-      phone: json['user']['phone'],
-      dob: DateTime.parse(json['user']['dob']['date']),
-      gender: json['user']['gender'],
+      id: json['id'], // Ensure this matches the JSON structure
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
+      dob: DateTime.parse(json['dob']),
+      gender: json['gender'],
     );
   }
 }

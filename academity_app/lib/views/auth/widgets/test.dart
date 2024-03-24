@@ -1,4 +1,3 @@
-
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +5,7 @@ class SignupForm extends StatefulWidget {
   const SignupForm({Key? key}) : super(key: key);
 
   @override
-  _SignupFormState createState() => _SignupFormState();
+  State<SignupForm> createState() => _SignupFormState();
 }
 
 enum Gender { male, female }
@@ -50,7 +49,6 @@ class _SignupFormState extends State<SignupForm> {
         'password_confirm': passwordConfirm,
       });
 
-
       if (signUpSuccess.success) {
         Navigator.of(context).pushReplacementNamed(
             '/browseSports'); // Navigate to login upon successful sign up
@@ -77,7 +75,9 @@ class _SignupFormState extends State<SignupForm> {
             children: [
               TextFormField(
                 decoration: InputDecoration(
-                    labelText: 'Email', errorText: emailError, errorMaxLines: 2),
+                    labelText: 'Email',
+                    errorText: emailError,
+                    errorMaxLines: 2),
                 onChanged: (value) => setState(() => email = value),
                 validator: (value) =>
                     value!.isEmpty ? 'Please enter your email' : null,
@@ -251,3 +251,4 @@ class _SignupFormState extends State<SignupForm> {
     );
   }
 }
+

@@ -2,42 +2,24 @@ import 'package:academity_app/views/MyAcademy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
 import 'package:academity_app/views/Profile/users_profile_screen.dart';
 import 'package:academity_app/views/Schedule/schedule_screen.dart';
-import 'package:academity_app/views/auth/home_screen.dart';
 import 'package:academity_app/views/auth/signup_screen.dart';
 import 'package:academity_app/views/home/browse_sports_screen.dart';
+import 'package:academity_app/views/landing_page.dart';
 import 'package:academity_app/views/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:academity_app/views/auth/login_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-final isLoggedInProvider = FutureProvider((ref) async {
-  const secureStorage = FlutterSecureStorage();
-  final isLoggedIn =
-      await secureStorage.read(key: 'api_token').then((apiToken) {
-    if (apiToken == null) return false;
-    // final auth = AuthServices();
-    // return auth.loginTest();
-    return true;
-  });
-  return isLoggedIn;
-});
-
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLog = ref.watch(isLoggedInProvider);
-    if (!isLog.hasValue || isLog.isLoading || isLog.hasError) {
-      return const Placeholder();
-    }
-    final isLoggedIn = isLog.requireValue;
     return MaterialApp(
       title: 'Academity',
       theme: ThemeData(
@@ -55,17 +37,11 @@ class MyApp extends ConsumerWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomeScreen(),
-        '/login': (context) {
-          if (isLoggedIn) {
-            return const MainScreen();
-          } else {
-            return const LoginScreen();
-          }
-        },
+        '/': (context) => const LandingPage(),
+        '/login': (context) => const LoginScreen(),
         '/browseSports': (context) => const MainScreen(),
         '/signup': (context) => const SignupScreen(),
-        '/userProfile': (context) =>  const UserProfileScreen(),
+        '/userProfile': (context) => const UserProfileScreen(),
       },
     );
   }
@@ -75,10 +51,10 @@ class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _widgetOptions = [

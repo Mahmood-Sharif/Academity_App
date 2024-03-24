@@ -29,7 +29,9 @@ class SportsListWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BrowseAcademyScreen(sport: sport,),
+                  builder: (context) => BrowseAcademyScreen(
+                    sport: sport,
+                  ),
                 ),
               );
             },
