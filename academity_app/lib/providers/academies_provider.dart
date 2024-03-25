@@ -8,3 +8,8 @@ final academyProvider = FutureProvider<List<Academy>>((ref) async {
   final academyService = AcademyServices();
   return academyService.fetchAcademies();
 });
+
+final CoachAcademiesProvider = FutureProvider.family<List<Academy>, int>((ref, coachId) {
+  final academyService = AcademyServices();
+  return academyService.fetchAcademiesByCoachId(coachId);
+});

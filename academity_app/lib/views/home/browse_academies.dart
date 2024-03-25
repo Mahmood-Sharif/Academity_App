@@ -20,7 +20,7 @@ class _AcademiesPageState extends State<AcademiesPage> {
   @override
   void initState() {
     super.initState();
-    futureSports = AcademyServices().fetchAcademies();
+    futureSports = AcademyServices().fetchAcademiesByCoachId(2);
   }
 
   @override

@@ -4,9 +4,9 @@ class Academy {
   final String name;
   final String phone;
   final String description;
-  final int mediaId;
-  final int ownerId;
-  final int sportId;
+  final String mediaId;
+  final String ownerId;
+  final String sportId;
 
   Academy({
     required this.academyId,

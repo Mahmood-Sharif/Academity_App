@@ -13,7 +13,7 @@ class AcademiesListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final academies = ref.watch(academyProvider);
+    final academies = ref.watch(CoachAcademiesProvider(2));
 
     return academies.when(
       data: (academies) => ListView.builder(

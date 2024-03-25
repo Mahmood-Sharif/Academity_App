@@ -55,8 +55,9 @@
         // students api
         $routes->resource('students', ['controller'=> 'Api\Students']);
         // academies api
-        
+        $routes->get('academies/bci', 'Api\Academies::byCoach');
         $routes->resource('academies', ['controller'=> 'Api\Academies']);
+        
 
 
         $routes->group('', /*['filter' => 'tokens'],*/ static function ($routes) {
@@ -77,5 +78,7 @@
             $routes->get('schedule/coach', 'Api\Schedule::getScheduleForCoach');
             $routes->post('attendance', 'Api\Attendance::insertAttendance');
             $routes->delete('attendance/(:num)/(:segment)', 'Api\Attendance::deleteAttendance/$1/$2');
+            
+
         });
     });

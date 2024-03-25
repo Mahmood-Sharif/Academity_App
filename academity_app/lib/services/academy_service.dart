@@ -18,5 +18,16 @@ Future<List<Academy>> fetchAcademies() async {
       } else {
         throw Exception('Failed to load Academies. Response status code: ${response.statusCode}');
       }
-    } 
+    }
+
+    Future<List<Academy>> fetchAcademiesByCoachId(int coachId) async {
+    final url = Uri.parse('http://192.168.100.15:8080/api/academies/bci?coach_id=$coachId');
+      final response = await http.get(url);
+  if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((dynamic item) => Academy.fromJson(item)).toList();
+      } else {
+        throw Exception('Failed to load Academies. Response status code: ${response.statusCode}');
+      }
+    }
 }
