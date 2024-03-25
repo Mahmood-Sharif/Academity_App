@@ -67,6 +67,7 @@ $routes->group('api', static function ($routes) {
         $routes->get('academy/(:num)/classes', 'Api\Academy::getClassDetails/$1');
         $routes->get('class/prices/(:num)', 'Api\ClassApi::getClassesWithPrices/$1');
         $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
+        $routes->post('log-attendance/', 'Api\Attendance::logAttendance');
         $routes->get('schedule/student', 'Api\Schedule::getScheduleForStudent');
         $routes->get('schedule/coach', 'Api\Schedule::getScheduleForCoach');
 

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:academity_app/views/MyAcademy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
 import 'package:academity_app/views/Profile/users_profile_screen.dart';
@@ -13,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:academity_app/views/auth/login_screen.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -60,17 +57,7 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
-  MobileScannerController qrController = MobileScannerController(
-    autoStart: false,
-    formats: [BarcodeFormat.qrCode],
-    detectionSpeed: DetectionSpeed.noDuplicates,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    unawaited(qrController.stop()); // stop the camera on startup
-  }
+  bool _qrScannerActive = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -78,9 +65,9 @@ class MainScreenState extends State<MainScreen> {
 
       // only activate the camera when its page is visible
       if (_selectedIndex == 2) {
-        unawaited(qrController.start());
+        _qrScannerActive = true;
       } else {
-        unawaited(qrController.stop());
+        _qrScannerActive = false;
       }
     });
   }
@@ -93,7 +80,7 @@ class MainScreenState extends State<MainScreen> {
         children: [
           const SportsPage(),
           const MyAcademyPage(),
-          QRScannerPage(controller: qrController),
+          QRScannerPage(active: _qrScannerActive),
           const SchedulePage(),
           const ProfilePage(),
         ],
@@ -103,11 +90,5 @@ class MainScreenState extends State<MainScreen> {
         onItemSelected: _onItemTapped,
       ),
     );
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    qrController.dispose();
   }
 }
