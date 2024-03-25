@@ -10,5 +10,6 @@ class Attendance extends Entity
         'attendance_id' => '?integer',
         'student_id'    => 'integer',
         'date_time'     => 'datetime',
+        'class_id'      => 'integer',
     ];
 }
