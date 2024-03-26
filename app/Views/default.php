@@ -121,7 +121,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
         <span class="fs-2 fw-bold text-center mb-3">
           <?= lang('App.academity_admin_portal') ?>
         </span>
-        <a href="<?= url_to('AdminPortal\Controller::dashboard')?>"
+        <a href="#"
           class="nav-link disabled <?= $tab == 'dashboard' ? 'active' : '' ?>">
           <i class="bi bi-grid fs-5 me-1"></i>
           <?=lang('App.dashboard')?>
