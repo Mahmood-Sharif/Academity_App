@@ -1,6 +1,7 @@
 <?php
 
 return [
+  'academity'              => 'Academity',
   // sidebar
   'academity_admin_portal' => 'Academity Admin Portal',
   'dashboard'              => 'Dashboard',
