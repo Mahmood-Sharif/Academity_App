@@ -110,7 +110,9 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
   <nav class="navbar navbar-expand-md bg-body-tertiary">
     <div class="container">
       <a class="navbar-brand fw-bold" href="/<?=$locale?>">
-        <img src="<?=base_url('images/logofull_L.png')?>" alt="Academity" height="24">
+        <svg height="24" viewBox="0 0 500 93.333336">
+          <?=include ROOTPATH . '/public/images/logofull.svg' ?>
+        </svg>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -198,7 +200,9 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
     <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-4 py-5 my-5 border-top">
       <div class="col mb-3">
         <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
-          <img src="<?=base_url('images/logofull_L.png')?>" alt="Academity" height="24">
+          <svg height="24" viewBox="0 0 500 93.333336">
+            <use href="#svg1" />
+          </svg>
         </a>
         <p class="text-body-secondary">© 2024 Academity</p>
       </div>
