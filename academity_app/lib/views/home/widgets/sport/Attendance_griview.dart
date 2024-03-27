@@ -49,7 +49,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                       Text(
                         attendance.studentName.toString(),
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -83,7 +83,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
   },
   style: ElevatedButton.styleFrom(
     backgroundColor: attendance.status == 'Present'
-        ? Colors.green // Change color if the student is already present
+        ? const Color(0xFF008B8B) // Change color if the student is already present
         : Colors.white, // Default color
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
@@ -99,7 +99,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
     style: TextStyle(
       color: attendance.status == 'Present'
           ? Colors.white // Change color if the student is already present
-          : Colors.green, // Set text color to white
+          : const Color(0xFF008B8B), // Set text color to white
     ),
   ),
 ),
@@ -116,7 +116,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                         },
                         style: ElevatedButton.styleFrom(
                           primary: attendance.status == 'Absent'
-                            ? Colors.red // Change color if the student is already absent
+                            ? const Color(0xFF8B0000) // Change color if the student is already absent
                             : Colors.white, // Default color
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
@@ -132,7 +132,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                           style: TextStyle(
                              color: attendance.status == 'Absent'
                             ? Colors.white // Change color if the student is already present
-                            : Colors.red, // Set text color to white
+                            : const Color(0xFF8B0000), // Set text color to white
                           ),
                         ),
                       ),

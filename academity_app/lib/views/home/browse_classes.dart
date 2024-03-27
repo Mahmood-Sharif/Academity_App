@@ -1,6 +1,8 @@
 import 'package:academity_app/views/home/widgets/class/class_list.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+
 class ClassesPage extends StatelessWidget {
   const ClassesPage({Key? key}) : super(key: key);
 
@@ -39,7 +41,7 @@ class ClassesPage extends StatelessWidget {
             children: [
               Text(
                 DateFormat.E().format(startOfWeek.add(Duration(days: i))),
-                style: const TextStyle(fontSize: 12), // Decrease the font size for day name
+                style: const TextStyle(fontSize: 10), // Decrease the font size for day name
               ),
               Text(
                 DateFormat.d().format(startOfWeek.add(Duration(days: i))),
