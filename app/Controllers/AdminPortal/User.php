@@ -125,9 +125,9 @@ class User extends ResourcePresenter
 
         } else {
             // coach user does not exist, register new user
-            $coach = $this->request->getPost(auth()->getProvider()->getValidationRules());
+            // $coach = $this->request->getPost(auth()->getProvider()->getValidationRules());
             return view('user/ajax_register_coach', [
-                'coach' => $coach,
+                // 'coach' => $coach,
             ]);
         }
     }

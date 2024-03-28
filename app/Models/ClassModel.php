@@ -79,7 +79,7 @@ class ClassModel extends Model
 
     public function includeOwnerId(): ClassModel
     {
-        return $this->join('academies', 'classes.academy_id = academies.academy_id')
+        return $this->join('academies', 'classes.academy_id = academies.academy_id', 'left')
                     ->select('classes.*')
                     ->select('academies.owner_id');
     }
@@ -106,8 +106,7 @@ class ClassModel extends Model
         return $this
             ->join('enrollments', 'enrollments.class_id = classes.class_id', 'left')
             ->groupBy('classes.class_id')
-            ->select('COUNT(DISTINCT enrollments.enrollment_id) as num_enrollments')
-            ->where("enrollments.end_date > '{$date->format('Y-m-d')}'");
+            ->select("COUNT(IF(enrollments.end_date IS NOT NULL, enrollments.end_date > '{$date->format('Y-m-d')}', NULL)) as num_enrollments");
     }
 
     public static function generateRegCode(): string
