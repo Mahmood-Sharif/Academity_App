@@ -36,6 +36,7 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->get('student-profile/(:num)', 'AdminPortal\User::showStudent/$1');
         $routes->get('coach-profile/(:num)', 'AdminPortal\User::showCoach/$1');
         $routes->get('edit-profile/(:num)', 'AdminPortal\User::edit/$1');
+        $routes->get('ajax-class-input', 'AdminPortal\Classes::selectInput');
     });
 });
 

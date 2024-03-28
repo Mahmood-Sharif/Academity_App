@@ -68,10 +68,16 @@ $this->endSection('sidebarTab');
           <?=lang('App.show_past')?>
         </label>
       </div>
+      <?php if ($pager->getPageCount() > 0): ?>
       <div class="hstack gap-2 ms-auto">
         <span>Page:</span>
         <?=$pager->links()?>
       </div>
+      <?php endif ?>
+      <a href="<?=url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId  ?>"
+        class="btn btn-outline-success ms-auto">
+        <?=lang('App.enrol_student')?>
+      </a>
     </div>
   </form>
 
@@ -109,6 +115,12 @@ $this->endSection('sidebarTab');
 
     </tbody>
   </table>
+
+  <?php if (empty($students)): ?>
+  <p class="text-center fs-3 py-3 text-muted">
+    <?=lang('App.empty.students')?>
+  </p>
+  <?php endif ?>
 
 
 </div>

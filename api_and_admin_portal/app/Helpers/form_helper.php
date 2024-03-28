@@ -1,7 +1,14 @@
 <?php
 
-function validated_form_input(string $id, string $name, string $labelText, string $value = '', string $type = 'text', array $attributes = [], bool $readonly = false): string
-{
+function validated_form_input(
+    string $id,
+    string $name,
+    string $labelText,
+    string $value = '',
+    string $type = 'text',
+    array $attributes = [],
+    bool $readonly = false
+): string {
     $isError = array_key_exists($name, validation_errors());
     if ($readonly) {
         $attributes['readonly'] = 'readonly';
@@ -21,8 +28,15 @@ function validated_form_input(string $id, string $name, string $labelText, strin
       '</div>' . "\n";
 }
 
-function validated_form_textarea(string $id, string $name, string $labelText, string $value = '', string $type = 'text', array $attributes = [], bool $readonly = false): string
-{
+function validated_form_textarea(
+    string $id,
+    string $name,
+    string $labelText,
+    string $value = '',
+    string $type = 'text',
+    array $attributes = [],
+    bool $readonly = false
+): string {
     $isError = array_key_exists($name, validation_errors());
     if ($readonly) {
         $attributes['readonly'] = 'readonly';
@@ -41,13 +55,23 @@ function validated_form_textarea(string $id, string $name, string $labelText, st
       '</div>' . "\n";
 }
 
-function validated_form_select(string $id, string $name, string $labelText, array $options, string|null $selected, string $extraClasses = '', string $attributes = ''): string
-{
+function validated_form_select(
+    string $id,
+    string $name,
+    string $labelText,
+    array $options,
+    string|null $selected,
+    string $extraClasses = '',
+    string $attributes = '',
+    string $optionsType = 'kv',
+): string {
     $isError = array_key_exists($name, validation_errors()) ? 'is-invalid' : '';
     $optionsDOM = '';
-    foreach ($options as $value => $text) {
+    foreach ($options as $value => $obj) {
+        $text = $optionsType == 'kv' ? $obj : $obj['text'];
+        $extraAttributes = $optionsType == 'ko' ? $obj['attributes'] : '';
         $isSelected = $selected == $value ? 'selected' : '';
-        $optionsDOM .= "<option value=\"$value\" $isSelected>$text</option>";
+        $optionsDOM .= "<option value=\"$value\" $isSelected $extraAttributes>$text</option>";
     }
     return
       "<div class=\"form-floating $extraClasses\">" .

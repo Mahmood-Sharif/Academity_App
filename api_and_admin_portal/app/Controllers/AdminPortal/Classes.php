@@ -301,4 +301,10 @@ class Classes extends ResourcePresenter
             'body'  => view('class/reg_code_modal', ['class' => $class]),
         ]);
     }
+
+    public function selectInput(): string
+    {
+        $academyId = $this->request->getGet('academy_id');
+        return view('class/ajax_class_input', ['academyId' => $academyId]);
+    }
 }

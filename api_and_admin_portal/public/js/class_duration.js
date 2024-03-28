@@ -11,8 +11,9 @@ class ClassDurationInput extends HTMLElement {
     super();
 
     this.unit = this.dataset.unit ?? 'week';
-    this.duration = this.dataset.duration ?? 1;
-    this.classesPerWeek = this.dataset.classesPerWeek;
+    this.classesPerWeek = this.dataset.classesPerWeek; // required attribute
+    this.value = this.getAttribute('value') ?? this.classesPerWeek;
+    this.duration = this.dataset.duration ?? Math.floor(this.value / this.classesPerWeek) ?? 1;
 
     if (this.hasAttribute('readonly')) {
       this.normalizeDuration();
