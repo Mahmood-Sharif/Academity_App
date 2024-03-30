@@ -98,11 +98,10 @@ class Login extends ResourceController
     {
         $token = $this->request->getHeaderLine('Authorization');
         $token = str_replace('Bearer ', '', $token);
-        log_message('debug', 'Attempting to logout with token: ' . $token);
+
 
         try {
             $result = auth()->user()->revokeAccessToken($token);
-            log_message('debug', 'Token revocation result: ' . print_r($result, true));
 
             if ($result) {
                 return $this->respondDeleted(['status' => 'Logout successful']);
@@ -110,7 +109,7 @@ class Login extends ResourceController
                 return $this->respond(['status' => 'Logout failed'], ResponseInterface::HTTP_BAD_REQUEST);
             }
         } catch (Exception $e) {
-            log_message('error', 'Logout exception: ' . $e->getMessage());
+
             return $this->respond(['status' => 'Logout failed', 'message' => $e->getMessage()], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -150,38 +149,103 @@ class Login extends ResourceController
         }
     }
 
+    // public function updateUserProfile(): ResponseInterface
+    // {
+    //     try {
+    //         $user = auth()->user();
+    //         log_message('info', "Raw POST Data: " . file_get_contents('php://input')); // Add this line
+
+    //         if (!$user) {
+    //             return $this->respond(['status' => 'Failed', 'message' => 'User not found'], ResponseInterface::HTTP_NOT_FOUND);
+    //         }
+
+    //         $r = auth()->getProvider()->getValidationRules();
+    //         $updatedData = $this->request->getPost($r);
+
+    //         // Check if updatedData is empty
+    //         if (empty($updatedData)) {
+    //             return $this->respond(['status' => 'Failed', 'message' => 'No data provided for update'], ResponseInterface::HTTP_BAD_REQUEST);
+    //         }
+
+    //         if (!auth()->getProvider()->validate($updatedData)) {
+    //             return $this->respond(['status' => 'Failed', 'message' => 'Validation failed for user profile'], ResponseInterface::HTTP_BAD_REQUEST);
+    //         }
+
+    //         if (auth()->getProvider()->update($user->id, $updatedData)) {
+    //             return $this->respond(['status' => 'Success', 'message' => 'User profile updated successfully']);
+    //         } else {
+    //             return $this->respond(['status' => 'Failed', 'message' => 'Failed to update user profile'], ResponseInterface::HTTP_BAD_REQUEST);
+    //         }
+    //     } catch (Exception $e) {
+    //         log_message('critical', "Error updating user profile for user {$user->id}: " . $e->getMessage());
+    //         log_message('info', "Data attempted to update: " . json_encode($updatedData));
+    //         return $this->respond(['status' => 'Failed', 'message' => 'Internal server error.'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+
     public function updateUserProfile(): ResponseInterface
-    {
-
+    {    
         try {
+            // Assuming 'auth()' can decode the token and fetch the user
             $user = auth()->user();
-
+    
             if (!$user) {
                 return $this->respond(['status' => 'Failed', 'message' => 'User not found'], ResponseInterface::HTTP_NOT_FOUND);
             }
+    
+            // Extract data from the request body
+            $data = $this->request->getPost();
+    
 
-            $r = auth()->getProvider()->getValidationRules();
-            // Get updated data from request
-            $updatedData = $this->request->getPost($r);
+                // Optionally reload the user to reflect the latest state
+                // $user = auth()->getProvider()->findById($user->id);
+            
+                // Prepare $updatedData based on the refreshed $user object
+                $updatedData = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->getEmail(), // Assuming getEmail() is the correct method
+                    'phone' => $user->phone,
+                    'dob' => $user->dob,
+                    'gender' => $user->gender,
+                    // Include additional fields as needed
+                ];
+            
+                // Return success response with populated $updatedData
+                return $this->respond([
+                    'status' => 'Success',
+                    'message' => 'Profile updated successfully',
+                    'user' => $updatedData,
+                ]);
+            
 
-
-            // Validate updated data as needed
-            // ...
-            if (!auth()->getProvider()->validate($updatedData)) {
-                return $this->respond(['status' => 'Failed', 'message' => 'Failed to update user profile'], ResponseInterface::HTTP_BAD_REQUEST);
+            foreach ($data as $key => $value) {
+                if (property_exists($user, $key)) {
+                    $user->$key = $value;
+                    $updatedData[$key] = $value; // Prepare data for explicit update if needed
+                }
             }
-
-            // Assuming you have a method to save the updated user object
-            if (auth()->getProvider()->update($user->id, $updatedData)) {
-                return $this->respond(['status' => 'Success', 'message' => 'User profile updated successfully']);
-            } else {
-                return $this->respond(['status' => 'Failed', 'message' => 'Failed to update user profile'], ResponseInterface::HTTP_BAD_REQUEST);
+    
+            // Attempt to save/update the user details
+            // Note: Adjust this part according to your specific user model/entity save or update method
+            $result = auth()->getProvider()->save($user); // Assuming this method exists and correctly updates the user
+            
+            if (!$result) {
+                log_message('error', "Failed to update user profile for user {$user->id}.");
+                return $this->respond(['status' => 'Failed', 'message' => 'Failed to update profile'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
             }
+    
+            // Success response
+            return $this->respond([
+                'status' => 'Success',
+                'message' => 'Profile updated successfully',
+                'user' => $updatedData, // Optionally return only the updated fields
+            ]);
         } catch (Exception $e) {
             log_message('critical', "Error updating user profile for user {$user->id}: " . $e->getMessage());
-            // Optionally, log the data being updated if it's safe to do so
-            log_message('info', "Data attempted to update: " . json_encode($updatedData));
+            log_message('info', "Data attempted to update: " . json_encode($data)); // Assuming $data is available
             return $this->respond(['status' => 'Failed', 'message' => 'Internal server error.'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    
 }
