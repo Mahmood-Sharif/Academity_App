@@ -88,10 +88,10 @@ $url = match($type) {
 
         <div class="mb-3">
           <?=validated_form_input('price', 'price', lang('App.price'), $class?->price ?? set_value('price'), 'number', [
-                                                                  'aria-describedby' => 'priceHelp',
-                                                                  'min' => '0.100',
-                                                                  'step' => '0.001',
-                                                        ])?>
+                                                                          'aria-describedby' => 'priceHelp',
+                                                                          'min' => '0.100',
+                                                                          'step' => '0.001',
+                                                                ])?>
           <div id="priceHelp" class="form-text">
             <?=lang('App.price.help')?>
           </div>
@@ -143,7 +143,7 @@ $url = match($type) {
       </div>
     </div>
   </form>
-  <?php if ($type === 'edit'): ?>
+  <?php /* if ($type === 'edit'): ?>
   <div class="accordion mt-4" id="accordionDanger">
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -172,7 +172,7 @@ $url = match($type) {
       </div>
     </div>
   </div>
-  <?php endif ?>
+  <?php endif */ ?>
 </div>
 
 <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
@@ -183,7 +183,6 @@ $url = match($type) {
 
 <script src="/js/class_schedule.js"></script>
 <script src="/js/class_duration.js"></script>
-<?php if($type == 'edit'): ?>
 <script>
   (() => {
     window.history.replaceState(
@@ -193,6 +192,5 @@ $url = match($type) {
     );
   })();
 </script>
-<?php endif ?>
 
 <?= $this->endSection('content'); ?>

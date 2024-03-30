@@ -50,7 +50,7 @@ class Academy extends ResourcePresenter
             ]);
         }
 
-        $sports = (new SportModel())->findAll();
+        $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
         return view('academy/create_edit', [
           'type' => 'edit',
@@ -75,10 +75,12 @@ class Academy extends ResourcePresenter
           ...$this->model->validationRules,
           'image' => 'max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
         ], $this->model->validationMessages)) {
+            $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
+
             return view('academy/create_edit', [
               'type' => 'edit',
               'academy' => $academy,
-              'sports' => (new SportModel())->findAll(),
+              'sports' => $sports,
               'errors' => $this->validator->getErrors(),
             ]);
         }
@@ -88,6 +90,7 @@ class Academy extends ResourcePresenter
         if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
             $uploadedFile = $this->request->getFile('image');
             $upload = BaseController::uploadMedia($uploadedFile);
+            $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
             if (array_key_exists('errors', $upload)) {
                 return view('academy/create_edit', [
                     'type' => 'edit',
@@ -177,11 +180,11 @@ class Academy extends ResourcePresenter
             ]);
         }
 
-        $sports = (new SportModel())->findAll();
+        $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
         return view('academy/create_edit', [
           'type' => 'create' ,
-          'sports' => $sports,
+          'sports' => [0 => lang('App.academy_sport.select'), ...$sports],
           'errors' => [],
         ]);
     }
@@ -196,7 +199,7 @@ class Academy extends ResourcePresenter
             ]);
         }
 
-        $sports = (new SportModel())->findAll();
+        $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
         if (! $this->validate([
           ...$this->model->validationRules,
@@ -205,7 +208,7 @@ class Academy extends ResourcePresenter
             return view('academy/create_edit', [
                 'type' => 'create',
                 'errors' => $this->validator->getErrors(),
-                'sports' => (new SportModel())->findAll(),
+                'sports' => [0 => lang('App.academy_sport.select'), ...$sports],
             ]);
         }
 
