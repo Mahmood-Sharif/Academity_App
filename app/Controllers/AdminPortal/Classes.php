@@ -104,7 +104,7 @@ class Classes extends ResourcePresenter
             [
                 ...$this->model->getValidationRules(),
                 'timings' => 'required|valid_json',
-                'price' => 'required|decimal',
+                'price' => ['label' => 'App.price', 'rules' => 'required|decimal'],
             ],
             $this->model->getValidationMessages()
         )) {
@@ -198,8 +198,8 @@ class Classes extends ResourcePresenter
             ...$this->model->getValidationRules(),
             'academy_id' => 'required|integer',
             'timings' => 'required|valid_json',
-            'price' => 'required|decimal',
-        ])) {
+            'price' => ['label' => 'App.price', 'rules' => 'required|decimal'],
+        ], $this->model->getValidationMessages())) {
             $academyId = $this->request->getPost('academy_id');
             /* @var UserModel $users */
             $users = auth()->getProvider() ;

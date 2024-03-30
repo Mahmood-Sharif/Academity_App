@@ -226,8 +226,6 @@ class Enrollment extends ResourcePresenter
             ->includeNumEnrollments()
             ->find((int)$classId);
 
-        log_message('critical', 'CCLASSsssssssssss: ' . var_export($class, true));
-
         if (!auth()->user()->can('enrollments.create') || $class === null || auth()->id() !== $class->owner_id) {
             return redirect()
                 ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)

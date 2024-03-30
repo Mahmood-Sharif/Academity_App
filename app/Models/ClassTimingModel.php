@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Entities\ClassTiming;
 use CodeIgniter\Model;
-use Exception;
 
 class ClassTimingModel extends Model
 {
@@ -19,7 +17,7 @@ class ClassTimingModel extends Model
       'end_time',
     ];
 
-    protected $returnType = \App\Entities\ClassEntity::class;
+    protected $returnType = \App\Entities\ClassTiming::class;
 
     public function getTimingsForClass(int $id): array
     {

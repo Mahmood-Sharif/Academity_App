@@ -31,18 +31,22 @@ class ClassModel extends Model
     protected $beforeInsert = ['insertRegCode'];
 
     protected $validationRules = [
-      'class_name'   => 'string|required|min_length[3]|max_length[100]',
-      'min_age'      => 'integer|required|is_natural_no_zero',
-      'max_age'      => 'integer|required|is_natural_no_zero',
-      'max_capacity' => 'integer|required|is_natural_no_zero',
-      'min_duration' => 'integer|required|is_natural_no_zero',
+      'class_name'   => ['label' => 'App.class_name',   'rules' => 'string|required|min_length[3]|max_length[100]'],
+      'min_age'      => ['label' => 'App.min_age',      'rules' => 'integer|required|is_natural_no_zero'],
+      'max_age'      => ['label' => 'App.max_age',      'rules' => 'integer|required|is_natural_no_zero'],
+      'max_capacity' => ['label' => 'App.max_capacity', 'rules' => 'integer|required|is_natural_no_zero'],
+      'min_duration' => ['label' => 'App.min_duration', 'rules' => 'integer|required|is_natural_no_zero'],
       // 'max_duration' => 'integer|required|is_natural_no_zero',
       'coach_id'     => 'integer|required|is_natural_no_zero',
     ];
     protected $validationMessages = [
-      'timings' => [
-        'valid_json' => 'Rules.class.timings',
-      ]
+        'coach_id'     => [
+            'integer'            => 'Rules.academy.coach',
+            'is_natural_no_zero' => 'Rules.academy.coach',
+        ],
+        'timings' => [
+            'valid_json' => 'Rules.class.timings',
+        ]
     ];
 
     protected $returnType = \App\Entities\ClassEntity::class;
