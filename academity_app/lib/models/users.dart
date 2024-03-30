@@ -18,44 +18,60 @@ class User {
     required this.gender,
   });
 
-factory User.fromJson(Map<String, dynamic> json) {
-  print('Received JSON for User: $json');
+  factory User.fromJson(Map<String, dynamic> json) {
+    print('Received JSON for User: $json');
 
-  final int idParsed = json['id'];
-  if (idParsed == null) {
-    throw FormatException("Invalid format for 'id': ${json['id']}");
+    // Attempt to parse 'id' and log the outcome
+    final idParsed = json['id'];
+    print('Parsed id: $idParsed');
+    if (idParsed == null) {
+      throw FormatException("Invalid format for 'id': ${json['id']}");
+    }
+
+    // Continue with parsing, adding print statements as necessary
+    final name = json['name'];
+    print('Parsed name: $name');
+
+    final email = json['email'];
+    print('Parsed email: $email');
+
+    final phone = json['phone'];
+    print('Parsed phone: $phone');
+
+    // Parsing DateTime can also be a common source of errors
+    DateTime dob;
+    try {
+      dob = DateTime.parse(json['dob']);
+      print('Parsed dob: $dob');
+    } catch (e) {
+      print('Error parsing dob: ${json['dob']}, Exception: $e');
+      rethrow; // or handle the error as appropriate
+    }
+
+    final gender = json['gender'];
+    print('Parsed gender: $gender');
+
+    // If everything went well, return the constructed User
+    return User(
+      id: idParsed,
+      name: name,
+      email: email,
+      phone: phone,
+      dob: dob,
+      gender: gender,
+    );
   }
-
-  final DateTime dob;
-  try {
-    dob = DateTime.parse(json['dob']);
-  } catch (e) {
-    print('Error parsing dob: ${json['dob']}, Exception: $e');
-    rethrow;
-  }
-
-  return User(
-    id: idParsed,
-    name: json['name'] ?? '', // Fallback to empty string if null
-    email: json['email'] ?? '',
-    phone: json['phone'].toString(),
-    dob: dob,
-    gender: json['gender'] ?? '',
-  );
-}
-
 
   Map<String, dynamic> toJson() {
-  return {
-    'id': id.toString(),
-    'name': name,
-    'email': email,
-    'phone': phone.toString(), // Ensure this is a string
-    'dob': dob.toIso8601String(),
-    'gender': gender,
-  };
-}
-
+    return {
+      'id': id.toString(),
+      'name': name,
+      'email': email,
+      'phone': phone.toString(), // Ensure this is a string
+      'dob': dob.toIso8601String(),
+      'gender': gender,
+    };
+  }
 
   User copyWith({
     int? id,

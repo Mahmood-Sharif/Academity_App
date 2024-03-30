@@ -62,19 +62,23 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   Widget _buildUserInputField(String label, String initialValue, IconData icon,
       Color customColor, Function(String) onSaved) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextFormField(
-        initialValue: initialValue,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(color: customColor),
-          border: const OutlineInputBorder(),
-          prefixIcon: Icon(icon, color: customColor),
-        ),
-        onSaved: (val) => onSaved(val ?? ''),
-        // You may want to use onChanged for instant updates or keep onSaved for form submission
-      ),
-    );
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: TextFormField(
+          initialValue: initialValue,
+          decoration: InputDecoration(
+            labelText: label,
+            labelStyle: TextStyle(color: customColor),
+            border: const OutlineInputBorder(),
+            prefixIcon: Icon(icon, color: customColor),
+          ),
+          onSaved: (val) => onSaved(val ?? ''),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter a valid $label';
+            }
+            return null;
+          },
+        ));
   }
 
   Widget _buildSaveButton() {
@@ -96,20 +100,23 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   }
 
   void _saveUserProfile() async {
-    _formKey.currentState?.save();
-    try {
-      final success =
-          await ref.read(authProvider.notifier).updateProfile(_editableUser);
-      if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile updated successfully')));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to update profile')));
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save();
+      print("Debug - Saving User: ${_editableUser.toJson()}"); // Add this line
+      try {
+        final success =
+            await ref.read(authProvider.notifier).updateProfile(_editableUser);
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Profile updated successfully')));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Failed to update profile')));
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Error: $e')));
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 

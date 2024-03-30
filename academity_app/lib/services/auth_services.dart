@@ -90,17 +90,44 @@ class AuthServices {
 
   static Future<User> editUserProfile(User updatedUser) async {
     try {
-      final response =
-          await AcademityApi.post('profile-edit', body: updatedUser.toJson());
+      // Ensure the user payload is correctly structured as per backend requirements
+      final Map<String, dynamic> userPayload = {
+        'id': updatedUser.id,
+        'name': updatedUser.name
+            .trim(), // Trim to remove any leading/trailing whitespace
+        'email': updatedUser.email,
+        'phone': updatedUser.phone,
+        'dob': updatedUser.dob
+            .toIso8601String(), // Format DateTime as ISO 8601 string
+        'gender': updatedUser.gender,
+      };
+
+      // Encode the entire payload as a JSON string
+      final String encodedPayload = json.encode({'user': userPayload});
+
+      // Fetch the API token securely
+      const secureStorage = FlutterSecureStorage();
+      final apiToken = await secureStorage.read(key: 'api_token');
+      if (apiToken == null) throw Exception("API token not found");
+
+      // Send the HTTP POST request
+      final response = await AcademityApi.post(
+        'profile-edit', // Replace with your actual endpoint
+        body: encodedPayload,
+      );
 
       if (response.statusCode == 200) {
+        // Handle successful response
         final data = json.decode(response.body);
         return User.fromJson(data['user']);
       } else {
+        // Handle non-200 responses
+        print('Failed to edit user profile: ${response.body}');
         throw Exception(
             'Failed to edit user profile with status code: ${response.statusCode}');
       }
     } catch (e) {
+      // Handle errors in making the request
       throw Exception('Error editing user profile: $e');
     }
   }
