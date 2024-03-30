@@ -30,4 +30,17 @@ class AcademyServices {
       throw Exception('Failed to load academy details');
     }
   }
+
+   // Function to enroll a student in a class with a registration code
+  Future<bool> enrollStudentWithCode(String regCode) async {
+    final response = await AcademityApi.post('enrol', body: {'regCode': regCode},);
+    
+    if (response.statusCode == 200) {
+      // Successfully created the enrollment
+      return true;
+    } else {
+      // Handle different statuses or errors accordingly
+      return false;
+    }
+  }
 }

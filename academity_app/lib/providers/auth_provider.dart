@@ -32,6 +32,12 @@ class AuthNotifier extends AsyncNotifier<User?> {
     await AuthServices.logout();
     state = const AsyncValue.data(null);
   }
+
+    Future<bool> updateProfile(User user) async {
+    final newUser = await AuthServices.editUserProfile(user);
+    state = AsyncValue.data(newUser);
+    return newUser != null;
+  }
 }
 
 final authProvider = AsyncNotifierProvider<AuthNotifier, User?>(() {

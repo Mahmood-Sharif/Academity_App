@@ -1,3 +1,4 @@
+import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/views/MyAcademy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
 import 'package:academity_app/views/Profile/users_profile_screen.dart';
@@ -48,14 +49,14 @@ class MyApp extends ConsumerWidget {
   }
 }
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
   MainScreenState createState() => MainScreenState();
 }
 
-class MainScreenState extends State<MainScreen> {
+class MainScreenState extends ConsumerState<MainScreen> {
   int _selectedIndex = 0;
   bool _qrScannerActive = false;
 
@@ -74,6 +75,7 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(authProvider);
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -91,4 +93,5 @@ class MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
 }

@@ -1,8 +1,9 @@
+import 'package:academity_app/models/class.dart';
+import 'package:academity_app/services/class_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/models/academy.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
-import 'package:academity_app/providers/class_provider.dart'; // Adjust path as necessary
 import 'package:academity_app/views/home/widgets/class/classes_widget.dart';
 import 'package:academity_app/views/home/widgets/class/description_widget.dart';
 import 'package:academity_app/views/home/widgets/class/location_widget.dart';
@@ -16,8 +17,7 @@ class AcademyDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final classesAsyncValue =
-        ref.watch(classProviderwithAcademy(academy.academyId));
+     final classAsync = ClassServices().fetchClasses(academy.academyId);
 
     return Scaffold(
       appBar: CustomAppBar(title: academy.name),
@@ -52,14 +52,20 @@ class AcademyDetailScreen extends ConsumerWidget {
                   const Text('Classes',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  classesAsyncValue.when(
-                    data: (classes) => ClassesWidget(
-                        academy: academy,
-                        classes: classes), // Now correctly passing List<Class>
-                    loading: () => const CircularProgressIndicator(),
-                    error: (error, _) => Text('Error: $error'),
+                                  FutureBuilder<List<Classes>>(
+                    future: classAsync,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        return ClassesWidget(academy: academy, classes: snapshot.data!);
+                      } else {
+                        return const Text('No classes available');
+                      }
+                    },
                   ),
-                  // const RegisterButtonWidget(),
                 ],
               ),
             ),

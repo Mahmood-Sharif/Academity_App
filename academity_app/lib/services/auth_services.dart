@@ -87,4 +87,21 @@ class AuthServices {
       throw Exception('Error fetching user profile: $e');
     }
   }
+
+  static Future<User> editUserProfile(User updatedUser) async {
+    try {
+      final response =
+          await AcademityApi.post('profile-edit', body: updatedUser.toJson());
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return User.fromJson(data['user']);
+      } else {
+        throw Exception(
+            'Failed to edit user profile with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error editing user profile: $e');
+    }
+  }
 }

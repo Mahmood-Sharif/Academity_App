@@ -1,5 +1,5 @@
 class ClassTiming {
-  final String timingId;
+  final int timingId;
   final int classId;
   final String dayOfWeek;
   final String startTime;

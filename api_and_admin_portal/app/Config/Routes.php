@@ -58,7 +58,7 @@ $routes->group('api', static function ($routes) {
         $routes->get('login-test', 'Api\Login::loginTest');
         $routes->post('logout', 'Api\Login::logoutUser');
         $routes->get('user-profile', 'Api\Login::getUserProfile');
-        $routes->put('profile-edit', 'Api\Login::updateUserProfile');
+        $routes->post('profile-edit', 'Api\Login::updateUserProfile');
         $routes->get('sport', 'Api\Sport::index');
         $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
         // $routes->get('academies','Api\Academy::show');
@@ -66,6 +66,7 @@ $routes->group('api', static function ($routes) {
         // $routes->get('academies', ['controller' => 'Api\Academy']);
         $routes->get('academy/(:num)/classes', 'Api\Academy::getClassDetails/$1');
         $routes->get('class/prices/(:num)', 'Api\ClassApi::getClassesWithPrices/$1');
+        $routes->post('enrol', 'Api\ClassApi::enrollWithCode');
         $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
         $routes->post('log-attendance/', 'Api\Attendance::logAttendance');
         $routes->get('schedule/student', 'Api\Schedule::getScheduleForStudent');

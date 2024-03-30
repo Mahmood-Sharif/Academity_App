@@ -1,6 +1,6 @@
+import 'package:academity_app/services/academy_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:academity_app/providers/academy_provider.dart';
 import 'package:academity_app/views/home/academy_detail_screen.dart';
 
 class AcademiesListWidget extends ConsumerWidget {
@@ -11,64 +11,72 @@ class AcademiesListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final academiesAsyncValue = ref.watch(academiesProvider(sportId));
+    final academiesAsync = AcademyServices().fetchAcademiesBySportId(sportId);
 
-    return academiesAsyncValue.when(
-      data: (academies) => ListView.separated(
-        itemCount: academies.length,
-        separatorBuilder: (context, index) =>
-            const Divider(), // Add a divider between each item
-        itemBuilder: (context, index) {
-          final academy = academies[index];
-          return InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AcademyDetailScreen(academy: academy),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Image.network(
-                      academy.imageUrl,
-                      width: double.infinity,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      academy.name,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20),
-                    ),
-                  ),
-                  // Row widget to display "Location:" and location in the same line
-                  Row(
-                    children: [
-                      Text(
-                        academy.location,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 18),
+    return FutureBuilder(
+        future: academiesAsync,
+        builder: (context, asy) {
+          if (asy.hasData) {
+            final academies = asy.requireData;
+            return ListView.separated(
+              itemCount: academies.length,
+              separatorBuilder: (context, index) =>
+                  const Divider(), // Add a divider between each item
+              itemBuilder: (context, index) {
+                final academy = academies[index];
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AcademyDetailScreen(academy: academy),
                       ),
-                    ],
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.network(
+                            academy.imageUrl,
+                            width: double.infinity,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            academy.name,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                        // Row widget to display "Location:" and location in the same line
+                        Row(
+                          children: [
+                            Text(
+                              academy.location,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-      loading: () => const CircularProgressIndicator(),
-      error: (error, _) => Text('Error: $error'),
-    );
+                );
+              },
+            );
+          } else if (asy.hasError) {
+            return Text('Error: ${asy.error}');
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 }
