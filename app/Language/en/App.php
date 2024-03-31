@@ -53,6 +53,7 @@ return [
 
 
   // manage academies
+  'academy.status'         => 'Academy Status',
   'academy.status.running' => 'Status: Running',
   'academy.status.stopped' => 'Status: Stopped',
   'academy.num_classes'    => '{0, plural, =0{No Classes} =1{# Class} other{# Classes}}',
