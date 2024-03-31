@@ -8,7 +8,9 @@
 
 <div class="container d-flex flex-column align-items-center justify-content-center p-5">
   <div class="col-8 col-md-5 mb-5">
-    <img src="<?=base_url('images/logofull_L.png')?>" alt="Academity" class="img-fluid">
+    <svg viewBox="0 0 500 93.333336" alt="Academity" class="img-fluid">
+        <?=include ROOTPATH . '/public/images/logofull.svg' ?>
+    </svg>
   </div>
   <div class="card col-12 col-md-5 shadow-sm">
     <div class="card-body">

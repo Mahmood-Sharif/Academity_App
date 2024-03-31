@@ -7,7 +7,7 @@
 }
 
 @include color-mode(dark) {
-  $component-active-color: $black;
+  $component-active-color: $white;
   $component-active-bg: $primary-dark;
 
 
@@ -21,6 +21,13 @@
     .btn-outline-#{$color} {
       @include button-outline-variant($value);
     }
+  }
+
+  .btn-primary,
+  .btn-primary:hover {
+    --#{$prefix}btn-color: #fff;
+    --#{$prefix}btn-hover-color: #fff;
+    --#{$prefix}btn-font-weight: 500;
   }
 
 
