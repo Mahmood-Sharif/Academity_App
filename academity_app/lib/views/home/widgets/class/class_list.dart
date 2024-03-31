@@ -65,14 +65,6 @@ class ClassesList extends ConsumerWidget {
                         width: 100,
                         height: 100,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          // Add image decoration if available
-                          // image: DecorationImage(
-                          //   image: NetworkImage(classesForDay[index].imageUrl),
-                          //   fit: BoxFit.cover,
-                          // ),
-                        ),
                       ),
                       const SizedBox(width: 16), // Add some spacing between image and text
                       Expanded(
