@@ -14,9 +14,11 @@ class _ClassesPageState extends State<ClassesPage> {
   DateTime _selectedDate = DateTime.now();
 
   // Helper function to get the date for the start of the week (Sunday)
-  DateTime _getStartOfWeek(DateTime date) {
-    return date.subtract(Duration(days: date.weekday));
-  }
+DateTime _getStartOfWeek(DateTime date) {
+  final weekday = date.weekday; // Get the weekday number (1 for Monday, 7 for Sunday)
+  final daysToSubtract = weekday == 7 ? 0 : weekday; // Subtract 0 for Sunday, otherwise subtract the weekday number
+  return date.subtract(Duration(days: daysToSubtract));
+}
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class _ClassesPageState extends State<ClassesPage> {
               height: 80, // Increased height for extra space
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: List.generate(7, (index) {
+                children: List.generate(10, (index) {
                   final day = startOfWeek.add(Duration(days: index));
                   final isSelected = day.day == _selectedDate.day;
                   return Padding(
@@ -58,6 +60,7 @@ class _ClassesPageState extends State<ClassesPage> {
                           _selectedDate = day;
                         });
                       },
+                      
                     ),
                   );
                 }),
