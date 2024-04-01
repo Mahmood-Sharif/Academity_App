@@ -13,6 +13,7 @@ class Academy extends ResourceController
     public function index(): ResponseInterface
     {
         $model = new AcademyModel();
+        $data = [];
         $data['academy'] = $model->orderBy('name')->findAll();
         return $this->respond($data);
     }
@@ -44,7 +45,7 @@ class Academy extends ResourceController
         return $this->respond(['academies' => $academies]);
     }
 
-    public function getClassDetails($academyId)
+    public function getClassDetails($academyId): ResponseInterface
     {
         $model = new ClassModel();
         $classes = $model->where('academy_id', $academyId)->findAll();
@@ -56,7 +57,7 @@ class Academy extends ResourceController
         return $this->respond(['classes' => $classes]);
     }
 
-    public function getEnrolledAcademiesDetails()
+    public function getEnrolledAcademiesDetails(): ResponseInterface
     {
         $academyModel = new AcademyModel();
         $classModel = new ClassModel();

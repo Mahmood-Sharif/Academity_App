@@ -1,32 +1,21 @@
-import 'package:academity_app/services/student_service.dart';
-import 'package:academity_app/views/home/student_details.dart';
+import 'package:academity_app/services/academy_services.dart';
+import 'package:academity_app/views/home/coach_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StudentsListWidget extends ConsumerWidget {
-  final int classId;
-  const StudentsListWidget({Key? key, required this.classId}) : super(key: key);
-
-  String formatTime(String? time) {
-    if (time == null) return '';
-    final parsedTime = DateTime.parse('2022-01-01 $time');
-    return '${parsedTime.hour.toString().padLeft(2, '0')}:${parsedTime.minute.toString().padLeft(2, '0')}';
-  }
+class CoachAcademiesListWidget extends ConsumerWidget {
+  const CoachAcademiesListWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
-        future: StudentServices().fetchStudentsByClassId(classId),
+        future: AcademyServices().fetchAcademiesByCoachId(),
         builder: (context, asyncSnapshot) {
           if (asyncSnapshot.hasData) {
-            final students = asyncSnapshot.requireData;
+            final academies = asyncSnapshot.requireData;
             return ListView.builder(
-              itemCount: students.length,
+              itemCount: academies.length,
               itemBuilder: (context, index) {
-                //final startTime = formatTime(classes[index]);
-                //final endTime = formatTime(classes[index].endTime);
-                //final timeRange = '$startTime - $endTime';
-
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
@@ -34,8 +23,10 @@ class StudentsListWidget extends ConsumerWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StudentDetailsScreen(),
-                          settings: RouteSettings(arguments: students[index]),
+                          builder: (context) => CoachClassesPage(
+                            academyId: academies[index].academyId,
+                            academyName: academies[index].name,
+                          ),
                         ),
                       );
                     },
@@ -60,11 +51,10 @@ class StudentsListWidget extends ConsumerWidget {
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              // Add image decoration if available
-                              // image: DecorationImage(
-                              //   image: NetworkImage(classes[index].imageUrl),
-                              //   fit: BoxFit.cover,
-                              // ),
+                              image: DecorationImage(
+                                image: NetworkImage(academies[index].imageUrl),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -75,14 +65,14 @@ class StudentsListWidget extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  students[index].name.toString(),
+                                  academies[index].name.toString(),
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
-                                  students[index].name.toString(),
+                                  academies[index].location.toString(),
                                   style: const TextStyle(
                                     fontSize: 14,
                                     //fontWeight: FontWeight.bold,
@@ -91,13 +81,6 @@ class StudentsListWidget extends ConsumerWidget {
                                 const SizedBox(
                                     height:
                                         8), // Add spacing between class name and subtext
-                                /* Text(
-                            timeRange,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),*/
                               ],
                             ),
                           ),

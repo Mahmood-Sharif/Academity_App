@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:academity_app/models/attendance.dart';
-import 'package:academity_app/models/postAttendance.dart';
 import 'package:academity_app/services/academity_api.dart';
 import 'package:http/http.dart' as http;
 
 class AttendanceServices {
-  Future<List<Attendance>> fetchAttendance(
-      int classId, String startDate, String endDate) async {
+  Future<List<Attendance>> fetchAttendance(int classId,
+      {DateTime? dateTime}) async {
     final response =
-        await AcademityApi.get('attendance/$classId/$startDate/$startDate');
+        await AcademityApi.get('attendance/$classId', {'datetime': dateTime});
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -19,47 +18,25 @@ class AttendanceServices {
     }
   }
 
-  Future<bool> updateAttendance(PostAttendance attendance) async {
+  Future<bool> postAttendance(
+      int studentId, int classId, String status, DateTime? datetime) async {
     try {
-      final response = await AcademityApi.post('attendance',
-          body: jsonEncode(attendance),
-          headers: {'Content-Type': 'application/json'});
+      final response = await AcademityApi.post('post-attendance', body: {
+        'student_id': studentId.toString(),
+        'class_id': classId.toString(),
+        'status': status,
+        if (datetime != null) 'datetime': datetime.toIso8601String()
+      });
 
       if (response.statusCode == 200) {
         // Attendance updated successfully
-        print('Attendance updated successfully');
         return true;
       } else {
         // Handle API error or failure
-        print(
-            'Failed to update attendance. Status code: ${response.statusCode}');
         return false;
       }
     } catch (e) {
       // Handle network or other errors
-      print('Error occurred while updating attendance: $e');
-      return false;
-    }
-  }
-
-  Future<bool> deleteAttendance(int studentId, String dateTime) async {
-    try {
-      final response =
-          await AcademityApi.delete('attendance/$studentId/$dateTime');
-
-      if (response.statusCode == 200) {
-        // Attendance deleted successfully
-        print('Attendance deleted successfully');
-        return true;
-      } else {
-        // Handle API error or failure
-        print(
-            'Failed to delete attendance. Status code: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      // Handle network or other errors
-      print('Error occurred while deleting attendance: $e');
       return false;
     }
   }

@@ -1,22 +1,22 @@
 import 'package:academity_app/models/academy.dart';
-import 'package:academity_app/services/academy_service.dart';
-import 'package:academity_app/views/home/widgets/academy/acaademies_griview.dart';
+import 'package:academity_app/services/academy_services.dart';
+import 'package:academity_app/views/home/widgets/academy/coach_academies_gridview.dart';
 import 'package:flutter/material.dart';
 
-class AcademiesPage extends StatefulWidget {
-  const AcademiesPage({Key? key}) : super(key: key);
+class CoachAcademiesPage extends StatefulWidget {
+  const CoachAcademiesPage({Key? key}) : super(key: key);
 
   @override
-  _AcademiesPageState createState() => _AcademiesPageState();
+  State<CoachAcademiesPage> createState() => _CoachAcademiesPageState();
 }
 
-class _AcademiesPageState extends State<AcademiesPage> {
+class _CoachAcademiesPageState extends State<CoachAcademiesPage> {
   late Future<List<Academy>> futureSports;
 
   @override
   void initState() {
     super.initState();
-    futureSports = AcademyServices().fetchAcademiesByCoachId(2);
+    futureSports = AcademyServices().fetchAcademiesByCoachId();
   }
 
   @override
@@ -47,11 +47,10 @@ class _AcademiesPageState extends State<AcademiesPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            return const AcademiesListWidget();
+            return const CoachAcademiesListWidget();
           }
         },
       ),
     );
   }
 }
-

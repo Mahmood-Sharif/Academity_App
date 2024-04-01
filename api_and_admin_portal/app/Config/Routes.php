@@ -73,9 +73,8 @@ $routes->group('api', static function ($routes) {
         $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
         $routes->get('enrolled/academy', 'Api\Academy::getEnrolledAcademiesDetails');
         $routes->get('academy/(:num)/classes', 'Api\Academy::getClassDetails/$1');
-        $routes->get('class/prices/(:num)', 'Api\ClassApi::getClassesWithPrices/$1');
-        $routes->post('enrol', 'Api\ClassApi::enrollWithCode');
-        $routes->post('log-attendance/', 'Api\Attendance::logAttendance');
+        $routes->get('class/prices/(:num)', 'Api\Classes::getClassesWithPrices/$1');
+        $routes->post('enrol', 'Api\Classes::enrollWithCode');
 
         $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
         $routes->get('schedule/student', 'Api\Schedule::getScheduleForStudent');

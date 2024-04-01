@@ -1,16 +1,13 @@
 import 'dart:convert';
 import 'package:academity_app/models/attendance.dart';
-import 'package:academity_app/models/class.dart';
 import 'package:academity_app/models/student.dart';
-import 'package:academity_app/providers/classes_provider.dart';
 import 'package:academity_app/services/academity_api.dart';
-import 'package:http/http.dart' as http;
 
 class StudentServices {
   Future<List<Student>> fetchStudentsByClassId(int classId) async {
     try {
-      final response =
-          await AcademityApi.get('enrollments/bci', {'class_id': classId});
+      final response = await AcademityApi.get(
+          'enrollments/bci', {'class_id': classId.toString()});
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
@@ -59,4 +56,3 @@ class StudentServices {
     }
   }
 }
-

@@ -5,6 +5,7 @@ namespace App\Models;
 use CodeIgniter\Model;
 
 /* @method $this selectSubquery(BaseBuilder $subquery, string $as) */
+/* @method $this distinct() */
 class AcademyModel extends Model
 {
     protected $table = 'academies';

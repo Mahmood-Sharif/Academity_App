@@ -1,4 +1,5 @@
 import 'package:academity_app/providers/auth_provider.dart';
+import 'package:academity_app/providers/class_provider.dart';
 import 'package:academity_app/views/MyAcademy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
 import 'package:academity_app/views/Schedule/schedule_screen.dart';
@@ -42,7 +43,7 @@ class MainScreenState extends ConsumerState<UsersBottomNavigation> {
           const SportsPage(),
           const MyAcademyPage(),
           QRScannerPage(active: _qrScannerActive),
-          const SchedulePage(),
+          SchedulePage(scheduleProvider: scheduleForStudentProvider),
           const ProfilePage(),
         ],
       ),

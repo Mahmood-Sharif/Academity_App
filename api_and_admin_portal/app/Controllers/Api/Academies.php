@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers\Api;
 
 use App\Models\AcademyModel;
@@ -11,14 +12,14 @@ class Academies extends ResourceController
     {
         $model = new AcademyModel();
         $data = $model->orderBy('academy_id', 'DESC')->findAll();
-        
+
         // Convert numeric values to integers
         foreach ($data as $row) {
             // Access object properties instead of array keys
             $row->academy_id = (int) $row->academy_id; // Example field, replace with your actual field names
             // Cast other numeric fields as needed
         }
-    
+
         return $this->respond($data);
     }
 
@@ -39,42 +40,34 @@ class Academies extends ResourceController
     }
 
     public function byCoach(): ResponseInterface
-{
+    {
 
-    $coachId = $this->request->getGet('coach_id');
-    
-    // If class_id is not provided, return an error
-    if ($coachId === null) {
-        return $this->fail('Coach ID is required for filtering.');
-    }
-    $model = new AcademyModel();
+        $coachId = auth()->id();
 
-    // Perform join with classes table to filter by coach ID
-    $data = $model->distinct()
-              ->select('academies.*')
-              ->join('classes c', 'academies.academy_id = c.academy_id')
-              ->where('c.coach_id', $coachId)
-              ->get()
-              ->getResultArray();
-
-    // Check if any academies were found
-    if (!empty($data)) {
-        // Convert numeric values to integers (optional)
-        foreach ($data as &$row) {
-            $row['academy_id'] = (int) $row['academy_id']; // Example field, replace with your actual field names
-            // Cast other numeric fields as needed
+        // If class_id is not provided, return an error
+        if ($coachId === null) {
+            return $this->fail('Coach ID is required for filtering.');
         }
+        $model = new AcademyModel();
 
-        return $this->respond($data);
-    } else {
-        // Return a "No Academies Found" response with a specific status code
-        return $this->respond([
-            'status'  => 404,
-            'error'   => 'Not Found',
-            'message' => 'No Academies Found for Coach ID: ' . $coachId
-        ], 404);
+        // Perform join with classes table to filter by coach ID
+        $data = $model
+                  ->includeImageUrl()
+                  ->distinct()
+                  ->join('classes c', 'academies.academy_id = c.academy_id')
+                  ->where('c.coach_id', $coachId)
+                  ->findAll();
+
+        // Check if any academies were found
+        if (!empty($data)) {
+            return $this->respond($data);
+        } else {
+            // Return a "No Academies Found" response with a specific status code
+            return $this->respond([
+                'status'  => 404,
+                'error'   => 'Not Found',
+                'message' => 'No Academies Found for Coach ID: ' . $coachId
+            ], 404);
+        }
     }
 }
-}
-
-

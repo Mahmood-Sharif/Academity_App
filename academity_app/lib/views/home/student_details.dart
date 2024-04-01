@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/student.dart';
 
 class StudentDetailsScreen extends StatelessWidget {
-  const   StudentDetailsScreen({Key? key}) : super(key: key);
+  const StudentDetailsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final student = ModalRoute.of(context)?.settings.arguments as Student?;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF8B0000), // Setting header color to FF8B0000
+        backgroundColor:
+            const Color(0xFF8B0000), // Setting header color to FF8B0000
         title: const Text(
           'Student Details',
-          style: TextStyle(color: Colors.white), // Setting header text color to white
+          style: TextStyle(
+              color: Colors.white), // Setting header text color to white
         ),
-        iconTheme: const IconThemeData(color: Colors.white), // Setting back arrow color to white
+        iconTheme: const IconThemeData(
+            color: Colors.white), // Setting back arrow color to white
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +32,8 @@ class StudentDetailsScreen extends StatelessWidget {
                     radius: 60.0,
                   ),
                   SizedBox(height: 8.0),
-                  Divider( // Adding a horizontal line below the avatar
+                  Divider(
+                    // Adding a horizontal line below the avatar
                     color: Colors.grey,
                     thickness: 1.0,
                   ),
@@ -65,7 +69,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student!.phone.toString(),
+                        student.phone,
                         style: const TextStyle(fontSize: 18.0),
                       ),
                     ],
@@ -78,7 +82,6 @@ class StudentDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 16.0),
-                      
                       const Text(
                         'Date of Registration:',
                         style: TextStyle(
@@ -87,7 +90,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student!.startDate.toString().split(' ')[0],
+                        student.startDate.toString().split(' ')[0],
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
@@ -99,7 +102,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        student!.endDate.toString().split(' ')[0],
+                        student.endDate.toString().split(' ')[0],
                         style: const TextStyle(fontSize: 18.0),
                       ),
                     ],
@@ -108,7 +111,6 @@ class StudentDetailsScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 24.0),
-            
             Card(
               color: Colors.red[200],
               child: Padding(
@@ -126,7 +128,8 @@ class StudentDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      student.medicalCondition.toString(),
+                      student.medicalCondition ??
+                          'No outstanding medical conditions',
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ],

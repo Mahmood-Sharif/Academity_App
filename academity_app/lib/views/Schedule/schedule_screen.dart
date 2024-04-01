@@ -1,10 +1,13 @@
-import 'package:academity_app/providers/class_provider.dart';
+import 'package:academity_app/models/class_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/views/widgets/app_bar.dart'; // Adjust the path as needed
 
 class SchedulePage extends ConsumerStatefulWidget {
-  const SchedulePage({Key? key}) : super(key: key);
+  final FutureProviderFamily<List<ClassSchedule>,
+      ({DateTime fromDate, DateTime toDate})> scheduleProvider;
+  const SchedulePage({Key? key, required this.scheduleProvider})
+      : super(key: key);
 
   @override
   ConsumerState<SchedulePage> createState() => _SchedulePageState();
@@ -17,7 +20,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
   Widget build(BuildContext context) {
     final today = DateTime.now();
     final endDate = today.add(const Duration(days: 13));
-    final scheduleAsyncValue = ref.watch(scheduleForStudentProvider((
+    final scheduleAsyncValue = ref.watch(widget.scheduleProvider((
       fromDate: DateTime(today.year, today.month, today.day),
       toDate: DateTime(endDate.year, endDate.month, endDate.day),
     )));
@@ -86,7 +89,12 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           Expanded(
             child: scheduleAsyncValue.when(
               data: (schedule) {
-                final filtered = schedule.where((element) => DateTime.parse(element.date)==DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)).toList();
+                final filtered = schedule
+                    .where((element) =>
+                        DateTime.parse(element.date) ==
+                        DateTime(_selectedDay.year, _selectedDay.month,
+                            _selectedDay.day))
+                    .toList();
                 return ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: filtered.length,
