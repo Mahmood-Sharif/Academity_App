@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use CodeIgniter\Shield\Models\UserModel as CodeIgniterUserModel;
+use DateTimeImmutable;
+use DateTimeZone;
 
 class UserModel extends CodeIgniterUserModel
 {
@@ -15,7 +17,7 @@ class UserModel extends CodeIgniterUserModel
         $this->allowedFields = [
           ...$this->allowedFields,
 
-          'name',   
+          'name',
           'dob',
           'phone',
 
@@ -26,25 +28,19 @@ class UserModel extends CodeIgniterUserModel
         ];
     }
 
-    public function saveUser($user)
-    {
-        // Assuming $user is an entity with an 'id' property
-        if (isset($user->id)) {
-            return $this->userModel->update($user->id, $user);
-        } else {
-            return $this->userModel->insert($user);
-        }
-    }
-
     public function whereEnrolledInClass(int $classId): UserModel
     {
+        $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
         return $this
-            ->join('enrollments', 'enrollments.student_id = users.id', 'left')
+            ->join('enrollments', 'enrollments.student_id = users.id', 'inner')
             ->join('classes', 'enrollments.class_id = classes.class_id', 'left')
             ->where('classes.class_id', $classId)
-            ->groupBy('users.id')
+            ->where("enrollments.end_date >= '$date'")
             ->select('users.*')
-            ->select('group_concat(classes.class_name SEPARATOR ", ") as classes');
+            ->select('enrollments.enrollment_id')
+            ->select('enrollments.start_date')
+            ->select('enrollments.end_date')
+        ;
     }
 
     public function whereEnrolledInAcademy(int $academyId): UserModel

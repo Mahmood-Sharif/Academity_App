@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Api;
 
+use App\Entities\User;
 use App\Models\EnrollmentModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -32,32 +33,33 @@ class Enrollments extends ResourceController
     {
         // Retrieve the class_id query parameter from the request
         $classId = $this->request->getGet('class_id');
-    
+
         // If class_id is not provided, return an error
         if ($classId === null) {
             return $this->fail('Class ID is required for filtering.');
         }
-    
+
         // Instantiate the StudentModel
-        $userModel = new UserModel();
-    
+        /** @var UserModel $userModel */
+        $userModel = auth()->getProvider();
+
         // Perform a join query to retrieve students and their enrollments
-        $users = $userModel->select('users.*, enrollments.*')
-                                 ->join('enrollments', 'enrollments.student_id = users.id')
-                                 ->where('enrollments.class_id', $classId)
-                                 ->findAll();
-    
+        $students = array_map(
+            fn (User $u) => [...$u->toArray(), 'email' => $u->getEmail()],
+            $userModel->whereEnrolledInClass($classId)->findAll()
+        );
+
         // If no students found, return a failure response
-        if (empty($users)) {
+        if (empty($students)) {
             return $this->failNotFound('No students found for the provided class ID.');
         }
-    
-        return $this->respond($users);
-    }
-    
 
-    
-    
-    
-    
-} 
+        return $this->respond($students);
+    }
+
+
+
+
+
+
+}
