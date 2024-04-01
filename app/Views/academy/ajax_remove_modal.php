@@ -31,7 +31,7 @@
         <?=lang('App.delete_academy.btn')?>
       </button>
       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-        <?=lang('App.close')?>
+        <?=lang('App.cancel')?>
       </button>
     </div>
   </div>

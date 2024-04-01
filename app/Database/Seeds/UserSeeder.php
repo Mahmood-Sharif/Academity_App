@@ -28,8 +28,8 @@ class UserSeeder extends Seeder
         // coach user
         $user = new User([
           'username' => null,
-          'email'    => 'coach',
-          'password' => '1',
+          'email'    => 'coach@coach.com',
+          'password' => 'asdasd123',
           'name'     => 'Coach Ali',
           'dob'      => '1990-01-01',
           'gender'   => 'Male',

@@ -14,7 +14,8 @@ class Schedule extends ResourceController
 
     public function getScheduleForStudent(): ResponseInterface
     {
-        $student_id = $this->request->getGetPost('student_id');
+        $student_id = auth()->id(); // get user id from token, requires the token filter to be enabled
+        $student_id ??= $this->request->getGetPost('student_id');
         $fromDate = $this->request->getGetPost('from_date');
         $toDate = $this->request->getGetPost('to_date');
 
@@ -23,13 +24,14 @@ class Schedule extends ResourceController
         if ($schedule) {
             return $this->respond($schedule);
         } else {
-            return $this->failNotFound('No schedue');
+            return $this->failNotFound('No schedule');
         }
     }
 
     public function getScheduleForCoach(): ResponseInterface
     {
-        $coach_id = $this->request->getGetPost('coach_id');
+        $coach_id = auth()->id();
+        $coach_id ??= $this->request->getGetPost('coach_id');
         $fromDate = $this->request->getGetPost('from_date');
         $toDate = $this->request->getGetPost('to_date');
 

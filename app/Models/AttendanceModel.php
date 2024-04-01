@@ -14,6 +14,7 @@ class AttendanceModel extends Model
         'student_id',
         'date_time', // date + class start time
         'status',
+        'class_id'
     ];
 
     protected $returnType = \App\Entities\Attendance::class;
@@ -41,6 +42,15 @@ class AttendanceModel extends Model
         $enddate = $enddate ?? $startdate;
         return $this->db->query('call getAttendance(?, ?, ?)', [$classId, $startdate, $enddate])
             ->getResult($this->returnType);
+    }
+
+    public function attendanceExists(int $studentId, string $datetime, int $classId): bool
+    {
+        return $this
+            ->where('student_id', $studentId)
+            ->where('date_time', $datetime)
+            ->where('class_id', $classId)
+            ->first() !== null;
     }
 
     public function insertAttendance(int $studentId, string $dateTime, string $status): bool

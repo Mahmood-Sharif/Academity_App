@@ -45,7 +45,7 @@ $url = match($type) {
   </div>
 
   <div class="row">
-    <div class="col col-lg-7 col-md-8 col-sm-12">
+    <div class="col col-lg-8">
 
       <form action="<?= match($type) {
           'create' => url_to('AdminPortal\Academy::create'),
@@ -55,37 +55,28 @@ $url = match($type) {
         <div class="mb-3 d-flex flex-column">
           <div class="ratio ratio-16x9 mb-2">
             <!-- TODO: persist 'uploaded' image after form validation -->
-            <img id="imagePreview" src="<?=base_url($academy?->image_url ?? 'images/Academy.jpg')?>" alt=""
+            <img id="imagePreview" src="<?=$academy?->image_url ?? base_url('images/placeholder.jpeg')?>" alt=""
               class="object-fit-cover rounded-4 border">
           </div>
-          <label for="academyImage" class="btn btn-secondary ms-auto">
-            <?=lang('App.change_image')?>
-          </label>
-          <input id="academyImage" name="image" class="visually-hidden" type="file"
-            accept="image/png,image/jpeg,image/webp" hidden>
+          <div class="ms-auto d-flex flex-row-reverse align-items-center">
+            <label for="academyImage" class="ms-3 btn btn-secondary">
+              <?=lang('App.change_image')?>
+            </label>
+            <div>
+              <input id="academyImage" name="image"
+                class="visually-hidden <?=array_key_exists('image', validation_errors()) ? ' is-invalid' : ''?>"
+                type="file" accept="image/png,image/jpeg,image/webp" hidden>
+              <?=validation_show_error('image')?>
+            </div>
+          </div>
         </div>
 
         <div class="mb-3">
           <?=validated_form_input('academyName', 'name', lang('App.academy_name'), $academy?->name ?? set_value('name'))?>
         </div>
 
-        <div class="form-floating mb-3">
-          <select class="form-select <?=array_key_exists('sport_id', validation_errors()) ? 'is-invalid' : ''?>"
-            id="sportSelect" name="sport_id" aria-label="<?=lang('App.academy_sport')?>" required>
-            <option selected>
-              <?=lang('App.academy_sport.select')?>
-            </option>
-            <?php foreach ($sports as $sport): ?>
-            <option value="<?=$sport->sport_id?>" <?=($academy?->sport_id ?? 0) == $sport->sport_id ? 'selected' : '' ?>
-              >
-              <?=$sport->name?>
-            </option>
-            <?php endforeach ?>
-          </select>
-          <label for="sportSelect">
-            <?=lang('App.academy_sport')?>
-          </label>
-          <?=validation_show_error('sport_id')?>
+        <div class="mb-3">
+          <?= validated_form_select('sport_id', 'sport_id', lang('App.academy_sport'), $sports, $academy?->sport_id ?? set_value('sport_id'))?>
         </div>
 
         <div class="mb-3">
@@ -111,7 +102,7 @@ $url = match($type) {
 
       </form>
 
-      <?php if ($type === 'edit'): ?>
+      <?php /* if ($type === 'edit'): ?>
       <div class="accordion mt-4" id="accordionDanger">
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -152,7 +143,7 @@ $url = match($type) {
           </div>
         </div>
       </div>
-      <?php endif ?>
+      <?php endif */ ?>
 
 
     </div>
@@ -172,9 +163,9 @@ $url = match($type) {
 
 <script>
   (() => {
-    window.history.pushState(
+    window.history.replaceState(
       null,
-      '<?= esc($title, 'js') ?>',
+      '',
       '<?= esc($url, 'js') ?>',
     );
     document.getElementById('academyImage').onchange = function () {

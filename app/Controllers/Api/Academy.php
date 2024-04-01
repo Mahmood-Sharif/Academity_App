@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Models\AcademyModel;
 use App\Models\ClassModel;
+use App\Models\EnrollmentModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -55,4 +56,43 @@ class Academy extends ResourceController
         return $this->respond(['classes' => $classes]);
     }
 
+    public function getEnrolledAcademiesDetails()
+    {
+        $academyModel = new AcademyModel();
+        $classModel = new ClassModel();
+        $enrollmentModel = new EnrollmentModel();
+
+        // Assuming this retrieves the currently logged-in user's ID correctly
+        $student_id = auth()->id();
+
+        $academies = $academyModel->includeImageUrl()
+            ->join('classes', 'classes.academy_id = academies.academy_id')
+            ->join('enrollments', 'enrollments.class_id = classes.class_id')
+            ->where('enrollments.student_id', $student_id)
+            ->findAll();
+
+        // Assuming EnrollmentModel is related to Classes and Academies, and you have a method to join user details
+        $enrollments = array_map(fn ($e) => $e->toArray(), $classModel
+            ->includePrice()
+            ->join('enrollments', 'enrollments.class_id = classes.class_id')
+            ->where('enrollments.student_id', $student_id)
+            ->select('enrollments.*') // Adjust based on actual table structure and fields
+            ->findAll());
+
+        if (empty($enrollments)) {
+            return $this->failNotFound('No enrollments found for this user.');
+        }
+
+        $enrollmentsGrouped = array_group_by($enrollments, ['academy_id']);
+
+
+        // Assuming you need to format the data into a structured array
+        $structuredData = [];
+        foreach ($academies as $academy) {
+            $structuredData[$academy->academy_id] = $academy->toArray();
+            $structuredData[$academy->academy_id]['classes'] = $enrollmentsGrouped[$academy->academy_id];
+        }
+
+        return $this->respond(['academiesDetails' => array_values($structuredData)]);
+    }
 }
