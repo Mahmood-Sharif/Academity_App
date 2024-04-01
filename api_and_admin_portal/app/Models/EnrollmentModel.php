@@ -43,6 +43,26 @@ class EnrollmentModel extends Model
         ;
     }
 
+    public function isEnrolled(
+        int $studentId,
+        int $classId,
+        DateTimeImmutable $datetime = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')),
+        string|null $regCode = null,
+    ): bool {
+        if ($regCode !== null) {
+            $class = (new ClassModel())
+                ->where('reg_code', $regCode)
+                ->first();
+            $classId = $class->class_id;
+        }
+
+        return $this
+            ->where('student_id', $studentId)
+            ->where('class_id', $classId)
+            ->where("end_date >= '{$datetime->format('Y-m-d')}'")
+            ->first() !== null;
+    }
+
     public function enrolWithCode(int $studentId, string $regCode): bool
     {
         $class = (new ClassModel())

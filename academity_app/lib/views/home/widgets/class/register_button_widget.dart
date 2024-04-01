@@ -1,3 +1,4 @@
+import 'package:academity_app/providers/academy_provider.dart';
 import 'package:academity_app/services/academy_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,7 @@ class RegisterButtonWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 100),
           child: Center(
             child: ElevatedButton(
-              onPressed: () => _showReferralCodeDialog(context),
+              onPressed: () => _showReferralCodeDialog(context, ref),
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     const Color(0xFFFF3200), // Button background color
@@ -34,7 +35,7 @@ class RegisterButtonWidget extends StatelessWidget {
     );
   }
 
-  void _showReferralCodeDialog(BuildContext context) {
+  void _showReferralCodeDialog(BuildContext context, WidgetRef ref) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -46,6 +47,8 @@ class RegisterButtonWidget extends StatelessWidget {
             decoration: const InputDecoration(
               hintText: 'Referral Code',
             ),
+            keyboardType: TextInputType.visiblePassword,
+            textCapitalization: TextCapitalization.characters,
           ),
           actions: <Widget>[
             TextButton(
@@ -57,22 +60,26 @@ class RegisterButtonWidget extends StatelessWidget {
             TextButton(
               child: const Text('Submit'),
               onPressed: () async {
-                final success = await AcademyServices()
-                    .enrollStudentWithCode(controller.text);
-                Navigator.of(context).pop(); // Close the dialog
-                if (success) {
+                AcademyServices()
+                    .enrollStudentWithCode(controller.text)
+                    .whenComplete(() {
+                  if (!context.mounted) return;
+                  Navigator.of(context)
+                    ..pop()
+                    ..pop(); // Close the dialog
+                }).then((_) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                         content: Text(
                             'Successfully enrolled with code ${controller.text}')),
                   );
-                } else {
+                  ref.invalidate(
+                      enrolledAcademiesProvider); // refresh my academies provider
+                }).catchError((error) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text(
-                            'Enrollment failed. Please check the code and try again.')),
+                    SnackBar(content: Text(error.message)),
                   );
-                }
+                });
               },
             ),
           ],

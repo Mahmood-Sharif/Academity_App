@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:academity_app/services/academity_api.dart';
 import '../models/academy.dart'; // Update with the correct path to your Academy model
 
+class NotFound extends Error {}
+
 class AcademyServices {
   // Fetches academies by sport ID
   Future<List<Academy>> fetchAcademiesBySportId(int sportId) async {
@@ -29,6 +31,7 @@ class AcademyServices {
       return academies;
     } else {
       // Handle HTTP errors here
+      if (response.statusCode == 404) throw NotFound();
       throw Exception('Failed to load academy details');
     }
   }
@@ -45,7 +48,13 @@ class AcademyServices {
       return true;
     } else {
       // Handle different statuses or errors accordingly
-      return false;
+      if (jsonDecode(response.body)['messages']?['error'] ==
+          'Already enrolled in this class') {
+        throw Exception('You are already enrolled in this class');
+      }
+      throw Exception(
+          'Enrollment failed. Please check the code and try again.');
     }
   }
 }
+
