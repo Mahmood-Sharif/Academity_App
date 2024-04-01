@@ -15,7 +15,6 @@ class Login extends ResourceController
             ...auth()->user()->toArray(),
             'email' => auth()->user()->getEmail()
         ]]);
-        log_message('error', var_export($r, true));
         return $r;
     }
 
@@ -40,14 +39,12 @@ class Login extends ResourceController
                 'new_token' => $user->generateAccessToken('mobile-app')->raw_token,
                 'user' => [...$user->toArray(), 'email' => $credentials['email']],
             ]);
-            log_message('error', var_export($r, true));
             return $r;
         } else {
             $r = $this->respond([
                 'status'  => 'Login failed',
                 'message' => $loginAttempt->reason(),
             ]);
-            log_message('error', var_export($r, true));
             return $r;
         }
     }
@@ -91,6 +88,7 @@ class Login extends ResourceController
         return $this->respond([
             'status'  => 'Register successful',
             'new_token' => $user->generateAccessToken('mobile-app')->raw_token,
+            'user' => $user->toArray()
         ]);
     }
 
@@ -184,40 +182,40 @@ class Login extends ResourceController
     // }
 
     public function updateUserProfile(): ResponseInterface
-    {    
+    {
         try {
             // Assuming 'auth()' can decode the token and fetch the user
             $user = auth()->user();
-    
+
             if (!$user) {
                 return $this->respond(['status' => 'Failed', 'message' => 'User not found'], ResponseInterface::HTTP_NOT_FOUND);
             }
-    
+
             // Extract data from the request body
             $data = $this->request->getPost();
-    
 
-                // Optionally reload the user to reflect the latest state
-                // $user = auth()->getProvider()->findById($user->id);
-            
-                // Prepare $updatedData based on the refreshed $user object
-                $updatedData = [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->getEmail(), // Assuming getEmail() is the correct method
-                    'phone' => $user->phone,
-                    'dob' => $user->dob,
-                    'gender' => $user->gender,
-                    // Include additional fields as needed
-                ];
-            
-                // Return success response with populated $updatedData
-                return $this->respond([
-                    'status' => 'Success',
-                    'message' => 'Profile updated successfully',
-                    'user' => $updatedData,
-                ]);
-            
+
+            // Optionally reload the user to reflect the latest state
+            // $user = auth()->getProvider()->findById($user->id);
+
+            // Prepare $updatedData based on the refreshed $user object
+            $updatedData = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->getEmail(),
+                'phone' => $user->phone,
+                'dob' => $user->dob,
+                'gender' => $user->gender,
+                // Include additional fields as needed
+            ];
+
+            // Return success response with populated $updatedData
+            return $this->respond([
+                'status' => 'Success',
+                'message' => 'Profile updated successfully',
+                'user' => $updatedData,
+            ]);
+
 
             foreach ($data as $key => $value) {
                 if (property_exists($user, $key)) {
@@ -225,16 +223,16 @@ class Login extends ResourceController
                     $updatedData[$key] = $value; // Prepare data for explicit update if needed
                 }
             }
-    
+
             // Attempt to save/update the user details
             // Note: Adjust this part according to your specific user model/entity save or update method
             $result = auth()->getProvider()->save($user); // Assuming this method exists and correctly updates the user
-            
+
             if (!$result) {
                 log_message('error', "Failed to update user profile for user {$user->id}.");
                 return $this->respond(['status' => 'Failed', 'message' => 'Failed to update profile'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
             }
-    
+
             // Success response
             return $this->respond([
                 'status' => 'Success',
@@ -247,5 +245,5 @@ class Login extends ResourceController
             return $this->respond(['status' => 'Failed', 'message' => 'Internal server error.'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
+
 }

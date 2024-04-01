@@ -1,6 +1,7 @@
 <?php
 
 return [
+  'academity'              => 'Academity',
   // sidebar
   'academity_admin_portal' => 'Academity Admin Portal',
   'dashboard'              => 'Dashboard',
@@ -34,6 +35,8 @@ return [
   'view'                   => 'View',
   'edit'                   => 'Edit',
   'edit.end_date'          => 'Edit End Date',
+  'remove'                 => 'Remove',
+  'remove.from_academy'    => 'Remove from {0}',
   'back'                   => 'Back',
   'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
@@ -46,9 +49,11 @@ return [
   'not_found.academy'      => 'Academy not found',
   'not_found.class'        => 'Class not found',
   'empty.coaches'          => 'No coaches are registered with this academy.',
+  'empty.students'         => 'No students.',
 
 
   // manage academies
+  'academy.status'         => 'Academy Status',
   'academy.status.running' => 'Status: Running',
   'academy.status.stopped' => 'Status: Stopped',
   'academy.num_classes'    => '{0, plural, =0{No Classes} =1{# Class} other{# Classes}}',
@@ -69,8 +74,12 @@ return [
   'register_coach'         => 'Register Coach',
   'register_coach.success' => 'Coach "{0}" registered in {1} successfully.',
   'register_coach.error'   => 'Could not register Coach "{0}" in {1}.',
+  'register_coach.help'    => 'A user with this email does not exist. Let the coach create an Academity account first, then try again.',
   'coach_name'             => 'Coach Name',
   'coach_email'            => 'Coach Email',
+  'remove_coach'           => 'Remove Coach',
+  'remove_coach.success'   => 'Coach "{0}" removed from {1} successfully.',
+  'remove_coach.error'     => 'Could not remove Coach "{0}" from {1}.',
 
   // manage classes
   'classes'                => 'Classes',
@@ -104,6 +113,14 @@ return [
   'unenrol.error'          => 'Error: could not unenrol student from class.',
   'enrollment_upd.success' => 'Enrollment updated successfully.',
   'enrollment_upd.error'   => 'Could not update enrollment.',
+  'student_email'          => 'Student Email',
+  'select.class'           => 'Select Class',
+  'enrol_student'          => 'Enrol Student',
+  'enrol_student.success'  => 'Successfully enrolled student <b>{0}</b> in the class <b>{1}</b>.',
+  'enrol_student.error'    => 'Error: could not enrol student in class.',
+  'enrol_student.max'      => 'Could not enrol student in class: class has reached maximum capacity.',
+  'enrol_student.help'     => 'A user with this email does not exist. Let the student create an Academity account first, then try again.',
+  'enrol_student.exists'   => 'The student already has an ongoing enrollment in this class',
 
   // user profiles
   'profile.view.owner'     => 'View Profile',

@@ -22,7 +22,7 @@ $this->endSection('sidebarTab');
 <div class="container">
 
   <div class="d-flex align-items-center">
-        <!-- TODO: only show if there is back page. refer_url -->
+    <!-- TODO: only show if there is back page. refer_url -->
     <a href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
       <i class="bi bi-arrow-left-short fs-1"></i>
     </a>
@@ -79,9 +79,25 @@ $this->endSection('sidebarTab');
         </td>
         <td><?=$coach->academies?></td>
         <td>
-          <a href="<?=url_to('AdminPortal\User::showCoach', $coach->id)?>" class="btn btn-outline-success ms-auto">
-            <?=lang('App.view')?>
-          </a>
+          <div class="d-flex gap-2">
+            <a href="<?=url_to('AdminPortal\User::showCoach', $coach->id)?>" class="btn btn-outline-success ms-auto">
+              <?=lang('App.view')?>
+            </a>
+            <div class="dropdown">
+              <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <?=lang('App.remove')?>
+              </button>
+              <ul class="dropdown-menu">
+                <?php foreach ($coach->academiesObj as $academy): ?>
+                <li><a href="<?=url_to('AdminPortal\User::removeCoach') . '?coach_id=' . $coach->id . '&academy_id=' . $academy->academy_id ?>"
+                    class="dropdown-item">
+                    <?=lang('App.remove.from_academy', [$academy->name])?>
+                  </a></li>
+                <?php endforeach ?>
+              </ul>
+            </div>
+          </div>
         </td>
       </tr>
       <?php endforeach ?>
@@ -91,6 +107,12 @@ $this->endSection('sidebarTab');
   <?php endif ?>
 
 
+</div>
+
+<div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content"></div>
+  </div>
 </div>
 
 <?= $this->endSection('content'); ?>

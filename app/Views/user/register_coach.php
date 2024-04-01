@@ -42,7 +42,7 @@ $this->endSection('sidebarTab');
     </div>
   </div>
 
-  <form hx-post="">
+  <form hx-post="" hx-swap="outerHTML"  class="col-12 col-md-5">
     <?=csrf_field()?>
 
     <div class="mb-3">

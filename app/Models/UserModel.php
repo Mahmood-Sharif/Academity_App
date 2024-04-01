@@ -82,4 +82,15 @@ class UserModel extends CodeIgniterUserModel
             ->where('group', 'coach');
     }
 
+    public function academiesOfCoach(int $coachId, int $ownerId): array
+    {
+        return $this
+            ->join('academy_coaches', 'academy_coaches.coach_id = users.id', 'right')
+            ->join('academies', 'academy_coaches.academy_id = academies.academy_id', 'right')
+            ->select('academies.*')
+            ->where('users.id', $coachId)
+            ->where('academies.owner_id', $ownerId)
+            ->findAll();
+    }
+
 }

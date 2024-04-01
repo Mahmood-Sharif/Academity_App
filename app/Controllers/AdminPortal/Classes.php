@@ -81,6 +81,7 @@ class Classes extends ResourcePresenter
         return view('class/create_edit', [
             'type' => 'edit',
             'class' => $class,
+            'academyId' => null,
             'coaches' => key_array(fn ($coach) => [$coach->id, $coach->name], $coaches),
             'classTimingsJson' => json_encode($classTimingsMap),
             'numTimings' => count($classTimings),
@@ -103,7 +104,7 @@ class Classes extends ResourcePresenter
             [
                 ...$this->model->getValidationRules(),
                 'timings' => 'required|valid_json',
-                'price' => 'required|decimal',
+                'price' => ['label' => 'App.price', 'rules' => 'required|decimal'],
             ],
             $this->model->getValidationMessages()
         )) {
@@ -119,6 +120,7 @@ class Classes extends ResourcePresenter
             return view('class/create_edit', [
                 'type' => 'edit',
                 'class' => $class,
+                'academyId' => null,
                 'coaches' => key_array(fn ($coach) => [$coach->id, $coach->name], $coaches),
                 'classTimingsJson' => json_encode($classTimingsMap),
                 'numTimings' => count($classTimings),
@@ -196,8 +198,8 @@ class Classes extends ResourcePresenter
             ...$this->model->getValidationRules(),
             'academy_id' => 'required|integer',
             'timings' => 'required|valid_json',
-            'price' => 'required|decimal',
-        ])) {
+            'price' => ['label' => 'App.price', 'rules' => 'required|decimal'],
+        ], $this->model->getValidationMessages())) {
             $academyId = $this->request->getPost('academy_id');
             /* @var UserModel $users */
             $users = auth()->getProvider() ;
@@ -206,7 +208,7 @@ class Classes extends ResourcePresenter
 
             return view('class/create_edit', [
                 'type' => 'create',
-                'academy_id' => $academyId,
+                'academyId' => $academyId,
                 'coaches' => key_array(fn ($coach) => [$coach->id, $coach->name], $coaches),
                 'academies' => key_array(fn ($academy) => [$academy->academy_id, $academy->name], $academies),
                 'class' => null,
@@ -295,8 +297,14 @@ class Classes extends ResourcePresenter
         }
 
         return view('ajax_message_modal', [
-            'title' => lang('App.registration_code'),
+            'title' => lang('App.registration_code') . ' - ' . $class->class_name,
             'body'  => view('class/reg_code_modal', ['class' => $class]),
         ]);
+    }
+
+    public function selectInput(): string
+    {
+        $academyId = $this->request->getGet('academy_id');
+        return view('class/ajax_class_input', ['academyId' => $academyId]);
     }
 }
