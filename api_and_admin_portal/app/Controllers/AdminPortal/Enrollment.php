@@ -64,7 +64,7 @@ class Enrollment extends ResourcePresenter
         }
 
         if ($classId !== null) {
-            $students = $students->whereEnrolledInClasses($classId);
+            $students = $students->whereEnrolledInClass($classId);
             $academyId = $class->academy_id;
         } elseif ($academyId !== null) {
             $students = $students->whereEnrolledInAcademy($academyId);

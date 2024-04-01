@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:academity_app/models/attendance.dart';
 import 'package:academity_app/services/academity_api.dart';
-import 'package:http/http.dart' as http;
 
 class AttendanceServices {
   Future<List<Attendance>> fetchAttendance(int classId,
-      {DateTime? dateTime}) async {
-    final response =
-        await AcademityApi.get('attendance/$classId', {'datetime': dateTime});
+      [DateTime? dateTime]) async {
+    final response = await AcademityApi.get('attendance/$classId',
+        {if (dateTime != null) 'datetime': dateTime.toIso8601String()});
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
@@ -19,13 +18,13 @@ class AttendanceServices {
   }
 
   Future<bool> postAttendance(
-      int studentId, int classId, String status, DateTime? datetime) async {
+      int studentId, int classId, String status, DateTime datetime) async {
     try {
       final response = await AcademityApi.post('post-attendance', body: {
         'student_id': studentId.toString(),
         'class_id': classId.toString(),
         'status': status,
-        if (datetime != null) 'datetime': datetime.toIso8601String()
+        'datetime': datetime.toIso8601String()
       });
 
       if (response.statusCode == 200) {

@@ -21,19 +21,22 @@ class AttendanceModel extends Model
 
     public function attendanceForClassNow(int $classId, DateTime $datetime): array
     {
+        $dow = strtoupper($datetime->format('D'));
         $date = $datetime->format('Y-m-d');
         $time = $datetime->format('H:i:s');
         return $this->db->table('class_timings')
-            ->join('enrollments', 'enrollments.class_id = class_timings.class_id')
+            ->join('enrollments', 'enrollments.class_id = class_timings.class_id', 'cross')
             ->join('users', 'enrollments.student_id = users.id', 'left')
             ->join('attendance', 'attendance.student_id = enrollments.student_id AND attendance.date_time = ' . $this->db->escape($date) . ' + INTERVAL class_timings.start_time HOUR_SECOND', 'left')
             ->where($this->db->escape($date) . ' BETWEEN enrollments.start_date AND enrollments.end_date')
             ->where($this->db->escape($time) . ' BETWEEN class_timings.start_time AND class_timings.end_time')
+            ->where('day_of_week', $dow)
             ->where('class_timings.class_id', $classId)
             ->select('attendance.attendance_id')
             ->select('enrollments.student_id')
             ->select('users.name as student_name')
             ->select("IFNULL(attendance.status, 'Absent') as status")
+            ->select("enrollments.class_id")
             ->get()->getResult($this->returnType);
     }
 
@@ -44,34 +47,33 @@ class AttendanceModel extends Model
             ->getResult($this->returnType);
     }
 
-    public function attendanceExists(int $studentId, string $datetime, int $classId): bool
+    public function attendanceExists(int $studentId, string $datetime, int $classId): int|false
     {
         return $this
             ->where('student_id', $studentId)
             ->where('date_time', $datetime)
             ->where('class_id', $classId)
-            ->first() !== null;
+            ->first()?->attendance_id ?? false;
     }
 
     public function insertAttendance(int $studentId, string $dateTime, string $status): bool
-{
-    $data = [
-        'student_id' => $studentId,
-        'date_time' => $dateTime,
-        'status' => $status,
-    ];
+    {
+        $data = [
+            'student_id' => $studentId,
+            'date_time' => $dateTime,
+            'status' => $status,
+        ];
 
-    return $this->insert($data);
+        return $this->insert($data);
+    }
+
+    public function deleteAttendance(int $studentId, string $dateTime): bool
+    {
+        $condition = [
+            'student_id' => $studentId,
+            'date_time' => $dateTime,
+        ];
+
+        return $this->where($condition)->delete();
+    }
 }
-
-public function deleteAttendance(int $studentId, string $dateTime): bool
-{
-    $condition = [
-        'student_id' => $studentId,
-        'date_time' => $dateTime,
-    ];
-
-    return $this->where($condition)->delete();
-}
-}
-

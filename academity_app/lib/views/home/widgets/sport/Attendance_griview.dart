@@ -1,15 +1,18 @@
 import 'package:academity_app/models/attendance.dart';
-import 'package:academity_app/models/postAttendance.dart';
 import 'package:academity_app/services/attendance_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AttendanceListWidget extends StatefulWidget {
   final List<Attendance> attendanceList;
-  final String timeRange;
+  final int classId;
+  final DateTime datetime;
 
   const AttendanceListWidget(
-      {Key? key, required this.attendanceList, required this.timeRange})
+      {Key? key,
+      required this.attendanceList,
+      required this.classId,
+      required this.datetime})
       : super(key: key);
 
   @override
@@ -35,10 +38,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 6,
-                    offset: Offset(0, 3),
-                  ),
+                  BoxShadow(blurRadius: 0.2),
                 ],
               ),
               child: Row(
@@ -77,13 +77,12 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                           setState(() {
                             if (attendance.status != 'Present') {
                               // Update the attendance status to 'Present'
-                              var postAttendance = PostAttendance(
-                                  studentId: attendance.studentId,
-                                  dateTime: widget.timeRange,
-                                  status: "Present");
-                              print('Calling updateAttendance()');
-                              AttendanceServices()
-                                  .updateAttendance(postAttendance);
+                              AttendanceServices().postAttendance(
+                                attendance.studentId,
+                                widget.classId,
+                                'Present',
+                                widget.datetime,
+                              );
                               attendance.status =
                                   "Present"; // Update the status in the local data
                             }
@@ -122,11 +121,13 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                       ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            // Update the attendance status to 'Absent'
-                            print('Calling deleteAttendance()');
                             //attendance.isUpdateSuccess = true;
-                            AttendanceServices().deleteAttendance(
-                                attendance.studentId, widget.timeRange);
+                            AttendanceServices().postAttendance(
+                              attendance.studentId,
+                              widget.classId,
+                              'Absent',
+                              widget.datetime,
+                            );
                             attendance.status =
                                 "Absent"; // Update the status in the local data
                           });
@@ -171,4 +172,3 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
     );
   }
 }
-
