@@ -5,7 +5,8 @@ import 'package:academity_app/models/class.dart'; // Adjust path as necessary
 import 'package:intl/intl.dart'; // Ensure this is correctly imported
 
 void showClassDetails(BuildContext context, int classId) {
-  final  academityApi = ClassServices().fetchClassDetails(classId); // Instantiate your API service here
+  final academityApi = ClassServices()
+      .fetchClassDetails(classId); // Instantiate your API service here
 
   showModalBottomSheet(
     context: context,
@@ -48,21 +49,28 @@ void showClassDetails(BuildContext context, int classId) {
                 ),
                 const SizedBox(height: 20),
                 const Text('Training Days',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 Expanded(
-                  child: hasTimings ? ListView.builder(
-                    itemCount: classItem.timings.length,
-                    itemBuilder: (context, index) {
-                      final timing = classItem.timings[index];
-                      final startTime = DateFormat('HH:mm:ss').parse(timing.startTime);
-                      final endTime = DateFormat('HH:mm:ss').parse(timing.endTime);
-                      return ListTile(
-                        title: Text(timing.dayOfWeek,
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: Text('${DateFormat('hh:mm a').format(startTime)} - ${DateFormat('hh:mm a').format(endTime)}'),
-                      );
-                    },
-                  ) : const Center(child: Text('No timings available')),
+                  child: hasTimings
+                      ? ListView.builder(
+                          itemCount: classItem.timings.length,
+                          itemBuilder: (context, index) {
+                            final timing = classItem.timings[index];
+                            final startTime =
+                                DateFormat('HH:mm:ss').parse(timing.startTime);
+                            final endTime =
+                                DateFormat('HH:mm:ss').parse(timing.endTime);
+                            return ListTile(
+                              title: Text(timing.dayOfWeek,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              subtitle: Text(
+                                  '${DateFormat('hh:mm a').format(startTime)} - ${DateFormat('hh:mm a').format(endTime)}'),
+                            );
+                          },
+                        )
+                      : const Center(child: Text('No timings available')),
                 ),
                 const RegisterButtonWidget(),
               ],

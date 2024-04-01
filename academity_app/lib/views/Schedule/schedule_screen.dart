@@ -86,7 +86,12 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
           Expanded(
             child: scheduleAsyncValue.when(
               data: (schedule) {
-                final filtered = schedule.where((element) => DateTime.parse(element.date)==DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)).toList();
+                final filtered = schedule
+                    .where((element) =>
+                        DateTime.parse(element.date) ==
+                        DateTime(_selectedDay.year, _selectedDay.month,
+                            _selectedDay.day))
+                    .toList();
                 return ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: filtered.length,

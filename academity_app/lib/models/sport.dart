@@ -3,7 +3,10 @@ class Sport {
   final String sportName;
   final String imageUrl;
 
-  Sport({required this.sportsId, required this.sportName, required this.imageUrl});
+  Sport(
+      {required this.sportsId,
+      required this.sportName,
+      required this.imageUrl});
 
   factory Sport.fromJson(Map<String, dynamic> json) {
     return Sport(

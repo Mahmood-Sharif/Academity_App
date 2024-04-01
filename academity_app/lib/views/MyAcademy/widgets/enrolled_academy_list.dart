@@ -23,7 +23,9 @@ class EnrolledAcademiesListWidget extends ConsumerWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SubscriptionScreen(academy: academy), // Adjust SubscriptionScreen to accept an Academy object
+                  builder: (context) => SubscriptionScreen(
+                      academy:
+                          academy), // Adjust SubscriptionScreen to accept an Academy object
                 ),
               );
             },
@@ -45,12 +47,14 @@ class EnrolledAcademiesListWidget extends ConsumerWidget {
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       academy.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
                   Text(
                     "Location: ${academy.location}",
-                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 18),
                   ),
                 ],
               ),

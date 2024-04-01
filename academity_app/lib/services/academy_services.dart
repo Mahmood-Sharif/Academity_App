@@ -17,13 +17,15 @@ class AcademyServices {
     }
   }
 
- Future<List<Academy>> getEnrolledAcademiesDetails() async {
+  Future<List<Academy>> getEnrolledAcademiesDetails() async {
     final response = await AcademityApi.get('enrolled/academy');
 
     if (response.statusCode == 200) {
       // Parse the JSON response into a list of Academy objects
-      final List<dynamic> decodedResponse = json.decode(response.body)['academiesDetails'];
-      List<Academy> academies = decodedResponse.map((json) => Academy.fromJson(json)).toList();
+      final List<dynamic> decodedResponse =
+          json.decode(response.body)['academiesDetails'];
+      List<Academy> academies =
+          decodedResponse.map((json) => Academy.fromJson(json)).toList();
       return academies;
     } else {
       // Handle HTTP errors here
@@ -31,10 +33,13 @@ class AcademyServices {
     }
   }
 
-   // Function to enroll a student in a class with a registration code
+  // Function to enroll a student in a class with a registration code
   Future<bool> enrollStudentWithCode(String regCode) async {
-    final response = await AcademityApi.post('enrol', body: {'regCode': regCode},);
-    
+    final response = await AcademityApi.post(
+      'enrol',
+      body: {'regCode': regCode},
+    );
+
     if (response.statusCode == 200) {
       // Successfully created the enrollment
       return true;

@@ -7,7 +7,9 @@ import 'package:academity_app/views/home/widgets/class/class_details.dart';
 class ClassesWidget extends StatelessWidget {
   final Academy academy;
 
-  ClassesWidget({Key? key, required this.academy, required List<Classes> classes}) : super(key: key);
+  ClassesWidget(
+      {Key? key, required this.academy, required List<Classes> classes})
+      : super(key: key);
 
   final ClassServices _classServices =
       ClassServices(); // Instantiate your service here

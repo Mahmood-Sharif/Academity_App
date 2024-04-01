@@ -21,7 +21,7 @@ class Academy {
 
   factory Academy.fromJson(Map<String, dynamic> json) {
     // Parse the 'classes' JSON array into a list of Class objects
- List<Classes> classesList = [];
+    List<Classes> classesList = [];
     // Check if 'classes' is not null and is a list
     if (json['classes'] != null && json['classes'] is List) {
       // Safely cast json['classes'] to List<dynamic> and parse each element to Classes
@@ -30,11 +30,11 @@ class Academy {
         if (classJson is Map<String, dynamic>) {
           return Classes.fromJson(classJson);
         } else {
-          throw Exception("Expected classJson to be of type Map<String, dynamic>");
+          throw Exception(
+              "Expected classJson to be of type Map<String, dynamic>");
         }
       }).toList();
     }
-
 
     return Academy(
       academyId: json['academy_id'],

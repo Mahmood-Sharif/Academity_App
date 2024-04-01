@@ -17,7 +17,7 @@ class AcademyDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-     final classAsync = ClassServices().fetchClasses(academy.academyId);
+    final classAsync = ClassServices().fetchClasses(academy.academyId);
 
     return Scaffold(
       appBar: CustomAppBar(title: academy.name),
@@ -52,7 +52,7 @@ class AcademyDetailScreen extends ConsumerWidget {
                   const Text('Classes',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                  FutureBuilder<List<Classes>>(
+                  FutureBuilder<List<Classes>>(
                     future: classAsync,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -60,7 +60,8 @@ class AcademyDetailScreen extends ConsumerWidget {
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else if (snapshot.hasData) {
-                        return ClassesWidget(academy: academy, classes: snapshot.data!);
+                        return ClassesWidget(
+                            academy: academy, classes: snapshot.data!);
                       } else {
                         return const Text('No classes available');
                       }

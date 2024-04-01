@@ -28,7 +28,9 @@ class Classes {
     List<ClassTiming> timings = [];
     if (json['timings'] != null) {
       var timingsJson = json['timings'] as List<dynamic>;
-      timings = timingsJson.map((i) => ClassTiming.fromJson(i as Map<String, dynamic>)).toList();
+      timings = timingsJson
+          .map((i) => ClassTiming.fromJson(i as Map<String, dynamic>))
+          .toList();
     }
 
     DateTime? parsedStartDate;
@@ -61,8 +63,11 @@ class Classes {
       'max_age': maxAge,
       'academy_id': academyId,
       'price': price,
-      'start_date': startDate != null ? DateFormat('yyyy-MM-dd').format(startDate!) : null,
-      'end_date': endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : null,
+      'start_date': startDate != null
+          ? DateFormat('yyyy-MM-dd').format(startDate!)
+          : null,
+      'end_date':
+          endDate != null ? DateFormat('yyyy-MM-dd').format(endDate!) : null,
       'timings': timings.map((timing) => timing.toJson()).toList(),
     };
   }

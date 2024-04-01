@@ -10,9 +10,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key? key,
     required this.title,
-    this.backgroundColor = const Color(0xFF8B0000), // Default to dark red if not specified
+    this.backgroundColor =
+        const Color(0xFF8B0000), // Default to dark red if not specified
     this.height = kToolbarHeight + 20, // You might adjust this for more space
-    this.showBackButton = true, // Add this line, default is true to show the back button
+    this.showBackButton =
+        true, // Add this line, default is true to show the back button
   }) : super(key: key);
 
   @override
@@ -20,13 +22,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: showBackButton, // Use the new parameter
       title: Transform.translate(
-        offset: const Offset(0, 10), // Adjust the offset value to lower the text as needed
+        offset: const Offset(
+            0, 10), // Adjust the offset value to lower the text as needed
         child: Text(
           title,
-          style: GoogleFonts.montserrat( // Use Montserrat font from google_fonts package
-            color: Colors.white,
-            fontWeight: FontWeight.bold // Set title text color to white
-          ),
+          style: GoogleFonts.montserrat(
+              // Use Montserrat font from google_fonts package
+              color: Colors.white,
+              fontWeight: FontWeight.bold // Set title text color to white
+              ),
         ),
       ),
       centerTitle: true, // Centers the AppBar title
@@ -39,7 +43,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(height);
 }
 
-
 class CustomShapeBorder extends ContinuousRectangleBorder {
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
@@ -49,7 +52,8 @@ class CustomShapeBorder extends ContinuousRectangleBorder {
     path.lineTo(0, rect.height - radius);
     path.quadraticBezierTo(0, rect.height, radius, rect.height);
     path.lineTo(rect.width - radius, rect.height);
-    path.quadraticBezierTo(rect.width, rect.height, rect.width, rect.height - radius);
+    path.quadraticBezierTo(
+        rect.width, rect.height, rect.width, rect.height - radius);
     path.lineTo(rect.width, 0);
     path.close();
 

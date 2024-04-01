@@ -93,5 +93,4 @@ class MainScreenState extends ConsumerState<MainScreen> {
       ),
     );
   }
-
 }
