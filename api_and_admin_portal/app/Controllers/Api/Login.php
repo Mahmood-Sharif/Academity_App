@@ -13,7 +13,8 @@ class Login extends ResourceController
     {
         $r = $this->respond(['user' => [
             ...auth()->user()->toArray(),
-            'email' => auth()->user()->getEmail()
+            'email' => auth()->user()->getEmail(),
+            'type' => auth()->user()->inGroup('coach') ? 'coach' : 'user'
         ]]);
         return $r;
     }
@@ -37,7 +38,11 @@ class Login extends ResourceController
             $r = $this->respond([
                 'status'  => 'Login successful',
                 'new_token' => $user->generateAccessToken('mobile-app')->raw_token,
-                'user' => [...$user->toArray(), 'email' => $credentials['email']],
+                'user' => [
+                    ...$user->toArray(),
+                    'email' => $credentials['email'],
+                    'type' => $user->inGroup('coach') ? 'coach' : 'user'
+                ],
             ]);
             return $r;
         } else {
@@ -88,7 +93,11 @@ class Login extends ResourceController
         return $this->respond([
             'status'  => 'Register successful',
             'new_token' => $user->generateAccessToken('mobile-app')->raw_token,
-            'user' => $user->toArray()
+            'user' => [
+                ...$user->toArray(),
+                'email' => $user->email,
+                'type' => 'user',
+            ]
         ]);
     }
 

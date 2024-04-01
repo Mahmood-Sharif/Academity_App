@@ -1,10 +1,6 @@
 import 'package:academity_app/models/academy.dart';
-import 'package:academity_app/models/class.dart';
-import 'package:academity_app/models/class_with_timing.dart';
 import 'package:academity_app/services/academy_service.dart';
-import 'package:academity_app/services/class_service.dart';
 import 'package:academity_app/views/home/widgets/academy/acaademies_griview.dart';
-import 'package:academity_app/views/home/widgets/class/classes_griview.dart';
 import 'package:flutter/material.dart';
 
 class AcademiesPage extends StatefulWidget {
@@ -27,9 +23,11 @@ class _AcademiesPageState extends State<AcademiesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF8B0000), // Set the background color to dark red
+        backgroundColor:
+            const Color(0xFF8B0000), // Set the background color to dark red
         flexibleSpace: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16), // Adjust the padding as needed
+          padding: const EdgeInsets.symmetric(
+              horizontal: 16), // Adjust the padding as needed
           alignment: Alignment.center,
           child: const Text(
             'My Academies',
@@ -56,3 +54,4 @@ class _AcademiesPageState extends State<AcademiesPage> {
     );
   }
 }
+

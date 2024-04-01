@@ -36,6 +36,8 @@ class AuthServices {
         await secureStorage.write(key: 'api_token', value: apiToken);
         log(data.toString());
         return User.fromJson(data['user']);
+      } else {
+        throw Exception('Login failed: ${data['message']}');
       }
     }
     return null;
