@@ -76,9 +76,14 @@ $routes->group('api', static function ($routes) {
         $routes->get('class/prices/(:num)', 'Api\Classes::getClassesWithPrices/$1');
         $routes->post('enrol', 'Api\Classes::enrollWithCode');
 
-        $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
         $routes->get('schedule/student', 'Api\Schedule::getScheduleForStudent');
         $routes->get('schedule/coach', 'Api\Schedule::getScheduleForCoach');
+
+        $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
+        // log attendace qr code
+        $routes->post('log-attendance/', 'Api\Attendance::logAttendance');
+        // log attendace coaches app
+        $routes->post('post-attendance/', 'Api\Attendance::postAttendance');
 
         // coaches app classes api
         $routes->get('classes/bai', 'Api\Classes::getByAcademyId');
