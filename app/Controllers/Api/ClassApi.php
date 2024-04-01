@@ -4,6 +4,7 @@
 
 namespace App\Controllers\Api;
 
+use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\ClassModel;
 use App\Models\ClassTimingModel;
@@ -11,7 +12,7 @@ use App\Models\EnrollmentModel;
 
 class ClassApi extends ResourceController
 {
-    public function getClassesWithPrices($classId)
+    public function getClassesWithPrices($classId): ResponseInterface
     {
         $classModel = new ClassModel();
         $timingModel = new ClassTimingModel();
@@ -32,22 +33,26 @@ class ClassApi extends ResourceController
         return $this->respond($classWithPrice);
     }
 
-    public function enrollWithCode()
+    public function enrollWithCode(): ResponseInterface
     {
         $studentId = auth()->id(); // get user id from token, requires the token filter to be enabled
         $regCode = $this->request->getPost('regCode');
 
-        if (!$studentId || !$regCode) {
+        if ($studentId == null || empty($regCode)) {
             return $this->fail('Missing student ID or registration code');
         }
 
         $enrollmentModel = new EnrollmentModel();
-        $enrolled = $enrollmentModel->enrolWithCode($studentId, (string)$regCode);
+        if ($enrollmentModel->isEnrolled($studentId, 0, regCode: $regCode)) {
+            return $this->fail('Already enrolled in this class');
+        }
 
-        if (!$enrolled) {
+        $success = $enrollmentModel->enrolWithCode($studentId, $regCode);
+
+        if (!$success) {
             return $this->fail('Enrollment failed. Class may not exist or be full.');
         }
 
-        return $this->respondCreated('Student successfully enrolled.');
+        return $this->respond('Student successfully enrolled.');
     }
 }
