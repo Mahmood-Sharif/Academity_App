@@ -1,28 +1,36 @@
-import 'package:academity_app/views/widgets/app_bar.dart';
+import 'package:academity_app/providers/class_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:academity_app/views/widgets/app_bar.dart'; // Adjust the path as needed
 
-class SchedulePage extends StatefulWidget {
+class SchedulePage extends ConsumerStatefulWidget {
   const SchedulePage({Key? key}) : super(key: key);
 
   @override
-  State<SchedulePage> createState() => _SchedulePageState();
+  ConsumerState<SchedulePage> createState() => _SchedulePageState();
 }
 
-class _SchedulePageState extends State<SchedulePage> {
+class _SchedulePageState extends ConsumerState<SchedulePage> {
   DateTime _selectedDay = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
+    final today = DateTime.now();
+    final endDate = today.add(const Duration(days: 13));
+    final scheduleAsyncValue = ref.watch(scheduleForStudentProvider((
+      fromDate: DateTime(today.year, today.month, today.day),
+      toDate: DateTime(endDate.year, endDate.month, endDate.day),
+    )));
+
     return Scaffold(
       appBar: const CustomAppBar(title: 'Schedule'),
       body: Column(
         children: [
-          // Height containing the ListView.builder for dates
           SizedBox(
-            height: 80, // Adjust for thinner appearance
+            height: 80,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 14, // Display next 5 days
+              itemCount: 14,
               itemBuilder: (context, index) {
                 final date = DateTime.now().add(Duration(days: index));
                 final isSelected = _selectedDay.year == date.year &&
@@ -38,34 +46,32 @@ class _SchedulePageState extends State<SchedulePage> {
                   child: Container(
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? const Color(0xFF008B8B)
-                          : Colors.white, // Highlight selected date
+                      color:
+                          isSelected ? const Color(0xFF008B8B) : Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 1,
                           blurRadius: 5,
-                          offset:
-                              const Offset(0, 2), // Changes position of shadow
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                    width: 70, // Adjust width for a "thinner" card
+                    width: 70,
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${date.day}/${date.month}', // Date
+                          '${date.day}/${date.month}',
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: isSelected ? Colors.white : Colors.black),
                         ),
                         Text(
-                          _getDayOfWeek(date.weekday), // Day of the week
+                          _getDayOfWeek(date.weekday),
                           style: TextStyle(
                               fontSize: 16,
                               color: isSelected ? Colors.white : Colors.black),
@@ -77,21 +83,27 @@ class _SchedulePageState extends State<SchedulePage> {
               },
             ),
           ),
-          // Expanded widget to handle the list without causing overflow
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: 5, // Example item count, adjust as necessary
-              itemBuilder: (context, index) {
-                // Replace this with your actual data and widget
-                return Card(
-                  child: ListTile(
-                    title: Text('Class Title $index'),
-                    subtitle:
-                        const Text('Time: 10:00 AM\nLocation: Sports Hall'),
-                  ),
+            child: scheduleAsyncValue.when(
+              data: (schedule) {
+                final filtered = schedule.where((element) => DateTime.parse(element.date)==DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day)).toList();
+                return ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: filtered.length,
+                  itemBuilder: (context, index) {
+                    final classDetails = filtered[index];
+                    return Card(
+                      child: ListTile(
+                        title: Text(classDetails.className),
+                        subtitle: Text(
+                            'Time: ${classDetails.startTime} - ${classDetails.endTime}\nLocation: ${classDetails.location}'),
+                      ),
+                    );
+                  },
                 );
               },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(child: Text('Error: $error')),
             ),
           ),
         ],

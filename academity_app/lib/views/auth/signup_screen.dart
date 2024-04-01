@@ -6,13 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
-  
-
   @override
   Widget build(BuildContext context) {
     // Making the Scaffold's body a Stack to overlay the image over the form.
     return Scaffold(
-            resizeToAvoidBottomInset: false, // Add this line
+      resizeToAvoidBottomInset: false, // Add this line
 
       appBar: AppBar(
         leading: IconButton(
@@ -28,6 +26,18 @@ class SignupScreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Container(
+              height: 180,
+              width: 200,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("lib/assets/images/logo1.png"),
+                ),
+              ),
+            ),
+          ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -37,39 +47,32 @@ class SignupScreen extends StatelessWidget {
                   const SignupForm(),
                   const SizedBox(height: 20),
                   // Combined text and clickable "Sign In"
-                 RichText(
-  text: TextSpan(
-    text: 'Already have an account? ',
-    style: GoogleFonts.montserrat(
-      color: Colors.black, // Default text color
-      fontSize: 16, // Set font size to 18
-    ),
-    children: <TextSpan>[
-      TextSpan(
-        text: 'Sign In',
-        style: GoogleFonts.montserrat(
-          decoration: TextDecoration.underline,
-          color: const Color.fromARGB(255, 0, 139, 139), // Specific color
-          fontSize: 16, // Set font size to 18
-        ),
-        recognizer: TapGestureRecognizer()
-          ..onTap = () {
-            Navigator.of(context).pushNamed('/login');
-          },
-      ),
-    ],
-  ),
-),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Already have an account? ',
+                      style: GoogleFonts.montserrat(
+                        color: Colors.black, // Default text color
+                        fontSize: 16, // Set font size to 18
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Sign In',
+                          style: GoogleFonts.montserrat(
+                            decoration: TextDecoration.underline,
+                            color: const Color.fromARGB(
+                                255, 0, 139, 139), // Specific color
+                            fontSize: 16, // Set font size to 18
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.of(context).pushNamed('/login');
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Image.asset(
-              'lib/assets/images/logo1.jpg', // Ensure this path is correct according to your project structure
-              height: 180,
-              width: 200,
             ),
           ),
         ],

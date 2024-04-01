@@ -1,40 +1,48 @@
-import 'package:academity_app/providers/sports_provider.dart';
+import 'package:academity_app/services/sports_services.dart';
+import 'package:flutter/material.dart';
+import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:academity_app/views/home/widgets/sport/cards_widget.dart';
 import 'package:academity_app/views/home/widgets/sport/sports_griview.dart';
-import 'package:academity_app/views/widgets/app_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:academity_app/models/sport.dart';
 
-// Make sure your SportsPage is now a ConsumerWidget or ConsumerStatefulWidget
-class SportsPage extends ConsumerStatefulWidget {
-  const SportsPage({super.key});
+class SportsPage extends StatefulWidget {
+  const SportsPage({Key? key}) : super(key: key);
 
   @override
   _SportsPageState createState() => _SportsPageState();
 }
 
-class _SportsPageState extends ConsumerState<SportsPage> {
+class _SportsPageState extends State<SportsPage> {
+  final SportsService _sportsService = SportsService();
+
   @override
   Widget build(BuildContext context) {
-    // Use Riverpod's ConsumerWidget features
-    final sportsFuture = ref.watch(sportsProvider);
-
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Home',
-        showBackButton: false, // Add this line to not show the back button
+        showBackButton: false, // Ensures the back button is not shown
       ),
-      body: sportsFuture.when(
-        data: (sports) => ListView(
-          children: [
-            const SizedBox(height: 20),
-            SportsListWidget(sports: sports),
-            const SizedBox(height: 20),
-            const TwoCardsSideBySide(),
-          ],
-        ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+      body: FutureBuilder<List<Sport>>(
+        future: _sportsService.fetchSports(),
+        builder: (BuildContext context, AsyncSnapshot<List<Sport>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            return ListView(
+              children: [
+                const SizedBox(height: 20),
+                SportsListWidget(sports: snapshot.data!),
+                const SizedBox(height: 20),
+                const TwoCardsSideBySide(),
+              ],
+            );
+          } else {
+            // This case handles empty data
+            return const Center(child: Text('No sports available'));
+          }
+        },
       ),
     );
   }

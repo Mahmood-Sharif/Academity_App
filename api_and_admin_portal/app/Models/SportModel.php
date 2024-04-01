@@ -18,11 +18,11 @@ class SportModel extends Model
 
     public function includeImageUrl(): SportModel
     {
-        $siteUrl = site_url();
+        $baseUrl = base_url();
         return $this
                 ->join('media', 'sports.media_id = media.media_id')
                 ->select('sports.*')
-                ->select("CONCAT('$siteUrl', url) as image_url");
+                ->select("CONCAT('$baseUrl', url) as image_url");
     }
 
 }

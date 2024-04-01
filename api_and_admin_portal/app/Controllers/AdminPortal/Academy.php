@@ -28,15 +28,10 @@ class Academy extends ResourcePresenter
                         ->includeStatistics($id)
                         ->find($id);
 
-        if (! auth()->user()->can('academies.access') || auth()->id() != $academy->owner_id) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.academy')
-            ]);
-        }
-
-        if (!$academy) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.academy')
+        if (! auth()->user()->can('academies.access') || auth()->id() !== $academy?->owner_id) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -48,19 +43,14 @@ class Academy extends ResourcePresenter
     {
         $academy = $this->model->includeImageUrl()->find($id);
 
-        if (! auth()->user()->can('academies.edit') || auth()->id() != $academy->owner_id) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.academy')
+        if (! auth()->user()->can('academies.edit') || auth()->id() != $academy?->owner_id) {
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
-        if (!$academy) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.academy')
-            ]);
-        }
-
-        $sports = (new SportModel())->findAll();
+        $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
         return view('academy/create_edit', [
           'type' => 'edit',
@@ -75,8 +65,9 @@ class Academy extends ResourcePresenter
     {
         $academy = $this->model->includeImageUrl()->find($id);
         if (! auth()->user()->can('academies.edit') || auth()->id() != $academy->owner_id) {
-            return view('errors/html/error_404', [
-              'message' => lang('App.not_found.academy')
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -84,10 +75,12 @@ class Academy extends ResourcePresenter
           ...$this->model->validationRules,
           'image' => 'max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
         ], $this->model->validationMessages)) {
+            $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
+
             return view('academy/create_edit', [
               'type' => 'edit',
               'academy' => $academy,
-              'sports' => (new SportModel())->findAll(),
+              'sports' => $sports,
               'errors' => $this->validator->getErrors(),
             ]);
         }
@@ -97,9 +90,10 @@ class Academy extends ResourcePresenter
         if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
             $uploadedFile = $this->request->getFile('image');
             $upload = BaseController::uploadMedia($uploadedFile);
+            $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
             if (array_key_exists('errors', $upload)) {
                 return view('academy/create_edit', [
-                    'type' => 'create',
+                    'type' => 'edit',
                     'academy' => $academy,
                     'errors' => ['image' => $upload['errors']],
                     'sports' => (new SportModel())->findAll(),
@@ -145,7 +139,7 @@ class Academy extends ResourcePresenter
 
         if (!auth()->user()->can('academies.delete') || $academy->owner_id !== auth()->user()->id) {
             // User can not delete academies or academy is not owned by user
-            return view('academy/ajax_message_modal', [
+            return view('ajax_message_modal', [
               'title' => lang('App.delete_academy'),
               'body'  => lang('Security.disallowedAction')
             ]);
@@ -162,14 +156,14 @@ class Academy extends ResourcePresenter
         }
 
         if ($result) {
-            return view('academy/ajax_message_modal', [
+            return view('ajax_message_modal', [
               'title'     => lang('App.delete_academy'),
               'body'      => lang('App.delete_academy.success', [$academy->name]),
               'action'    => lang('App.back.academies'),
               'actionUrl' => url_to('AdminPortal\Academy::index'),
             ]);
         } else {
-            return view('academy/ajax_message_modal', [
+            return view('ajax_message_modal', [
               'title' => lang('App.delete_academy'),
               'body'  => $error,
             ]);
@@ -180,15 +174,17 @@ class Academy extends ResourcePresenter
     public function new(): string
     {
         if (!auth()->user()->can('academies.create')) {
-            // TODO: make proper error page
-            return view('errors/html/error_404');
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
         }
 
-        $sports = (new SportModel())->findAll();
+        $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
         return view('academy/create_edit', [
           'type' => 'create' ,
-          'sports' => $sports,
+          'sports' => [0 => lang('App.academy_sport.select'), ...$sports],
           'errors' => [],
         ]);
     }
@@ -197,10 +193,13 @@ class Academy extends ResourcePresenter
     public function create(): ResponseInterface|string
     {
         if (! auth()->user()->can('academies.create')) {
-            return view('errors/html/error_404');
+            return view('errors/html/production', [
+              'errorCode' => lang('App.unauthorized'),
+              'message' => lang('Security.disallowedAction')
+            ]);
         }
 
-        $sports = (new SportModel())->findAll();
+        $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
         if (! $this->validate([
           ...$this->model->validationRules,
@@ -209,7 +208,7 @@ class Academy extends ResourcePresenter
             return view('academy/create_edit', [
                 'type' => 'create',
                 'errors' => $this->validator->getErrors(),
-                'sports' => (new SportModel())->findAll(),
+                'sports' => [0 => lang('App.academy_sport.select'), ...$sports],
             ]);
         }
 

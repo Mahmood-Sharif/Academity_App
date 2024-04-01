@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Entities\Enrollment;
 use CodeIgniter\Model;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeZone;
 
 class EnrollmentModel extends Model
 {
@@ -17,5 +21,52 @@ class EnrollmentModel extends Model
     ];
 
     protected $returnType = \App\Entities\Enrollment::class;
+
+    public function select($select = 'enrollments.*'): EnrollmentModel
+    {
+        return parent::select($select);
+    }
+
+    public function includeStudentName(): EnrollmentModel
+    {
+        return $this
+            ->join('users', 'enrollments.student_id = users.id')
+            ->select('users.name as student_name')
+        ;
+    }
+
+    public function includeClassName(): EnrollmentModel
+    {
+        return $this
+            ->join('classes', 'enrollments.class_id = classes.class_id')
+            ->select('classes.class_name')
+        ;
+    }
+
+    public function enrolWithCode(int $studentId, string $regCode): bool
+    {
+        $class = (new ClassModel())
+            ->includeClassesPerWeek()
+            ->includeNumEnrollments()
+            ->where('reg_code', $regCode)
+            ->first();
+
+        if ($class == null || $class->num_enrollments >= $class->max_capacity) {
+            return false;
+        }
+
+        $date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+        // TODO: enrollment duration
+        // TODO: more rigorous calculation?
+        // TODO: what if classes_per_week changed?
+        $weeks = ceil($class->min_duration / $class->classes_per_week);
+        $enrollment = new Enrollment([
+            'start_date' => $date->format('Y-m-d'),
+            'end_date' => $date->add(new DateInterval("P{$weeks}W"))->format('Y-m-d'),
+            'student_id' => $studentId,
+            'class_id' => $class->class_id,
+        ]);
+        return $this->insert($enrollment->toArray(), false);
+    }
 
 }

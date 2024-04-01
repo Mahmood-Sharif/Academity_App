@@ -1,6 +1,6 @@
+import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:academity_app/providers/auth_provider.dart'; // Make sure this import path is correct
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -44,6 +44,18 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
       builder: (context, ref, child) {
         return Stack(
           children: [
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                height: 180,
+                width: 200,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("lib/assets/images/logo1.png"),
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -52,10 +64,12 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                   const SizedBox(height: 20),
                   TextField(
                     controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Email',
                       border: UnderlineInputBorder(),
                     ),
+                    autofillHints: const [AutofillHints.email],
                   ),
                   const SizedBox(height: 20),
                   TextField(
@@ -64,6 +78,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                       labelText: 'Password',
                       border: UnderlineInputBorder(),
                     ),
+                    autofillHints: const [AutofillHints.password],
                     obscureText: true,
                   ),
                   const SizedBox(height: 30),
@@ -89,15 +104,6 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                 ],
               ),
             ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Image.asset(
-                'lib/assets/images/logo1.jpg',
-                height: 180,
-                width: 200,
-              ),
-            ),
           ],
         );
       },
@@ -106,19 +112,11 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
 
   Future<void> _login(BuildContext context, WidgetRef ref, String email,
       String password) async {
-    await ref.read(authStateProvider.notifier).login(email, password);
-
-    if (ref.read(authStateProvider)) {
-      Navigator.of(context)
-          .pushReplacementNamed('/'); // Adjust this route as needed
-    if (!mounted) return;
-
-    /*if (success) {
-      Navigator.pushReplacementNamed(context, '/browseClasses');
-    } else {
+    ref.read(authProvider.notifier).login(email, password).then((_) {
+      Navigator.of(context).pop();
+    }, onError: (_) {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Login failed')));
-    }*/
+    });
   }
-}
 }
