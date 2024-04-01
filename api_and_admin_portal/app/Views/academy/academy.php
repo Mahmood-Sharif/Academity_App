@@ -49,23 +49,38 @@ $this->endSection('sidebarTab');
         <img src="<?=$academy->image_url?>" alt="" class="object-fit-cover rounded-4"
           style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
-      <h2>
-        <?=lang('App.notifications')?>
-      </h2>
-      <div class="d-flex flex-column">
-        <div class="alert alert-secondary alert-dismissible fade show">Lorem ipsum dolor sit amet
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <div class="alert alert-secondary alert-dismissible fade show">Lorem ipsum dolor sit amet
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <div class="alert alert-secondary alert-dismissible fade show">Lorem ipsum dolor sit amet
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+      <div class="d-flex gap-2">
+        <a href="<?=url_to('AdminPortal\Classes::index', $academy->academy_id)?>" class="btn btn-secondary">
+          <i class="bi bi-mortarboard fs-1"></i>
+          <?=lang('App.manage.classes')?>
+        </a>
+        <a href="<?=url_to('AdminPortal\Enrollment::index') . '?academy=' . $academy->academy_id ?>"
+          class="btn btn-secondary">
+          <i class="bi bi-person fs-1"></i>
+          <?=lang('App.manage.students')?>
+        </a>
+        <a href="<?=url_to('AdminPortal\User::indexCoaches') ?>" class="btn btn-secondary">
+          <i class="bi fs-1">
+            <svg viewBox="0 0 16 16" style="width: 2.5rem; vertical-align: -.125em;">
+              <use href="#whistle"></use>
+            </svg>
+          </i>
+          <?=lang('App.manage.coaches')?>
+        </a>
+        <a href="<?=url_to('AdminPortal\Academy::edit', $academy->academy_id)?>" class="btn btn-secondary">
+          <i class="bi bi-gear fs-1"></i>
+          <?=lang('App.manage.academy')?>
+        </a>
+
       </div>
     </div>
     <div class="col-4">
       <ul class="list-group mb-3">
+        <li class="list-group-item">
+          <span class="fs-6 fw-bold">
+            <?=lang('App.academy.status')?>
+          </span>
+        </li>
         <li class="list-group-item">
           <i class="bi bi-check2 fs-5 me-1"></i>
           <?=lang('App.academy.status.running')?>
@@ -79,28 +94,15 @@ $this->endSection('sidebarTab');
           <?=lang('App.academy.num_students', [$academy->num_students])?>
         </li>
       </ul>
-      <div class="d-flex flex-column gap-3">
-        <a href="<?=url_to('AdminPortal\Classes::index', $academy->academy_id)?>" class="btn btn-secondary">
-          <?=lang('App.manage.classes')?>
-        </a>
-        <a href="#" class="btn btn-secondary">
-          <?=lang('App.manage.schedule')?>
-        </a>
-        <a href="<?=url_to('AdminPortal\Enrollment::index') . '?academy=' . $academy->academy_id ?>" class="btn btn-secondary">
-          <?=lang('App.manage.students')?>
-        </a>
-        <a href="<?=url_to('AdminPortal\User::indexCoaches') ?>" class="btn btn-secondary">
-          <?=lang('App.manage.coaches')?>
-        </a>
-        <a href="#" class="btn btn-secondary disabled">
-          <?=lang('App.manage.announcements')?>
-        </a>
-        <a href="#" class="btn btn-secondary disabled">
-          <?=lang('App.manage.accounting')?>
-        </a>
-        <a href="<?=url_to('AdminPortal\Academy::edit', $academy->academy_id)?>" class="btn btn-secondary">
-          <?=lang('App.manage.academy')?>
-        </a>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title fs-6">
+            <?=lang('App.academy_description')?>
+          </h5>
+          <p class="card-text">
+            <?=$academy->description?>
+          </p>
+        </div>
       </div>
     </div>
   </div>

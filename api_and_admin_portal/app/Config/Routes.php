@@ -7,16 +7,21 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-// Root route. for now redirect to admin portal
-$routes->addRedirect('/', 'en/admin-portal');
-$routes->addRedirect('admin-portal', 'en/admin-portal');
+// Root route. Academity website
+$routes->addRedirect('/', '/en/');
+$routes->group('{locale}', static function ($routes) {
+    $routes->view('/', 'home/index', ['as' => 'home']);
+    $routes->view('about', 'home/about', ['as' => 'home_about']);
+    $routes->view('privacy-policy', 'home/privacy', ['as' => 'home_privacy']);
+    $routes->view('contact-us', 'home/contact', ['as' => 'home_contact']);
+});
 
 $routes->group('{locale}/admin-portal', static function ($routes) {
     // Admin portal Auth routes: login*, register, logout, auth/a*
     service('auth')->routes($routes);
 
     $routes->group('', ['filter' => 'group:admin,superadmin'], static function ($routes) {
-        $routes->get('/', 'AdminPortal\Controller::dashboard', ['as' => 'dashboard']);
+        $routes->get('/', 'AdminPortal\Academy::index', ['as' => 'admin_portal_home']);
         $routes->presenter('my-academies', ['controller' => 'AdminPortal\Academy']);
         $routes->get('classes/by-academy/(:num)', 'AdminPortal\Classes::index/$1');
         $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
@@ -26,10 +31,12 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->get('academy-coaches/', 'AdminPortal\User::academyCoachesInput');
         $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
         $routes->view('register-coach/', 'user/register_coach', ['as' => 'register_new_coach']);
+        $routes->get('remove-coach/', 'AdminPortal\User::removeCoach');
         $routes->get('user-profile/(:num)', 'AdminPortal\User::showOwner/$1');
         $routes->get('student-profile/(:num)', 'AdminPortal\User::showStudent/$1');
         $routes->get('coach-profile/(:num)', 'AdminPortal\User::showCoach/$1');
         $routes->get('edit-profile/(:num)', 'AdminPortal\User::edit/$1');
+        $routes->get('ajax-class-input', 'AdminPortal\Classes::selectInput');
     });
 });
 

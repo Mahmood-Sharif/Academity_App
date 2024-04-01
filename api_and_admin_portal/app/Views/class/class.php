@@ -43,7 +43,7 @@ $this->endSection('sidebarTab');
       <?=lang('App.edit')?>
     </a>
   </div>
-    
+
   <?php if (session('error') !== null) : ?>
   <div class="alert alert-danger alert-dismissible" role="alert">
     <?= session('error') ?>

@@ -121,27 +121,19 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
         <span class="fs-2 fw-bold text-center mb-3">
           <?= lang('App.academity_admin_portal') ?>
         </span>
-        <a href="<?= url_to('AdminPortal\Controller::dashboard')?>"
-          class="nav-link disabled <?= $tab == 'dashboard' ? 'active' : '' ?>">
-          <i class="bi bi-grid fs-5 me-1"></i>
-          <?=lang('App.dashboard')?>
-        </a>
         <a href="<?= url_to('AdminPortal\Academy::index')?>"
           class="nav-link <?= $tab == 'academies' ? 'active' : '' ?>">
           <i class="bi bi-mortarboard fs-5 me-1"></i>
           <?=lang('App.my_academies')?>
         </a>
-        <a href="analytics" class="nav-link disabled <?= $tab == 'analytics' ? 'active' : '' ?>">
-          <i class="bi bi-clipboard-data fs-5 me-1"></i>
-          <?=lang('App.analytics')?>
-        </a>
-        <a href="announcements" class="nav-link disabled <?= $tab == 'announcements' ? 'active' : '' ?>">
-          <i class="bi bi-megaphone fs-5 me-1"></i>
-          <?=lang('App.announcements')?>
-        </a>
         <a href="<?=url_to('AdminPortal\User::indexCoaches')?>"
           class="nav-link <?= $tab == 'coaches' ? 'active' : '' ?>">
-          <i class="bi bi-person fs-5 me-1"></i>
+          <div class="d-none">
+            <?php readfile(ROOTPATH . '/public/images/whistle.svg') ?>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 16 16" class="me-1" style="vertical-align: -.275em;">
+            <use href="#whistle"></use>
+          </svg>
           <?=lang('App.coaches')?>
         </a>
         <a href="<?=url_to('AdminPortal\Enrollment::index')?>"
@@ -149,18 +141,42 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
           <i class="bi bi-person fs-5 me-1"></i>
           <?=lang('App.students')?>
         </a>
-        <a href="reviews" class="nav-link disabled <?= $tab == 'reviews' ? 'active' : '' ?>">
-          <i class="bi bi-chat-left-text fs-5 me-1"></i>
-          <?=lang('App.reviews')?>
-        </a>
-        <a href="offers" class="nav-link disabled <?= $tab == 'offers' ? 'active' : '' ?>">
-          <i class="bi bi-tag fs-5 me-1"></i>
-          <?=lang('App.offers')?>
-        </a>
-        <a href="accounting" class="nav-link disabled <?= $tab == 'accounting' ? 'active' : '' ?>">
-          <i class="bi bi-cash-stack fs-5 me-1"></i>
-          <?=lang('App.accounting')?>
-        </a>
+        <div class="div" title="Coming Soon!">
+          <a href="#" class="nav-link disabled <?= $tab == 'dashboard' ? 'active' : '' ?>">
+            <i class="bi bi-grid fs-5 me-1"></i>
+            <?=lang('App.dashboard')?>
+          </a>
+        </div>
+        <div class="div" title="Coming Soon!">
+          <a href="analytics" class="nav-link disabled <?= $tab == 'analytics' ? 'active' : '' ?>">
+            <i class="bi bi-clipboard-data fs-5 me-1"></i>
+            <?=lang('App.analytics')?>
+          </a>
+        </div>
+        <div class="div" title="Coming Soon!">
+          <a href="announcements" class="nav-link disabled <?= $tab == 'announcements' ? 'active' : '' ?>">
+            <i class="bi bi-megaphone fs-5 me-1"></i>
+            <?=lang('App.announcements')?>
+          </a>
+        </div>
+        <div class="div" title="Coming Soon!">
+          <a href="reviews" class="nav-link disabled <?= $tab == 'reviews' ? 'active' : '' ?>">
+            <i class="bi bi-chat-left-text fs-5 me-1"></i>
+            <?=lang('App.reviews')?>
+          </a>
+        </div>
+        <div class="div" title="Coming Soon!">
+          <a href="offers" class="nav-link disabled <?= $tab == 'offers' ? 'active' : '' ?>">
+            <i class="bi bi-tag fs-5 me-1"></i>
+            <?=lang('App.offers')?>
+          </a>
+        </div>
+        <div class="div" title="Coming Soon!">
+          <a href="accounting" class="nav-link disabled <?= $tab == 'accounting' ? 'active' : '' ?>">
+            <i class="bi bi-cash-stack fs-5 me-1"></i>
+            <?=lang('App.accounting')?>
+          </a>
+        </div>
 
       </div>
       <div class="mt-auto d-flex gap-3">
@@ -169,7 +185,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
             <?=lang('App.profile')?>&nbsp;
           </button>
           <ul class="dropdown-menu">
-                <li><a href="<?=url_to('AdminPortal\User::show', auth()->id())?>" class="dropdown-item">
+            <li><a href="<?=url_to('AdminPortal\User::show', auth()->id())?>" class="dropdown-item">
                 <?=lang('App.profile.view')?>
               </a></li>
             <li><a href="<?=url_to('logout')?>" class="dropdown-item">

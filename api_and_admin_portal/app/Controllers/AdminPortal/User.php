@@ -4,7 +4,6 @@ namespace App\Controllers\AdminPortal;
 
 use App\Entities\User as AppUser;
 use App\Models\AcademyModel;
-use App\Models\ClassModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
@@ -35,6 +34,9 @@ class User extends ResourcePresenter
         }
 
         $coaches = $this->users->coaches()->where('academies.owner_id', auth()->id())->findAll();
+        foreach ($coaches as $coach) {
+            $coach->academiesObj = $this->users->academiesOfCoach($coach->id, auth()->id());
+        }
 
         return view('user/coaches', ['coaches' => $coaches]);
     }
@@ -99,12 +101,6 @@ class User extends ResourcePresenter
         $coach = $this->users->findByCredentials(['email' => $coachEmail]);
         if ($coach !== null) {
             // coach user exists, register it in this academy
-
-            $sql = $this->users->db->table('academy_coaches')->setData([
-              'academy_id' => $academyId,
-              'coach_id' => $coach->id,
-            ])->getCompiledUpsert();
-            log_message('debug', "sql: $sql");
             $result =
               $this->users->db->table('academy_coaches')->ignore()->insert([
                 'academy_id' => $academyId,
@@ -122,16 +118,62 @@ class User extends ResourcePresenter
                 return redirect()
                     ->setHeader('HX-Redirect', url_to('AdminPortal\User::indexCoaches'))
                     ->with('error', lang(
-                        'App.register_coach.error'
-                    ), [$coach->name, $academy->name]);
+                        'App.register_coach.error',
+                        [$coach->name, $academy->name]
+                    ));
             }
 
         } else {
             // coach user does not exist, register new user
-
-            return view('user/ajax_register_coach', [ 'register' => true, 'coach' => null]);
+            // $coach = $this->request->getPost(auth()->getProvider()->getValidationRules());
+            return view('user/ajax_register_coach', [
+                // 'coach' => $coach,
+            ]);
         }
     }
+
+    // GET
+    public function removeCoach(): ResponseInterface|string
+    {
+        // TODO: check classes the coach is assigned to
+
+        $coachId = $this->request->getGet('coach_id');
+        $academyId = $this->request->getGet('academy_id');
+
+        $academy = (new AcademyModel())->find($academyId);
+        $coach = $this->users->find($coachId);
+
+        if (auth()->id() !== $academy?->owner_id) {
+            return $this->response->setHeader('HX-Retarget', 'html')->setBody(
+                view('errors/html/production', [
+                    'errorCode' => lang('App.unauthorized'),
+                    'message' => lang('Security.disallowedAction')
+                ])
+            );
+        }
+
+        $result = $this->users->db->table('academy_coaches')->delete([
+            'coach_id' => $coachId,
+            'academy_id' => $academyId,
+        ]);
+
+        if ($result) {
+            return redirect()
+                ->route('AdminPortal\User::indexCoaches')
+                ->with('message', lang(
+                    'App.remove_coach.success',
+                    [$coach->name, $academy->name]
+                ));
+        } else {
+            return redirect()
+                ->route('AdminPortal\User::indexCoaches')
+                ->with('error', lang(
+                    'App.remove_coach.error',
+                    [$coach->name, $academy->name]
+                ));
+        }
+    }
+
     /**
      * @param mixed $id
      */
