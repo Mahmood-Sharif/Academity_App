@@ -24,8 +24,9 @@ class AuthNotifier extends AsyncNotifier<User?> {
   }
 
   Future<void> login(String email, String password) async {
-    final user = await AuthServices.login(email, password);
-    state = AsyncValue.data(user);
+    await AuthServices.login(email, password).then((user) {
+      state = AsyncValue.data(user);
+    });
   }
 
   Future<void> logout() async {
@@ -34,9 +35,10 @@ class AuthNotifier extends AsyncNotifier<User?> {
   }
 
   Future<bool> updateProfile(User user) async {
-    final newUser = await AuthServices.editUserProfile(user);
-    state = AsyncValue.data(newUser);
-    return newUser != null;
+    return await AuthServices.editUserProfile(user).then((newUser) {
+      state = AsyncValue.data(newUser);
+      return true;
+    }).catchError((error, stackTrace) => false);
   }
 }
 

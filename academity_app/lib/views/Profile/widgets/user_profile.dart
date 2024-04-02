@@ -102,7 +102,6 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   void _saveUserProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      print("Debug - Saving User: ${_editableUser.toJson()}"); // Add this line
       try {
         final success =
             await ref.read(authProvider.notifier).updateProfile(_editableUser);
