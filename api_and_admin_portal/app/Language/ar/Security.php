@@ -1,5 +1,5 @@
 <?php
 
 return [
-  'disallowedAction' => 'The action you requested is not allowed.',
+  'disallowedAction' => 'أنت غير مصرح للقيام بهذه العملية.',
 ];

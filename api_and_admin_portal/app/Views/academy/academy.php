@@ -51,24 +51,24 @@ $this->endSection('sidebarTab');
       </div>
       <div class="d-flex gap-2">
         <a href="<?=url_to('AdminPortal\Classes::index', $academy->academy_id)?>" class="btn btn-secondary">
-          <i class="bi bi-mortarboard fs-1"></i>
+          <div class="bi bi-mortarboard fs-1"></div>
           <?=lang('App.manage.classes')?>
         </a>
         <a href="<?=url_to('AdminPortal\Enrollment::index') . '?academy=' . $academy->academy_id ?>"
           class="btn btn-secondary">
-          <i class="bi bi-person fs-1"></i>
+          <div class="bi bi-person fs-1"></div>
           <?=lang('App.manage.students')?>
         </a>
         <a href="<?=url_to('AdminPortal\User::indexCoaches') ?>" class="btn btn-secondary">
-          <i class="bi fs-1">
+          <div class="bi fs-1">
             <svg viewBox="0 0 16 16" style="width: 2.5rem; vertical-align: -.125em;">
               <use href="#whistle"></use>
             </svg>
-          </i>
+          </div>
           <?=lang('App.manage.coaches')?>
         </a>
         <a href="<?=url_to('AdminPortal\Academy::edit', $academy->academy_id)?>" class="btn btn-secondary">
-          <i class="bi bi-gear fs-1"></i>
+          <div class="bi bi-gear fs-1"></div>
           <?=lang('App.manage.academy')?>
         </a>
 

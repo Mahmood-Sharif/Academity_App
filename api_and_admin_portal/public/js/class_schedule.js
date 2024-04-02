@@ -4,6 +4,42 @@ class ClassScheduleEditor extends HTMLElement {
   createMode = true;
   timings = { sun: [{ start_time: '08:00', end_time: '09:00' }] };
   classCounters = [];
+  i18n = ClassScheduleEditor.l10n.en;
+
+  static l10n = {
+    en: {
+      classTimings: 'Class Timings',
+      showWeekend: 'Show Weekend',
+      sun: 'Sun',
+      mon: 'Mon',
+      tue: 'Tue',
+      wed: 'Wed',
+      thu: 'Thu',
+      fri: 'Fri',
+      sat: 'Sat',
+      helpCreate: 'Left Click to Create New Timing',
+      helpRemove: 'Right Click to Remove Timing',
+      from: 'From',
+      to: 'To',
+      remove: 'Remove',
+    },
+    ar: {
+      classTimings: 'توقيتات الصف',
+      showWeekend: 'أظهر نهاية الأسبوع',
+      sun: 'الأحد',
+      mon: 'الإثنين',
+      tue: 'الثلاثاء',
+      wed: 'الأربعاء',
+      thu: 'الخميس',
+      fri: 'الجمعة',
+      sat: 'السبت',
+      helpCreate: 'اضغط زر المؤشر الأيسر لإنشاء توقيت',
+      helpRemove: 'اضغط زر المؤشر الأيمن لإزالة توقيت',
+      from: 'من',
+      to: 'إلى',
+      remove: 'إزالة',
+    },
+  };
 
   /**
    * @typedef {{start_time: String, end_time: String}} Timing
@@ -31,6 +67,8 @@ class ClassScheduleEditor extends HTMLElement {
 
   constructor() {
     super();
+
+    this.i18n = ClassScheduleEditor.l10n[document.querySelector('html').lang];
 
     const presetTimings = JSON.parse(this.innerText.trim() || 'null');
     if (presetTimings !== null) this.timings = presetTimings;
@@ -77,6 +115,7 @@ class ClassScheduleEditor extends HTMLElement {
       }
       .time-marker {
         margin-top: -1.5rem;
+        direction: ltr;
       }
       .days {
         display: flex;
@@ -97,17 +136,13 @@ class ClassScheduleEditor extends HTMLElement {
         background: var(--calBgColor);
       }
       .timing {
-        border-radius: 5px;
-        padding: 0.5rem;
         margin: 0 0.5rem;
         user-select: none;
-        background-color: var(--bs-secondary);
-        border-radius: var(--bs-border-radius);
-        padding: 0.25rem;
       }
       .timing>[type="button"] {
         height: 100%;
         width: 100%;
+        font-weight: 400;
       }
       .date-day {
         background: var(--bs-body-bg);
@@ -121,10 +156,10 @@ class ClassScheduleEditor extends HTMLElement {
     <textarea class="visually-hidden" name="${this.getAttribute('name')}" hidden></textarea>
     <div class="card mb-3">
       <div class="card-header d-flex">
-        <span>Class Timings</span>
+        <span>${this.i18n.classTimings}</span>
         <div class="form-check form-check-inline ms-auto">
           <input class="form-check-input" type="checkbox" id="weekendCheck">
-          <label class="form-check-label" for="weekendCheck">Show Weekend</label>
+          <label class="form-check-label" for="weekendCheck">${this.i18n.showWeekend}</label>
         </div>
       </div>
       <div class="card-body">
@@ -146,41 +181,12 @@ class ClassScheduleEditor extends HTMLElement {
             <div class="time-marker">6 PM</div>
           </div>
           <div class="days">
-            <div class="day" data-day="sun">
-              <div class="date-day">Sun</div>
-              <div class="timings">
-              </div>
-            </div>
-            <div class="day" data-day="mon">
-              <div class="date-day">Mon</div>
-              <div class="timings">
-              </div>
-            </div>
-            <div class="day" data-day="tue">
-              <div class="date-day">Tue</div>
-              <div class="timings">
-              </div>
-            </div>
-            <div class="day" data-day="wed">
-              <div class="date-day">Wed</div>
-              <div class="timings">
-              </div>
-            </div>
-            <div class="day" data-day="thu">
-              <div class="date-day">Thu</div>
-              <div class="timings">
-              </div>
-            </div>
-            <div class="day d-none" data-day="fri">
-              <div class="date-day">Fri</div>
-              <div class="timings">
-              </div>
-            </div>
-            <div class="day d-none" data-day="sat">
-              <div class="date-day">Sat</div>
-              <div class="timings">
-              </div>
-            </div>
+            ${['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'].map(
+      day => `<div class="day" data-day="${day}">
+                <div class="date-day">${this.i18n[day]}</div>
+                <div class="timings">
+                </div>
+              </div>`).join('')}
           </div>
         </div>
       </div>
@@ -189,20 +195,21 @@ class ClassScheduleEditor extends HTMLElement {
     if (!this.hasAttribute('readonly')) {
       this.querySelector('.card').innerHTML += `
       <div class="card-footer d-flex gap-2 text-muted">
-        <span>Left Click to Create New Timing</span>
+        <span>${this.i18n.helpCreate}</span>
         &centerdot;
-        <span>Right Click to Remove Timing</span>
+        <span>${this.i18n.helpRemove}</span>
       </div>
     `;
     }
 
     this.updateValue();
 
-    if (this.timings['fri'] || this.timings['sat']) {
-      this.querySelector('#weekendCheck').checked = true;
-      this.querySelector('.day[data-day="fri"]').classList.toggle('d-none', false);
-      this.querySelector('.day[data-day="sat"]').classList.toggle('d-none', false);
-    }
+    {
+      const showWeekend = this.timings['fri'] || this.timings['sat'];
+      this.querySelector('#weekendCheck').checked = showWeekend;
+      this.querySelector('.day[data-day="fri"]').classList.toggle('d-none', !showWeekend);
+      this.querySelector('.day[data-day="sat"]').classList.toggle('d-none', !showWeekend);
+    };
 
     // Render class timings
     for (const [day, timings] of Object.entries(this.timings)) {
@@ -259,19 +266,22 @@ class ClassScheduleEditor extends HTMLElement {
     timingElem.dataset.index = index;
     timingElem.style = this.timingExtents(timing);
     timingElem.innerHTML = `
-      <div type="button" class="" ${this.hasAttribute('readonly') ? '' : 'data-bs-toggle="dropdown"'} aria-expanded="false">
-        ${this.formatTime(timing)}</div>
+      <div type="button"
+        class="btn btn-secondary px-0 fs-5 ${this.hasAttribute('readonly') ? ' pe-none' : ''}"
+        ${this.hasAttribute('readonly') ? '' : 'data-bs-toggle="dropdown"'} aria-expanded="false">
+        ${this.formatTime(timing)}
+      </div>
       <div class="dropdown-menu">
         <div class="vstack gap-3 p-2">
         <div>
-          <label>From</label>
+          <label>${this.i18n.from}</label>
           <input class="form-control fromtime" type="time" value="${timing.start_time}" onkeydown="return event.key != 'Enter';">
         </div>
         <div>
-          <label>To</label>
+          <label>${this.i18n.to}</label>
           <input class="form-control totime" type="time" value="${timing.end_time}" onkeydown="return event.key != 'Enter';">
         </div>
-        <button type="button" class="btn btn-danger removebtn">Remove</button>
+        <button type="button" class="btn btn-danger removebtn">${this.i18n.remove}</button>
         </div>
       </div>
       `;
