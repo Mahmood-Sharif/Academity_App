@@ -118,7 +118,10 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
   <div class="row m-0 p-0">
     <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column sticky-md-top">
       <div class="nav nav-pills nav-fill flex-column gap-1">
-        <span class="fs-2 fw-bold text-center mb-3">
+        <svg viewBox="0 0 500 93.333336">
+          <?php readfile(ROOTPATH . 'public/images/logofull.svg') ?>
+        </svg>
+        <span class="fs-4 fw-bold text-center mt-3 mb-4">
           <?= lang('App.academity_admin_portal') ?>
         </span>
         <a href="<?= url_to('AdminPortal\Academy::index')?>"
@@ -141,37 +144,37 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
           <i class="bi bi-person fs-5 me-1"></i>
           <?=lang('App.students')?>
         </a>
-        <div class="div" title="Coming Soon!">
+        <div class="div" title="<?=lang('App.coming_soon')?>">
           <a href="#" class="nav-link disabled <?= $tab == 'dashboard' ? 'active' : '' ?>">
             <i class="bi bi-grid fs-5 me-1"></i>
             <?=lang('App.dashboard')?>
           </a>
         </div>
-        <div class="div" title="Coming Soon!">
+        <div class="div" title="<?=lang('App.coming_soon')?>">
           <a href="analytics" class="nav-link disabled <?= $tab == 'analytics' ? 'active' : '' ?>">
             <i class="bi bi-clipboard-data fs-5 me-1"></i>
             <?=lang('App.analytics')?>
           </a>
         </div>
-        <div class="div" title="Coming Soon!">
+        <div class="div" title="<?=lang('App.coming_soon')?>">
           <a href="announcements" class="nav-link disabled <?= $tab == 'announcements' ? 'active' : '' ?>">
             <i class="bi bi-megaphone fs-5 me-1"></i>
             <?=lang('App.announcements')?>
           </a>
         </div>
-        <div class="div" title="Coming Soon!">
+        <div class="div" title="<?=lang('App.coming_soon')?>">
           <a href="reviews" class="nav-link disabled <?= $tab == 'reviews' ? 'active' : '' ?>">
             <i class="bi bi-chat-left-text fs-5 me-1"></i>
             <?=lang('App.reviews')?>
           </a>
         </div>
-        <div class="div" title="Coming Soon!">
+        <div class="div" title="<?=lang('App.coming_soon')?>">
           <a href="offers" class="nav-link disabled <?= $tab == 'offers' ? 'active' : '' ?>">
             <i class="bi bi-tag fs-5 me-1"></i>
             <?=lang('App.offers')?>
           </a>
         </div>
-        <div class="div" title="Coming Soon!">
+        <div class="div" title="<?=lang('App.coming_soon')?>">
           <a href="accounting" class="nav-link disabled <?= $tab == 'accounting' ? 'active' : '' ?>">
             <i class="bi bi-cash-stack fs-5 me-1"></i>
             <?=lang('App.accounting')?>

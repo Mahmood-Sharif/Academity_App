@@ -3,12 +3,33 @@ class ClassDurationInput extends HTMLElement {
 
   durId = this.id + '-dur';
   duration = 0;
+  /** type {'day' | 'week' | 'month'} */
   unit = '';
   classesPerWeek = 0;
   value = 0;
+  i18n = ClassDurationInput.l10n.en;
+
+  static l10n = {
+    en: {
+      days: 'Days',
+      weeks: 'Weeks',
+      months: 'Months',
+      class: 'Class',
+      classes: 'Classes',
+    },
+    ar: {
+      days: 'أيام',
+      weeks: 'أسابيع',
+      months: 'أشهر',
+      class: 'صف',
+      classes: 'صفوف',
+    },
+  };
 
   constructor() {
     super();
+
+    this.i18n = ClassDurationInput.l10n[document.querySelector('html').lang];
 
     this.unit = this.dataset.unit ?? 'week';
     this.classesPerWeek = this.dataset.classesPerWeek; // required attribute
@@ -20,7 +41,7 @@ class ClassDurationInput extends HTMLElement {
       this.innerHTML = `
         <div class="d-flex align-items-baseline">
           <div class="form-floating">
-            <input type="text" value="${this.duration} ${this.unit}s" id="${this.durId}" class="form-control-plaintext" readonly placeholder="">
+            <input type="text" value="${this.duration} ${this.i18n[this.unit + 's']}" id="${this.durId}" class="form-control-plaintext" readonly placeholder="">
             <label for="${this.durId}" class="form-label">${this.dataset.label}</label>
           </div>
           <div>
@@ -38,9 +59,9 @@ class ClassDurationInput extends HTMLElement {
         <label for="${this.durId}" class="form-label">${this.dataset.label}</label>
       </div>
       <select class="form-select" style="flex: 0.25 0; min-width: fit-content;">
-        <option value="day" ${this.unit == 'day' ? 'selected' : ''}>Days</option>
-        <option value="week" ${this.unit == 'week' ? 'selected' : ''}>Weeks</option>
-        <option value="month" ${this.unit == 'month' ? 'selected' : ''}>Months</option>
+        <option value="day" ${this.unit == 'day' ? 'selected' : ''}>${this.i18n.days}</option>
+        <option value="week" ${this.unit == 'week' ? 'selected' : ''}>${this.i18n.weeks}</option>
+        <option value="month" ${this.unit == 'month' ? 'selected' : ''}>${this.i18n.months}</option>
       </select>
       <div class="numclasses input-group-text">${this.numClassesText()}</div>
     </div>
@@ -60,7 +81,7 @@ class ClassDurationInput extends HTMLElement {
   }
 
   numClassesText() {
-    return this.value + (this.value == 1 ? ' Class' : ' Classes');
+    return this.value + ' ' + (this.value == 1 ? this.i18n.class : this.i18n.classes);
   }
 
   updateNumClasses() {

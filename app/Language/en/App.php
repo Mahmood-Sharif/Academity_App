@@ -3,7 +3,7 @@
 return [
   'academity'              => 'Academity',
   // sidebar
-  'academity_admin_portal' => 'Academity Admin Portal',
+  'academity_admin_portal' => 'Admin Portal',
   'dashboard'              => 'Dashboard',
   'my_academies'           => 'My Academies',
   'academies'              => 'Academies',
@@ -15,6 +15,7 @@ return [
   'reviews'                => 'Reviews And Ratings',
   'offers'                 => 'Offers And Discounts',
   'accounting'             => 'Accounting',
+  'coming_soon'            => 'Coming Soon!',
 
   'profile'                => 'Profile',
   'profile.view'           => 'View Profile',

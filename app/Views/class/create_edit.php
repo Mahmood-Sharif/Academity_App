@@ -62,12 +62,8 @@ $url = match($type) {
     </div>
 
     <div class="row">
-      <div class="col">
 
-        <!-- <h2> -->
-        <!--   <?=lang('class.details')?> -->
-        <!-- </h2> -->
-
+      <div class="col col-lg-8">
         <div class="mb-3 row">
           <div class="col">
             <?=validated_form_input('className', 'class_name', lang('App.class_name'), $class?->class_name ?? set_value('class_name'))?>
@@ -87,14 +83,17 @@ $url = match($type) {
         </div>
 
         <div class="mb-3">
-          <?=validated_form_input('price', 'price', lang('App.price'), $class?->price ?? set_value('price'), 'number', [
-                                                                          'aria-describedby' => 'priceHelp',
-                                                                          'min' => '0.100',
-                                                                          'step' => '0.001',
-                                                                ])?>
-          <div id="priceHelp" class="form-text">
-            <?=lang('App.price.help')?>
-          </div>
+          <?=validated_form_input(
+              'price',
+              'price',
+              lang('App.price'),
+              $class?->price ?? set_value('price'),
+              'number',
+              ['aria-describedby' => 'priceHelp', 'min' => '0.100', 'step' => '0.001',]
+          )?>
+          <!-- <div id="priceHelp" class="form-text"> -->
+          <!--   <?=lang('App.price.help')?> -->
+          <!-- </div> -->
         </div>
 
         <div class="mb-3">
@@ -103,11 +102,6 @@ $url = match($type) {
           </duration-input>
         </div>
 
-        <!-- <h2 class="fw-normal"> -->
-        <!--   <?=lang('class.scheduling')?> -->
-        <!-- </h2> -->
-
-        <!-- TODO: search select -->
         <div id="academyCoaches" class="mb-3 d-flex align-items-center gap-3">
           <?=validated_form_select(
               'coach',
@@ -124,7 +118,11 @@ $url = match($type) {
           </a>
           <?php endif ?>
         </div>
+      </div>
+      <div class="col-0">
+      </div>
 
+      <div class="col">
         <class-schedule-editor name="timings" data-class-counters="min_duration">
           <?= $classTimingsJson ?? '' ?>
         </class-schedule-editor>
@@ -138,41 +136,43 @@ $url = match($type) {
             <?=lang('App.reset')?>
           </button>
         </div>
-
-
       </div>
+
+
     </div>
-  </form>
-  <?php /* if ($type === 'edit'): ?>
-  <div class="accordion mt-4" id="accordionDanger">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-          aria-expanded="true" aria-controls="collapseOne">
-          <?=lang('App.advanced_options')?>
-        </button>
-      </h2>
-      <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionDanger">
-        <div class="accordion-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex align-items-start">
-              <div class="ms-2 me-auto">
-                <div class="fw-bold">
-                  <?=lang('App.delete_class')?>
-                </div>
-                <?=lang('App.delete_class.desc')?>
+</div>
+</form>
+
+<?php /* if ($type === 'edit'): ?>
+<div class="accordion mt-4" id="accordionDanger">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+        aria-expanded="true" aria-controls="collapseOne">
+        <?=lang('App.advanced_options')?>
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionDanger">
+      <div class="accordion-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">
+                <?=lang('App.delete_class')?>
               </div>
-              <button hx-get="<?=url_to('AdminPortal\Classes::remove', $class->class_id)?>" hx-target="#modals-here"
-                hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here" class="btn btn-danger">
-                <?=lang('App.delete_class.btn')?>
-              </button>
-            </li>
-          </ul>
-        </div>
+              <?=lang('App.delete_class.desc')?>
+            </div>
+            <button hx-get="<?=url_to('AdminPortal\Classes::remove', $class->class_id)?>" hx-target="#modals-here"
+              hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here" class="btn btn-danger">
+              <?=lang('App.delete_class.btn')?>
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-  <?php endif */ ?>
+</div>
+<?php endif */ ?>
 </div>
 
 <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">

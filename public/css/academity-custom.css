@@ -21,3 +21,7 @@
   font-weight: 500;
   height: 100dvh;
 }
+
+[dir="rtl"] .bi-arrow-left-short::before {
+  content: "\f135";
+}
