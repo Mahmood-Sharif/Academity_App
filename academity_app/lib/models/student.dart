@@ -1,49 +1,41 @@
-class Student {
-  final int userId;
-  final int age;
-  final String dob;
-  final int emergencyContact;
-  final String firstName;
-  final String gender;
-  final String lastName;
-  final String medicalCondition;
-  final int phone;
+import 'package:academity_app/models/users.dart';
 
-  Student({
-    required this.userId,
-    required this.age,
-    required this.dob,
-    required this.emergencyContact,
-    required this.firstName,
-    required this.gender,
-    required this.lastName,
+class Student extends User {
+  final String? medicalCondition;
+  final int? parentId;
+  final int enrollmentId;
+  final String startDate;
+  final String endDate;
+
+  const Student({
+    required super.id,
+    required super.name,
+    required super.email,
+    required super.phone,
+    required super.dob,
+    required super.gender,
+    required super.type,
     required this.medicalCondition,
-    required this.phone,
+    required this.parentId,
+    required this.enrollmentId,
+    required this.startDate,
+    required this.endDate,
   });
-
-  Map<String, dynamic> toJson() => {
-        'user_id': userId,
-        'age': age,
-        'dob': dob,
-        'emergency_contact': emergencyContact,
-        'first_name': firstName,
-        'gender': gender,
-        'last_name': lastName,
-        'medical_condition': medicalCondition,
-        'phone': phone,
-      };
 
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
-      userId: json['user_id'],
-      age: json['age'],
-      dob: json['dob'],
-      emergencyContact: json['emergency_contact'],
-      firstName: json['first_name'],
-      gender: json['gender'],
-      lastName: json['last_name'],
-      medicalCondition: json['medical_condition'],
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
       phone: json['phone'],
+      dob: DateTime.parse(json['dob']),
+      gender: json['gender'],
+      type: json['type'] ?? 'user',
+      medicalCondition: json['medical_condition'],
+      parentId: json['parent_id'],
+      enrollmentId: json['enrollment_id'],
+      startDate: json['start_date'],
+      endDate: json['end_date'],
     );
   }
 }

@@ -15,9 +15,11 @@ class BrowseAcademyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: sport.sportName, // Correctly display the sport's name in the app bar
+        title: sport
+            .sportName, // Correctly display the sport's name in the app bar
       ),
-      body: AcademiesListWidget(sportId: sport.sportsId), // Pass the sportId to the list widget
+      body: AcademiesListWidget(
+          sportId: sport.sportsId), // Pass the sportId to the list widget
     );
   }
 }

@@ -12,11 +12,10 @@ import 'package:academity_app/views/home/browse_sports_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget( const SportsPage());
+    await tester.pumpWidget(const SportsPage());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

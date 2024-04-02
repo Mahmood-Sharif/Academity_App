@@ -62,22 +62,44 @@ $routes->group('api', static function ($routes) {
         // example resource route generates all HTTP verbs (get, post, put, patch, delete)
         $routes->resource('test', ['controller' => 'Api\Test']);
 
+        // user profiles api
         $routes->get('login-test', 'Api\Login::loginTest');
         $routes->post('logout', 'Api\Login::logoutUser');
         $routes->get('user-profile', 'Api\Login::getUserProfile');
         $routes->post('profile-edit', 'Api\Login::updateUserProfile');
+
+        // users app academies api
         $routes->get('sport', 'Api\Sport::index');
         $routes->get('academies/sport/(:num)', 'Api\Academy::academiesBySport/$1');
-        // $routes->get('academies','Api\Academy::show');
         $routes->get('enrolled/academy', 'Api\Academy::getEnrolledAcademiesDetails');
-        // $routes->get('academies', ['controller' => 'Api\Academy']);
         $routes->get('academy/(:num)/classes', 'Api\Academy::getClassDetails/$1');
-        $routes->get('class/prices/(:num)', 'Api\ClassApi::getClassesWithPrices/$1');
-        $routes->post('enrol', 'Api\ClassApi::enrollWithCode');
-        $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
-        $routes->post('log-attendance/', 'Api\Attendance::logAttendance');
+        $routes->get('class/prices/(:num)', 'Api\Classes::getClassesWithPrices/$1');
+        $routes->post('enrol', 'Api\Classes::enrollWithCode');
+
         $routes->get('schedule/student', 'Api\Schedule::getScheduleForStudent');
         $routes->get('schedule/coach', 'Api\Schedule::getScheduleForCoach');
+
+        $routes->get('attendance/(:num)', 'Api\Attendance::getAttendanceForClassNow/$1');
+        // log attendace qr code
+        $routes->post('log-attendance/', 'Api\Attendance::logAttendance');
+        // log attendace coaches app
+        $routes->post('post-attendance/', 'Api\Attendance::postAttendance');
+
+        // coaches app classes api
+        $routes->get('classes/bai', 'Api\Classes::getByAcademyId');
+        $routes->get('classes/bci', 'Api\Classes::getByCoachId');
+        $routes->resource('classes', ['controller' => 'Api\Classes']);
+
+        // coaches app enrollments api
+        $routes->get('enrollments/bci', 'Api\Enrollments::getStudentsByClassId');
+        $routes->resource('enrollments', ['controller' => 'Api\Enrollments']);
+
+        // coaches app students api
+        $routes->resource('students', ['controller' => 'Api\Students']);
+
+        // coaches app academies api
+        $routes->get('academies/bci', 'Api\Academies::byCoach');
+        // $routes->resource('academies', ['controller' => 'Api\Academies']);
 
     });
 });

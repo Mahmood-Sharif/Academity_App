@@ -38,6 +38,14 @@ class ProfilePage extends ConsumerWidget {
             SectionCard(
               title: 'Account',
               items: [
+                if (ref.read(authProvider.notifier).canSwitchType)
+                  {
+                    'title':
+                        'Swap to ${ref.read(authProvider).requireValue!.type == 'coach' ? 'Normal' : 'Coach'} User',
+                    'icon': Icons.swap_horiz_rounded,
+                    'onTap': () =>
+                        ref.read(authProvider.notifier).changeUserType()
+                  },
                 {
                   'title': 'Profile',
                   'icon': Icons.person,

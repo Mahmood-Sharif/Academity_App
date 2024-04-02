@@ -19,7 +19,7 @@ class AuthServices {
     }
   }
 
-  static Future<User?> login(String email, String password) async {
+  static Future<User> login(String email, String password) async {
     // here we are not using AcademityApi.get because we don't have a token
     // and /api/login does not need one
     final response =
@@ -36,9 +36,11 @@ class AuthServices {
         await secureStorage.write(key: 'api_token', value: apiToken);
         log(data.toString());
         return User.fromJson(data['user']);
+      } else {
+        throw Exception('Login failed: ${data['message']}');
       }
     }
-    return null;
+    throw Exception('Login failed');
   }
 
   static Future<RegisterResponse> registerUser(
@@ -91,19 +93,16 @@ class AuthServices {
   static Future<User> editUserProfile(User updatedUser) async {
     try {
       // Ensure the user payload is correctly structured as per backend requirements
-      final Map<String, dynamic> userPayload = {
-        'id': updatedUser.id,
+      final Map<String, String> userPayload = {
+        'id': updatedUser.id.toString(),
         'name': updatedUser.name
             .trim(), // Trim to remove any leading/trailing whitespace
-        'email': updatedUser.email,
+        if (updatedUser.email != null) 'email': updatedUser.email!,
         'phone': updatedUser.phone,
         'dob': updatedUser.dob
             .toIso8601String(), // Format DateTime as ISO 8601 string
         'gender': updatedUser.gender,
       };
-
-      // Encode the entire payload as a JSON string
-      final String encodedPayload = json.encode({'user': userPayload});
 
       // Fetch the API token securely
       const secureStorage = FlutterSecureStorage();
@@ -113,7 +112,7 @@ class AuthServices {
       // Send the HTTP POST request
       final response = await AcademityApi.post(
         'profile-edit', // Replace with your actual endpoint
-        body: encodedPayload,
+        body: userPayload,
       );
 
       if (response.statusCode == 200) {
@@ -122,7 +121,6 @@ class AuthServices {
         return User.fromJson(data['user']);
       } else {
         // Handle non-200 responses
-        print('Failed to edit user profile: ${response.body}');
         throw Exception(
             'Failed to edit user profile with status code: ${response.statusCode}');
       }

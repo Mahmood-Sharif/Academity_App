@@ -6,7 +6,7 @@ import 'package:academity_app/models/class.dart';
 import 'package:intl/intl.dart'; // Adjust path
 
 class ClassServices {
-  Future<List<Classes>> fetchClasses(int academyId) async {
+  Future<List<Classes>> fetchClassesByAcademyId(int academyId) async {
     final response = await AcademityApi.get('academy/$academyId/classes');
 
     if (response.statusCode == 200) {
@@ -60,6 +60,30 @@ class ClassServices {
           .map((json) => ClassSchedule.fromJson(json as Map<String, dynamic>))
           .toList();
     } else {
+      if (response.statusCode == 404) return [];
+      throw Exception('Failed to load schedule');
+    }
+  }
+
+  static Future<List<ClassSchedule>> fetchScheduleForCoach({
+    required DateTime fromDate,
+    required DateTime toDate,
+  }) async {
+    final formattedFromDate = DateFormat('yyyy-MM-dd').format(fromDate);
+    final formattedToDate = DateFormat('yyyy-MM-dd').format(toDate);
+
+    final response = await AcademityApi.get('schedule/coach', {
+      'from_date': formattedFromDate,
+      'to_date': formattedToDate,
+    });
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data
+          .map((json) => ClassSchedule.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } else {
+      if (response.statusCode == 404) return [];
       throw Exception('Failed to load schedule');
     }
   }

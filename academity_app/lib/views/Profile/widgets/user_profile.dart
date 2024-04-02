@@ -37,8 +37,12 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
               const SizedBox(height: 20),
               _buildUserInputField('Name', _editableUser.name, Icons.person,
                   customColor, (val) => _updateUserField('name', val)),
-              _buildUserInputField('Email', _editableUser.email, Icons.email,
-                  customColor, (val) => _updateUserField('email', val)),
+              _buildUserInputField(
+                  'Email',
+                  _editableUser.email ?? '',
+                  Icons.email,
+                  customColor,
+                  (val) => _updateUserField('email', val)),
               _buildUserInputField('Phone', _editableUser.phone, Icons.phone,
                   customColor, (val) => _updateUserField('phone', val)),
               // For Date of Birth, consider using a DatePicker instead of a TextFormField
@@ -102,7 +106,6 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   void _saveUserProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      print("Debug - Saving User: ${_editableUser.toJson()}"); // Add this line
       try {
         final success =
             await ref.read(authProvider.notifier).updateProfile(_editableUser);

@@ -1,5 +1,3 @@
-
-
 // Provides an instance of SportsService
 // final sportsServiceProvider = Provider<SportsService>((ref) {
 //   return SportsService();

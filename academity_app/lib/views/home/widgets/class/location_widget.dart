@@ -18,11 +18,13 @@ class LocationWidget extends StatelessWidget {
             fontSize: 16,
           ),
         ),
-        Expanded( // Use Expanded to prevent overflow
+        Expanded(
+          // Use Expanded to prevent overflow
           child: Text(
             academy.location,
             style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.w400, // Regular weight for the actual location
+              fontWeight:
+                  FontWeight.w400, // Regular weight for the actual location
               fontSize: 14,
             ),
             overflow: TextOverflow.ellipsis, // Prevent overflow

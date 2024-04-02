@@ -4,7 +4,6 @@ class ClassTiming {
   final String dayOfWeek;
   final String startTime;
   final String endTime;
-  
 
   ClassTiming({
     required this.timingId,
