@@ -234,7 +234,7 @@ $this->section('content');
 <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are
   effective when they are posted on this page.</p>
 <h2>Contact Us</h2>
-<p>If you have any questions about this Privacy Policy, You can contact us:</p>
+<p><?=lang('Home.contact_us.privacy')?></p>
 <ul>
   <li>By email: <a href="mailto:mahmood.acadmity@gmail.com">mahmood.acadmity@gmail.com</a></li>
 </ul>
