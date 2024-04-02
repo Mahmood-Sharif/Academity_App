@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Entities\Schedule;
 use CodeIgniter\Model;
 
 class ClassTimingModel extends Model
@@ -31,12 +32,12 @@ class ClassTimingModel extends Model
 
     public function getScheduleForStudent(int $id, string $fromDate, string $toDate): array
     {
-        return $this->db->query('call getStudentSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult();
+        return $this->db->query('call getStudentSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult(Schedule::class);
     }
 
     public function getScheduleForCoach(int $id, string $fromDate, string $toDate): array
     {
-        return $this->db->query('call getCoachSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult();
+        return $this->db->query('call getCoachSchedule(?, ?, ?)', [$id, $fromDate, $toDate])->getResult(Schedule::class);
     }
 
     /**

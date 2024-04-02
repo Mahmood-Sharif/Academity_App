@@ -25,7 +25,7 @@ class Attendance extends ResourceController
         $customDateTime = $this->request->getGet('datetime');
         // NOTE: if no time is passed by GET parameter, assumes Bahrain timezone (UTC+3)
         $currentDateTime =
-            $customDateTime !== null
+            !empty($customDateTime)
             ? (new DateTime($customDateTime))
             : (new DateTime('now', new DateTimeZone('Asia/Bahrain')));
 
@@ -38,6 +38,71 @@ class Attendance extends ResourceController
         }
     }
 
+    // Log attendance manually (coaches app)
+    public function postAttendance(): ResponseInterface
+    {
+        log_message('critical', var_export($this->request->getPost(), true));
+        $studentId = $this->request->getPost('student_id');
+        $classId = $this->request->getPost('class_id');
+        $status = $this->request->getPost('status');
+        $datetime = $this->request->getPost('datetime');
+        if (empty($status)) {
+            $status = 'Present';
+        }
+        if (empty($datetime)) {
+            $datetime = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+        } else {
+            $datetime = new DateTimeImmutable($datetime);
+        }
+
+        if (empty($classId)  || empty($studentId)) {
+            return $this->fail('Invalid request', 400);
+        }
+
+        $dow = strtoupper($datetime->format('D'));
+        $start = $datetime->sub(new DateInterval('PT10M'));
+        $end = $datetime->setTime(23, 59, 59);
+
+        $classTiming = (new ClassTimingModel())
+        ->join('enrollments', 'enrollments.class_id = class_timings.class_id', 'left')
+        ->where('enrollments.student_id', $studentId)
+        ->where('enrollments.class_id', $classId)
+        ->where("'$dow' = class_timings.day_of_week")
+        ->where("'{$datetime->format('H:i:s')}' BETWEEN class_timings.start_time and class_timings.end_time")
+        ->select()
+        ->first();
+
+        if ($classTiming === null) {
+            return $this->fail('The class is not running now', 500);
+        }
+
+        $hour = substr($classTiming->start_time, 0, 2);
+        $minute = substr($classTiming->start_time, 3, 2);
+        $datetime = $datetime->setTime($hour, $minute)->format(DateTimeImmutable::ATOM);
+
+        $result = false;
+        if ($id = $this->model->attendanceExists($studentId, $datetime, $classId)) {
+            $result = $this->model->update($id, ['status' => $status]);
+        } else {
+            $result = $this->model->insert([
+                        'student_id' => $studentId,
+                        'date_time' => $datetime,
+                        'status' => $status,
+                        'class_id' => $classId,
+                    ]);
+        }
+
+        if ($result) {
+            return $this->respond([
+                'message' => 'Attendance logged successfully',
+            ]);
+        } else {
+            return $this->failServerError('Failed to log attendance');
+        }
+
+    }
+
+    // Log attendance with QR code
     public function logAttendance(): ResponseInterface
     {
         $studentId = auth()->id();
@@ -95,6 +160,47 @@ class Attendance extends ResourceController
             ]);
         } else {
             return $this->failServerError('Failed to log attendance');
+        }
+    }
+
+    public function getAttendanceBetween(int $classId, string $startdate, string $enddate): ResponseInterface
+    {
+        $attendance = $this->model->attendanceBetween($classId, $startdate, $enddate);
+
+        if ($attendance) {
+            return $this->respond($attendance);
+        } else {
+            return $this->failNotFound('No attendance between ' . $startdate . ' and ' . $enddate);
+        }
+    }
+
+    public function insertAttendance(): ResponseInterface
+    {
+        $studentId = $this->request->getVar('student_id');
+        $dateTime =  $this->request->getVar('date_time');
+        $status = $this->request->getVar('status');
+        //$status = "Present";
+        if ($studentId === null) {
+            return $this->failValidationError('Student ID is required.');
+        }
+
+        $model = new AttendanceModel();
+
+        if ($model->insertAttendance($studentId, $dateTime, $status)) {
+            return $this->respondCreated('Attendance inserted successfully.');
+        } else {
+            return $this->failServerError('Failed to insert attendance.');
+        }
+    }
+
+    public function deleteAttendance(int $studentId, string $dateTime): ResponseInterface
+    {
+        $model = new AttendanceModel();
+
+        if ($model->deleteAttendance($studentId, $dateTime)) {
+            return $this->respondDeleted('Attendance deleted successfully.');
+        } else {
+            return $this->failServerError('Failed to delete attendance.');
         }
     }
 }

@@ -7,12 +7,15 @@ use App\Models\ClassModel;
 use App\Models\EnrollmentModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use DateTimeImmutable;
+use DateTimeZone;
 
 class Academy extends ResourceController
 {
     public function index(): ResponseInterface
     {
         $model = new AcademyModel();
+        $data = [];
         $data['academy'] = $model->orderBy('name')->findAll();
         return $this->respond($data);
     }
@@ -44,7 +47,7 @@ class Academy extends ResourceController
         return $this->respond(['academies' => $academies]);
     }
 
-    public function getClassDetails($academyId)
+    public function getClassDetails($academyId): ResponseInterface
     {
         $model = new ClassModel();
         $classes = $model->where('academy_id', $academyId)->findAll();
@@ -56,8 +59,9 @@ class Academy extends ResourceController
         return $this->respond(['classes' => $classes]);
     }
 
-    public function getEnrolledAcademiesDetails()
+    public function getEnrolledAcademiesDetails(): ResponseInterface
     {
+        log_message('critical', 'yaaaaaaay');
         $academyModel = new AcademyModel();
         $classModel = new ClassModel();
         $enrollmentModel = new EnrollmentModel();
@@ -71,12 +75,14 @@ class Academy extends ResourceController
             ->where('enrollments.student_id', $student_id)
             ->findAll();
 
+        $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
         // Assuming EnrollmentModel is related to Classes and Academies, and you have a method to join user details
         $enrollments = array_map(fn ($e) => $e->toArray(), $classModel
             ->includePrice()
             ->join('enrollments', 'enrollments.class_id = classes.class_id')
             ->where('enrollments.student_id', $student_id)
-            ->select('enrollments.*') // Adjust based on actual table structure and fields
+            ->where("enrollments.end_date >= '$date'")
+            ->select('enrollments.*')
             ->findAll());
 
         if (empty($enrollments)) {
