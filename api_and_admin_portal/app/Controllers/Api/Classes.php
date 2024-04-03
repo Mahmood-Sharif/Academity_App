@@ -123,22 +123,27 @@ class Classes extends ResourceController
         return $this->respond($classWithPrice);
     }
 
-    public function enrollWithCode()
+    public function enrollWithCode(): ResponseInterface
     {
         $studentId = auth()->id(); // get user id from token, requires the token filter to be enabled
         $regCode = $this->request->getPost('regCode');
 
-        if (!$studentId || !$regCode) {
+        if ($studentId == null || empty($regCode)) {
             return $this->fail('Missing student ID or registration code');
         }
 
         $enrollmentModel = new EnrollmentModel();
-        $enrolled = $enrollmentModel->enrolWithCode($studentId, (string)$regCode);
+        if ($enrollmentModel->isEnrolled($studentId, 0, regCode: $regCode)) {
+            return $this->fail('Already enrolled in this class');
+        }
 
-        if (!$enrolled) {
+        $success = $enrollmentModel->enrolWithCode($studentId, $regCode);
+
+        if (!$success) {
             return $this->fail('Enrollment failed. Class may not exist or be full.');
         }
 
-        return $this->respondCreated('Student successfully enrolled.');
+        return $this->respond('Student successfully enrolled.');
     }
+
 }
