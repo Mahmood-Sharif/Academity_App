@@ -111,7 +111,7 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
     <div class="container">
       <a class="navbar-brand fw-bold" href="/<?=$locale?>">
         <svg height="24" viewBox="0 0 500 93.333336">
-          <?php readfile(ROOTPATH . '/public/images/logofull.svg') ?>
+          <?php readfile(ROOTPATH . 'public/images/logofull.svg') ?>
         </svg>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"

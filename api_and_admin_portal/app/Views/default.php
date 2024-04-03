@@ -129,7 +129,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
         <a href="<?=url_to('AdminPortal\User::indexCoaches')?>"
           class="nav-link <?= $tab == 'coaches' ? 'active' : '' ?>">
           <div class="d-none">
-            <?php readfile(ROOTPATH . '/public/images/whistle.svg') ?>
+            <?php readfile(ROOTPATH . 'public/images/whistle.svg') ?>
           </div>
           <svg width="20" height="20" viewBox="0 0 16 16" class="me-1" style="vertical-align: -.275em;">
             <use href="#whistle"></use>
