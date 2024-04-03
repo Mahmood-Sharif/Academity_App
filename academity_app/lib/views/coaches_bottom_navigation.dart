@@ -1,7 +1,7 @@
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/providers/class_provider.dart';
-import 'package:academity_app/views/Profile/profile_screen.dart';
-import 'package:academity_app/views/Schedule/schedule_screen.dart';
+import 'package:academity_app/views/profile/profile_screen.dart';
+import 'package:academity_app/views/schedule/schedule_screen.dart';
 import 'package:academity_app/views/home/browse_academies.dart';
 import 'package:academity_app/views/home/attendance.dart';
 import 'package:academity_app/views/widgets/coach_nav_bar.dart';

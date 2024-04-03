@@ -1,5 +1,5 @@
 // lib/views/profile/user_profile_screen.dart
-import 'package:academity_app/views/Profile/widgets/user_profile.dart';
+import 'package:academity_app/views/profile/widgets/user_profile.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';

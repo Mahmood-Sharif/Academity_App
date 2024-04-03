@@ -9,7 +9,7 @@ class SportsPage extends StatefulWidget {
   const SportsPage({Key? key}) : super(key: key);
 
   @override
-  _SportsPageState createState() => _SportsPageState();
+  State<SportsPage> createState() => _SportsPageState();
 }
 
 class _SportsPageState extends State<SportsPage> {

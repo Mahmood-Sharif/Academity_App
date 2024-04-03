@@ -109,6 +109,7 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
       try {
         final success =
             await ref.read(authProvider.notifier).updateProfile(_editableUser);
+        if (!context.mounted) return;
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Profile updated successfully')));

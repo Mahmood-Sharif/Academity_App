@@ -28,7 +28,6 @@ class CoachClassesPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            final List<Classes> students = snapshot.data ?? [];
             return CoachClassListWidget(
               academyId: academyId,
               academyName: academyName,
