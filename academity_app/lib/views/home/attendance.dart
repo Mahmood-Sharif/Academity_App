@@ -1,6 +1,6 @@
 import 'package:academity_app/models/attendance.dart';
 import 'package:academity_app/services/attendance_service.dart';
-import 'package:academity_app/views/home/widgets/sport/attendance_griview.dart';
+import 'package:academity_app/views/home/widgets/sport/attendance_gridview.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
