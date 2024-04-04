@@ -1,4 +1,4 @@
-import 'package:academity_app/views/MyAcademy/widgets/enrolled_academy_list.dart';
+import 'package:academity_app/views/my_academy/widgets/enrolled_academy_list.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 

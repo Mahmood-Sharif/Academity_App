@@ -23,7 +23,7 @@ class AuthServices {
     // here we are not using AcademityApi.get because we don't have a token
     // and /api/login does not need one
     final response =
-        await http.post(Uri.http(Env.academityHost, '/api/login'), body: {
+        await http.post(Uri.parse('${Env.academityUrl}api/login'), body: {
       'email': email,
       'password': password,
     });
@@ -46,7 +46,7 @@ class AuthServices {
   static Future<RegisterResponse> registerUser(
       Map<String, dynamic> data) async {
     final response = await http.post(
-      Uri.http(Env.academityHost, '/api/register'),
+      Uri.parse('${Env.academityUrl}api/register'),
       body: data,
     );
 

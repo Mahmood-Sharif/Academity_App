@@ -1,8 +1,8 @@
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/providers/class_provider.dart';
-import 'package:academity_app/views/MyAcademy/my_academy_screen.dart';
 import 'package:academity_app/views/Profile/profile_screen.dart';
 import 'package:academity_app/views/Schedule/schedule_screen.dart';
+import 'package:academity_app/views/my_academy/my_academy_screen.dart';
 import 'package:academity_app/views/attendance/qr_scanner_page.dart';
 import 'package:academity_app/views/home/browse_sports_screen.dart';
 import 'package:academity_app/views/widgets/nav_bar.dart';

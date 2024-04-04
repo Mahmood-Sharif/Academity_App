@@ -28,7 +28,6 @@ class StudentServices {
       });
 
       if (response.statusCode == 200) {
-        print('Attendance marked successfully for student $studentId');
       } else {
         throw Exception(
             'Failed to mark attendance for student $studentId. Response status code: ${response.statusCode}');

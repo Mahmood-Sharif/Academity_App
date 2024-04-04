@@ -15,7 +15,7 @@ class AttendanceListWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AttendanceListWidgetState createState() => _AttendanceListWidgetState();
+  State<AttendanceListWidget> createState() => _AttendanceListWidgetState();
 }
 
 class _AttendanceListWidgetState extends State<AttendanceListWidget> {
