@@ -37,6 +37,7 @@ class AuthNotifier extends AsyncNotifier<User?> {
   Future<void> logout() async {
     await AuthServices.logout();
     state = const AsyncValue.data(null);
+    canSwitchType = false;
   }
 
   void changeUserType() {
