@@ -69,13 +69,15 @@ class Academy extends ResourceController
         // Assuming this retrieves the currently logged-in user's ID correctly
         $student_id = auth()->id();
 
+        $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
+
         $academies = $academyModel->includeImageUrl()
             ->join('classes', 'classes.academy_id = academies.academy_id')
             ->join('enrollments', 'enrollments.class_id = classes.class_id')
             ->where('enrollments.student_id', $student_id)
+            ->where("enrollments.end_date >= '$date'")
             ->findAll();
 
-        $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
         // Assuming EnrollmentModel is related to Classes and Academies, and you have a method to join user details
         $enrollments = array_map(fn ($e) => $e->toArray(), $classModel
             ->includePrice()
