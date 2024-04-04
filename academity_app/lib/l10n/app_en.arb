@@ -1,0 +1,158 @@
+{
+    "loginButton": "Login",
+    "@loginButton": {
+        "description": "Text for the login button"
+    },
+    "signUpButton": "Sign Up",
+    "@signUpButton": {
+        "description": "Text for the sign-up button"
+    },
+    "createYourAccount": "Create Your Account",
+    "@createYourAccount": {
+        "description": "Title text for the signup screen's AppBar"
+    },
+    "alreadyHaveAnAccount": "Already have an account? ",
+    "@alreadyHaveAnAccount": {
+        "description": "Text preceding the 'Sign In' link on the signup screen"
+    },
+    "signIn": "Sign In",
+    "@signIn": {
+        "description": "The 'Sign In' link text on the signup screen"
+    },
+    "personalInfoTitle": "Personal Info",
+    "@personalInfoTitle": {
+        "description": "Title for the personal information step in the signup form"
+    },
+    "accountInfoTitle": "Account Info",
+    "@accountInfoTitle": {
+        "description": "Title for the account information step in the signup form"
+    },
+    "fullNameLabel": "Full Name",
+    "@fullNameLabel": {
+        "description": "Label for the full name input field"
+    },
+    "fullNameError": "Please enter your full name",
+    "@fullNameError": {
+        "description": "Error message when the full name field is empty"
+    },
+    "phoneNumberLabel": "Phone Number",
+    "@phoneNumberLabel": {
+        "description": "Label for the phone number input field"
+    },
+    "phoneNumberError": "Please enter your phone number",
+    "@phoneNumberError": {
+        "description": "Error message when the phone number field is empty"
+    },
+    "genderLabel": "Gender",
+    "@genderLabel": {
+        "description": "Label for the gender selection"
+    },
+    "dayLabel": "Day",
+    "@dayLabel": {
+        "description": "Label for the day selection dropdown"
+    },
+    "monthLabel": "Month",
+    "@monthLabel": {
+        "description": "Label for the month selection dropdown"
+    },
+    "yearLabel": "Year",
+    "@yearLabel": {
+        "description": "Label for the year selection dropdown"
+    },
+    "emailLabel": "Email",
+    "@emailLabel": {
+        "description": "Label for the email input field"
+    },
+    "emailError": "Please enter your email",
+    "@emailError": {
+        "description": "Error message when the email field is empty"
+    },
+    "passwordLabel": "Password",
+    "@passwordLabel": {
+        "description": "Label for the password input field"
+    },
+    "passwordError": "Please enter a password",
+    "@passwordError": {
+        "description": "Error message when the password field is empty"
+    },
+    "confirmPasswordLabel": "Confirm Password",
+    "@confirmPasswordLabel": {
+        "description": "Label for the confirm password input field"
+    },
+    "confirmPasswordError": "Passwords do not match",
+    "@confirmPasswordError": {
+        "description": "Error message when the password and confirm password fields do not match"
+    },
+    "continueButtonText": "Continue",
+    "@continueButtonText": {
+        "description": "Text for the continue button in the stepper"
+    },
+    "backButtonText": "Back",
+    "@backButtonText": {
+        "description": "Text for the back button in the stepper"
+    },
+    "maleGender": "Male",
+    "@maleGender": {
+        "description": "Option for male gender"
+    },
+    "femaleGender": "Female",
+    "@femaleGender": {
+        "description": "Option for female gender"
+    },
+    "formErrorPersonalInfo": "Please correct the errors in the personal information form.",
+    "@formErrorPersonalInfo": {
+        "description": "Error message for personal information form validation"
+    },
+    "formErrorAccountInfo": "Please correct the errors in the account information form.",
+    "@formErrorAccountInfo": {
+        "description": "Error message for account information form validation"
+    },
+    "signupSuccessMessage": "Sign up successful! Welcome!",
+    "@signupSuccessMessage": {
+        "description": "Success message after signing up"
+    },
+    "signupFailureMessage": "Failed to sign up. Please check your information and try again.",
+    "@signupFailureMessage": {
+        "description": "Failure message when signup is unsuccessful"
+    },
+    "loginScreenTitle": "Enter Your Credentials",
+    "@loginScreenTitle": {
+        "description": "Title for the login screen's AppBar"
+    },
+    "loginFailedSnackbar": "Login failed",
+    "@loginFailedSnackbar": {
+        "description": "Message displayed in a snackbar when login fails"
+    },
+    "homeTitle": "Home",
+    "@homeTitle": {
+        "description": "Title for the home page shown in the AppBar"
+    },
+    "noSportsAvailable": "No sports available",
+    "@noSportsAvailable": {
+        "description": "Text displayed when no sports are available to show"
+    },
+    "loadingSports": "Loading sports...",
+    "@loadingSports": {
+        "description": "Text displayed while sports are being loaded"
+    },
+    "noAcademiesAvailable": "No academies available",
+    "@noAcademiesAvailable": {
+        "description": "Text displayed when no academies data is available to show"
+    },
+    "descriptionTitle": "Description",
+    "@descriptionTitle": {
+        "description": "Title for the description section of an academy"
+    },
+    "classesTitle": "Classes",
+    "@classesTitle": {
+        "description": "Title for the classes section of an academy"
+    },
+    "loadingClasses": "Loading classes...",
+    "@loadingClasses": {
+        "description": "Text displayed while the classes data is being loaded"
+    },
+    "noClassesAvailable": "No classes available",
+    "@noClassesAvailable": {
+        "description": "Text displayed when no classes data is available to show"
+    }
+}

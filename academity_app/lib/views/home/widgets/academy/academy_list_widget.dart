@@ -73,7 +73,7 @@ class AcademiesListWidget extends ConsumerWidget {
               },
             );
           } else if (asy.hasError) {
-            return Text('Error: ${asy.error}');
+            return const Text('No academies available');
           } else {
             return const CircularProgressIndicator();
           }
