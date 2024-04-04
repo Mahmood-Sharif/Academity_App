@@ -1,4 +1,4 @@
-import 'package:academity_app/views/profile/users_profile_screen.dart';
+import 'package:academity_app/views/Profile/users_profile_screen.dart';
 import 'package:academity_app/views/auth/login_screen.dart';
 import 'package:academity_app/views/auth/signup_screen.dart';
 import 'package:academity_app/views/login_gate.dart';
