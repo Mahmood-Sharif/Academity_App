@@ -66,6 +66,7 @@ return [
   'manage.coaches'         => 'إدارة المدربين',
   'manage.announcements'   => 'إصدار إعلان',
   'manage.academy'         => 'إدارة الأكاديمية',
+  'manage.gallery'         => 'معرض الأكاديمية',
   'academy.edit'           => 'تعديل تفاصيل {0}',
   'academy.create'         => 'إنشاء أكاديمية',
 
@@ -128,6 +129,9 @@ return [
   'profile.view.coach'     => 'عرض حساب المدرب',
   'medical_condition'      => 'الحالة الصحية',
   'no_medical_condition'   => 'لا توجد حالة صحية.',
+
+  // gallery
+  'change_thumbnail'       => 'Change Thumbnail Image',
 
   // forms
   'submit'                 => 'إرسال',

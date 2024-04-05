@@ -235,4 +235,94 @@ class Academy extends ResourcePresenter
         return redirect()->route('AdminPortal\Academy::show', [$insertId]);
 
     }
+
+    /**
+     * @param int|null $id
+     */
+    public function gallery($id = null): string
+    {
+        $academy = $this->model->includeImageUrl()->find($id);
+        return view('academy/gallery', ['academy' => $academy]);
+    }
+
+    /**
+     * @param int|null $id
+     */
+    public function galleryItems($id = null): ResponseInterface
+    {
+        $gallery = $this->model->db->table('gallery')
+        ->join('media', 'media.media_id = gallery.media_id')
+        ->where('academy_id', $id)
+        ->select('gallery.*')
+        ->select('media.url')
+        ->select('media.mime_type')
+        ->orderBy('gallery.index', 'asc')
+        ->get()
+        ->getResult('array');
+
+        $gallery = array_map(fn ($g) => [
+            'media_id' => (int)$g['media_id'],
+            'url' => base_url($g['url']),
+            'type' => $g['mime_type'],
+        ], $gallery);
+
+        return $this->response->setStatusCode(200)->setJSON(['gallery' => $gallery]);
+    }
+
+    public function galleryUpload(): ResponseInterface
+    {
+        $file = $this->request->getFile('file');
+
+        try {
+            ['url' => $url, 'media_id' => $mediaId, 'type' => $type] =
+                BaseController::uploadMedia($file, maxBytes: 200 * 1024 * 1024);
+
+            return $this->response->setStatusCode(200)->setJSON([
+                'media_id' => $mediaId,
+                'url'      => base_url($url),
+                'type'     => $type,
+            ]);
+        } catch (\Throwable $th) {
+            return $this->response->setStatusCode(500);
+        }
+    }
+
+    /**
+     * @param int|null $id
+     */
+    public function gallerySubmit($id = null): ResponseInterface
+    {
+        $academy = $this->model->find($id);
+
+        if (! auth()->user()->can('academies.gallery') || auth()->id() !== $academy?->owner_id) {
+            return $this->response->setStatusCode(403);
+        }
+
+        $id = (int)$id;
+
+        ['deletions' => $deletions, 'upsertions' => $upsertions] = $this->request->getJSON(true);
+
+        if (empty($upsertions) && empty($deletions)) {
+            return $this->response->setStatusCode(200)->setJSON(['status' => 'no change']);
+        }
+
+        $deletions = array_map(fn ($d) => ['academy_id' => $id, ...$d], $deletions);
+        $upsertions = array_map(fn ($u) => ['academy_id' => $id, ...$u], $upsertions);
+
+        $db = $this->model->db;
+        $db->transStart();
+        if (!empty($deletions)) {
+            $db->table('gallery')->deleteBatch($deletions, 'academy_id, media_id');
+        }
+        if (!empty($upsertions)) {
+            $db->table('gallery')->upsertBatch($upsertions);
+        }
+        $db->transComplete();
+
+        if ($db->transStatus() === true) {
+            return $this->response->setStatusCode(200)->setJSON(['status' => 'success']);
+        } else {
+            return $this->response->setStatusCode(500)->setJSON(['error' => 'Unknown error']);
+        }
+    }
 }

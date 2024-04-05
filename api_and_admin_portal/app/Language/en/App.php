@@ -65,9 +65,9 @@ return [
   'manage.students'        => 'Manage Students',
   'manage.coaches'         => 'Manage Coaches',
   'manage.announcements'   => 'Make Announcement',
-  'manage.academy'         => 'Manage Academy',
+  'manage.academy'         => 'Academy Settings',
+  'manage.gallery'         => 'Edit Gallery',
   'academy.edit'           => 'Edit {0} details',
-  'academy.create'         => 'Create Academy',
   'academy.create'         => 'Create Academy',
 
   // manage coaches
@@ -129,6 +129,9 @@ return [
   'profile.view.coach'     => 'View Coach Profile',
   'medical_condition'      => 'Medical Condition',
   'no_medical_condition'   => 'No Medical Condition',
+
+  // gallery
+  'change_thumbnail'       => 'Change Thumbnail Image',
 
   // forms
   'submit'                 => 'Submit',
