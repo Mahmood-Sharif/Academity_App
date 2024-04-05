@@ -89,6 +89,7 @@ class AuthGroups extends ShieldAuthGroups
         'academies.access'     => 'Can access (own) academies details',
         'academies.edit'       => 'Can edit (own) academies details',
         'academies.delete'     => 'Can delete (own) academies from the system',
+        'academies.gallery'    => 'Can modify (own) academies gallery',
 
         'classes.register'     => 'Can register in classes',
         'classes.create'       => 'Can create classes in (own) academies',
@@ -147,6 +148,7 @@ class AuthGroups extends ShieldAuthGroups
             'academies.create',
             'academies.edit',
             'academies.delete',
+            'academies.gallery',
 
             'classes.*',
             'enrollments.*',

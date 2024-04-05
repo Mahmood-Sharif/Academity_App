@@ -63,10 +63,13 @@ abstract class BaseController extends Controller
      * Upload a file and store it in the database.
      * @return array<string,mixed>
      */
-    public static function uploadMedia(UploadedFile|null $uploadedFile): array
+    public static function uploadMedia(UploadedFile|null $uploadedFile, int|null $maxBytes = null): array
     {
         if ($uploadedFile->hasMoved()) {
             return ['errors' => 'file has moved'];
+        }
+        if ($maxBytes != null && $uploadedFile->getSize() > $maxBytes) {
+            return ['errors' => 'file too large'];
         }
         $filepath = 'uploads/' . $uploadedFile->store();
         $file = new File(WRITEPATH . $filepath);
@@ -76,6 +79,10 @@ abstract class BaseController extends Controller
             'url'       => $filepath,
         ], true);
 
-        return ['url' => $filepath, 'media_id' => $mediaId];
+        return [
+            'url'      => $filepath,
+            'media_id' => $mediaId,
+            'type'     => $file->getMimeType(),
+        ];
     }
 }
