@@ -2,6 +2,8 @@ import 'package:academity_app/services/academy_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/views/home/academy_detail_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class AcademiesListWidget extends ConsumerWidget {
   final int sportId;
@@ -62,7 +64,7 @@ class AcademiesListWidget extends ConsumerWidget {
                             Text(
                               academy.location,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 18),
+                                  fontWeight: FontWeight.w500, fontSize: 12),
                             ),
                           ],
                         ),
@@ -73,7 +75,7 @@ class AcademiesListWidget extends ConsumerWidget {
               },
             );
           } else if (asy.hasError) {
-            return const Text('No academies available');
+            return  Center(child: Text(AppLocalizations.of(context)!.noAcademiesAvailable));
           } else {
             return const CircularProgressIndicator();
           }

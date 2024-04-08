@@ -2,6 +2,7 @@ import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Ensure this path is correct
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum Gender { male, female }
 
@@ -52,8 +53,8 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(!isForm1Valid
-                ? 'Please correct the errors in the personal information form.'
-                : 'Please correct the errors in the account information form.')),
+                ? AppLocalizations.of(context)!.formErrorPersonalInfo
+                : AppLocalizations.of(context)!.formErrorAccountInfo)),
       );
       return; // Stop the sign-up process here if any form validation fails
     }
@@ -74,7 +75,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
       ref.read(authProvider.notifier).loginTest().then((_) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sign up successful! Welcome!')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.signupSuccessMessage)),
         );
       });
     } else {
@@ -110,9 +113,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
         // This handles the case where the user has moved to Form 2 but Form 1 becomes invalid
         setState(() => _currentStep = 0);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Please correct the errors in the personal information form.')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.formErrorPersonalInfo)),
         );
       }
     }
@@ -161,43 +164,50 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                           BorderRadius.circular(4), // Slightly rounded edges
                     ),
                   ),
-                  child: Text(isLastStep ? 'Sign Up' : 'Continue',
+                  child: Text(
+                      isLastStep
+                          ? AppLocalizations.of(context)!.signUpButton
+                          : AppLocalizations.of(context)!.continueButtonText,
                       style: const TextStyle(color: Colors.white)),
                 ),
                 const SizedBox(width: 10),
                 if (_currentStep > 0)
                   TextButton(
                     onPressed: details.onStepCancel,
-                    child: const Text('Back'),
+                    child:
+                        Text(AppLocalizations.of(context)!.continueButtonText),
                   ),
               ],
             );
           },
           steps: [
             Step(
-              title: const Text("Personal Info"),
+              title: Text(AppLocalizations.of(context)!.personalInfoTitle),
               content: Form(
                 key: _formKey1,
                 child: Column(
                   children: [
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: 'Full Name',
+                          labelText:
+                              AppLocalizations.of(context)!.fullNameLabel,
                           errorText: nameError,
                           errorMaxLines: 2),
                       onChanged: (value) => name = value,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Please enter your full name' : null,
+                      validator: (value) => value!.isEmpty
+                          ? AppLocalizations.of(context)!.signupFailureMessage
+                          : null,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: 'Phone Number',
+                          labelText:
+                              AppLocalizations.of(context)!.phoneNumberLabel,
                           errorText: phoneError,
                           errorMaxLines: 2),
                       keyboardType: TextInputType.phone,
                       onChanged: (value) => phone = value,
                       validator: (value) => value!.isEmpty
-                          ? 'Please enter your phone number'
+                          ? AppLocalizations.of(context)!.phoneNumberError
                           : null,
                     ),
                     // Add Gender and Date of Birth fields here
@@ -207,7 +217,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Gender',
+                        Text(AppLocalizations.of(context)!.genderLabel,
                             style: Theme.of(context).textTheme.titleMedium,
                             textAlign: TextAlign.left),
                         Row(
@@ -225,7 +235,8 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                                       });
                                     },
                                   ),
-                                  const Text('Male'),
+                                  Text(
+                                      AppLocalizations.of(context)!.maleGender),
                                 ],
                               ),
                             ),
@@ -241,7 +252,8 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                                       });
                                     },
                                   ),
-                                  const Text('Female'),
+                                  Text(AppLocalizations.of(context)!
+                                      .femaleGender),
                                 ],
                               ),
                             ),
@@ -255,7 +267,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                         Expanded(
                           child: DropdownButtonFormField<int>(
                             value: selectedDay,
-                            decoration: const InputDecoration(labelText: 'Day'),
+                            decoration: InputDecoration(
+                                labelText:
+                                    AppLocalizations.of(context)!.dayLabel),
                             items: days.map<DropdownMenuItem<int>>((int value) {
                               return DropdownMenuItem<int>(
                                 value: value,
@@ -271,8 +285,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                         Expanded(
                           child: DropdownButtonFormField<int>(
                             value: selectedMonth,
-                            decoration:
-                                const InputDecoration(labelText: 'Month'),
+                            decoration: InputDecoration(
+                                labelText:
+                                    AppLocalizations.of(context)!.monthLabel),
                             items:
                                 months.map<DropdownMenuItem<int>>((int value) {
                               return DropdownMenuItem<int>(
@@ -289,8 +304,9 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                         Expanded(
                           child: DropdownButtonFormField<int>(
                             value: selectedYear,
-                            decoration:
-                                const InputDecoration(labelText: 'Year'),
+                            decoration: InputDecoration(
+                                labelText:
+                                    AppLocalizations.of(context)!.yearLabel),
                             items:
                                 years.map<DropdownMenuItem<int>>((int value) {
                               return DropdownMenuItem<int>(
@@ -313,7 +329,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
               state: _currentStep > 0 ? StepState.complete : StepState.indexed,
             ),
             Step(
-              title: const Text("Account Info"),
+              title: Text(AppLocalizations.of(context)!.accountInfoTitle),
               content: Form(
                 key: _formKey2,
                 child: Column(
@@ -321,32 +337,37 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                          labelText: 'Email',
+                          labelText: AppLocalizations.of(context)!.emailLabel,
                           errorText: emailError,
                           errorMaxLines: 2),
                       onChanged: (value) => email = value,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Please enter your email' : null,
+                      validator: (value) => value!.isEmpty
+                          ? AppLocalizations.of(context)!.emailError
+                          : null,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: 'Password',
+                          labelText:
+                              AppLocalizations.of(context)!.passwordLabel,
                           errorText: passwordError,
                           errorMaxLines: 2),
                       obscureText: true,
                       onChanged: (value) => password = value,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Please enter a password' : null,
+                      validator: (value) => value!.isEmpty
+                          ? AppLocalizations.of(context)!.passwordError
+                          : null,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: 'Confirm Password',
+                          labelText: AppLocalizations.of(context)!
+                              .confirmPasswordLabel,
                           errorText: passwordConfirmError,
                           errorMaxLines: 2),
                       obscureText: true,
                       onChanged: (value) => passwordConfirm = value,
-                      validator: (value) =>
-                          value != password ? 'Passwords do not match' : null,
+                      validator: (value) => value != password
+                          ? AppLocalizations.of(context)!.confirmPasswordError
+                          : null,
                     ),
                   ],
                 ),

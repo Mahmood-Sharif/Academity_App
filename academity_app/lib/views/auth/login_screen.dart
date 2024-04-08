@@ -1,6 +1,8 @@
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -14,9 +16,9 @@ class LoginScreen extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back, color: Color(0xFFFF3200)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          "Enter Your Credentials",
-          style: TextStyle(color: Color(0xFF8B0000)),
+        title: Text(
+          AppLocalizations.of(context)!.enterCredentials,
+          style: const TextStyle(color: Color(0xFF8B0000)),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -65,18 +67,18 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                   TextField(
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: UnderlineInputBorder(),
+                    decoration:  InputDecoration(
+                      labelText: AppLocalizations.of(context)!.emailLabel,
+                      border: const UnderlineInputBorder(),
                     ),
                     autofillHints: const [AutofillHints.email],
                   ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: UnderlineInputBorder(),
+                    decoration:  InputDecoration(
+                      labelText: AppLocalizations.of(context)!.passwordLabel,
+                      border: const UnderlineInputBorder(),
                     ),
                     autofillHints: const [AutofillHints.password],
                     obscureText: true,
@@ -93,9 +95,9 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
+                    child:  Text(
+                      AppLocalizations.of(context)!.loginButton,
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 18),

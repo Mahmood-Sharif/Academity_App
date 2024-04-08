@@ -2,6 +2,7 @@ import 'package:academity_app/providers/academy_provider.dart';
 import 'package:academity_app/services/academy_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterButtonWidget extends StatelessWidget {
   const RegisterButtonWidget({Key? key}) : super(key: key);
@@ -26,8 +27,8 @@ class RegisterButtonWidget extends StatelessWidget {
                       BorderRadius.circular(4), // Slightly rounded edges
                 ),
               ),
-              child: const Text('Register',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
+              child: Text(AppLocalizations.of(context)!.registerButtonText,
+                  style: const TextStyle(fontSize: 18, color: Colors.white)),
             ),
           ),
         );
@@ -41,24 +42,25 @@ class RegisterButtonWidget extends StatelessWidget {
       builder: (BuildContext context) {
         final TextEditingController controller = TextEditingController();
         return AlertDialog(
-          title: const Text('Enter Referral Code'),
+          title:
+              Text(AppLocalizations.of(context)!.enterReferralCodeDialogTitle),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(
-              hintText: 'Referral Code',
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.referralCodeHint,
             ),
             keyboardType: TextInputType.visiblePassword,
             textCapitalization: TextCapitalization.characters,
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancelButtonText),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
             TextButton(
-              child: const Text('Submit'),
+              child: Text(AppLocalizations.of(context)!.submitButtonText),
               onPressed: () async {
                 AcademyServices()
                     .enrollStudentWithCode(controller.text)
@@ -70,8 +72,8 @@ class RegisterButtonWidget extends StatelessWidget {
                 }).then((_) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                            'Successfully enrolled with code ${controller.text}')),
+                        content: Text(AppLocalizations.of(context)!
+                            .successfullyEnrolledMessage(controller.text))),
                   );
                   ref.invalidate(
                       enrolledAcademiesProvider); // refresh my academies provider

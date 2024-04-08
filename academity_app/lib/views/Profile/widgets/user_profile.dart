@@ -2,6 +2,7 @@ import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserProfileWidget extends ConsumerStatefulWidget {
   final User user;
@@ -35,24 +36,24 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              _buildUserInputField('Name', _editableUser.name, Icons.person,
+              _buildUserInputField(AppLocalizations.of(context)!.fullNameLabel, _editableUser.name, Icons.person,
                   customColor, (val) => _updateUserField('name', val)),
               _buildUserInputField(
-                  'Email',
+                  AppLocalizations.of(context)!.emailLabel,
                   _editableUser.email ?? '',
                   Icons.email,
                   customColor,
                   (val) => _updateUserField('email', val)),
-              _buildUserInputField('Phone', _editableUser.phone, Icons.phone,
+              _buildUserInputField(AppLocalizations.of(context)!.phoneNumberLabel, _editableUser.phone, Icons.phone,
                   customColor, (val) => _updateUserField('phone', val)),
               // For Date of Birth, consider using a DatePicker instead of a TextFormField
               _buildUserInputField(
-                  'Date of Birth',
+                  AppLocalizations.of(context)!.dobLabel,
                   _formatDate(_editableUser.dob),
                   Icons.cake,
                   customColor,
                   (val) => _updateUserField('dob', val)),
-              _buildUserInputField('Gender', _editableUser.gender, Icons.male,
+              _buildUserInputField(AppLocalizations.of(context)!.genderLabel, _editableUser.gender, Icons.male,
                   customColor, (val) => _updateUserField('gender', val)),
               const SizedBox(height: 20),
               _buildSaveButton(),
@@ -97,8 +98,8 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
             borderRadius: BorderRadius.circular(4), // Slightly rounded edges
           ),
         ),
-        child: const Text('Save',
-            style: TextStyle(fontSize: 18, color: Colors.white)),
+        child:  Text(AppLocalizations.of(context)!.saveButton,
+            style: const TextStyle(fontSize: 18, color: Colors.white)),
       ),
     );
   }
@@ -112,10 +113,10 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
         if (!context.mounted) return;
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Profile updated successfully')));
+               SnackBar(content: Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Failed to update profile')));
+               SnackBar(content: Text(AppLocalizations.of(context)!.profileUpdateFailed)));
         }
       } catch (e) {
         ScaffoldMessenger.of(context)

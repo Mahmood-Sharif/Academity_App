@@ -8,6 +8,7 @@ import 'package:academity_app/views/home/widgets/class/classes_widget.dart';
 import 'package:academity_app/views/home/widgets/class/description_widget.dart';
 import 'package:academity_app/views/home/widgets/class/location_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AcademyDetailScreen extends ConsumerWidget {
   final Academy academy;
@@ -40,7 +41,7 @@ class AcademyDetailScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Description',
+                  Text('${AppLocalizations.of(context)!.descriptionTitle}:',
                       style: GoogleFonts.montserrat(
                           textStyle: const TextStyle(
                               color: Colors.black,
@@ -50,9 +51,9 @@ class AcademyDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   LocationWidget(academy: academy),
                   const SizedBox(height: 8),
-                  const Text('Classes',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text('${AppLocalizations.of(context)!.classesTitle}:',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16)),
                   FutureBuilder<List<Classes>>(
                     future: classAsync,
                     builder: (context, snapshot) {
@@ -64,7 +65,8 @@ class AcademyDetailScreen extends ConsumerWidget {
                         return ClassesWidget(
                             academy: academy, classes: snapshot.requireData);
                       } else {
-                        return const Text('No classes available');
+                        return Text(
+                            AppLocalizations.of(context)!.noClassesAvailable);
                       }
                     },
                   ),
