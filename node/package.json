@@ -1,0 +1,26 @@
+{
+  "name": "Academity_admin_portal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css:base": "npx sass --style compressed scss/academity-bootstrap.scss ../public/css/academity-bootstrap.min.css",
+    "build:css:rtl": "npx rtlcss ../public/css/academity-bootstrap.min.css",
+    "build:css": "npm run build:css:base && npm run build:css:rtl",
+    "build:uppy": "npx esbuild js/uppy.mjs --bundle --minify --outfile=../public/js/uppy.min.js",
+    "build:delta": "npx esbuild js/delta.mjs --bundle --minify --outfile=../public/js/delta.min.js",
+    "build:all": "npm run build:css && npm run build:uppy",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@uppy/core": "^3.10.0",
+    "@uppy/dashboard": "^3.8.0",
+    "@uppy/xhr-upload": "^3.6.4",
+    "bootstrap": "^5.3.2",
+    "esbuild": "^0.20.2",
+    "sass": "^1.72.0"
+  }
+}

@@ -119,10 +119,21 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-3">
+          <li class="nav-item" data-bs-theme="dark">
+            <a href="#" class="btn btn-secondary rounded-pill shadow" onclick="alert('Coming Soon!')">
+              <?=lang('Home.download_app')?>
+            </a>
+          </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <?=lang('Home.business')?>
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+              title="<?=lang('Home.business')?>">
+              <div class="d-none">
+                <?php readfile(ROOTPATH . 'public/images/whistle.svg') ?>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 16 16" class="me-1" style="vertical-align: -.275em;">
+                <use href="#whistle"></use>
+              </svg>
             </a>
             <ul class="dropdown-menu">
               <li class="nav-item">
@@ -143,9 +154,10 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+              title="<?=lang('App.language')?>">
               <!-- <?=$locale == 'en' ? lang('App.language.english') : lang('App.language.arabic')?> -->
-              <?= lang('App.language') ?>
+              <i class="bi bi-globe2"></i>
             </a>
             <ul class="dropdown-menu">
               <li>
@@ -162,7 +174,7 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
           </li>
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" id="bd-theme" data-bs-toggle="dropdown" aria-expanded="false"
-              role="button">
+              role="button" title="<?=lang('App.theme')?>">
               <i id="theme-icon-active" class="bi bi-circle-half"></i>
               <span class="d-none" id="bd-theme-text">Toggle theme</span>
             </a>
