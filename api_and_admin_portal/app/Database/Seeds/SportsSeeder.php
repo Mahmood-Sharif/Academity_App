@@ -26,7 +26,7 @@ class SportsSeeder extends Seeder
             ['sport_id' => 2, 'name' => 'Boxing',     'media_id' => 2],
             ['sport_id' => 3, 'name' => 'Fencing',    'media_id' => 3],
             ['sport_id' => 4, 'name' => 'Football',   'media_id' => 4],
-            ['sport_id' => 5, 'name' => 'Taekowndo',  'media_id' => 5],
+            ['sport_id' => 5, 'name' => 'Taekwondo',  'media_id' => 5],
             ['sport_id' => 6, 'name' => 'Tennis',     'media_id' => 6],
         ]);
     }
