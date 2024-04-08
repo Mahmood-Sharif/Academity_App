@@ -28,6 +28,42 @@ class UserModel extends CodeIgniterUserModel
         ];
     }
 
+    public function addUserImage(int $userId, $imageFile): bool
+    {
+        if (!$imageFile->isValid() || $imageFile->hasMoved()) {
+            return false; // Handle file upload errors or already moved files.
+        }
+
+        // Define your path where images should be stored. Adjust as needed.
+        $targetPath = WRITEPATH . 'uploads/user_images/';
+        
+        $imageName = $imageFile->getRandomName(); // Generates a random name for the image.
+        if ($imageFile->move($targetPath, $imageName)) {
+            // Assuming you have a MediaModel to handle media records.
+            $mediaModel = new \App\Models\MediaModel();
+            $mediaData = [
+                'url' => '/uploads/user_images/' . $imageName, // Adjust based on your needs.
+                // Add other necessary fields for the media table.
+            ];
+            
+            if ($mediaModel->insert($mediaData)) {
+                $mediaId = $mediaModel->getInsertID();
+                return $this->update($userId, ['media_id' => $mediaId]);
+            }
+        }
+
+        return false; // Return false if any step fails.
+    }
+
+    public function includeImageUrl(): self
+    {
+        $baseUrl = base_url();
+        return $this
+            ->join('media', 'users.media_id = media.media_id') 
+            ->select('users.*')
+            ->select("CONCAT('$baseUrl', url) as image_url");
+    }
+
     public function whereEnrolledInClass(int $classId): UserModel
     {
         $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
