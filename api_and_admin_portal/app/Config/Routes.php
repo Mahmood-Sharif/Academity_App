@@ -67,6 +67,7 @@ $routes->group('api', static function ($routes) {
         $routes->post('logout', 'Api\Login::logoutUser');
         $routes->get('user-profile', 'Api\Login::getUserProfile');
         $routes->post('profile-edit', 'Api\Login::updateUserProfile');
+        $routes->post('profile-upload', 'Api\Students::uploadProfilePicture');
 
         // users app academies api
         $routes->get('sport', 'Api\Sport::index');

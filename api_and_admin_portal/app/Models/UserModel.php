@@ -20,12 +20,27 @@ class UserModel extends CodeIgniterUserModel
           'name',
           'dob',
           'phone',
+          'profile_image',
 
           // student fields
           'gender',
           'medical_condition',
           'parent_id',
         ];
+    }
+
+    public function select($select = 'users.*'): EnrollmentModel
+    {
+        return parent::select($select);
+    }
+
+    public function includeImageUrl(): UserModel
+    {
+        $baseUrl = base_url();
+        return $this
+          ->join('media', 'media.media_id = users.profile_image')
+          ->select()
+          ->select("CONCAT('$baseUrl', url) as image_url");
     }
 
     public function whereEnrolledInClass(int $classId): UserModel
@@ -36,7 +51,7 @@ class UserModel extends CodeIgniterUserModel
             ->join('classes', 'enrollments.class_id = classes.class_id', 'left')
             ->where('classes.class_id', $classId)
             ->where("enrollments.end_date >= '$date'")
-            ->select('users.*')
+            ->select()
             ->select('enrollments.enrollment_id')
             ->select('enrollments.start_date')
             ->select('enrollments.end_date')
@@ -50,7 +65,7 @@ class UserModel extends CodeIgniterUserModel
             ->join('classes', 'enrollments.class_id = classes.class_id', 'left')
             ->where('academy_id', $academyId)
             ->groupBy('users.id')
-            ->select('users.*')
+            ->select()
             ->select('group_concat(classes.class_name SEPARATOR ", ") as classes');
     }
 
@@ -62,7 +77,7 @@ class UserModel extends CodeIgniterUserModel
             ->join('academies', 'academies.academy_id = classes.academy_id', 'left')
             ->where('academies.owner_id', $userId)
             ->groupBy('users.id')
-            ->select('users.*')
+            ->select()
             ->select('group_concat(classes.class_name SEPARATOR ", ") as classes');
     }
 
@@ -73,7 +88,7 @@ class UserModel extends CodeIgniterUserModel
             ->join('academy_coaches', 'academy_coaches.coach_id = users.id', 'left')
             ->join('academies', 'academy_coaches.academy_id = academies.academy_id', 'left')
             ->groupBy('users.id')
-            ->select('users.*')
+            ->select()
             ->select('group_concat(academies.name SEPARATOR ", ") as academies')
             ->where('group', 'coach');
     }
