@@ -44,9 +44,9 @@ void showClassDetails(BuildContext context, int classId) {
                           text: '${AppLocalizations.of(context)!.priceTitle(classItem.price)} ',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
-                      TextSpan(
-                          text: classItem.price,
-                          style: const TextStyle(fontSize: 16)),
+                      // TextSpan(
+                      //     text: classItem.price,
+                      //     style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),

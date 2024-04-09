@@ -186,7 +186,7 @@
             }
         }
     },
-    "priceTitle": "Price: BD ",
+    "priceTitle": "Price: BD {price}",
     "@priceTitle": {
         "description": "Displays the price of the class",
         "placeholders": {
@@ -195,6 +195,33 @@
                 "description": "The price of the class"
             }
         }
+    },
+    "sportTitle": "{sportTitle, select, basketball{Basketball} football{Football} boxing{Boxing} taekwondo{Taekwondo} fencing{Fencing} tennis{Tennis} other{sport}}",
+    "@commonVehicleType": {
+    "description": "Sport type",
+    "placeholders": {
+        "sportTitle": {}
+    }
+    },
+    "customerSupportLabel": "Customer Support",
+    "@customerSupportLabel": {
+    "description": "Label for Customer Support"
+    },
+    "playerLabel": "Player",
+    "@playerLabel": {
+    "description": "Label for Player"
+    },
+    "coachLabel": "Coach",
+    "@coachLabel": {
+    "description": "Label for coach "
+    },
+    "swapToLabel": "Swap To",
+    "@swapToLabel": {
+    "description": "Label for Swap To "
+    },
+    "userLabel": "User",
+    "@userLabel": {
+    "description": "Label for User "
     },
     "trainingDaysTitle": "Training Days",
     "@trainingDaysTitle": {

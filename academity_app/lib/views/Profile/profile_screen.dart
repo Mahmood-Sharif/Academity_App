@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends ConsumerWidget {
-   const ProfilePage({super.key});
+  const ProfilePage({super.key});
 
   void _logout(BuildContext context, WidgetRef ref) {
     ref.read(authProvider.notifier).logout().catchError((error) {
@@ -30,15 +30,14 @@ class ProfilePage extends ConsumerWidget {
     const String waWebUrl = "https://wa.link/qbcghz"; // Your WhatsApp link
 
     // Launch the URL
-    try {
-      await launchUrl(Uri.parse(waWebUrl));
-    } catch (e) {
+
+    await launchUrl(Uri.parse(waWebUrl)).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Failed to open the link."),
       ));
-    }
+      return false;
+    });
   }
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,7 +56,7 @@ class ProfilePage extends ConsumerWidget {
                 if (ref.read(authProvider.notifier).canSwitchType)
                   {
                     'title':
-                        'Swap to ${ref.read(authProvider).requireValue!.type == 'coach' ? 'Normal' : 'Coach'} User',
+                        '${AppLocalizations.of(context)!.swapToLabel} ${ref.read(authProvider).requireValue!.type == 'coach' ? AppLocalizations.of(context)!.playerLabel : AppLocalizations.of(context)!.coachLabel}',
                     'icon': Icons.swap_horiz_rounded,
                     'onTap': () =>
                         ref.read(authProvider.notifier).changeUserType()
@@ -77,7 +76,6 @@ class ProfilePage extends ConsumerWidget {
                       .switchLanguageLabel, // Add a title for your language switcher, make sure to define it in your localization files
                   'icon': Icons.language,
                   'onTap': () => showLanguageSelectionBottomSheet(context, ref),
-
                 },
               ],
             ),
@@ -96,7 +94,7 @@ class ProfilePage extends ConsumerWidget {
                   'icon': Icons.report_problem
                 },
                 {
-                  'title': 'Customer Support',
+                  'title': AppLocalizations.of(context)!.customerSupportLabel,
                   'icon': Icons.support_agent,
                   'onTap': () => navigateToCustomerSupport(context)
                 },
