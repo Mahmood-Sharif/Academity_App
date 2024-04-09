@@ -53,4 +53,37 @@ class AcademityApi {
       encoding: encoding,
     );
   }
+
+  /// Perform an HTTP POST request to the Academity Api.
+  ///
+  /// Like [AcademityApi.post], except it can also upload a [file].
+  ///
+  /// If thei api token does not exist, a blank streamed response with code 401
+  /// is returned.
+  static Future<http.StreamedResponse> postMultipart(
+    String path, {
+    http.MultipartFile? file,
+    Map<String, String>? body,
+    Encoding? encoding,
+    Map<String, String>? headers,
+  }) async {
+    const secureStorage = FlutterSecureStorage();
+    final apiToken = await secureStorage.read(key: 'api_token');
+    if (apiToken == null) {
+      return http.StreamedResponse(const Stream.empty(), 401);
+    }
+
+    final request = http.MultipartRequest(
+        'POST', Uri.parse('${Env.academityUrl}api/$path'));
+
+    request.headers.addAll({'Authorization': 'Bearer $apiToken'});
+    if (body != null) {
+      request.fields.addAll(body);
+    }
+    if (file != null) {
+      request.files.add(file);
+    }
+
+    return request.send();
+  }
 }
