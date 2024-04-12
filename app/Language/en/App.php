@@ -131,7 +131,10 @@ return [
   'no_medical_condition'   => 'No Medical Condition',
 
   // gallery
+  'academy_gallery'        => 'Academy Gallery',
   'change_thumbnail'       => 'Change Thumbnail Image',
+  'upd_thumbnail.success'  => 'Successfully changed thumbnail.',
+  'upd_thumbnail.error'    => 'Could not change thumbnail.',
 
   // forms
   'submit'                 => 'Submit',

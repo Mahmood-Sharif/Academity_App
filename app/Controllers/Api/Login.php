@@ -126,7 +126,6 @@ class Login extends ResourceController
     {
         $token = $this->request->header('Authorization');
         $token = str_replace('Bearer ', '', $token);
-        log_message('debug', 'Fetching profile with token: ' . $token);
 
         try {
             // Assuming 'auth()' can decode the token and fetch the user
@@ -152,7 +151,6 @@ class Login extends ResourceController
                 'user' => $userData,
             ]);
         } catch (Exception $e) {
-            log_message('error', 'Profile fetch exception: ' . $e->getMessage());
             return $this->respond(['status' => 'Failed', 'message' => $e->getMessage()], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -169,9 +167,7 @@ class Login extends ResourceController
             $rules = (new ValidationRules())->getRegistrationRules();
             unset($rules['password']);
             unset($rules['password_confirm']);
-            log_message('critical', "rules: " . var_export($rules, true));
             $updatedData = $this->request->getPost(array_keys($rules));
-            log_message('critical', "data: " . var_export($updatedData, true));
 
             // Check if updatedData is empty
             if (empty($updatedData)) {
@@ -196,8 +192,6 @@ class Login extends ResourceController
                 return $this->respond(['status' => 'Failed', 'message' => 'Failed to update user profile'], ResponseInterface::HTTP_BAD_REQUEST);
             }
         } catch (Exception $e) {
-            log_message('critical', "Error updating user profile for user {$user->id}: " . $e->getMessage());
-            log_message('info', "Data attempted to update: " . json_encode($updatedData));
             return $this->respond(['status' => 'Failed', 'message' => 'Internal server error.'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
