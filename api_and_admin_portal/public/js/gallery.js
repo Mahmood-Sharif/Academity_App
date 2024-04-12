@@ -25,7 +25,7 @@ this.ifd0Offset: ${this.ifd0Offset}, file.byteLength: ${e.byteLength}`),e.tiff&&
     }
     .galleryItem {
       position: relative;
-      cursor: move;
+      cursor: grab;
     }
     .galleryItem>button {
         all: unset;
@@ -60,7 +60,7 @@ this.ifd0Offset: ${this.ifd0Offset}, file.byteLength: ${e.byteLength}`),e.tiff&&
       border-radius: 50%;
     }
     .card>.card-body {
-      min-height: 550px;
+      min-height: 470px;
     }
     [dir="rtl"] .uppy-Dashboard-AddFiles-title {
       direction: ltr;
@@ -110,7 +110,7 @@ this.ifd0Offset: ${this.ifd0Offset}, file.byteLength: ${e.byteLength}`),e.tiff&&
         </div>
       </div>
     </div>
-    `,this.querySelector("#submitBtn").addEventListener("click",()=>{console.log(this.diff());let t=new XMLHttpRequest;t.open("POST",this.submitEndpoint,!0),t.onloadend=()=>{let s=this.querySelector(".toast");if(t.status==200){let r=JSON.parse(t.response).status;s.outerHTML=`
+    `,this.querySelector("#submitBtn").addEventListener("click",()=>{let t=new XMLHttpRequest;t.open("POST",this.submitEndpoint,!0),t.onloadend=()=>{let s=this.querySelector(".toast");if(t.status==200){let r=JSON.parse(t.response).status;s.outerHTML=`
             <div class="toast bg-success-subtle text-success-emphasis border-success align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
               <div class="d-flex align-items-center">
                 <i class="bi bi-check2 ms-3 fs-5"></i>
@@ -121,7 +121,7 @@ this.ifd0Offset: ${this.ifd0Offset}, file.byteLength: ${e.byteLength}`),e.tiff&&
                 </div>
                 <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="${this.i18n.close}"></button>
               </div>
-          </div>`,this.originalFiles=this.files.map(n=>({...n,inserted:!0})),this.updateGalleryView(this.originalFiles)}else s.outerHTML=`
+          </div>`,this.originalFiles=this.files.map(n=>({...n,inserted:!0})),r!="no change"&&this.updateGalleryView(this.originalFiles)}else s.outerHTML=`
             <div class="toast bg-danger-subtle text-danger-emphasis border-danger align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
               <div class="d-flex align-items-center">
                 <i class="bi bi-exclamation-lg ms-3 fs-5"></i>

@@ -84,7 +84,7 @@ class Gallery extends HTMLElement {
     }
     .galleryItem {
       position: relative;
-      cursor: move;
+      cursor: grab;
     }
     .galleryItem>button {
         all: unset;
@@ -119,7 +119,7 @@ class Gallery extends HTMLElement {
       border-radius: 50%;
     }
     .card>.card-body {
-      min-height: 550px;
+      min-height: 470px;
     }
     [dir="rtl"] .uppy-Dashboard-AddFiles-title {
       direction: ltr;
@@ -172,7 +172,6 @@ class Gallery extends HTMLElement {
     `;
 
     this.querySelector('#submitBtn').addEventListener('click', () => {
-      console.log(this.diff());
       const request = new XMLHttpRequest();
       request.open('POST', this.submitEndpoint, true);
       request.onloadend = () => {
@@ -192,7 +191,7 @@ class Gallery extends HTMLElement {
               </div>
           </div>`;
           this.originalFiles = this.files.map(i => { return { ...i, inserted: true } });
-          this.updateGalleryView(this.originalFiles);
+          if (status != 'no change') this.updateGalleryView(this.originalFiles);
         } else {
           toast.outerHTML = `
             <div class="toast bg-danger-subtle text-danger-emphasis border-danger align-items-center" role="alert" aria-live="assertive" aria-atomic="true">

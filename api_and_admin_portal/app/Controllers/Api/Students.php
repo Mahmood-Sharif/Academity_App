@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Api;
 
-use App\Controllers\BaseController;
+use App\Models\MediaModel;
 use App\Models\StudentModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -39,7 +39,7 @@ class Students extends ResourceController
             if (!array_search($file->getMimeType(), ['image/png', 'image/jpeg'])) {
                 throw new Exception("Invalid file type", 400);
             }
-            ['url' => $url, 'media_id' => $mediaId] = BaseController::uploadMedia($file);
+            ['url' => $url, 'media_id' => $mediaId] = (new MediaModel())->uploadMedia($file);
             $user = $users->findById($userId);
             $user->profile_image = $mediaId;
             $users->save($user);

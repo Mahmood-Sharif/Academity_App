@@ -61,7 +61,6 @@ class Academy extends ResourceController
 
     public function getEnrolledAcademiesDetails(): ResponseInterface
     {
-        log_message('critical', 'yaaaaaaay');
         $academyModel = new AcademyModel();
         $classModel = new ClassModel();
         $enrollmentModel = new EnrollmentModel();

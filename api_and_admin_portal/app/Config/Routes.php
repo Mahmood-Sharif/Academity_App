@@ -27,6 +27,7 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->get('gallery-items/(:num)', 'AdminPortal\Academy::galleryItems/$1');
         $routes->post('gallery-upload/', 'AdminPortal\Academy::galleryUpload');
         $routes->post('gallery-submit/(:num)', 'AdminPortal\Academy::gallerySubmit/$1');
+        $routes->post('update-thumbnail/(:num)', 'AdminPortal\Academy::updateThumbnail/$1');
         $routes->get('classes/by-academy/(:num)', 'AdminPortal\Classes::index/$1');
         $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
         $routes->get('class-reg-code/(:num)', 'AdminPortal\Classes::registrationCode/$1');

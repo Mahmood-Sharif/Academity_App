@@ -41,7 +41,6 @@ class Attendance extends ResourceController
     // Log attendance manually (coaches app)
     public function postAttendance(): ResponseInterface
     {
-        log_message('critical', var_export($this->request->getPost(), true));
         $studentId = $this->request->getPost('student_id');
         $classId = $this->request->getPost('class_id');
         $status = $this->request->getPost('status');
@@ -134,7 +133,6 @@ class Attendance extends ResourceController
         ->select()
         ->first();
 
-        log_message('critical', 'HMMMMMMMMMM ' . var_export($classTiming, true));
 
         if ($classTiming === null) {
             return $this->fail('The class is not running now', 500);
