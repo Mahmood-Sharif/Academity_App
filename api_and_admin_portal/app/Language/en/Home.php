@@ -13,7 +13,8 @@ return [
   'login_admin_portal' => 'Log in to Admin Portal',
   'download_app'       => 'Download The App',
   'learn_more'         => 'Learn More',
-  'home_about'         => 'Enhancing the sports industry by connecting sports academies, enthusiasts, and guardians, streamlining the process of discovery, enrollment, and management of sports activities.',
+  'home_about'         => 'Play, Connect, Thrive',
+  'home_about.more'    => 'Connect with Your Sport, Your Coach, and Your Academy',
 
    // info
   'users_app'          => 'Academity Users App',
