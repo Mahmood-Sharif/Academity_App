@@ -50,13 +50,13 @@ $url = match($type) {
       <form action="<?= match($type) {
           'create' => url_to('AdminPortal\Academy::create'),
           'edit' => url_to('AdminPortal\Academy::update', $academy->academy_id),
-      }?>" method="post" enctype="multipart/form-data">
+      }?>" method="post" enctype="multipart/form-data" hx-push-url="false">
         <?= csrf_field() ?>
         <div class="mb-3 d-flex flex-column">
           <div class="ratio ratio-16x9 mb-2">
             <!-- TODO: persist 'uploaded' image after form validation -->
             <img id="imagePreview" src="<?=$academy?->image_url ?? base_url('images/placeholder.jpeg')?>" alt=""
-              class="object-fit-cover rounded-4 border">
+              class="object-fit-cover rounded-4 border" style="view-transition-name: academy<?=$academy->academy_id?>;">
           </div>
           <div class="ms-auto d-flex flex-row-reverse align-items-center">
             <label for="academyImage" class="ms-3 btn btn-secondary">
@@ -163,11 +163,6 @@ $url = match($type) {
 
 <script>
   (() => {
-    window.history.replaceState(
-      null,
-      '',
-      '<?= esc($url, 'js') ?>',
-    );
     document.getElementById('academyImage').onchange = function () {
       const src = URL.createObjectURL(this.files[0]);
       document.getElementById('imagePreview').src = src;

@@ -71,10 +71,12 @@ class Academy extends ResourcePresenter
             ]);
         }
 
-        if (! $this->validate([
-          ...$this->model->validationRules,
-          'image' => 'max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
-        ], $this->model->validationMessages)) {
+        $rules = [...$this->model->validationRules];
+        if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
+            $rules['image'] = 'mime_in[image,image/png,image/jpeg,image/webp]|max_size[image,2048]';
+        }
+
+        if (! $this->validate($rules, $this->model->validationMessages)) {
             $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
             return view('academy/create_edit', [

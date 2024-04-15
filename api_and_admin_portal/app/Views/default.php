@@ -10,6 +10,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="view-transition" content="same-origin">
+  <meta name="htmx-config" content='{"globalViewTransitions":true}'>
   <title>
     Academity -
     <?= $this->renderSection('page_title', true) ?>
@@ -113,7 +114,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
   </script>
 </head>
 
-<body hx-ext="ajax-header">
+<body hx-boost="true" hx-ext="ajax-header">
 
   <div class="row m-0 p-0">
     <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column sticky-md-top">
