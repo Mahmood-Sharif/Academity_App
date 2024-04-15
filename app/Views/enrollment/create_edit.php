@@ -37,7 +37,7 @@ $url = match($type) {
   <form action="<?= match($type) {
       'create' => url_to('AdminPortal\Enrollment::create'),
       'edit' => url_to('AdminPortal\Enrollment::update', $enrollment->enrollment_id),
-  }?>" method="post">
+  }?>" method="post" hx-push-url="false">
     <?= csrf_field() ?>
 
     <div class="d-flex align-items-center mb-3">
@@ -99,17 +99,5 @@ $url = match($type) {
     <div class="modal-content"></div>
   </div>
 </div>
-
-<?php if($type == 'edit'): ?>
-<script>
-  (() => {
-    window.history.replaceState(
-      null,
-      '',
-      '<?= esc($url, 'js') ?>',
-    );
-  })();
-</script>
-<?php endif ?>
 
 <?= $this->endSection('content'); ?>

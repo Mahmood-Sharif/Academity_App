@@ -38,7 +38,7 @@ $url = match($type) {
   <form action="<?= match($type) {
       'create' => url_to('AdminPortal\Classes::create'),
       'edit' => url_to('AdminPortal\Classes::update', $class->class_id),
-  }?>" method="post">
+  }?>" method="post" hx-push-url="false">
     <?= csrf_field() ?>
 
     <div class="d-flex align-items-center mb-3">
@@ -183,14 +183,5 @@ $url = match($type) {
 
 <script src="/js/class_schedule.js"></script>
 <script src="/js/class_duration.js"></script>
-<script>
-  (() => {
-    window.history.replaceState(
-      null,
-      '',
-      '<?= esc($url, 'js') ?>',
-    );
-  })();
-</script>
 
 <?= $this->endSection('content'); ?>
