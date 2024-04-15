@@ -60,7 +60,7 @@ class Database extends Config
         'pConnect'    => false,
         'DBDebug'     => true,
         'charset'     => 'utf8',
-        'DBCollat'    => 'utf8_general_ci',
+        'DBCollat'    => '',
         'swapPre'     => '',
         'encrypt'     => false,
         'compress'    => false,
