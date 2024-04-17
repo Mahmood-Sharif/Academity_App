@@ -183,7 +183,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
         </div>
 
       </div>
-      <div class="mt-auto d-flex gap-3">
+      <div id="sidebarActions" class="mt-auto d-flex gap-3" hx-preserve="true">
         <div class="dropup flex-fill">
           <button class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
             <?=lang('App.profile')?>&nbsp;
