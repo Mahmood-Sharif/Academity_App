@@ -183,13 +183,13 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
         </div>
 
       </div>
-      <div id="sidebarActions" class="mt-auto d-flex gap-3" hx-preserve="true">
+      <div id="sidebarActions" class="mt-auto d-flex gap-3">
         <div class="dropup flex-fill">
           <button class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
             <?=lang('App.profile')?>&nbsp;
           </button>
           <ul class="dropdown-menu">
-            <li><a href="<?=url_to('AdminPortal\User::show', auth()->id())?>" class="dropdown-item">
+            <li><a href="<?=url_to('AdminPortal\User::showOwner')?>" class="dropdown-item">
                 <?=lang('App.profile.view')?>
               </a></li>
             <li><a href="<?=url_to('logout')?>" class="dropdown-item">
@@ -204,7 +204,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
           </button>
           <ul class="dropdown-menu">
             <li>
-              <div class="dropend">
+              <div id="theme-changer" class="dropend" hx-preserve="true">
                 <button class="dropdown-item dropdown-toggle" id="bd-theme" data-bs-toggle="dropdown"
                   aria-expanded="false">
                   <span id="bd-theme-text">
@@ -235,7 +235,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
               </div>
             </li>
             <li>
-              <div class="dropend">
+              <div class="dropend" hx-boost="false">
                 <button class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                   <?=lang('App.language')?>&nbsp;
                 </button>
