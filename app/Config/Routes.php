@@ -37,10 +37,11 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
         $routes->view('register-coach/', 'user/register_coach', ['as' => 'register_new_coach']);
         $routes->get('remove-coach/', 'AdminPortal\User::removeCoach');
-        $routes->get('user-profile/(:num)', 'AdminPortal\User::showOwner/$1');
+        $routes->get('user-profile/', 'AdminPortal\User::showOwner');
         $routes->get('student-profile/(:num)', 'AdminPortal\User::showStudent/$1');
         $routes->get('coach-profile/(:num)', 'AdminPortal\User::showCoach/$1');
-        $routes->get('edit-profile/(:num)', 'AdminPortal\User::edit/$1');
+        $routes->view('change-password/', 'Shield/change_password', ['as' => 'change_password']);
+        $routes->post('password-change/', 'AdminPortal\User::changePassword');
         $routes->get('ajax-class-input', 'AdminPortal\Classes::selectInput');
     });
 });

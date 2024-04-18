@@ -7,6 +7,7 @@ use App\Models\AcademyModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
+use CodeIgniter\Shield\Validation\ValidationRules;
 use Exception;
 
 class User extends ResourcePresenter
@@ -177,16 +178,9 @@ class User extends ResourcePresenter
     /**
      * @param mixed $id
      */
-    public function showOwner($id = null): string
+    public function showOwner(): string
     {
-        if (auth()->id() != $id) {
-            return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
-            ]);
-        }
-
-        $user = $this->users->find($id);
+        $user = auth()->user();
 
         return view('user/profile', [
             'user' => $user,
@@ -238,6 +232,40 @@ class User extends ResourcePresenter
     public function edit($id = null): string
     {
         throw new Exception("Unimplemented", 1);
+    }
+
+    public function changePassword(): ResponseInterface
+    {
+        $oldPassword = $this->request->getPost('password');
+        $newPassword = $this->request->getPost('new_password');
+        $newPasswordConfirm = $this->request->getPost('confirm_password');
+
+        $user = auth()->user();
+        $users = auth()->getProvider();
+
+        $validation = auth()->check(['email' => $user->getEmail(), 'password' => $oldPassword]);
+        if (!$validation->isOK()) {
+            return redirect()->route('change_password')->with('error', lang('Auth.error.cred'));
+        }
+
+        if ($newPassword != $newPasswordConfirm) {
+            return redirect()->route('change_password')->with('error', lang('Auth.error.new_match'));
+        }
+
+        if (!$this->validateData(
+            ['password' => $newPassword],
+            ['password' => (new ValidationRules())->getRegistrationRules()['password']],
+        )) {
+            return redirect()->route('change_password')->with('error', $this->validator->getError('password'));
+        }
+
+        try {
+            $user->setPassword($newPassword);
+            $users->save($user);
+            return redirect()->route('AdminPortal\User::showOwner')->with('message', lang('Auth.password_success'));
+        } catch (\Throwable $th) {
+            return redirect()->route('change_password')->with('error', lang('Auth.error.change'));
+        }
     }
 
 }

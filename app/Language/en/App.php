@@ -129,6 +129,7 @@ return [
   'profile.view.coach'     => 'View Coach Profile',
   'medical_condition'      => 'Medical Condition',
   'no_medical_condition'   => 'No Medical Condition',
+  'change_password'        => 'Change Password',
 
   // gallery
   'academy_gallery'        => 'Academy Gallery',
