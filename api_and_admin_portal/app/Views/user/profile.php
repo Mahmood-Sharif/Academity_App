@@ -63,9 +63,14 @@ $this->endSection('page_title');
       </div>
       <?php endif ?>
       <?php if ($type == 'owner'): ?>
-      <a href="<?=url_to('change_password')?>" class="btn btn-outline-danger">
-        <?=lang('App.change_password')?>
-      </a>
+      <div class="hstack gap-3">
+        <a href="<?=url_to('AdminPortal\User::editProfile')?>" class="btn btn-outline-secondary">
+          <?=lang('App.edit')?>
+        </a>
+        <a href="<?=url_to('change_password')?>" class="btn btn-outline-danger">
+          <?=lang('App.change_password')?>
+        </a>
+      </div>
       <?php endif ?>
     </div>
   </div>

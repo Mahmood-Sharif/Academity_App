@@ -15,9 +15,14 @@
   </div>
   <div class="card col-12 col-md-7 col-lg-6 shadow-sm">
     <div class="card-body">
-      <h5 class="card-title mb-5">
-        <?= lang('App.change_password') ?>
-      </h5>
+      <div class="d-flex align-items-center mb-3">
+        <a hx-boost="false" href="javascript:history.back()" class="btn text-danger text-danger p-0 me-2">
+          <i class="bi bi-arrow-left-short fs-1"></i>
+        </a>
+        <h5>
+          <?= lang('App.change_password') ?>
+        </h5>
+      </div>
 
       <?php if (session('error') !== null) : ?>
       <div class="alert alert-danger" role="alert">
@@ -65,8 +70,8 @@
 
         <!-- New Password Again -->
         <div class="form-floating mb-4">
-          <input type="password" class="form-control" id="floatingNCPasswordInput" name="confirm_password" inputmode="text"
-            autocomplete="new-password" placeholder="<?= lang('Auth.new_pass_again') ?>" required>
+          <input type="password" class="form-control" id="floatingNCPasswordInput" name="confirm_password"
+            inputmode="text" autocomplete="new-password" placeholder="<?= lang('Auth.new_pass_again') ?>" required>
           <label for="floatingNCPasswordInput">
             <?= lang('Auth.new_pass_again') ?>
           </label>

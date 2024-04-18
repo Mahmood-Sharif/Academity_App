@@ -64,6 +64,13 @@ class Validation extends BaseConfig
                 'valid_date',
             ],
         ],
+        'gender' => [
+            'label' => 'Auth.gender',
+            'rules' => [
+                'required',
+                'in_list[Male,Female]',
+            ],
+        ],
         'name' => [
             'label' => 'Auth.name',
             'rules' => [
