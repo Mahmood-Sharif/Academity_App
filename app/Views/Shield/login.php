@@ -6,13 +6,13 @@
 
 <?= $this->section('main') ?>
 
-<div class="container d-flex flex-column align-items-center justify-content-center p-5">
+<div class="container d-flex flex-column align-items-center justify-content-center p-3 p-md-5">
   <div class="col-8 col-md-5 mb-5">
     <svg viewBox="0 0 500 93.333336" alt="Academity" class="img-fluid">
       <?php readfile(ROOTPATH . 'public/images/logofull.svg') ?>
     </svg>
   </div>
-  <div class="card col-12 col-md-5 shadow-sm">
+  <div class="card col-12 col-md-7 col-lg-6 shadow-sm">
     <div class="card-body">
       <h5 class="card-title mb-5">
         <?= lang('Home.login_admin_portal') ?>
@@ -54,7 +54,7 @@
         </div>
 
         <!-- Password -->
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-4">
           <input type="password" class="form-control" id="floatingPasswordInput" name="password" inputmode="text"
             autocomplete="current-password" placeholder="<?= lang('Auth.password') ?>" required>
           <label for="floatingPasswordInput">
@@ -87,7 +87,8 @@
         </p>
         <?php endif ?>
 
-        <?php if (setting('Auth.allowRegistration')) : ?>
+        <?php if (false && setting('Auth.allowRegistration')) : ?>
+                <!-- ^ hide it anyway, only super admin can register for now -->
         <p class="text-center">
           <?= lang('Auth.needAccount') ?> <a href="<?= url_to('register') ?>">
             <?= lang('Auth.register') ?>

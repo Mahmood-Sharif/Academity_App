@@ -5,6 +5,7 @@ namespace App\Controllers\AdminPortal;
 use App\Entities\User as AppUser;
 use App\Models\AcademyModel;
 use App\Models\UserModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
 use CodeIgniter\Shield\Validation\ValidationRules;
@@ -229,9 +230,39 @@ class User extends ResourcePresenter
         ]);
     }
 
-    public function edit($id = null): string
+    public function editProfile(): string
     {
-        throw new Exception("Unimplemented", 1);
+        $user = auth()->user();
+        return view('user/edit_profile', ['user' => $user]);
+    }
+
+    public function updateProfile(): RedirectResponse
+    {
+        $user = auth()->user();
+        $users = auth()->getProvider();
+
+        $reg = (new ValidationRules())->getRegistrationRules();
+        $rules = [
+            'phone' => $reg['phone'],
+            'dob'   => $reg['dob'  ],
+            'name'  => $reg['name' ],
+        ];
+
+        // if user changed the email, check it too
+        if ($this->request->getPost('email') != $user->getEmail()) {
+            $rules['email'] = $reg['email'];
+        }
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('errors', $this->validator->getErrors());
+        }
+
+        try {
+            $users->update(auth()->id(), $this->validator->getValidated());
+            return redirect()->route('AdminPortal\User::showOwner')->with('message', lang('App.profile.success'));
+        } catch (\Throwable $th) {
+            return redirect()->route('AdminPortal\User::showOwner')->with('error', lang('App.profile.error'));
+        }
     }
 
     public function changePassword(): ResponseInterface

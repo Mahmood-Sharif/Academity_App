@@ -8,18 +8,23 @@
 
 <?= $this->section('main') ?>
 
-<div class="container d-flex flex-column align-items-center justify-content-center p-5">
+<div class="container d-flex flex-column align-items-center justify-content-center p-3 p-md-5">
   <div class="col-8 col-md-5 mb-5">
     <svg viewBox="0 0 500 93.333336" alt="Academity" class="img-fluid">
       <?php readfile(ROOTPATH . 'public/images/logofull.svg') ?>
     </svg>
   </div>
-  <div class="card col-12 col-md-5 shadow-sm">
+  <div class="card col-12 p-md-7 col-lg-6 shadow-sm">
     <div class="card-body">
       <h5 class="card-title mb-5">
         <?= lang('Auth.register') ?>
       </h5>
 
+      <?php if (session('message') !== null) : ?>
+      <div class="alert alert-success" role="alert">
+        <?= session('message') ?>
+      </div>
+      <?php endif ?>
       <?php if (session('error') !== null) : ?>
       <div class="alert alert-danger" role="alert">
         <?= session('error') ?>
@@ -40,28 +45,17 @@
       <form action="<?= url_to('register') ?>" method="post">
         <?= csrf_field() ?>
 
-        <!-- First Name -->
-        <div class="form-floating mb-2">
-          <input type="text" class="form-control" id="floatingFirstNameInput" name="first_name" inputmode="text"
-            autocomplete="given-name" placeholder="<?= lang('Auth.first_name') ?>" value="<?= old('first_name') ?>"
-            required>
-          <label for="floatingFirstNameInput">
-            <?= lang('Auth.first_name') ?>
-          </label>
-        </div>
-
-        <!-- Last Name -->
-        <div class="form-floating mb-2">
-          <input type="text" class="form-control" id="floatingLastNameInput" name="last_name" inputmode="text"
-            autocomplete="family-name" placeholder="<?= lang('Auth.last_name') ?>" value="<?= old('last_name') ?>"
-            required>
+        <!-- Name -->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingLastNameInput" name="name" inputmode="text"
+            autocomplete="name" placeholder="<?= lang('Auth.name') ?>" value="<?= old('name') ?>" required>
           <label for="floatingLastNameInput">
-            <?= lang('Auth.last_name') ?>
+            <?= lang('Auth.name') ?>
           </label>
         </div>
 
         <!-- Phone -->
-        <div class="form-floating mb-2">
+        <div class="form-floating mb-3">
           <input type="tel" class="form-control" id="floatingPhoneInput" name="phone" inputmode="tel" autocomplete="tel"
             placeholder="<?= lang('Auth.phone') ?>" value="<?= old('phone') ?>" required>
           <label for="floatingPhoneInput">
@@ -70,7 +64,7 @@
         </div>
 
         <!-- DOB -->
-        <div class="form-floating mb-2">
+        <div class="form-floating mb-3">
           <input type="date" class="form-control" id="floatingDobInput" name="dob" autocomplete="bday"
             placeholder="<?= lang('Auth.dob') ?>" value="<?= old('dob') ?>" required>
           <label for="floatingDobInput">
@@ -78,8 +72,28 @@
           </label>
         </div>
 
+        <!-- Gender -->
+        <fieldset class="mb-3">
+          <legend class="text-body fs-6">
+            <?=lang('Auth.gender')?>
+          </legend>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="Male" required>
+            <label class="form-check-label" for="inlineRadio1">
+              <?=lang('Auth.gender.male')?>
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="Female" required>
+            <label class="form-check-label" for="inlineRadio2">
+              <?=lang('Auth.gender.female')?>
+            </label>
+          </div>
+        </fieldset>
+
+
         <!-- Email -->
-        <div class="form-floating mb-2">
+        <div class="form-floating mb-3">
           <input type="email" class="form-control" id="floatingEmailInput" name="email" inputmode="email"
             autocomplete="email" placeholder="<?= lang('Auth.email') ?>" value="<?= old('email') ?>" required>
           <label for="floatingEmailInput">
@@ -89,7 +103,7 @@
 
 
         <!-- Password -->
-        <div class="form-floating mb-2">
+        <div class="form-floating mb-3">
           <input type="password" class="form-control" id="floatingPasswordInput" name="password" inputmode="text"
             autocomplete="new-password" placeholder="<?= lang('Auth.password') ?>" required>
           <label for="floatingPasswordInput">

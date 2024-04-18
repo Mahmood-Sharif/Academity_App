@@ -38,6 +38,7 @@ return [
   'edit.end_date'          => 'Edit End Date',
   'remove'                 => 'Remove',
   'remove.from_academy'    => 'Remove from {0}',
+  'save'                   => 'Save',
   'back'                   => 'Back',
   'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
@@ -130,6 +131,9 @@ return [
   'medical_condition'      => 'Medical Condition',
   'no_medical_condition'   => 'No Medical Condition',
   'change_password'        => 'Change Password',
+  'profile.edit'           => 'Edit Profile',
+  'profile.success'        => 'Profile updated successfully.',
+  'profile.error'          => 'Could not update profile.',
 
   // gallery
   'academy_gallery'        => 'Academy Gallery',
