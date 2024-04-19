@@ -10,7 +10,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="view-transition" content="same-origin">
-  <meta name="htmx-config" content='{"globalViewTransitions":true}'>
+  <meta name="htmx-config" content='{"globalViewTransitions":true,"historyCacheSize":0,"refreshOnHistoryMiss":true}'>
   <title>
     Academity -
     <?= $this->renderSection('page_title', true) ?>
