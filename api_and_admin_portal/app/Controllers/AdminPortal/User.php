@@ -103,11 +103,21 @@ class User extends ResourcePresenter
         $coach = $this->users->findByCredentials(['email' => $coachEmail]);
         if ($coach !== null) {
             // coach user exists, register it in this academy
+            $sql = $this->users->db->table('academy_coaches')->ignore()->set([
+              'academy_id' => $academy->academy_id,
+              'coach_id' => $coach->id,
+            ])->getCompiledInsert();
+            log_message('critical', var_export($sql, true));
+
             $result =
               $this->users->db->table('academy_coaches')->ignore()->insert([
-                'academy_id' => $academyId,
+                'academy_id' => $academy->academy_id,
                 'coach_id' => $coach->id,
               ]);
+
+            if(!$coach->inGroup('coach')) {
+                $coach->addGroup('coach');
+            }
 
             if ($result) {
                 return redirect()
