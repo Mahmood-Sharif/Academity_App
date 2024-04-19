@@ -70,8 +70,10 @@ class ClassDurationInput extends HTMLElement {
 
     this.updateNumClasses();
 
-    this.querySelector('#' + this.durId).addEventListener('change', (event) => this.onDurChange(event));
-    this.querySelector('.form-select').addEventListener('change', (event) => this.onUnitChange(event));
+    if (!this.hasAttribute('readonly')) {
+      this.querySelector('#' + this.durId).addEventListener('change', (event) => this.onDurChange(event));
+      this.querySelector('.form-select').addEventListener('change', (event) => this.onUnitChange(event));
+    }
   }
 
   attributeChangedCallback(name, _oldValue, newValue) {
@@ -96,7 +98,8 @@ class ClassDurationInput extends HTMLElement {
     }
 
     this.querySelector('.numclasses').innerText = this.numClassesText();
-    this.querySelector('input[type="hidden"]').value = this.value;
+    if (!this.hasAttribute('readonly'))
+      this.querySelector('input[type="hidden"]').value = this.value;
   }
 
   /** @param {Event} event */

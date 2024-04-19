@@ -5,11 +5,15 @@ class ClassScheduleEditor extends HTMLElement {
   timings = { sun: [{ start_time: '08:00', end_time: '09:00' }] };
   classCounters = [];
   i18n = ClassScheduleEditor.l10n.en;
+  coachSelect;
+  coachEndpoint;
+  csrfToken;
 
   static l10n = {
     en: {
       classTimings: 'Class Timings',
       showWeekend: 'Show Weekend',
+      showCoachSchedule: 'Show Coach Schedule',
       sun: 'Sun',
       mon: 'Mon',
       tue: 'Tue',
@@ -22,10 +26,12 @@ class ClassScheduleEditor extends HTMLElement {
       from: 'From',
       to: 'To',
       remove: 'Remove',
+      coachBusy: 'coach is busy at this time',
     },
     ar: {
       classTimings: 'توقيتات الصف',
       showWeekend: 'أظهر نهاية الأسبوع',
+      showCoachSchedule: 'أظهر جدول المدرب',
       sun: 'الأحد',
       mon: 'الإثنين',
       tue: 'الثلاثاء',
@@ -38,6 +44,7 @@ class ClassScheduleEditor extends HTMLElement {
       from: 'من',
       to: 'إلى',
       remove: 'إزالة',
+      coachBusy: 'المدرب مشغول هذا الوقت',
     },
   };
 
@@ -45,25 +52,6 @@ class ClassScheduleEditor extends HTMLElement {
    * @typedef {{start_time: String, end_time: String}} Timing
    */
 
-  /**
-   * @param {Timing} timing
-  */
-  timingExtents(timing) {
-    const { start_time, end_time } = timing;
-    const hourMap = (hour) => Math.min(Math.max(hour, hourStart), hourEnd) - hourStart + 1;
-    const fromHour = +start_time.split(':')[0];
-    const toHour = +end_time.split(':')[0];
-    return `grid-row-start: ${hourMap(fromHour)}; grid-row-end: ${hourMap(toHour)}`;
-  }
-
-  /** @param {Timing} timing  */
-  formatTime(timing) {
-    const { start_time, end_time } = timing;
-    const regex = /^(\d\d):(\d\d)(:\d\d)?/;
-    const [_from, fromHour, fromMinute] = start_time.match(regex);
-    const [_to, toHour, toMinute] = end_time.match(regex);
-    return `${+fromHour}:${fromMinute} &ndash; ${+toHour}:${toMinute}`
-  }
 
   constructor() {
     super();
@@ -74,6 +62,9 @@ class ClassScheduleEditor extends HTMLElement {
     if (presetTimings !== null) this.timings = presetTimings;
 
     this.classCounters = this.dataset.classCounters?.split(',') ?? [];
+    this.coachSelect = this.dataset.coachSelect;
+    this.coachEndpoint = this.dataset.coachEndpoint;
+    this.csrfToken = this.dataset.csrfToken;
 
     this.innerHTML = `
     <style>
@@ -126,7 +117,7 @@ class ClassScheduleEditor extends HTMLElement {
         margin-inline-end: 10px;
       }
       .day {
-        flex: 1 1 0;
+        flex-grow: 1;
         min-width: 150px;
       }
       .timings {
@@ -136,13 +127,22 @@ class ClassScheduleEditor extends HTMLElement {
         background: var(--calBgColor);
       }
       .timing {
-        margin: 0 0.5rem;
+        margin: 0 0 3px;
         user-select: none;
       }
       .timing>[type="button"] {
         height: 100%;
         width: 100%;
         font-weight: 400;
+      }
+      .timing>[type="button"].is-coach {
+        --bs-bg-opacity: 0.5;
+        --bs-border-opacity: 1;
+        color: #fff;
+        border-color: rgba(var(--bs-light-rgb), var(--bs-border-opacity)) !important;
+        background-color: RGBA(var(--bs-dark-rgb), var(--bs-bg-opacity, 1)) !important;
+        font-size: 1rem !important;
+        pointer-events: none;
       }
       .date-day {
         background: var(--bs-body-bg);
@@ -160,6 +160,10 @@ class ClassScheduleEditor extends HTMLElement {
         <div class="form-check form-check-inline ms-auto">
           <input class="form-check-input" type="checkbox" id="weekendCheck">
           <label class="form-check-label" for="weekendCheck">${this.i18n.showWeekend}</label>
+        </div>
+        <div class="form-check form-check-inline ms-3">
+          <input class="form-check-input" type="checkbox" id="coachCheck">
+          <label class="form-check-label" for="coachCheck">${this.i18n.showCoachSchedule}</label>
         </div>
       </div>
       <div class="card-body">
@@ -225,7 +229,29 @@ class ClassScheduleEditor extends HTMLElement {
       this.querySelector('.day[data-day="sat"]').classList.toggle('d-none', event.value);
     });
 
+    this.querySelector('#coachCheck').addEventListener('change', (event) => {
+      this.querySelectorAll('.is-coach').forEach(el => el.parentElement.classList.toggle('show', event.target.checked));
+    });
+
+
+    // get coach schedule
+    if (this.hasAttribute('readonly')) {
+      this.getCoachSchedule(this.dataset.coachId);
+    }
+
+    // the rest of listeners only apply to edit mode
     if (this.hasAttribute('readonly')) return;
+
+    // get coach schedule
+    const coachSelect = document.querySelector(this.coachSelect);
+    this.getCoachSchedule(coachSelect.value);
+    this.querySelector('#coachCheck').checked = true;
+    coachSelect.addEventListener('change', (event) => {
+      document.querySelectorAll('.is-coach').forEach(element => {
+        element.parentElement.remove();
+      });
+      this.getCoachSchedule(event.target.value);
+    });
 
     this.querySelectorAll('.timings').forEach((elem) => {
       elem.addEventListener('click', (event) => {
@@ -237,7 +263,8 @@ class ClassScheduleEditor extends HTMLElement {
             );
 
           // if timing exists don't create another one
-          if (Object.values(this.timings[day] ?? []).find((e) => {
+          const timings = (this.timings[day] ?? []).concat(this.coachTimings[day] ?? []);
+          if (Object.values(timings).find((e) => {
             const { start_time: from, end_time: to } = e;
             const fromHour = +from.split(':')[0];
             const toHour = +to.split(':')[0];
@@ -259,17 +286,44 @@ class ClassScheduleEditor extends HTMLElement {
     });
   }
 
-  appendTimingDOM(elem, timing, day, index) {
+  /**
+   * @param {Timing} timing
+  */
+  timingExtents(timing) {
+    const { start_time, end_time } = timing;
+    const hourMap = (hour) => Math.min(Math.max(hour, hourStart), hourEnd) - hourStart + 1;
+    const fromHour = +start_time.split(':')[0];
+    const toHour = +end_time.split(':')[0];
+    return `grid-row: ${hourMap(fromHour)} / ${hourMap(toHour)}`;
+  }
+
+  /** @param {Timing} timing  */
+  formatTime(timing) {
+    const { start_time, end_time } = timing;
+    const regex = /^(\d\d):(\d\d)(:\d\d)?/;
+    const [_from, fromHour, fromMinute] = start_time.match(regex);
+    const [_to, toHour, toMinute] = end_time.match(regex);
+    return `${+fromHour}:${fromMinute} &ndash; ${+toHour}:${toMinute}`
+  }
+
+  appendTimingDOM(elem, timing, day, index, isCoach = false) {
     const timingElem = document.createElement('div');
-    timingElem.classList.add('dropend', 'timing');
+    timingElem.classList.add('dropend', 'timing', 'fade');
     timingElem.dataset.day = day;
     timingElem.dataset.index = index;
     timingElem.style = this.timingExtents(timing);
+    let classes = 'btn btn-secondary px-0 fs-5'; {
+      if (this.hasAttribute('readonly')) classes += ' pe-none';
+      if (isCoach) classes += ' is-coach';
+      if (!(this.hasAttribute('readonly') && isCoach)) timingElem.classList.add('show');
+    }
+
     timingElem.innerHTML = `
       <div type="button"
-        class="btn btn-secondary px-0 fs-5 ${this.hasAttribute('readonly') ? ' pe-none' : ''}"
-        ${this.hasAttribute('readonly') ? '' : 'data-bs-toggle="dropdown"'} aria-expanded="false">
-        ${this.formatTime(timing)}
+        class="${classes}"
+        ${this.hasAttribute('readonly') ? '' : 'data-bs-toggle="dropdown"'} 
+        aria-expanded="false">
+        ${this.formatTime(timing)}${isCoach ? '<br>' + timing.class_name : ''}
       </div>
       <div class="dropdown-menu">
         <div class="vstack gap-3 p-2">
@@ -286,10 +340,19 @@ class ClassScheduleEditor extends HTMLElement {
       </div>
       `;
 
+    if (isCoach) {
+      timingElem.title = this.i18n.coachBusy;
+      timingElem.addEventListener('click', _ => {
+        const check = this.querySelector('#coachCheck');
+        if (!check.checked)
+          check.dispatchEvent(new PointerEvent('click'))
+      });
+    }
+
     elem.append(timingElem);
 
     // attach timing listeners 
-    if (this.hasAttribute('readonly')) return;
+    if (this.hasAttribute('readonly') || isCoach) return;
 
     timingElem.querySelector('.fromtime').addEventListener('change', (e) => this.onTimeInputChanged(e.target, 'from'));
     timingElem.querySelector('.totime').addEventListener('change', (e) => this.onTimeInputChanged(e.target, 'to'));
@@ -359,6 +422,24 @@ class ClassScheduleEditor extends HTMLElement {
           day_of_week: day.toUpperCase()
         }))
       ));
+  }
+
+  /** @param {number} coachId  */
+  getCoachSchedule(coachId) {
+    const request = new XMLHttpRequest();
+    request.open('GET', this.coachEndpoint + '?coach_id=' + coachId, true);
+    request.setRequestHeader('X-CSRF-TOKEN', this.csrfToken);
+    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    request.onloadend = () => {
+      this.coachTimings = JSON.parse(request.response);
+      for (const [day, timings] of Object.entries(this.coachTimings)) {
+        const elem = this.querySelector(`[data-day="${day}"]>.timings`);
+        timings.forEach((timing, index) => {
+          this.appendTimingDOM(elem, timing, day, index, true);
+        });
+      }
+    }
+    request.send();
   }
 
 }

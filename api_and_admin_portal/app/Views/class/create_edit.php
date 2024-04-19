@@ -123,7 +123,13 @@ $url = match($type) {
       </div>
 
       <div class="col">
-        <class-schedule-editor name="timings" data-class-counters="min_duration">
+                <class-schedule-editor name="timings" data-class-counters="min_duration"
+                    <?php if($type == 'edit'): ?>
+                    data-coach-endpoint="<?=url_to('AdminPortal\Classes::getCoachSchedule', $class->class_id)?>"
+                    data-csrf-token="<?=csrf_hash()?>"
+                    data-coach-select="#coach"
+                    <?php endif ?>
+                >
           <?= $classTimingsJson ?? '' ?>
         </class-schedule-editor>
 
@@ -140,39 +146,7 @@ $url = match($type) {
 
 
     </div>
-</div>
-</form>
-
-<?php /* if ($type === 'edit'): ?>
-<div class="accordion mt-4" id="accordionDanger">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-        aria-expanded="true" aria-controls="collapseOne">
-        <?=lang('App.advanced_options')?>
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionDanger">
-      <div class="accordion-body">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item d-flex align-items-start">
-            <div class="ms-2 me-auto">
-              <div class="fw-bold">
-                <?=lang('App.delete_class')?>
-              </div>
-              <?=lang('App.delete_class.desc')?>
-            </div>
-            <button hx-get="<?=url_to('AdminPortal\Classes::remove', $class->class_id)?>" hx-target="#modals-here"
-              hx-trigger="click" data-bs-toggle="modal" data-bs-target="#modals-here" class="btn btn-danger">
-              <?=lang('App.delete_class.btn')?>
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-<?php endif */ ?>
+  </form>
 </div>
 
 <div id="modals-here" class="modal modal-blur fade" style="display: none" aria-hidden="false" tabindex="-1">
