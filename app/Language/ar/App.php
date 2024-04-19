@@ -38,6 +38,7 @@ return [
   'edit.end_date'          => 'تعديل تاريخ الانتهاء',
   'remove'                 => 'إزالة',
   'remove.from_academy'    => 'إزالة من {0}',
+  'save'                   => 'حفظ',
   'back'                   => 'الرجوع',
   'back.previous'          => 'الرجوع إلى الصفحة السابقة',
   'back.academies'         => 'الرجوع إلى أكاديمياتي',
@@ -129,9 +130,16 @@ return [
   'profile.view.coach'     => 'عرض حساب المدرب',
   'medical_condition'      => 'الحالة الصحية',
   'no_medical_condition'   => 'لا توجد حالة صحية.',
+  'change_password'        => 'تغيير كلمة السر',
+  'profile.edit'           => 'تحديث الحساب',
+  'profile.success'        => 'تم تحديث بياناتك الشخصية بنجاح.',
+  'profile.error'          => 'لم يتم تحديث بياناتك الشخصية.',
 
   // gallery
-  'change_thumbnail'       => 'Change Thumbnail Image',
+  'academy_gallery'        => 'معرض الأكاديمية',
+  'change_thumbnail'       => 'تغيير صورة الأكاديمية',
+  'upd_thumbnail.success'  => 'نم تغيير صورة الأكاديمية بنجاح.',
+  'upd_thumbnail.error'    => 'لم تغيير صورة الأكاديمية.',
 
   // forms
   'submit'                 => 'إرسال',
