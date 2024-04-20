@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/auth/widgets/signup_form.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -17,9 +19,9 @@ class SignupScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Color(0xFFFF3200)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
-          "Create Your Account",
-          style: TextStyle(color: Color(0xFF8B0000)),
+        title:  Text(
+          AppLocalizations.of(context)!.createYourAccount,
+          style: const TextStyle(color: Color(0xFF8B0000)),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -49,14 +51,14 @@ class SignupScreen extends StatelessWidget {
                   // Combined text and clickable "Sign In"
                   RichText(
                     text: TextSpan(
-                      text: 'Already have an account? ',
+                      text: AppLocalizations.of(context)!.alreadyHaveAnAccount,
                       style: GoogleFonts.montserrat(
                         color: Colors.black, // Default text color
                         fontSize: 16, // Set font size to 18
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Sign In',
+                          text: AppLocalizations.of(context)!.signIn,
                           style: GoogleFonts.montserrat(
                             decoration: TextDecoration.underline,
                             color: const Color.fromARGB(

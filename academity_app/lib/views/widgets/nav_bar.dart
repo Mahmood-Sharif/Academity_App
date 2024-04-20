@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -16,15 +18,15 @@ class CustomBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem>[
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
-          activeIcon: Icon(Icons.home),
+         BottomNavigationBarItem(
+          icon: const Icon(Icons.explore_outlined),
+          label: AppLocalizations.of(context)!.exploreTitle,
+          activeIcon: const Icon(Icons.explore),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.shield_outlined),
-          label: 'My Academy',
-          activeIcon: Icon(Icons.shield_rounded),
+         BottomNavigationBarItem(
+          icon: const Icon(Icons.shield_outlined),
+          label: AppLocalizations.of(context)!.myAcademyTitle,
+          activeIcon: const Icon(Icons.shield_rounded),
         ),
         BottomNavigationBarItem(
           icon: Container(
@@ -38,15 +40,15 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
           label: '',
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today_outlined),
-          label: 'Schedule',
-          activeIcon: Icon(Icons.calendar_today),
+         BottomNavigationBarItem(
+          icon: const Icon(Icons.calendar_today_outlined),
+          label: AppLocalizations.of(context)!.scheduleTitle,
+          activeIcon: const Icon(Icons.calendar_today),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'Profile',
-          activeIcon: Icon(Icons.person),
+         BottomNavigationBarItem(
+          icon: const Icon(Icons.person_outline),
+          label: AppLocalizations.of(context)!.profileActionTitle,
+          activeIcon: const Icon(Icons.person),
         ),
       ],
       currentIndex: selectedIndex,

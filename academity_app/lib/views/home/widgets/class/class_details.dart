@@ -3,6 +3,7 @@ import 'package:academity_app/views/home/widgets/class/register_button_widget.da
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/class.dart'; // Adjust path as necessary
 import 'package:intl/intl.dart'; // Ensure this is correctly imported
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showClassDetails(BuildContext context, int classId) {
   final academityApi = ClassServices()
@@ -28,7 +29,9 @@ void showClassDetails(BuildContext context, int classId) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Text('Class Name: ${classItem.className}',
+                  child: Text(
+                      AppLocalizations.of(context)!
+                          .classNameTitle(classItem.className),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18)),
                 ),
@@ -37,20 +40,20 @@ void showClassDetails(BuildContext context, int classId) {
                   text: TextSpan(
                     style: const TextStyle(color: Colors.black),
                     children: [
-                      const TextSpan(
-                          text: 'Price: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text: 'BD ${classItem.price} ',
-                          style: const TextStyle(fontSize: 16)),
+                          text: '${AppLocalizations.of(context)!.priceTitle(classItem.price)} ',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16)),
+                      // TextSpan(
+                      //     text: classItem.price,
+                      //     style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text('Training Days',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text('${AppLocalizations.of(context)!.trainingDaysTitle}: ',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16)),
                 Expanded(
                   child: hasTimings
                       ? ListView.builder(
@@ -70,14 +73,16 @@ void showClassDetails(BuildContext context, int classId) {
                             );
                           },
                         )
-                      : const Center(child: Text('No timings available')),
+                      : Center(
+                          child: Text(AppLocalizations.of(context)!
+                              .noTimingsAvailable)),
                 ),
                 const RegisterButtonWidget(),
               ],
             ),
           );
         } else {
-          return const Text('No class details available');
+          return Text(AppLocalizations.of(context)!.noClassesAvailable);
         }
       },
     ),

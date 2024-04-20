@@ -1,6 +1,7 @@
+import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/student.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class StudentDetailsScreen extends StatelessWidget {
   const StudentDetailsScreen({Key? key}) : super(key: key);
 
@@ -8,17 +9,7 @@ class StudentDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final student = ModalRoute.of(context)?.settings.arguments as Student?;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor:
-            const Color(0xFF8B0000), // Setting header color to FF8B0000
-        title: const Text(
-          'Student Details',
-          style: TextStyle(
-              color: Colors.white), // Setting header text color to white
-        ),
-        iconTheme: const IconThemeData(
-            color: Colors.white), // Setting back arrow color to white
-      ),
+       appBar:  CustomAppBar(title: AppLocalizations.of(context)!.studentDetailsTitle),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -49,9 +40,9 @@ class StudentDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 16.0),
-                      const Text(
-                        'Name:',
-                        style: TextStyle(
+                       Text(
+                        AppLocalizations.of(context)!.studentName,
+                        style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -61,9 +52,9 @@ class StudentDetailsScreen extends StatelessWidget {
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
-                      const Text(
-                        'Phone:',
-                        style: TextStyle(
+                       Text(
+                        AppLocalizations.of(context)!.studentPhone,
+                        style: const TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -82,8 +73,8 @@ class StudentDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 16.0),
-                      const Text(
-                        'Date of Registration:',
+                       Text(
+                        AppLocalizations.of(context)!.studentDateOfRegistration,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -94,8 +85,8 @@ class StudentDetailsScreen extends StatelessWidget {
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
-                      const Text(
-                        'Renewal Date:',
+                       Text(
+                        AppLocalizations.of(context)!.studentRenewalDate,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -119,8 +110,8 @@ class StudentDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 12.0),
-                    const Text(
-                      'Medical Condition:',
+                     Text(
+                      AppLocalizations.of(context)!.studentMedicalCondition,
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -129,7 +120,7 @@ class StudentDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     Text(
                       student.medicalCondition ??
-                          'No outstanding medical conditions',
+                          AppLocalizations.of(context)!.studentMedicalConditionNone,
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/academy.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MySubscriptionDetails extends StatelessWidget {
   final Academy academy;
@@ -30,9 +31,9 @@ class MySubscriptionDetails extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        "Registeration: Date:",
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.registrationDateLabel,
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
@@ -40,9 +41,9 @@ class MySubscriptionDetails extends StatelessWidget {
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
-                        "Renewal Date:",
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.renewalDateLabel,
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
@@ -50,15 +51,16 @@ class MySubscriptionDetails extends StatelessWidget {
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
-                        "Price:",
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!
+                            .priceTitle(classDetail.price),
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "\$${classDetail.price}",
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                      // Text(
+                      //   "\$${classDetail.price}",
+                      //   style: const TextStyle(fontSize: 16),
+                      // ),
                       const Divider(height: 32, thickness: 2),
                     ],
                   );

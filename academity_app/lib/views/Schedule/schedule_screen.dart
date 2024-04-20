@@ -2,6 +2,8 @@ import 'package:academity_app/models/class_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/views/widgets/app_bar.dart'; // Adjust the path as needed
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SchedulePage extends ConsumerStatefulWidget {
   final FutureProviderFamily<List<ClassSchedule>,
@@ -27,7 +29,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     )));
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Schedule'),
+      appBar:  CustomAppBar(title: AppLocalizations.of(context)!.scheduleTitle),
       body: Column(
         children: [
           SizedBox(
@@ -107,7 +109,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                         child: ListTile(
                           title: Text(classDetails.className),
                           subtitle: Text(
-                              'Time: ${classDetails.startTime} - ${classDetails.endTime}\nLocation: ${classDetails.location}'),
+                              '${AppLocalizations.of(context)!.timeLabel} ${classDetails.startTime} - ${classDetails.endTime}\n${AppLocalizations.of(context)!.locationLabel(classDetails.location)}'),
                         ),
                       ),
                     );
@@ -125,22 +127,22 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
   String _getDayOfWeek(int weekday) {
     switch (weekday) {
-      case 1:
-        return 'Mon';
-      case 2:
-        return 'Tue';
-      case 3:
-        return 'Wed';
-      case 4:
-        return 'Thu';
-      case 5:
-        return 'Fri';
-      case 6:
-        return 'Sat';
-      case 7:
-        return 'Sun';
-      default:
-        return '';
+       case 1:
+      return AppLocalizations.of(context)!.dayOfWeekMon;
+    case 2:
+      return AppLocalizations.of(context)!.dayOfWeekTue;
+    case 3:
+      return AppLocalizations.of(context)!.dayOfWeekWed;
+    case 4:
+      return AppLocalizations.of(context)!.dayOfWeekThu;
+    case 5:
+      return AppLocalizations.of(context)!.dayOfWeekFri;
+    case 6:
+      return AppLocalizations.of(context)!.dayOfWeekSat;
+    case 7:
+      return AppLocalizations.of(context)!.dayOfWeekSun;
+    default:
+      return '';
     }
   }
 }

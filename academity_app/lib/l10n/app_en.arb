@@ -1,0 +1,382 @@
+{
+    "@@locale": "en",
+    "loginButton": "Login",
+    "@loginButton": {
+        "description": "Text for the login button"
+    },
+    "switchLanguageLabel": "Switch Language",
+    "@switchLanguageLabel": {
+        "description": "Text for the Switch Language button"
+    },
+    "englishLabel": "English",
+    "@englishLabel": {
+        "description": "Text for the English button"
+    },
+    "arabicLabel": "Arabic",
+    "@arabicLabel": {
+        "description": "Text for the Arabic button"
+    },
+    "saveButton": "Save",
+    "@saveButton": {
+        "description": "Text for the save button"
+    },
+    "enterCredentials": "Enter Your Credentials",
+    "@enterCredentials": {
+        "description": "Text for Enter Your Credentials"
+    },
+    "signUpButton": "Sign Up",
+    "@signUpButton": {
+        "description": "Text for the sign-up button"
+    },
+    "createYourAccount": "Create Your Account",
+    "@createYourAccount": {
+        "description": "Title text for the signup screen's AppBar"
+    },
+    "alreadyHaveAnAccount": "Already have an account? ",
+    "@alreadyHaveAnAccount": {
+        "description": "Text preceding the 'Sign In' link on the signup screen"
+    },
+    "signIn": "Sign In",
+    "@signIn": {
+        "description": "The 'Sign In' link text on the signup screen"
+    },
+    "personalInfoTitle": "Personal Info",
+    "@personalInfoTitle": {
+        "description": "Title for the personal information step in the signup form"
+    },
+    "accountInfoTitle": "Account Info",
+    "@accountInfoTitle": {
+        "description": "Title for the account information step in the signup form"
+    },
+    "fullNameLabel": "Full Name",
+    "@fullNameLabel": {
+        "description": "Label for the full name input field"
+    },
+    "fullNameError": "Please enter your full name",
+    "@fullNameError": {
+        "description": "Error message when the full name field is empty"
+    },
+    "phoneNumberLabel": "Phone Number",
+    "@phoneNumberLabel": {
+        "description": "Label for the phone number input field"
+    },
+    "phoneNumberError": "Please enter your phone number",
+    "@phoneNumberError": {
+        "description": "Error message when the phone number field is empty"
+    },
+    "genderLabel": "Gender",
+    "@genderLabel": {
+        "description": "Label for the gender selection"
+    },
+    "dayLabel": "Day",
+    "@dayLabel": {
+        "description": "Label for the day selection dropdown"
+    },
+    "monthLabel": "Month",
+    "@monthLabel": {
+        "description": "Label for the month selection dropdown"
+    },
+    "yearLabel": "Year",
+    "@yearLabel": {
+        "description": "Label for the year selection dropdown"
+    },
+    "emailLabel": "Email",
+    "@emailLabel": {
+        "description": "Label for the email input field"
+    },
+    "emailError": "Please enter your email",
+    "@emailError": {
+        "description": "Error message when the email field is empty"
+    },
+    "passwordLabel": "Password",
+    "@passwordLabel": {
+        "description": "Label for the password input field"
+    },
+    "passwordError": "Please enter a password",
+    "@passwordError": {
+        "description": "Error message when the password field is empty"
+    },
+    "confirmPasswordLabel": "Confirm Password",
+    "@confirmPasswordLabel": {
+        "description": "Label for the confirm password input field"
+    },
+    "confirmPasswordError": "Passwords do not match",
+    "@confirmPasswordError": {
+        "description": "Error message when the password and confirm password fields do not match"
+    },
+    "continueButtonText": "Continue",
+    "@continueButtonText": {
+        "description": "Text for the continue button in the stepper"
+    },
+    "backButtonText": "Back",
+    "@backButtonText": {
+        "description": "Text for the back button in the stepper"
+    },
+    "maleGender": "Male",
+    "@maleGender": {
+        "description": "Option for male gender"
+    },
+    "femaleGender": "Female",
+    "@femaleGender": {
+        "description": "Option for female gender"
+    },
+    "formErrorPersonalInfo": "Please correct the errors in the personal information form.",
+    "@formErrorPersonalInfo": {
+        "description": "Error message for personal information form validation"
+    },
+    "formErrorAccountInfo": "Please correct the errors in the account information form.",
+    "@formErrorAccountInfo": {
+        "description": "Error message for account information form validation"
+    },
+    "signupSuccessMessage": "Sign up successful! Welcome!",
+    "@signupSuccessMessage": {
+        "description": "Success message after signing up"
+    },
+    "signupFailureMessage": "Failed to sign up. Please check your information and try again.",
+    "@signupFailureMessage": {
+        "description": "Failure message when signup is unsuccessful"
+    },
+    "loginScreenTitle": "Enter Your Credentials",
+    "@loginScreenTitle": {
+        "description": "Title for the login screen's AppBar"
+    },
+    "loginFailedSnackbar": "Login failed",
+    "@loginFailedSnackbar": {
+        "description": "Message displayed in a snackbar when login fails"
+    },
+    "exploreTitle": "Explore",
+    "@exploreTitle": {
+        "description": "Title for the home page shown in the AppBar"
+    },
+    "noSportsAvailable": "No sports available",
+    "@noSportsAvailable": {
+        "description": "Text displayed when no sports are available to show"
+    },
+    "loadingSports": "Loading sports...",
+    "@loadingSports": {
+        "description": "Text displayed while sports are being loaded"
+    },
+    "noAcademiesAvailable": "No academies available",
+    "@noAcademiesAvailable": {
+        "description": "Text displayed when no academies data is available to show"
+    },
+    "descriptionTitle": "Description",
+    "@descriptionTitle": {
+        "description": "Title for the description section of an academy"
+    },
+    "classesTitle": "Classes",
+    "@classesTitle": {
+        "description": "Title for the classes section of an academy"
+    },
+    "loadingClasses": "Loading classes...",
+    "@loadingClasses": {
+        "description": "Text displayed while the classes data is being loaded"
+    },
+    "noClassesAvailable": "No classes available",
+    "@noClassesAvailable": {
+        "description": "Text displayed when no classes data is available to show"
+    },
+    "classNameTitle": "Class Name",
+    "@classNameTitle": {
+        "description": "Displays the class name in the modal",
+        "placeholders": {
+            "className": {
+                "type": "String",
+                "description": "The name of the class"
+            }
+        }
+    },
+    "priceTitle": "Price: BD {price}",
+    "@priceTitle": {
+        "description": "Displays the price of the class",
+        "placeholders": {
+            "price": {
+                "type": "String",
+                "description": "The price of the class"
+            }
+        }
+    },
+    "sportTitle": "{sportTitle, select, basketball{Basketball} football{Football} boxing{Boxing} taekwondo{Taekwondo} fencing{Fencing} tennis{Tennis} other{sport}}",
+    "@commonVehicleType": {
+    "description": "Sport type",
+    "placeholders": {
+        "sportTitle": {}
+    }
+    },
+    "customerSupportLabel": "Customer Support",
+    "@customerSupportLabel": {
+    "description": "Label for Customer Support"
+    },
+    "playerLabel": "Player",
+    "@playerLabel": {
+    "description": "Label for Player"
+    },
+    "coachLabel": "Coach",
+    "@coachLabel": {
+    "description": "Label for coach "
+    },
+    "swapToLabel": "Swap To",
+    "@swapToLabel": {
+    "description": "Label for Swap To "
+    },
+    "userLabel": "User",
+    "@userLabel": {
+    "description": "Label for User "
+    },
+    "trainingDaysTitle": "Training Days",
+    "@trainingDaysTitle": {
+        "description": "Title for the section listing the training days"
+    },
+    "noTimingsAvailable": "No timings available",
+    "@noTimingsAvailable": {
+        "description": "Displayed when there are no timings available for the class"
+    },
+    "noClassDetailsAvailable": "No class details available",
+    "@noClassDetailsAvailable": {
+        "description": "Displayed when no class details are available to show"
+    },
+    "registerButtonText": "Register",
+    "@registerButtonText": {
+        "description": "Text for the register button"
+    },
+    "enterReferralCodeDialogTitle": "Enter Referral Code",
+    "@enterReferralCodeDialogTitle": {
+        "description": "Title for the dialog where users can enter a referral code"
+    },
+    "referralCodeHint": "Referral Code",
+    "@referralCodeHint": {
+        "description": "Hint text for the referral code input field in the dialog"
+    },
+    "cancelButtonText": "Cancel",
+    "@cancelButtonText": {
+        "description": "Text for a generic cancel button"
+    },
+    "submitButtonText": "Submit",
+    "@submitButtonText": {
+        "description": "Text for a generic submit button"
+    },
+    "successfullyEnrolledMessage": "Successfully enrolled with code",
+    "@successfullyEnrolledMessage": {
+        "description": "Snackbar message for successful enrollment with a referral code",
+        "placeholders": {
+            "code": {
+                "type": "String",
+                "description": "The referral code used for enrollment"
+            }
+        }
+    },
+    "myAcademyTitle": "My Academy",
+    "@myAcademyTitle": {
+        "description": "Title for the My Academy page"
+    },
+    "locationLabel": "Location",
+    "@locationLabel": {
+        "description": "Label showing the location of the academy",
+        "placeholders": {
+            "location": {
+                "type": "String",
+                "description": "The location of the academy"
+            }
+        }
+    },
+    "timeLabel": "Time",
+    "@timeLabel": {
+        "description": "Label for Time"
+    },
+    "ageLabel": "Age",
+    "@ageLabel": {
+        "description": "Label for the age"
+    },
+    "notEnrolledMessage": "You are not enrolled in any academies",
+    "@notEnrolledMessage": {
+        "description": "Message displayed when a user is not enrolled in any academies"
+    },
+    "registrationDateLabel": "Registration Date",
+    "@registrationDateLabel": {
+        "description": "Label for the registration date of a class"
+    },
+    "renewalDateLabel": "Renewal Date",
+    "@renewalDateLabel": {
+        "description": "Label for the renewal date of a class subscription"
+    },
+    "dobLabel": "Date of Birth",
+    "@dobLabel": {
+        "description": "Label for the Date of Birth"
+    },
+    "priceLabel": "Price",
+    "@priceLabel": {
+        "description": "Label for the price of a class"
+    },
+    "scheduleTitle": "Schedule",
+    "@scheduleTitle": {
+        "description": "Title for the schedule page"
+    },
+    "userProfileTitle": "User Profile",
+    "@userProfileTitle": {
+        "description": "Title for the user profile page"
+    },
+    "noUserDataFound": "No user data found",
+    "@noUserDataFound": {
+        "description": "Message displayed when no user data is available"
+    },
+    "accountSectionTitle": "Account",
+    "@accountSectionTitle": {
+        "description": "Title for the account section in profile page"
+    },
+    "profileActionTitle": "Profile",
+    "@profileActionTitle": {
+        "description": "Title for navigating to the user profile"
+    },
+    "privacyAndSecurityActionTitle": "Privacy and Security",
+    "@privacyAndSecurityActionTitle": {
+        "description": "Title for the privacy and security section"
+    },
+    "actionsSectionTitle": "Actions",
+    "@actionsSectionTitle": {
+        "description": "Title for the actions section in profile page"
+    },
+    "reportAProblemActionTitle": "Report A Problem",
+    "@reportAProblemActionTitle": {
+        "description": "Title for the action to report a problem"
+    },
+    "profileUpdatedSuccess": "Profile updated successfully",
+    "@profileUpdatedSuccess": {
+        "description": "Message displayed when the profile is updated successfully"
+    },
+    "profileUpdateFailed": "Failed to update profile",
+    "@profileUpdateFailed": {
+        "description": "Message displayed when the profile update fails"
+    },
+    "logoutActionTitle": "Logout",
+    "@logoutActionTitle": {
+        "description": "Title for the logout action"
+    },
+    "dayOfWeekMon": "Mon",
+    "@dayOfWeekMon": {
+        "description": "Abbreviation for Monday"
+    },
+    "dayOfWeekTue": "Tue",
+    "@dayOfWeekTue": {
+        "description": "Abbreviation for Tuesday"
+    },
+    "dayOfWeekWed": "Wed",
+    "@dayOfWeekWed": {
+        "description": "Abbreviation for Wednesday"
+    },
+    "dayOfWeekThu": "Thu",
+    "@dayOfWeekThu": {
+        "description": "Abbreviation for Thursday"
+    },
+    "dayOfWeekFri": "Fri",
+    "@dayOfWeekFri": {
+        "description": "Abbreviation for Friday"
+    },
+    "dayOfWeekSat": "Sat",
+    "@dayOfWeekSat": {
+        "description": "Abbreviation for Saturday"
+    },
+    "dayOfWeekSun": "Sun",
+    "@dayOfWeekSun": {
+        "description": "Abbreviation for Sunday"
+    }
+}

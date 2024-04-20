@@ -1,6 +1,8 @@
 import 'package:academity_app/views/home/browse_academy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/sport.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SportsListWidget extends StatelessWidget {
   final List<Sport> sports;
@@ -45,7 +47,7 @@ class SportsListWidget extends StatelessWidget {
               ),
               alignment: Alignment.bottomCenter,
               child: Text(
-                sport.sportName,
+                AppLocalizations.of(context)!.sportTitle(sport.sportName.toLowerCase()),
                 style: TextStyle(
                   color: Colors.white,
                   backgroundColor: Colors.black.withOpacity(0.5),

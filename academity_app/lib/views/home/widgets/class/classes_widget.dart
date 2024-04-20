@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/academy.dart';
 import 'package:academity_app/models/class.dart'; // Verify this import path
 import 'package:academity_app/views/home/widgets/class/class_details.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ClassesWidget extends StatelessWidget {
   final Academy academy;
@@ -20,7 +21,9 @@ class ClassesWidget extends StatelessWidget {
         final classItem = classes[index];
         return ListTile(
           title: Text(classItem.className),
-          subtitle: Text('Age: ${classItem.minAge}-${classItem.maxAge}'),
+          subtitle: Text(
+            '${AppLocalizations.of(context)!.descriptionTitle} ${classItem.minAge}-${classItem.maxAge}',
+          ),
           trailing: const Icon(Icons.arrow_forward),
           onTap: () => showClassDetails(
             context,

@@ -4,6 +4,7 @@ import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:academity_app/views/home/widgets/sport/cards_widget.dart';
 import 'package:academity_app/views/home/widgets/sport/sports_griview.dart';
 import 'package:academity_app/models/sport.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SportsPage extends StatefulWidget {
   const SportsPage({Key? key}) : super(key: key);
@@ -18,8 +19,8 @@ class _SportsPageState extends State<SportsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Home',
+      appBar:  CustomAppBar(
+        title: AppLocalizations.of(context)!.exploreTitle,
         showBackButton: false, // Ensures the back button is not shown
       ),
       body: FutureBuilder<List<Sport>>(
@@ -40,7 +41,7 @@ class _SportsPageState extends State<SportsPage> {
             );
           } else {
             // This case handles empty data
-            return const Center(child: Text('No sports available'));
+            return  Center(child: Text(AppLocalizations.of(context)!.noSportsAvailable));
           }
         },
       ),

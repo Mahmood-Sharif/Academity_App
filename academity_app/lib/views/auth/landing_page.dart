@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -34,8 +36,8 @@ class LandingPage extends StatelessWidget {
                       BorderRadius.circular(4), // Slightly rounded edges
                 ),
               ),
-              child: const Text('Login',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
+              child:  Text(AppLocalizations.of(context)!.loginButton,
+                  style: const TextStyle(fontSize: 18, color: Colors.white)),
             ),
             const SizedBox(height: 20), // Adds space between the elements
 
@@ -53,8 +55,8 @@ class LandingPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              child: const Text('Sign Up',
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
+              child: Text(AppLocalizations.of(context)!.signUpButton,
+                  style: const TextStyle(fontSize: 18, color: Colors.white)),
             ),
           ],
         ),

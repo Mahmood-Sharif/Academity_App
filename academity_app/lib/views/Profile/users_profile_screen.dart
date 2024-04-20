@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserProfileScreen extends ConsumerWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -12,8 +13,8 @@ class UserProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: "User Profile",
+      appBar: CustomAppBar(
+        title: AppLocalizations.of(context)!.userProfileTitle,
       ),
       body: FutureBuilder<User>(
         future: AuthServices.getUserProfile(), // Implement this method
@@ -25,7 +26,8 @@ class UserProfileScreen extends ConsumerWidget {
           } else if (snapshot.hasData) {
             return UserProfileWidget(user: snapshot.data!);
           } else {
-            return const Center(child: Text("No user data found"));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.noUserDataFound));
           }
         },
       ),

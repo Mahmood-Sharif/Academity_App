@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/models/academy.dart';
 import 'package:academity_app/providers/academy_provider.dart'; // Make sure this is the correct path
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EnrolledAcademiesListWidget extends ConsumerWidget {
   const EnrolledAcademiesListWidget({Key? key}) : super(key: key);
@@ -55,7 +56,8 @@ class EnrolledAcademiesListWidget extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      "Location: ${academy.location}",
+                      AppLocalizations.of(context)!
+                          .locationLabel(academy.location),
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 18),
                     ),
@@ -68,8 +70,8 @@ class EnrolledAcademiesListWidget extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) {
           if (error is NotFound) {
-            return const Center(
-                child: Text('You are not enrolled in any academies'));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.notEnrolledMessage));
           } else {
             return Center(child: Text('Error: $error'));
           }
