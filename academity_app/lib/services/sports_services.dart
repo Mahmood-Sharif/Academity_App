@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:academity_app/env.dart';
+import 'package:academity_app/.env.dart';
 import 'package:academity_app/models/sport.dart';
 import 'package:academity_app/services/academity_api.dart';
 

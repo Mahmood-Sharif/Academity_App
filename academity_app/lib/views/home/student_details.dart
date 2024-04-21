@@ -2,6 +2,7 @@ import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/student.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class StudentDetailsScreen extends StatelessWidget {
   const StudentDetailsScreen({Key? key}) : super(key: key);
 
@@ -9,7 +10,8 @@ class StudentDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final student = ModalRoute.of(context)?.settings.arguments as Student?;
     return Scaffold(
-       appBar:  CustomAppBar(title: AppLocalizations.of(context)!.studentDetailsTitle),
+      appBar: CustomAppBar(
+          title: AppLocalizations.of(context)!.studentDetailsTitle),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -40,7 +42,7 @@ class StudentDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 16.0),
-                       Text(
+                      Text(
                         AppLocalizations.of(context)!.studentName,
                         style: const TextStyle(
                           fontSize: 20.0,
@@ -52,7 +54,7 @@ class StudentDetailsScreen extends StatelessWidget {
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
-                       Text(
+                      Text(
                         AppLocalizations.of(context)!.studentPhone,
                         style: const TextStyle(
                           fontSize: 20.0,
@@ -73,8 +75,8 @@ class StudentDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 16.0),
-                       Text(
-                        AppLocalizations.of(context)!.studentDateOfRegistration,
+                      Text(
+                        AppLocalizations.of(context)!.registrationDateLabel,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -85,8 +87,8 @@ class StudentDetailsScreen extends StatelessWidget {
                         style: const TextStyle(fontSize: 18.0),
                       ),
                       const SizedBox(height: 12.0),
-                       Text(
-                        AppLocalizations.of(context)!.studentRenewalDate,
+                      Text(
+                        AppLocalizations.of(context)!.renewalDateLabel,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -110,8 +112,8 @@ class StudentDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 12.0),
-                     Text(
-                      AppLocalizations.of(context)!.studentMedicalCondition,
+                    Text(
+                      AppLocalizations.of(context)!.medicalCondition,
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -120,7 +122,7 @@ class StudentDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     Text(
                       student.medicalCondition ??
-                          AppLocalizations.of(context)!.studentMedicalConditionNone,
+                          AppLocalizations.of(context)!.medicalConditionNone,
                       style: const TextStyle(fontSize: 18.0),
                     ),
                   ],

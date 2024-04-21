@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:academity_app/env.dart';
+import 'package:academity_app/.env.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:academity_app/services/academity_api.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
