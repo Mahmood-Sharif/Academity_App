@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:academity_app/models/class_schedule.dart';
 import 'package:academity_app/services/academity_api.dart';
 import 'package:academity_app/models/class.dart';
+import 'package:academity_app/services/academy_services.dart';
 import 'package:intl/intl.dart'; // Adjust path
 
 class ClassServices {
@@ -27,6 +28,8 @@ class ClassServices {
         throw Exception(
             'Data format is not as expected. Expected a list of classes.');
       }
+    } else if (response.statusCode == 404) {
+       throw NotFound();
     } else {
       throw Exception(
           'Failed to load classes with status code ${response.statusCode}');

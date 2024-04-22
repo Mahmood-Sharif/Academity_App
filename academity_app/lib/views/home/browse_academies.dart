@@ -23,7 +23,7 @@ class _CoachAcademiesPageState extends State<CoachAcademiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(title: AppLocalizations.of(context)!.myAcademiesTitle),
+      // appBar:  CustomAppBar(title: AppLocalizations.of(context)!.myAcademiesTitle),
       body: FutureBuilder<List<Academy>>(
         future: futureSports,
         builder: (context, snapshot) {

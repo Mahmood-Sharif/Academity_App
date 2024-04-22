@@ -19,7 +19,7 @@
     "saveButton": "Save",
     "@saveButton": {
         "description": "Text for the save button"
-    },
+    },    
     "enterCredentials": "Enter Your Credentials",
     "@enterCredentials": {
         "description": "Text for Enter Your Credentials"
@@ -35,10 +35,6 @@
     "alreadyHaveAnAccount": "Already have an account? ",
     "@alreadyHaveAnAccount": {
         "description": "Text preceding the 'Sign In' link on the signup screen"
-    },
-    "signIn": "Sign In",
-    "@signIn": {
-        "description": "The 'Sign In' link text on the signup screen"
     },
     "personalInfoTitle": "Personal Info",
     "@personalInfoTitle": {

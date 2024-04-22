@@ -1,7 +1,6 @@
 import 'package:academity_app/services/sports_services.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
-import 'package:academity_app/views/home/widgets/sport/cards_widget.dart';
 import 'package:academity_app/views/home/widgets/sport/sports_griview.dart';
 import 'package:academity_app/models/sport.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,7 +35,7 @@ class _SportsPageState extends State<SportsPage> {
                 const SizedBox(height: 20),
                 SportsListWidget(sports: snapshot.data!),
                 const SizedBox(height: 20),
-                const TwoCardsSideBySide(),
+                // const TwoCardsSideBySide(),
               ],
             );
           } else {

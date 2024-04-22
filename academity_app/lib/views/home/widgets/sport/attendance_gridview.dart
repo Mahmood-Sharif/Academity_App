@@ -107,8 +107,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                           ),
                         ),
                         child: Text(
-                          AppLocalizations.of(context)!.presentButton,
-                          style: TextStyle(
+'Medical',                          style: TextStyle(
                             color: attendance.status == 'Present'
                                 ? Colors
                                     .white // Change color if the student is already present
@@ -151,8 +150,7 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                           ),
                         ),
                         child: Text(
-                          AppLocalizations.of(context)!.absentButton,
-                          style: TextStyle(
+'Medical',                          style: TextStyle(
                             color: attendance.status == 'Absent'
                                 ? Colors
                                     .white // Change color if the student is already present

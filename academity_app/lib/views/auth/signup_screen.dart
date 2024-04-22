@@ -12,7 +12,7 @@ class SignupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Making the Scaffold's body a Stack to overlay the image over the form.
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Add this line
+      resizeToAvoidBottomInset: true, // Add this line
 
       appBar: AppBar(
         leading: IconButton(
@@ -58,7 +58,7 @@ class SignupScreen extends StatelessWidget {
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: AppLocalizations.of(context)!.signIn,
+                          text: AppLocalizations.of(context)!.loginButton,
                           style: GoogleFonts.montserrat(
                             decoration: TextDecoration.underline,
                             color: const Color.fromARGB(

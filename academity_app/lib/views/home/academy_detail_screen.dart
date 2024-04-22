@@ -1,4 +1,5 @@
 import 'package:academity_app/models/class.dart';
+import 'package:academity_app/services/academy_services.dart';
 import 'package:academity_app/services/class_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,7 +61,10 @@ class AcademyDetailScreen extends ConsumerWidget {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return switch (snapshot.error) {
+                          NotFound() => Text(AppLocalizations.of(context)!.noClassesAvailable),
+                          _ => Text('Error: ${snapshot.error}'),
+                        };
                       } else if (snapshot.hasData) {
                         return ClassesWidget(
                             academy: academy, classes: snapshot.requireData);
