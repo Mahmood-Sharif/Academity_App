@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFFFF3200)),
@@ -59,7 +58,11 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(
+                bottom: 150,
+                left: 20,
+                right: 20,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -67,7 +70,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                   TextField(
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.emailLabel,
                       border: const UnderlineInputBorder(),
                     ),
@@ -76,7 +79,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                   const SizedBox(height: 20),
                   TextField(
                     controller: passwordController,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.passwordLabel,
                       border: const UnderlineInputBorder(),
                     ),
@@ -95,7 +98,7 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),
-                    child:  Text(
+                    child: Text(
                       AppLocalizations.of(context)!.loginButton,
                       style: const TextStyle(
                           color: Colors.white,

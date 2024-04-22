@@ -36,16 +36,24 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              _buildUserInputField(AppLocalizations.of(context)!.fullNameLabel, _editableUser.name, Icons.person,
-                  customColor, (val) => _updateUserField('name', val)),
+              _buildUserInputField(
+                  AppLocalizations.of(context)!.fullNameLabel,
+                  _editableUser.name,
+                  Icons.person,
+                  customColor,
+                  (val) => _updateUserField('name', val)),
               _buildUserInputField(
                   AppLocalizations.of(context)!.emailLabel,
                   _editableUser.email ?? '',
                   Icons.email,
                   customColor,
                   (val) => _updateUserField('email', val)),
-              _buildUserInputField(AppLocalizations.of(context)!.phoneNumberLabel, _editableUser.phone, Icons.phone,
-                  customColor, (val) => _updateUserField('phone', val)),
+              _buildUserInputField(
+                  AppLocalizations.of(context)!.phoneNumberLabel,
+                  _editableUser.phone,
+                  Icons.phone,
+                  customColor,
+                  (val) => _updateUserField('phone', val)),
               // For Date of Birth, consider using a DatePicker instead of a TextFormField
               _buildUserInputField(
                   AppLocalizations.of(context)!.dobLabel,
@@ -53,8 +61,12 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
                   Icons.cake,
                   customColor,
                   (val) => _updateUserField('dob', val)),
-              _buildUserInputField(AppLocalizations.of(context)!.genderLabel, _editableUser.gender, Icons.male,
-                  customColor, (val) => _updateUserField('gender', val)),
+              _buildUserInputField(
+                  AppLocalizations.of(context)!.genderLabel,
+                  _editableUser.gender,
+                  Icons.male,
+                  customColor,
+                  (val) => _updateUserField('gender', val)),
               const SizedBox(height: 20),
               _buildSaveButton(),
             ],
@@ -98,7 +110,7 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
             borderRadius: BorderRadius.circular(4), // Slightly rounded edges
           ),
         ),
-        child:  Text(AppLocalizations.of(context)!.saveButton,
+        child: Text(AppLocalizations.of(context)!.saveButton,
             style: const TextStyle(fontSize: 18, color: Colors.white)),
       ),
     );
@@ -112,11 +124,13 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
             await ref.read(authProvider.notifier).updateProfile(_editableUser);
         if (!context.mounted) return;
         if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(content: Text(AppLocalizations.of(context)!.profileUpdateFailed)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.profileUpdateFailed)));
         }
       } catch (e) {
         ScaffoldMessenger.of(context)

@@ -21,7 +21,8 @@ class LocationWidget extends StatelessWidget {
         ),
         Expanded(
           // Use Expanded to prevent overflow
-          child: Text(': ${academy.location}',
+          child: Text(
+            ': ${academy.location}',
             style: GoogleFonts.montserrat(
               fontWeight:
                   FontWeight.w400, // Regular weight for the actual location

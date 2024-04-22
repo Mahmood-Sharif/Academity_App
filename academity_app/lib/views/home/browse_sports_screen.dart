@@ -18,7 +18,7 @@ class _SportsPageState extends State<SportsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         title: AppLocalizations.of(context)!.exploreTitle,
         showBackButton: false, // Ensures the back button is not shown
       ),
@@ -40,7 +40,8 @@ class _SportsPageState extends State<SportsPage> {
             );
           } else {
             // This case handles empty data
-            return  Center(child: Text(AppLocalizations.of(context)!.noSportsAvailable));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.noSportsAvailable));
           }
         },
       ),

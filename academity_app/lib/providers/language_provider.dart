@@ -9,7 +9,7 @@ class LanguageProvider extends StateNotifier<Locale> {
   LanguageProvider() : super(const Locale('en'));
 
   void switchLanguage(String languageCode) {
-      debugPrint("Switching language to $languageCode");
+    debugPrint("Switching language to $languageCode");
 
     state = Locale(languageCode);
   }

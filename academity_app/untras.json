@@ -1,0 +1,11 @@
+{
+  "ar": [
+    "studentDetailsTitle",
+    "studentName",
+    "studentPhone",
+    "medicalCondition",
+    "medicalConditionNone",
+    "presentButton",
+    "absentButton"
+  ]
+}

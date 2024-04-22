@@ -77,7 +77,7 @@ class StudentDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 16.0),
                       Text(
                         AppLocalizations.of(context)!.registrationDateLabel,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -89,7 +89,7 @@ class StudentDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 12.0),
                       Text(
                         AppLocalizations.of(context)!.renewalDateLabel,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -114,7 +114,7 @@ class StudentDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 12.0),
                     Text(
                       AppLocalizations.of(context)!.medicalCondition,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),

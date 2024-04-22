@@ -1,7 +1,6 @@
 import 'package:academity_app/models/attendance.dart';
 import 'package:academity_app/services/attendance_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AttendanceListWidget extends StatefulWidget {
   final List<Attendance> attendanceList;
@@ -107,7 +106,8 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                           ),
                         ),
                         child: Text(
-'Medical',                          style: TextStyle(
+                          'Medical',
+                          style: TextStyle(
                             color: attendance.status == 'Present'
                                 ? Colors
                                     .white // Change color if the student is already present
@@ -150,7 +150,8 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                           ),
                         ),
                         child: Text(
-'Medical',                          style: TextStyle(
+                          'Medical',
+                          style: TextStyle(
                             color: attendance.status == 'Absent'
                                 ? Colors
                                     .white // Change color if the student is already present

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/views/widgets/app_bar.dart'; // Adjust the path as needed
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class SchedulePage extends ConsumerStatefulWidget {
   final FutureProviderFamily<List<ClassSchedule>,
       ({DateTime fromDate, DateTime toDate})> scheduleProvider;
@@ -29,7 +28,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     )));
 
     return Scaffold(
-      appBar:  CustomAppBar(title: AppLocalizations.of(context)!.scheduleTitle),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.scheduleTitle),
       body: Column(
         children: [
           SizedBox(
@@ -127,22 +126,22 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
 
   String _getDayOfWeek(int weekday) {
     switch (weekday) {
-       case 1:
-      return AppLocalizations.of(context)!.dayOfWeekMon;
-    case 2:
-      return AppLocalizations.of(context)!.dayOfWeekTue;
-    case 3:
-      return AppLocalizations.of(context)!.dayOfWeekWed;
-    case 4:
-      return AppLocalizations.of(context)!.dayOfWeekThu;
-    case 5:
-      return AppLocalizations.of(context)!.dayOfWeekFri;
-    case 6:
-      return AppLocalizations.of(context)!.dayOfWeekSat;
-    case 7:
-      return AppLocalizations.of(context)!.dayOfWeekSun;
-    default:
-      return '';
+      case 1:
+        return AppLocalizations.of(context)!.dayOfWeekMon;
+      case 2:
+        return AppLocalizations.of(context)!.dayOfWeekTue;
+      case 3:
+        return AppLocalizations.of(context)!.dayOfWeekWed;
+      case 4:
+        return AppLocalizations.of(context)!.dayOfWeekThu;
+      case 5:
+        return AppLocalizations.of(context)!.dayOfWeekFri;
+      case 6:
+        return AppLocalizations.of(context)!.dayOfWeekSat;
+      case 7:
+        return AppLocalizations.of(context)!.dayOfWeekSun;
+      default:
+        return '';
     }
   }
 }

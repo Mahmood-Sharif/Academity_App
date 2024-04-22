@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemSelected;
@@ -18,12 +17,12 @@ class CustomBottomNavBar extends StatelessWidget {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem>[
-         BottomNavigationBarItem(
+        BottomNavigationBarItem(
           icon: const Icon(Icons.explore_outlined),
           label: AppLocalizations.of(context)!.exploreTitle,
           activeIcon: const Icon(Icons.explore),
         ),
-         BottomNavigationBarItem(
+        BottomNavigationBarItem(
           icon: const Icon(Icons.shield_outlined),
           label: AppLocalizations.of(context)!.myAcademyTitle,
           activeIcon: const Icon(Icons.shield_rounded),
@@ -40,12 +39,12 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
           label: '',
         ),
-         BottomNavigationBarItem(
+        BottomNavigationBarItem(
           icon: const Icon(Icons.calendar_today_outlined),
           label: AppLocalizations.of(context)!.scheduleTitle,
           activeIcon: const Icon(Icons.calendar_today),
         ),
-         BottomNavigationBarItem(
+        BottomNavigationBarItem(
           icon: const Icon(Icons.person_outline),
           label: AppLocalizations.of(context)!.profileActionTitle,
           activeIcon: const Icon(Icons.person),

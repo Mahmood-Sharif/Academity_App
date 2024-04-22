@@ -62,7 +62,8 @@ class AcademyDetailScreen extends ConsumerWidget {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return switch (snapshot.error) {
-                          NotFound() => Text(AppLocalizations.of(context)!.noClassesAvailable),
+                          NotFound() => Text(
+                              AppLocalizations.of(context)!.noClassesAvailable),
                           _ => Text('Error: ${snapshot.error}'),
                         };
                       } else if (snapshot.hasData) {

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/views/home/academy_detail_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class AcademiesListWidget extends ConsumerWidget {
   final int sportId;
 
@@ -75,7 +74,9 @@ class AcademiesListWidget extends ConsumerWidget {
               },
             );
           } else if (asy.hasError) {
-            return  Center(child: Text(AppLocalizations.of(context)!.noAcademiesAvailable));
+            return Center(
+                child:
+                    Text(AppLocalizations.of(context)!.noAcademiesAvailable));
           } else {
             return const CircularProgressIndicator();
           }

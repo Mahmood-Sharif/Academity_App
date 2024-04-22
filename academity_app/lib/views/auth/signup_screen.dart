@@ -4,7 +4,6 @@ import 'package:academity_app/views/auth/widgets/signup_form.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
@@ -12,14 +11,14 @@ class SignupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Making the Scaffold's body a Stack to overlay the image over the form.
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Add this line
+      resizeToAvoidBottomInset: false, // Add this line
 
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFFFF3200)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title:  Text(
+        title: Text(
           AppLocalizations.of(context)!.createYourAccount,
           style: const TextStyle(color: Color(0xFF8B0000)),
         ),

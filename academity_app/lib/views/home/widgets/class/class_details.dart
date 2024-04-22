@@ -41,7 +41,8 @@ void showClassDetails(BuildContext context, int classId) {
                     style: const TextStyle(color: Colors.black),
                     children: [
                       TextSpan(
-                          text: '${AppLocalizations.of(context)!.priceTitle(classItem.price)} ',
+                          text:
+                              '${AppLocalizations.of(context)!.priceTitle(classItem.price)} ',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       // TextSpan(

@@ -360,7 +360,7 @@
         "description": "medicalCondition"
     },
     "medicalConditionNone": "No Outstanding Medical Condition",
-    "@medicalCondition": {
+    "@MedicalConditionNone": {
         "description": "Message displayed when in absence of major medical condition"
     },
     "presentButton": "Present",

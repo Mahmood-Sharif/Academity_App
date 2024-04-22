@@ -29,7 +29,7 @@ class ClassServices {
             'Data format is not as expected. Expected a list of classes.');
       }
     } else if (response.statusCode == 404) {
-       throw NotFound();
+      throw NotFound();
     } else {
       throw Exception(
           'Failed to load classes with status code ${response.statusCode}');

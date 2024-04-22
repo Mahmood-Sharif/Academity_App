@@ -8,7 +8,7 @@ class MyAcademyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: CustomAppBar(
         title: AppLocalizations.of(context)!.myAcademyTitle,
         showBackButton: false,
