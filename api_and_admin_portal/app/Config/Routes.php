@@ -18,24 +18,37 @@ $routes->group('{locale}', static function ($routes) {
 
 $routes->group('{locale}/admin-portal', static function ($routes) {
     // Admin portal Auth routes: login*, register, logout, auth/a*
-    service('auth')->routes($routes);
+    $routes->get('/', 'AdminPortal\Academy::index', ['as' => 'admin_portal_home']);
+    service('auth')->routes($routes, ['except' => ['register']]);
+    $routes->get('register/', 'AdminPortal\Shield\Register::registerView', ['as' => 'register', 'filter' => 'group:superadmin']);
+    $routes->post('register/', 'AdminPortal\Shield\Register::registerAction', ['filter' => 'group:superadmin']);
+
 
     $routes->group('', ['filter' => 'group:admin,superadmin'], static function ($routes) {
         $routes->get('/', 'AdminPortal\Academy::index', ['as' => 'admin_portal_home']);
         $routes->presenter('my-academies', ['controller' => 'AdminPortal\Academy']);
+        $routes->get('gallery/(:num)', 'AdminPortal\Academy::gallery/$1');
+        $routes->get('gallery-items/(:num)', 'AdminPortal\Academy::galleryItems/$1');
+        $routes->post('gallery-upload/', 'AdminPortal\Academy::galleryUpload');
+        $routes->post('gallery-submit/(:num)', 'AdminPortal\Academy::gallerySubmit/$1');
+        $routes->post('update-thumbnail/(:num)', 'AdminPortal\Academy::updateThumbnail/$1');
         $routes->get('classes/by-academy/(:num)', 'AdminPortal\Classes::index/$1');
         $routes->presenter('classes', ['controller' => 'AdminPortal\Classes']);
         $routes->get('class-reg-code/(:num)', 'AdminPortal\Classes::registrationCode/$1');
+        $routes->get('coach-schedule/(:num)', 'AdminPortal\Classes::getCoachSchedule/$1');
         $routes->presenter('students', ['controller' => 'AdminPortal\Enrollment']);
         $routes->get('coaches/', 'AdminPortal\User::indexCoaches');
         $routes->get('academy-coaches/', 'AdminPortal\User::academyCoachesInput');
         $routes->post('register-coach/', 'AdminPortal\User::registerCoach');
         $routes->view('register-coach/', 'user/register_coach', ['as' => 'register_new_coach']);
         $routes->get('remove-coach/', 'AdminPortal\User::removeCoach');
-        $routes->get('user-profile/(:num)', 'AdminPortal\User::showOwner/$1');
+        $routes->get('user-profile/', 'AdminPortal\User::showOwner');
         $routes->get('student-profile/(:num)', 'AdminPortal\User::showStudent/$1');
         $routes->get('coach-profile/(:num)', 'AdminPortal\User::showCoach/$1');
-        $routes->get('edit-profile/(:num)', 'AdminPortal\User::edit/$1');
+        $routes->view('change-password/', 'Shield/change_password', ['as' => 'change_password']);
+        $routes->get('edit-profile/', 'AdminPortal\User::editProfile');
+        $routes->post('edit-profile/', 'AdminPortal\User::updateProfile');
+        $routes->post('password-change/', 'AdminPortal\User::changePassword');
         $routes->get('ajax-class-input', 'AdminPortal\Classes::selectInput');
     });
 });

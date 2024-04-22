@@ -17,6 +17,7 @@ class AddProfileImageColumn extends Migration
 
     public function down(): void
     {
+        $this->forge->dropForeignKey('users', 'users_profile_image_foreign');
         $this->forge->dropColumn('users', 'profile_image');
     }
 }

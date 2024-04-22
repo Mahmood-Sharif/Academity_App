@@ -4,6 +4,7 @@ import 'package:academity_app/views/home/widgets/academy/coach_academies_gridvie
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class CoachAcademiesPage extends StatefulWidget {
   const CoachAcademiesPage({Key? key}) : super(key: key);
 
@@ -23,7 +24,7 @@ class _CoachAcademiesPageState extends State<CoachAcademiesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar:  CustomAppBar(title: AppLocalizations.of(context)!.myAcademiesTitle),
+      appBar: CustomAppBar(title: AppLocalizations.of(context)!.myAcademyTitle),
       body: FutureBuilder<List<Academy>>(
         future: futureSports,
         builder: (context, snapshot) {

@@ -38,6 +38,7 @@ return [
   'edit.end_date'          => 'Edit End Date',
   'remove'                 => 'Remove',
   'remove.from_academy'    => 'Remove from {0}',
+  'save'                   => 'Save',
   'back'                   => 'Back',
   'back.previous'          => 'Back to previous page',
   'back.academies'         => 'Back to my academies',
@@ -65,9 +66,9 @@ return [
   'manage.students'        => 'Manage Students',
   'manage.coaches'         => 'Manage Coaches',
   'manage.announcements'   => 'Make Announcement',
-  'manage.academy'         => 'Manage Academy',
+  'manage.academy'         => 'Academy Settings',
+  'manage.gallery'         => 'Edit Gallery',
   'academy.edit'           => 'Edit {0} details',
-  'academy.create'         => 'Create Academy',
   'academy.create'         => 'Create Academy',
 
   // manage coaches
@@ -129,6 +130,16 @@ return [
   'profile.view.coach'     => 'View Coach Profile',
   'medical_condition'      => 'Medical Condition',
   'no_medical_condition'   => 'No Medical Condition',
+  'change_password'        => 'Change Password',
+  'profile.edit'           => 'Edit Profile',
+  'profile.success'        => 'Profile updated successfully.',
+  'profile.error'          => 'Could not update profile.',
+
+  // gallery
+  'academy_gallery'        => 'Academy Gallery',
+  'change_thumbnail'       => 'Change Thumbnail Image',
+  'upd_thumbnail.success'  => 'Successfully changed thumbnail.',
+  'upd_thumbnail.error'    => 'Could not change thumbnail.',
 
   // forms
   'submit'                 => 'Submit',

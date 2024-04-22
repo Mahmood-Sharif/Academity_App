@@ -343,6 +343,34 @@
     "@profileUpdateFailed": {
         "description": "Message displayed when the profile update fails"
     },
+    "studentDetailsTitle": "Student Details",
+    "@studentDetailsTitle": {
+        "description": "studentDetailsTitle"
+    },
+    "studentName": "Student Name",
+    "@studentName": {
+        "description": "studentName"
+    },
+    "studentPhone": "Student Phone",
+    "@studentPhone": {
+        "description": "studentPhone"
+    },
+    "medicalCondition": "Medical Condition",
+    "@medicalCondition": {
+        "description": "medicalCondition"
+    },
+    "medicalConditionNone": "No Outstanding Medical Condition",
+    "@medicalCondition": {
+        "description": "Message displayed when in absence of major medical condition"
+    },
+    "presentButton": "Present",
+    "@presentButton": {
+        "description": "presentButton"
+    },
+    "absentButton": "Absent",
+    "@absentButton": {
+        "description": "absentButton"
+    },
     "logoutActionTitle": "Logout",
     "@logoutActionTitle": {
         "description": "Title for the logout action"

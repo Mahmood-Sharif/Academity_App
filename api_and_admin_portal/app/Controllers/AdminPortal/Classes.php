@@ -9,6 +9,7 @@ use App\Models\ClassTimingModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
+use DateTime;
 
 class Classes extends ResourcePresenter
 {
@@ -151,8 +152,14 @@ class Classes extends ResourcePresenter
             $flashData = ['error', lang('App.class_update.error')];
         }
 
-        sleep(1);
-        return redirect()->route('AdminPortal\Classes::show', [$id])->with(...$flashData);
+        session()->setTempdata($flashData, null);
+        return $this->response
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Classes::show', $id));
+        // return redirect()
+        //     ->route('AdminPortal\Classes::show', [$id])
+        //     ->setHeader('HX-Redirect', url_to('AdminPortal\Classes::show', $id))
+        //     ->setStatusCode(302)
+        //     ->with(...$flashData);
     }
 
     // show create form
@@ -306,5 +313,28 @@ class Classes extends ResourcePresenter
     {
         $academyId = $this->request->getGet('academy_id');
         return view('class/ajax_class_input', ['academyId' => $academyId]);
+    }
+
+    public function getCoachSchedule(int $classId): ResponseInterface
+    {
+        $coachId = (int)$this->request->getGet('coach_id');
+        /** @var UserModel $users */
+        $users = auth()->getProvider();
+
+        $sch = (new ClassTimingModel())
+            ->join('classes', 'classes.class_id = class_timings.class_id', 'left')
+            ->select()
+            ->select('classes.class_name')
+            ->where('coach_id', $coachId)
+            ->where('class_timings.class_id !=', $classId)
+            ->findAll();
+
+        $classTimingsMap =
+        array_group_by(array_map(
+            fn ($timing) => [...$timing->toArray(), 'dow' => strtolower($timing->day_of_week)],
+            $sch
+        ), ['dow']);
+
+        return $this->response->setJSON($classTimingsMap);
     }
 }

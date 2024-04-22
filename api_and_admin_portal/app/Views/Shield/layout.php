@@ -18,6 +18,9 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
   <?php else: ?>
   <link href="/css/academity-bootstrap.min.css" rel="stylesheet">
   <?php endif ?>
+  <link href="/css/academity-custom.css" rel="stylesheet">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
   <script>
     (() => {
       'use strict'

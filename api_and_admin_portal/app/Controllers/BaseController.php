@@ -2,11 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\MediaModel;
 use CodeIgniter\Controller;
-use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\CLIRequest;
-use CodeIgniter\HTTP\Files\UploadedFile;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -59,23 +56,4 @@ abstract class BaseController extends Controller
         // E.g.: $this->session = \Config\Services::session();
     }
 
-    /**
-     * Upload a file and store it in the database.
-     * @return array<string,mixed>
-     */
-    public static function uploadMedia(UploadedFile|null $uploadedFile): array
-    {
-        if ($uploadedFile->hasMoved()) {
-            return ['errors' => 'file has moved'];
-        }
-        $filepath = 'uploads/' . $uploadedFile->store();
-        $file = new File(WRITEPATH . $filepath);
-        $mediaModel = new MediaModel();
-        $mediaId = $mediaModel->insert([
-            'mime_type' => $file->getMimeType(),
-            'url'       => $filepath,
-        ], true);
-
-        return ['url' => $filepath, 'media_id' => $mediaId];
-    }
 }

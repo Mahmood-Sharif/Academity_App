@@ -29,7 +29,7 @@ class UserModel extends CodeIgniterUserModel
         ];
     }
 
-    public function select($select = 'users.*'): EnrollmentModel
+    public function select($select = 'users.*'): UserModel
     {
         return parent::select($select);
     }
