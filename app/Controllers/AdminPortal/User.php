@@ -5,8 +5,10 @@ namespace App\Controllers\AdminPortal;
 use App\Entities\User as AppUser;
 use App\Models\AcademyModel;
 use App\Models\UserModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
+use CodeIgniter\Shield\Validation\ValidationRules;
 use Exception;
 
 class User extends ResourcePresenter
@@ -101,11 +103,21 @@ class User extends ResourcePresenter
         $coach = $this->users->findByCredentials(['email' => $coachEmail]);
         if ($coach !== null) {
             // coach user exists, register it in this academy
+            $sql = $this->users->db->table('academy_coaches')->ignore()->set([
+              'academy_id' => $academy->academy_id,
+              'coach_id' => $coach->id,
+            ])->getCompiledInsert();
+            log_message('critical', var_export($sql, true));
+
             $result =
               $this->users->db->table('academy_coaches')->ignore()->insert([
-                'academy_id' => $academyId,
+                'academy_id' => $academy->academy_id,
                 'coach_id' => $coach->id,
               ]);
+
+            if(!$coach->inGroup('coach')) {
+                $coach->addGroup('coach');
+            }
 
             if ($result) {
                 return redirect()
@@ -177,16 +189,9 @@ class User extends ResourcePresenter
     /**
      * @param mixed $id
      */
-    public function showOwner($id = null): string
+    public function showOwner(): string
     {
-        if (auth()->id() != $id) {
-            return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
-            ]);
-        }
-
-        $user = $this->users->find($id);
+        $user = auth()->user();
 
         return view('user/profile', [
             'user' => $user,
@@ -235,9 +240,73 @@ class User extends ResourcePresenter
         ]);
     }
 
-    public function edit($id = null): string
+    public function editProfile(): string
     {
-        throw new Exception("Unimplemented", 1);
+        $user = auth()->user();
+        return view('user/edit_profile', ['user' => $user]);
+    }
+
+    public function updateProfile(): RedirectResponse
+    {
+        $user = auth()->user();
+        $users = auth()->getProvider();
+
+        $reg = (new ValidationRules())->getRegistrationRules();
+        $rules = [
+            'phone' => $reg['phone'],
+            'dob'   => $reg['dob'  ],
+            'name'  => $reg['name' ],
+        ];
+
+        // if user changed the email, check it too
+        if ($this->request->getPost('email') != $user->getEmail()) {
+            $rules['email'] = $reg['email'];
+        }
+
+        if (!$this->validate($rules)) {
+            return redirect()->back()->with('errors', $this->validator->getErrors());
+        }
+
+        try {
+            $users->update(auth()->id(), $this->validator->getValidated());
+            return redirect()->route('AdminPortal\User::showOwner')->with('message', lang('App.profile.success'));
+        } catch (\Throwable $th) {
+            return redirect()->route('AdminPortal\User::showOwner')->with('error', lang('App.profile.error'));
+        }
+    }
+
+    public function changePassword(): ResponseInterface
+    {
+        $oldPassword = $this->request->getPost('password');
+        $newPassword = $this->request->getPost('new_password');
+        $newPasswordConfirm = $this->request->getPost('confirm_password');
+
+        $user = auth()->user();
+        $users = auth()->getProvider();
+
+        $validation = auth()->check(['email' => $user->getEmail(), 'password' => $oldPassword]);
+        if (!$validation->isOK()) {
+            return redirect()->route('change_password')->with('error', lang('Auth.error.cred'));
+        }
+
+        if ($newPassword != $newPasswordConfirm) {
+            return redirect()->route('change_password')->with('error', lang('Auth.error.new_match'));
+        }
+
+        if (!$this->validateData(
+            ['password' => $newPassword],
+            ['password' => (new ValidationRules())->getRegistrationRules()['password']],
+        )) {
+            return redirect()->route('change_password')->with('error', $this->validator->getError('password'));
+        }
+
+        try {
+            $user->setPassword($newPassword);
+            $users->save($user);
+            return redirect()->route('AdminPortal\User::showOwner')->with('message', lang('Auth.password_success'));
+        } catch (\Throwable $th) {
+            return redirect()->route('change_password')->with('error', lang('Auth.error.change'));
+        }
     }
 
 }

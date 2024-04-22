@@ -83,8 +83,9 @@ $this->endSection('sidebarTab');
       </div>
 
       <div class="mb-3">
-                <duration-input id="min_duration" name="min_duration" data-classes-per-week="<?=$numTimings?>" data-duration="<?=$class->min_duration?>" data-unit="day"
-          data-label="<?=lang('App.enrol_duration')?>" readonly>
+        <duration-input id="min_duration" name="min_duration" data-classes-per-week="<?=$numTimings?>"
+          data-duration="<?=$class->min_duration?>" data-unit="day" data-label="<?=lang('App.enrol_duration')?>"
+          readonly>
         </duration-input>
       </div>
 
@@ -92,7 +93,9 @@ $this->endSection('sidebarTab');
         <?=validated_form_input('coach', 'ceach', lang('App.main_coach'), $coach->name, 'text', ['readonly' => 'readonly'], 'form-control-plaintext')?>
       </div>
 
-      <class-schedule-editor readonly>
+      <class-schedule-editor data-coach-id="<?=$coach->id?>"
+        data-coach-endpoint="<?=url_to('AdminPortal\Classes::getCoachSchedule', $class->class_id)?>"
+        data-csrf-token="<?=csrf_hash()?>" readonly>
         <?= $classTimingsJson ?>
       </class-schedule-editor>
 

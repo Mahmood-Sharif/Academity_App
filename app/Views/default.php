@@ -10,6 +10,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="view-transition" content="same-origin">
+  <meta name="htmx-config" content='{"globalViewTransitions":true,"historyCacheSize":0,"refreshOnHistoryMiss":true}'>
   <title>
     Academity -
     <?= $this->renderSection('page_title', true) ?>
@@ -113,7 +114,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
   </script>
 </head>
 
-<body hx-ext="ajax-header">
+<body hx-boost="true" hx-ext="ajax-header">
 
   <div class="row m-0 p-0">
     <div id="sidebar" class="col-lg-3 col-md-4 col-12 border-end border-2 p-4 d-flex flex-column sticky-md-top">
@@ -182,13 +183,13 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
         </div>
 
       </div>
-      <div class="mt-auto d-flex gap-3">
+      <div id="sidebarActions" class="mt-auto d-flex gap-3">
         <div class="dropup flex-fill">
           <button class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown">
             <?=lang('App.profile')?>&nbsp;
           </button>
           <ul class="dropdown-menu">
-            <li><a href="<?=url_to('AdminPortal\User::show', auth()->id())?>" class="dropdown-item">
+            <li><a href="<?=url_to('AdminPortal\User::showOwner')?>" class="dropdown-item">
                 <?=lang('App.profile.view')?>
               </a></li>
             <li><a href="<?=url_to('logout')?>" class="dropdown-item">
@@ -203,7 +204,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
           </button>
           <ul class="dropdown-menu">
             <li>
-              <div class="dropend">
+              <div id="theme-changer" class="dropend" hx-preserve="true">
                 <button class="dropdown-item dropdown-toggle" id="bd-theme" data-bs-toggle="dropdown"
                   aria-expanded="false">
                   <span id="bd-theme-text">
@@ -234,7 +235,7 @@ $tab = ($this->sections['sidebarTab'] ?? [''])[0];
               </div>
             </li>
             <li>
-              <div class="dropend">
+              <div class="dropend" hx-boost="false">
                 <button class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                   <?=lang('App.language')?>&nbsp;
                 </button>

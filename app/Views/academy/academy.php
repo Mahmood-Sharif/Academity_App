@@ -43,13 +43,13 @@ $this->endSection('sidebarTab');
   </div>
   <?php endif ?>
 
-  <div class="row">
-    <div class="col-8 col-lg-6">
+  <div class="row gap-3">
+    <div class="col-8 col-lg-6 col-sm-12">
       <div class="ratio ratio-16x9 mb-4">
         <img src="<?=$academy->image_url?>" alt="" class="object-fit-cover rounded-4"
           style="view-transition-name: academy<?=$academy->academy_id?>">
       </div>
-      <div class="d-flex gap-2">
+      <div class="d-grid gap-2" style="grid-template-columns: repeat(3, 1fr);">
         <a href="<?=url_to('AdminPortal\Classes::index', $academy->academy_id)?>" class="btn btn-secondary">
           <div class="bi bi-mortarboard fs-1"></div>
           <?=lang('App.manage.classes')?>
@@ -67,6 +67,10 @@ $this->endSection('sidebarTab');
           </div>
           <?=lang('App.manage.coaches')?>
         </a>
+        <a href="<?=url_to('AdminPortal\Academy::gallery', $academy->academy_id)?>" class="btn btn-secondary">
+          <div class="bi bi-images fs-1"></div>
+          <?=lang('App.manage.gallery')?>
+        </a>
         <a href="<?=url_to('AdminPortal\Academy::edit', $academy->academy_id)?>" class="btn btn-secondary">
           <div class="bi bi-gear fs-1"></div>
           <?=lang('App.manage.academy')?>
@@ -74,7 +78,7 @@ $this->endSection('sidebarTab');
 
       </div>
     </div>
-    <div class="col-4">
+    <div class="col-4 col-md-4 col-sm-12">
       <ul class="list-group mb-3">
         <li class="list-group-item">
           <span class="fs-6 fw-bold">

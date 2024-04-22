@@ -27,12 +27,13 @@ $this->endSection('page_title');
     <h1>
       <?= $title ?>
     </h1>
-    <?php if (false && $type == 'owner'): ?>
-    <a href="<?=url_to('AdminPortal\User::edit', $user->id)?>" class="btn btn-outline-secondary ms-auto">
-      <?=lang('App.edit')?>
-    </a>
-    <?php endif ?>
   </div>
+
+  <?php if (session('message') !== null) : ?>
+  <div class="alert alert-success" role="alert">
+    <?= session('message') ?>
+  </div>
+  <?php endif ?>
 
   <div class="row">
     <div class="col">
@@ -41,6 +42,9 @@ $this->endSection('page_title');
       </div>
       <div class="mb-3">
         <?=validated_form_input('', '', lang('Auth.phone'), $user->phone, 'text', [], true)?>
+      </div>
+      <div class="mb-3">
+        <?=validated_form_input('', '', lang('Auth.email'), $user->email, 'text', [], true)?>
       </div>
       <div class="mb-3">
         <?=validated_form_input('', '', lang('Auth.dob'), $user->dob, 'text', [], true)?>
@@ -56,6 +60,16 @@ $this->endSection('page_title');
       <?php if ($type == 'coach'): ?>
       <div class="mb-3">
         <?=validated_form_textarea('', '', lang('App.academies'), $user->academies ?? lang('App.error'), 'text', [], true)?>
+      </div>
+      <?php endif ?>
+      <?php if ($type == 'owner'): ?>
+      <div class="hstack gap-3">
+        <a href="<?=url_to('AdminPortal\User::editProfile')?>" class="btn btn-outline-secondary">
+          <?=lang('App.edit')?>
+        </a>
+        <a href="<?=url_to('change_password')?>" class="btn btn-outline-danger">
+          <?=lang('App.change_password')?>
+        </a>
       </div>
       <?php endif ?>
     </div>

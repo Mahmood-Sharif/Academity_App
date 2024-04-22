@@ -7,9 +7,11 @@
     "build:css:base": "npx sass --style compressed scss/academity-bootstrap.scss ../public/css/academity-bootstrap.min.css",
     "build:css:rtl": "npx rtlcss ../public/css/academity-bootstrap.min.css",
     "build:css": "npm run build:css:base && npm run build:css:rtl",
-    "build:uppy": "npx esbuild js/uppy.mjs --bundle --minify --outfile=../public/js/uppy.min.js",
-    "build:delta": "npx esbuild js/delta.mjs --bundle --minify --outfile=../public/js/delta.min.js",
-    "build:all": "npm run build:css && npm run build:uppy",
+    "build:js:schedule": "npx esbuild js/class_schedule.js --bundle --minify --outfile=../public/js/class_schedule.js",
+    "build:js:duration": "npx esbuild js/class_duration.js --bundle --minify --outfile=../public/js/class_duration.js",
+    "build:js:gallery": "npx esbuild js/gallery.mjs --bundle --minify --outfile=../public/js/gallery.js",
+    "build:js": "npm run build:js:gallery && npm run build:js:schedule && npm run build:js:duration",
+    "build:all": "npm run build:css && npm run build:js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,6 +20,7 @@
   "devDependencies": {
     "@uppy/core": "^3.10.0",
     "@uppy/dashboard": "^3.8.0",
+    "@uppy/locales": "^3.5.2",
     "@uppy/xhr-upload": "^3.6.4",
     "bootstrap": "^5.3.2",
     "esbuild": "^0.20.2",

@@ -25,3 +25,15 @@
 [dir="rtl"] .bi-arrow-left-short::before {
   content: "\f135";
 }
+
+fieldset {
+  border: var(--bs-border-width) var(--bs-border-color) groove;
+  border-radius: var(--bs-border-radius);
+  padding: 0.5em 1em 0.7em;
+}
+
+legend {
+  float: unset;
+  width: fit-content;
+  margin: 0;
+}

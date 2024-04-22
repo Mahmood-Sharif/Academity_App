@@ -2,12 +2,13 @@
 
 namespace App\Controllers\AdminPortal;
 
-use App\Controllers\BaseController;
 use App\Entities\Academy as AppAcademy;
 use App\Models\AcademyModel;
+use App\Models\MediaModel;
 use App\Models\SportModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
+use Error;
 
 class Academy extends ResourcePresenter
 {
@@ -71,10 +72,12 @@ class Academy extends ResourcePresenter
             ]);
         }
 
-        if (! $this->validate([
-          ...$this->model->validationRules,
-          'image' => 'max_size[image,2048]|mime_in[image,image/png,image/jpeg,image/webp]',
-        ], $this->model->validationMessages)) {
+        $rules = [...$this->model->validationRules];
+        if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
+            $rules['image'] = 'mime_in[image,image/png,image/jpeg,image/webp]|max_size[image,2048]';
+        }
+
+        if (! $this->validate($rules, $this->model->validationMessages)) {
             $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
 
             return view('academy/create_edit', [
@@ -89,7 +92,8 @@ class Academy extends ResourcePresenter
 
         if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
             $uploadedFile = $this->request->getFile('image');
-            $upload = BaseController::uploadMedia($uploadedFile);
+            $mediaModel = new MediaModel();
+            $upload = $mediaModel->uploadMedia($uploadedFile);
             $sports = key_array(fn ($s) => [$s->sport_id, $s->name], (new SportModel())->findAll());
             if (array_key_exists('errors', $upload)) {
                 return view('academy/create_edit', [
@@ -98,6 +102,12 @@ class Academy extends ResourcePresenter
                     'errors' => ['image' => $upload['errors']],
                     'sports' => (new SportModel())->findAll(),
                 ]);
+            }
+
+            try {
+                // delete old thumbnail file for privace reasons
+                $mediaModel->deleteMedia($academy->media_id);
+            } catch (\Throwable $th) {
             }
 
             ['media_id' => $mediaId] = $upload;
@@ -214,7 +224,7 @@ class Academy extends ResourcePresenter
 
         $academy = new AppAcademy($this->validator->getValidated());
 
-        $upload = BaseController::uploadMedia($this->request->getFile('image'));
+        $upload = (new MediaModel())->uploadMedia($this->request->getFile('image'));
 
         if (array_key_exists('errors', $upload)) {
             return view('academy/create_edit', [
@@ -235,4 +245,164 @@ class Academy extends ResourcePresenter
         return redirect()->route('AdminPortal\Academy::show', [$insertId]);
 
     }
+
+    /**
+     * @param string|null $id
+     */
+    public function gallery($id = null): string
+    {
+        $academy = $this->model->includeImageUrl()->find($id);
+        return view('academy/gallery', ['academy' => $academy]);
+    }
+
+    /**
+     * @param string|null $id
+     */
+    public function galleryItems($id = null): ResponseInterface
+    {
+        $gallery = $this->model->db->table('gallery')
+        ->join('media', 'media.media_id = gallery.media_id')
+        ->where('academy_id', $id)
+        ->select('gallery.*')
+        ->select('media.url')
+        ->select('media.mime_type')
+        ->orderBy('gallery.index', 'asc')
+        ->get()
+        ->getResult('array');
+
+        $gallery = array_map(fn ($g) => [
+            'media_id' => (int)$g['media_id'],
+            'url' => base_url($g['url']),
+            'type' => $g['mime_type'],
+        ], $gallery);
+
+        return $this->response->setStatusCode(200)->setJSON(['gallery' => $gallery]);
+    }
+
+    public function galleryUpload(): ResponseInterface
+    {
+        $file = $this->request->getFile('file');
+
+        try {
+            ['url' => $url, 'media_id' => $mediaId, 'type' => $type] =
+                (new MediaModel())->uploadMedia($file, maxBytes: 200 * 1024 * 1024);
+
+            return $this->response->setStatusCode(200)->setJSON([
+                'media_id' => $mediaId,
+                'url'      => base_url($url),
+                'type'     => $type,
+            ]);
+        } catch (\Throwable $th) {
+            return $this->response->setStatusCode(500);
+        }
+    }
+
+    /**
+     * @param string|null $id
+     */
+    public function gallerySubmit($id = null): ResponseInterface
+    {
+        $academy = $this->model->find($id);
+
+        if (! auth()->user()->can('academies.gallery') || auth()->id() !== $academy?->owner_id) {
+            return $this->response->setStatusCode(403);
+        }
+
+        $id = (int)$id;
+
+        ['deletions' => $deletions, 'upsertions' => $upsertions] = $this->request->getJSON(true);
+
+        if (empty($upsertions) && empty($deletions)) {
+            return $this->response->setStatusCode(200)->setJSON(['status' => 'no change']);
+        }
+
+        $deletions = array_map(fn ($d) => ['academy_id' => $id, ...$d], $deletions);
+        $upsertions = array_map(fn ($u) => ['academy_id' => $id, ...$u], $upsertions);
+
+        $db = $this->model->db;
+        $db->transStart();
+        if (!empty($deletions)) {
+            $db->table('gallery')->deleteBatch($deletions, 'academy_id, media_id');
+            try {
+                $m = new MediaModel();
+                foreach ($deletions as ['media_id' => $mediaId]) {
+                    // delete files for privacy reasons.
+                    $m->deleteMedia($mediaId);
+                }
+            } catch (\Throwable $th) {
+            }
+        }
+        if (!empty($upsertions)) {
+            $db->table('gallery')->upsertBatch($upsertions);
+        }
+        $db->transComplete();
+
+        if ($db->transStatus() === true) {
+            return $this->response->setStatusCode(200)->setJSON(['status' => 'success']);
+        } else {
+            return $this->response->setStatusCode(500)->setJSON(['error' => 'Unknown error']);
+        }
+    }
+
+    /**
+     * @param string|null $id
+     */
+    public function updateThumbnail($id = null): string
+    {
+        $academy = $this->model->find($id);
+
+        if (! auth()->user()->can('academies.gallery') || auth()->id() !== $academy?->owner_id) {
+            return $this->response->setStatusCode(403);
+        }
+
+        $id = (int)$id;
+        $file = $this->request->getFile('thumbnail');
+
+        $close = lang('App.close');
+
+        try {
+            ['url' => $url, 'media_id' => $mediaId, 'type' => $type] =
+                (new MediaModel())->uploadMedia($file, maxBytes: 2 * 1024 * 1024);
+
+            if (!$this->model->update($id, ['media_id' => $mediaId])) {
+                throw new Error('Could not update DB');
+            }
+
+            // delete old thumbnail for privacy reasons
+            (new MediaModel())->deleteMedia($academy->media_id);
+
+            $body = lang('App.upd_thumbnail.success');
+            $url = base_url($url);
+
+            return "
+                <div class='toast bg-success-subtle text-success-emphasis border-success align-items-center' role='alert' aria-live='assertive' aria-atomic='true'>
+                    <div class='d-flex align-items-center'>
+                        <i class='bi bi-check2 ms-3 fs-5'></i>
+                        <div class='toast-body'>
+                            <span>$body</span>
+                        </div>
+                        <button type='button' class='btn-close me-2 m-auto' data-bs-dismiss='toast' aria-label='$close'></button>
+                    </div>
+                </div>
+                <img id='imagePreview' hx-swap-oob='outerHTML' src='$url' alt='' class='img-fluid object-fit-cover rounded-4 border'>
+                <script>new bootstrap.Toast(document.querySelector('.toast')).show()</script>
+                ";
+        } catch (\Throwable $th) {
+            $body = lang('App.upd_thumbnail.error');
+
+            return "
+                <div class='toast bg-danger-subtle text-danger-emphasis border-danger align-items-center' role='alert' aria-live='assertive' aria-atomic='true'>
+                    <div class='d-flex align-items-center'>
+                        <i class='bi bi-exclamation ms-3 fs-5'></i>
+                        <div class='toast-body'>
+                            <span>$body</span>
+                        </div>
+                        <button type='button' class='btn-close me-2 m-auto' data-bs-dismiss='toast' aria-label='$close'></button>
+                    </div>
+                </div>
+                <script>new bootstrap.Toast(document.querySelector('.toast')).show()</script>
+                ";
+        }
+    }
+
 }
