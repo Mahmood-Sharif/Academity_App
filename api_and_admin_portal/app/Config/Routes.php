@@ -72,6 +72,7 @@ $routes->group('api', static function ($routes) {
     $routes->post('register', 'Api\Login::registerUser');
 
     $routes->group('', ['filter' => 'tokens'], static function ($routes) {
+        $routes->post('check-password', 'Api\Login::checkPassword');
         $routes->post('delete-account', 'Api\Login::deleteAccount');
 
         // user profiles api
