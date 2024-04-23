@@ -69,6 +69,8 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
                   (val) => _updateUserField('gender', val)),
               const SizedBox(height: 20),
               _buildSaveButton(),
+              const SizedBox(height: 20),
+              _buildDeleteButton(),
             ],
           ),
         ),
@@ -103,7 +105,7 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
       child: ElevatedButton(
         onPressed: _saveUserProfile,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFF3200), // Button background color
+          backgroundColor: const Color(0xFF008B8B), // Button background color
           padding: const EdgeInsets.symmetric(
               horizontal: 42, vertical: 10), // Makes the button a bit bigger
           shape: RoundedRectangleBorder(
@@ -111,6 +113,24 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
           ),
         ),
         child: Text(AppLocalizations.of(context)!.saveButton,
+            style: const TextStyle(fontSize: 18, color: Colors.white)),
+      ),
+    );
+  }
+
+  Widget _buildDeleteButton() {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFFF3200), // Button background color
+          padding: const EdgeInsets.symmetric(
+              horizontal: 52, vertical: 10), // Makes the button a bit bigger
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4), // Slightly rounded edges
+          ),
+        ),
+        child: Text(AppLocalizations.of(context)!.delectAccountActionTitle,
             style: const TextStyle(fontSize: 18, color: Colors.white)),
       ),
     );

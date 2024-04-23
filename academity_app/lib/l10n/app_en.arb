@@ -375,6 +375,10 @@
     "@logoutActionTitle": {
         "description": "Title for the logout action"
     },
+    "delectAccountActionTitle": "Delete Account",
+    "@delectAccountActionTitle": {
+        "description": "Title for the Delete Account action"
+    },
     "dayOfWeekMon": "Mon",
     "@dayOfWeekMon": {
         "description": "Abbreviation for Monday"

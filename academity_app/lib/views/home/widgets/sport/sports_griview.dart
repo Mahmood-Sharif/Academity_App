@@ -10,21 +10,21 @@ class SportsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 1,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: sports.length,
-      itemBuilder: (context, index) {
-        final sport = sports[index];
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: InkWell(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: sports.length,
+        itemBuilder: (context, index) {
+          final sport = sports[index];
+          return InkWell(
             onTap: () {
               // Handle the tap event here. For example, navigate to a detail screen.
               Navigator.push(
@@ -50,13 +50,14 @@ class SportsListWidget extends StatelessWidget {
                     .sportTitle(sport.sportName.toLowerCase()),
                 style: TextStyle(
                   color: Colors.white,
-                  backgroundColor: Colors.black.withOpacity(0.5),
+                  backgroundColor: Colors.black.withOpacity(0.8),
+                  fontSize: 18
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -32,9 +32,9 @@ class _SportsPageState extends State<SportsPage> {
           } else if (snapshot.hasData) {
             return ListView(
               children: [
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
                 SportsListWidget(sports: snapshot.data!),
-                const SizedBox(height: 20),
+                // const SizedBox(height: 20),
                 // const TwoCardsSideBySide(),
               ],
             );

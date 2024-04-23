@@ -87,6 +87,7 @@
     "profileUpdatedSuccess": "تم تحديث الملف الشخصي بنجاح",
     "profileUpdateFailed": "فشل في تحديث الملف الشخصي",
     "logoutActionTitle": "تسجيل الخروج",
+    "delectAccountActionTitle": "حذف الحساب",
     "dayOfWeekMon": "الاثنين",
     "dayOfWeekTue": "الثلاثاء",
     "dayOfWeekWed": "الأربعاء",
