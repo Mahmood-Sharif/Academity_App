@@ -196,4 +196,30 @@ class Login extends ResourceController
         }
     }
 
+    public function deleteAccount(): ResponseInterface
+    {
+        $user = auth()->user();
+        if ($user->inGroup('admin')) {
+            return $this->respond([
+                'status' => 'cannot delete',
+                'reason' => 'academy owner',
+            ]);
+        }
+
+        $users = auth()->getProvider();
+
+        try {
+            $result = auth()->getProvider()->delete($user->id, false)->getResult();
+        } catch (\Throwable $th) {
+        }
+
+        $u = $users->findById($user->id);
+        if ($u == null) {
+            return $this->respond(['status' => 'deleted']);
+        } else {
+            return $this->fail('could not delete', 500);
+        }
+
+    }
+
 }
