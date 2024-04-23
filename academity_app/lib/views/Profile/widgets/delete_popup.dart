@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:academity_app/services/auth_services.dart';  // Import the AuthServices
+// Import the AuthServices
 
 class DeletePopUp extends StatefulWidget {
   const DeletePopUp({super.key});
@@ -42,14 +42,12 @@ class _DeletePopUpState extends State<DeletePopUp> {
             const SizedBox(height: 16),
             const Text('Data deletion will be effective within 14 days.'),
             const SizedBox(height: 20),
-            Container(
-              child: TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Enter your password to confirm',
-                  border: OutlineInputBorder(),
-                ),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Enter your password to confirm',
+                border: OutlineInputBorder(),
               ),
             ),
           ],
