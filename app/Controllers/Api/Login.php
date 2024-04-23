@@ -36,7 +36,7 @@ class Login extends ResourceController
             // NOTE: this disallows users to login in multiple devices
             // $user->revokeAllAccessTokens();
 
-            $r = $this->respond([
+            return $this->respond([
                 'status'  => 'Login successful',
                 'new_token' => $user->generateAccessToken('mobile-app')->raw_token,
                 'user' => [
@@ -45,13 +45,11 @@ class Login extends ResourceController
                     'type' => $user->inGroup('coach') ? 'coach' : 'user'
                 ],
             ]);
-            return $r;
         } else {
-            $r = $this->respond([
+            return $this->respond([
                 'status'  => 'Login failed',
                 'message' => $loginAttempt->reason(),
             ]);
-            return $r;
         }
     }
 
@@ -193,6 +191,23 @@ class Login extends ResourceController
             }
         } catch (Exception $e) {
             return $this->respond(['status' => 'Failed', 'message' => 'Internal server error.'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function checkPassword(): ResponseInterface
+    {
+        $user = auth()->user();
+        $credentials = [
+            'email'    => $user->getEmail(),
+            'password' => $this->request->getPost('password'),
+        ];
+
+        $loginAttempt = auth()->check($credentials);
+
+        if ($loginAttempt->isOK()) {
+            return $this->respond('success');
+        } else {
+            return $this->fail('invalid');
         }
     }
 
