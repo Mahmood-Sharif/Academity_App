@@ -129,4 +129,21 @@ class AuthServices {
       throw Exception('Error editing user profile: $e');
     }
   }
+
+  static Future<void> deleteAccount() async {
+    final response = await AcademityApi.post('delete-account');
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if(data['status'] == 'cannot delete'){
+        throw Exception(
+          'Cannot delete owner account'
+        );
+      }
+    } else {
+     throw Exception(
+        'Could Not Delete Account'
+     );
+    }
+  }
 }
