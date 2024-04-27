@@ -130,20 +130,48 @@ class AuthServices {
     }
   }
 
+  // static Future<void> deleteAccount() async {
+  //   final response = await AcademityApi.post('delete-account');
+
+  //   if (response.statusCode == 200) {
+  //     final data = json.decode(response.body);
+  //     if(data['status'] == 'cannot delete'){
+  //       throw Exception(
+  //         'Cannot delete owner account'
+  //       );
+  //     }
+  //   } else {
+  //    throw Exception(
+  //       'Could Not Delete Account'
+  //    );
+  //   }
+  // }
+
+  //   static Future<User> checkPassword(String password) async {
+  //   final response = await AcademityApi.post('check-password', body: {
+  //     'password': password
+  //   });
+  //     return null;
+  // }
+
+  static Future<bool> checkPassword(String password) async {
+    var response = await AcademityApi.post('check-password',
+      body: {'password': password},
+    );
+    return response.statusCode == 200 &&
+        json.decode(response.body)['status'] == 'success';
+  }
+
   static Future<void> deleteAccount() async {
     final response = await AcademityApi.post('delete-account');
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if(data['status'] == 'cannot delete'){
-        throw Exception(
-          'Cannot delete owner account'
-        );
+      if (data['status'] == 'cannot delete') {
+        throw Exception('Cannot delete owner account');
       }
     } else {
-     throw Exception(
-        'Could Not Delete Account'
-     );
+      throw Exception('Could Not Delete Account');
     }
   }
 }
