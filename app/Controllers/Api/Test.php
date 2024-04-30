@@ -2,30 +2,18 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\AcademyModel;
-use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Test extends ResourceController
 {
-    public function index(): ResponseInterface
+    public function get(): ResponseInterface
     {
-        $model = new UserModel();
-        $data = array();
-        $data['hello'] = $model->orderBy('id', 'DESC')->findAll();
-        return $this->respond($data);
+        return $this->fail(['status' => 'hello'], 400);
     }
 
-    public function show($id = null): ResponseInterface
+    public function post(): ResponseInterface
     {
-        /* $user = auth()->getProvider()->findById(1); */
-        $m = new AcademyModel();
-        $data = $m->includeStatistics($id)->includeImageUrl()->find($id);
-        if ($data) {
-            return $this->respond($data);
-        } else {
-            return $this->failNotFound('User Not Found');
-        }
+        return $this->fail('hello');
     }
 }
