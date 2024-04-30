@@ -1,4 +1,4 @@
-import 'package:academity_app/services/academy_services.dart';
+import 'package:academity_app/services/errors.dart';
 import 'package:academity_app/views/my_academy/subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:academity_app/services/academity_api.dart';
+import 'package:academity_app/services/errors.dart';
 import '../models/academy.dart'; // Update with the correct path to your Academy model
-
-class NotFound extends Error {}
 
 class AcademyServices {
   // Fetches academies by sport ID

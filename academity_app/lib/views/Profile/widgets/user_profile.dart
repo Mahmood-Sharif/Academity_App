@@ -1,5 +1,5 @@
 import 'package:academity_app/providers/auth_provider.dart';
-import 'package:academity_app/views/profile/widgets/delete_popup.dart';
+import 'package:academity_app/views/Profile/widgets/delete_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -119,40 +119,41 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
     );
   }
 
-Widget _buildDeleteButton(BuildContext context) { // Ensure to pass context
-  return Center(
-    child: ElevatedButton(
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const DeletePopUp();
-          },
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFF3200), // Button background color
-        padding: const EdgeInsets.symmetric(
-            horizontal: 52, vertical: 10), // Makes the button a bit bigger
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4), // Slightly rounded edges
+  Widget _buildDeleteButton(BuildContext context) {
+    // Ensure to pass context
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const DeletePopUp();
+            },
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFFF3200), // Button background color
+          padding: const EdgeInsets.symmetric(
+              horizontal: 52, vertical: 10), // Makes the button a bit bigger
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4), // Slightly rounded edges
+          ),
+        ),
+        child: Text(
+          AppLocalizations.of(context)!.delectAccountActionTitle,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
-      child: Text(
-        AppLocalizations.of(context)!.delectAccountActionTitle,
-        style: const TextStyle(fontSize: 18, color: Colors.white),
-      ),
-    ),
-  );
-}
+    );
+  }
 
   void _saveUserProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      try {
-        final success =
-            await ref.read(authProvider.notifier).updateProfile(_editableUser);
-        if (!context.mounted) return;
+      await ref
+          .read(authProvider.notifier)
+          .updateProfile(_editableUser)
+          .then((success) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content:
@@ -162,10 +163,10 @@ Widget _buildDeleteButton(BuildContext context) { // Ensure to pass context
               content:
                   Text(AppLocalizations.of(context)!.profileUpdateFailed)));
         }
-      } catch (e) {
+      }).catchError((e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Error: $e')));
-      }
+      });
     }
   }
 
@@ -181,7 +182,6 @@ Widget _buildDeleteButton(BuildContext context) { // Ensure to pass context
       );
     });
   }
-  
 
   String _formatDate(DateTime date) {
     // Formatting date as yyyy-MM-dd

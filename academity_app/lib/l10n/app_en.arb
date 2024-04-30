@@ -19,7 +19,7 @@
     "saveButton": "Save",
     "@saveButton": {
         "description": "Text for the save button"
-    },    
+    },
     "enterCredentials": "Enter Your Credentials",
     "@enterCredentials": {
         "description": "Text for Enter Your Credentials"
@@ -194,30 +194,30 @@
     },
     "sportTitle": "{sportTitle, select, basketball{Basketball} football{Football} boxing{Boxing} taekwondo{Taekwondo} fencing{Fencing} tennis{Tennis} other{sport}}",
     "@commonVehicleType": {
-    "description": "Sport type",
-    "placeholders": {
-        "sportTitle": {}
-    }
+        "description": "Sport type",
+        "placeholders": {
+            "sportTitle": {}
+        }
     },
     "customerSupportLabel": "Customer Support",
     "@customerSupportLabel": {
-    "description": "Label for Customer Support"
+        "description": "Label for Customer Support"
     },
     "playerLabel": "Player",
     "@playerLabel": {
-    "description": "Label for Player"
+        "description": "Label for Player"
     },
     "coachLabel": "Coach",
     "@coachLabel": {
-    "description": "Label for coach "
+        "description": "Label for coach "
     },
     "swapToLabel": "Swap To",
     "@swapToLabel": {
-    "description": "Label for Swap To "
+        "description": "Label for Swap To "
     },
     "userLabel": "User",
     "@userLabel": {
-    "description": "Label for User "
+        "description": "Label for User "
     },
     "trainingDaysTitle": "Training Days",
     "@trainingDaysTitle": {
@@ -406,5 +406,21 @@
     "dayOfWeekSun": "Sun",
     "@dayOfWeekSun": {
         "description": "Abbreviation for Sunday"
+    },
+    "errorUnknown": "Unknown Error Occured",
+    "@errorUnknown": {
+        "description": "Help message for an generic error."
+    },
+    "errorCannotDeleteAccount": "Cannot delete academy owner account in the app, please contact customer support to delete your account.",
+    "@errorCannotDeleteAccount": {
+        "description": "Help message for when the user cannot delete the account because of contractual obligations."
+    },
+    "errorCouldNotDeleteAccount": "Could not delete user account.",
+    "@errorCouldNotDeleteAccount": {
+        "description": "Error message when account deletion fails."
+    },
+    "errorInvalidCredentials": "Invalid credentials",
+    "@errorInvalidCredentials": {
+        "description": "Help message for the invalid credentials error."
     }
 }

@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:academity_app/.env.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:academity_app/services/academity_api.dart';
+import 'package:academity_app/services/errors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,6 +24,7 @@ class AuthServices {
   static Future<User> login(String email, String password) async {
     // here we are not using AcademityApi.get because we don't have a token
     // and /api/login does not need one
+    debugPrint('${Env.academityUrl}api/login');
     final response =
         await http.post(Uri.parse('${Env.academityUrl}api/login'), body: {
       'email': email,
@@ -130,47 +133,25 @@ class AuthServices {
     }
   }
 
-  // static Future<void> deleteAccount() async {
-  //   final response = await AcademityApi.post('delete-account');
-
-  //   if (response.statusCode == 200) {
-  //     final data = json.decode(response.body);
-  //     if(data['status'] == 'cannot delete'){
-  //       throw Exception(
-  //         'Cannot delete owner account'
-  //       );
-  //     }
-  //   } else {
-  //    throw Exception(
-  //       'Could Not Delete Account'
-  //    );
-  //   }
-  // }
-
-  //   static Future<User> checkPassword(String password) async {
-  //   final response = await AcademityApi.post('check-password', body: {
-  //     'password': password
-  //   });
-  //     return null;
-  // }
-
-  static Future<bool> checkPassword(String password) async {
-    var response = await AcademityApi.post('check-password',
-      body: {'password': password},
-    );
-    return response.statusCode == 200 &&
-        json.decode(response.body)['status'] == 'success';
-  }
-
-  static Future<void> deleteAccount() async {
-    final response = await AcademityApi.post('delete-account');
+  static Future<void> deleteAccount(String password) async {
+    final response =
+        await AcademityApi.post('delete-account', body: {'password': password});
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      if (data['status'] == 'cannot delete') {
-        throw Exception('Cannot delete owner account');
-      }
+      assert(data['status'] == 'deleted', 'Unexpected response');
+      return;
     } else {
+      if (response.statusCode == 500 || response.statusCode == 400) {
+        final data = json.decode(response.body);
+        throw switch (data['messages']) {
+          {'status': 'failed', 'reason': 'invalid credentials'} =>
+            InvalidCredentials(),
+          {'status': 'cannot delete'} => CannotDeleteAccount(),
+          _ => Exception('Could Not Delete Account'),
+        };
+      }
+
       throw Exception('Could Not Delete Account');
     }
   }

@@ -194,37 +194,39 @@ class Login extends ResourceController
         }
     }
 
-    public function checkPassword(): ResponseInterface
-    {
-        $user = auth()->user();
-        $credentials = [
-            'email'    => $user->getEmail(),
-            'password' => $this->request->getPost('password'),
-        ];
-
-        $loginAttempt = auth()->check($credentials);
-
-        if ($loginAttempt->isOK()) {
-            return $this->respond('success');
-        } else {
-            return $this->fail('invalid');
-        }
-    }
-
     public function deleteAccount(): ResponseInterface
     {
         $user = auth()->user();
         if ($user->inGroup('admin')) {
-            return $this->respond([
+            return $this->fail([
                 'status' => 'cannot delete',
                 'reason' => 'academy owner',
-            ]);
+            ], 400);
+
+        }
+        log_message('critical', var_export($this->request->headers(), true));
+
+        $credentials = [
+            'email'    => $user->getEmail(),
+            'password' => $this->request->getPost('password'),
+        ];
+        log_message('critical', var_export($credentials, true));
+
+        $loginAttempt = auth('session')->check($credentials);
+
+        log_message('critical', var_export($loginAttempt, true));
+
+        if (!$loginAttempt->isOK()) {
+            return $this->fail([
+                'status' => 'failed',
+                'reason' => 'invalid credentials'
+            ], 400);
         }
 
         $users = auth()->getProvider();
 
         try {
-            $result = auth()->getProvider()->delete($user->id, false)->getResult();
+            $result = $users->delete($user->id, false)->getResult();
         } catch (\Throwable $th) {
         }
 
@@ -232,7 +234,7 @@ class Login extends ResourceController
         if ($u == null) {
             return $this->respond(['status' => 'deleted']);
         } else {
-            return $this->fail('could not delete', 500);
+            return $this->fail(['status' => 'could not delete'], 500);
         }
 
     }

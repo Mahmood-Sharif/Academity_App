@@ -49,10 +49,9 @@ class SportsListWidget extends StatelessWidget {
                 AppLocalizations.of(context)!
                     .sportTitle(sport.sportName.toLowerCase()),
                 style: TextStyle(
-                  color: Colors.white,
-                  backgroundColor: Colors.black.withOpacity(0.8),
-                  fontSize: 18
-                ),
+                    color: Colors.white,
+                    backgroundColor: Colors.black.withOpacity(0.8),
+                    fontSize: 18),
               ),
             ),
           );

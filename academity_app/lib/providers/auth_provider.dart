@@ -29,13 +29,16 @@ class AuthNotifier extends AsyncNotifier<User?> {
   }
 
   Future<void> login(String email, String password) async {
-    final user = await AuthServices.login(email, password);
+    final user = await AuthServices.login(email, password)
+        .timeout(const Duration(seconds: 10));
     if (user.type == 'coach') canSwitchType = true;
     state = AsyncValue.data(user);
   }
 
   Future<void> logout() async {
-    await AuthServices.logout();
+    try {
+      await AuthServices.logout();
+    } catch (_) {}
     state = const AsyncValue.data(null);
     canSwitchType = false;
   }
