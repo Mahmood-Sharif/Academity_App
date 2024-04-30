@@ -21,9 +21,9 @@ CI_ENVIRONMENT = development
 # APP
 #--------------------------------------------------------------------
 
+# CHANGE YOUR IP HERE v
 app.baseURL = 'http://192.168.28.119:8080/'
-# If you have trouble with `.`, you could also use `_`.
-# app_baseURL = ''
+
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
 
@@ -32,11 +32,11 @@ app.baseURL = 'http://192.168.28.119:8080/'
 #--------------------------------------------------------------------
 
 # database.default.hostname = localhost
-database.default.database = academity
+database.default.database = academitydb
 database.default.username = root
-database.default.password = aoeAOE123
-database.default.DBDriver = SQLite3
-# database.default.DBDriver = MySQLi
+database.default.password = 
+# database.default.DBDriver = SQLite3
+database.default.DBDriver = MySQLi
 # database.default.DBPrefix =
 # database.default.port = 3306
 
