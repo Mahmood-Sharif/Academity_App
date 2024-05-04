@@ -9,6 +9,7 @@ class User {
   final DateTime dob;
   final String gender;
   final String type;
+  final String? image; // Add the image property
 
   const User({
     required this.id,
@@ -18,6 +19,7 @@ class User {
     required this.dob,
     required this.gender,
     required this.type,
+    this.image, // Update the constructor
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class User {
       dob: DateTime.parse(json['dob']),
       gender: json['gender'],
       type: json['type'] ?? 'user',
+      image: json['profile_image_url'] , // Parse the image property from JSON
     );
   }
 
@@ -40,6 +43,7 @@ class User {
       'phone': phone.toString(), // Ensure this is a string
       'dob': dob.toIso8601String(),
       'gender': gender,
+      'profile_image_url': image, // Include the image property in JSON
     };
   }
 
@@ -51,6 +55,7 @@ class User {
     DateTime? dob,
     String? gender,
     String? type,
+    String? image, // Add image to the copyWith method
   }) {
     return User(
       id: id ?? this.id,
@@ -60,6 +65,7 @@ class User {
       dob: dob ?? this.dob,
       gender: gender ?? this.gender,
       type: type ?? this.type,
+      image: image ?? this.image, // Update the image property
     );
   }
 }

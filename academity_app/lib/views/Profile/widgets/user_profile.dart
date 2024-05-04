@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 
 class UserProfileWidget extends ConsumerStatefulWidget {
   final User user;
@@ -17,6 +20,7 @@ class UserProfileWidget extends ConsumerStatefulWidget {
 class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   final _formKey = GlobalKey<FormState>();
   late User _editableUser;
+  File? _imageFile;
 
   @override
   void initState() {
@@ -28,6 +32,7 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   Widget build(BuildContext context) {
     const Color customColor = Color(0xFF008B8B);
 
+    
     return Form(
       key: _formKey,
       child: Padding(
@@ -36,6 +41,18 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 20),
+            GestureDetector(
+  onTap: _selectImage,
+  child: CircleAvatar(
+    backgroundImage: _imageFile != null
+      ? FileImage(_imageFile!)
+      : widget.user.image != null
+        ? NetworkImage(widget.user.image!)
+        : AssetImage('lib/assets/images/pattern.jpg') as ImageProvider<Object>,
+    radius: 50,
+  ),
+),
               const SizedBox(height: 20),
               _buildUserInputField(
                   AppLocalizations.of(context)!.fullNameLabel,
@@ -139,28 +156,33 @@ Widget _buildDeleteButton(BuildContext context) { // Ensure to pass context
         ),
       ),
       child: Text(
-        AppLocalizations.of(context)!.delectAccountActionTitle,
+        AppLocalizations.of(context)!.absentButton,
         style: const TextStyle(fontSize: 18, color: Colors.white),
       ),
     ),
   );
 }
 
-  void _saveUserProfile() async {
+void _saveUserProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
       try {
-        final success =
-            await ref.read(authProvider.notifier).updateProfile(_editableUser);
+        if (_imageFile != null) {
+          // If a new image is selected, upload it before updating the profile
+          await ref
+              .read(authProvider.notifier)
+              .uploadProfilePicture(_imageFile!.path);
+        }
+        final success = await ref
+            .read(authProvider.notifier)
+            .updateProfile(_editableUser);
         if (!context.mounted) return;
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
+              content: Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.profileUpdateFailed)));
+              content: Text(AppLocalizations.of(context)!.profileUpdateFailed)));
         }
       } catch (e) {
         ScaffoldMessenger.of(context)
@@ -181,7 +203,55 @@ Widget _buildDeleteButton(BuildContext context) { // Ensure to pass context
       );
     });
   }
-  
+void _selectImage() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Select Image"),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _getImage(ImageSource.camera);
+                },
+                child: ListTile(
+                  leading: Icon(Icons.camera),
+                  title: Text("Take a Photo"),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _getImage(ImageSource.gallery);
+                },
+                child: ListTile(
+                  leading: Icon(Icons.photo_library),
+                  title: Text("Choose from Gallery"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void _getImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: source);
+
+    if (pickedImage != null) {
+      setState(() {
+        _imageFile = File(pickedImage.path);
+      });
+    }
+  }
+
+
 
   String _formatDate(DateTime date) {
     // Formatting date as yyyy-MM-dd

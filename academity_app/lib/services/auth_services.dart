@@ -174,4 +174,44 @@ class AuthServices {
       throw Exception('Could Not Delete Account');
     }
   }
+
+   static Future<void> uploadProfilePicture(String filePath) async {
+  try {
+    // Retrieve API token from secure storage
+    final secureStorage = FlutterSecureStorage();
+    final apiToken = await secureStorage.read(key: 'api_token');
+    if (apiToken == null) {
+      throw Exception('API token not found');
+    }
+
+    // Define the backend endpoint URL for uploading profile pictures
+    final url = Uri.parse('http://192.168.100.15:8080/api/profile-upload');
+
+    // Create a multipart request for uploading files
+    var request = http.MultipartRequest('POST', url);
+
+    // Add the API token to the request headers
+    request.headers['Authorization'] = 'Bearer $apiToken';
+
+    // Add the file to the request
+    request.files.add(await http.MultipartFile.fromPath('file', filePath));
+
+    // Send the request
+    final response = await request.send();
+
+    // Check the response status code
+    if (response.statusCode == 200) {
+      // If successful, parse the response
+      final responseBody = await response.stream.bytesToString();
+      final parsedResponse = jsonDecode(responseBody);
+      print(parsedResponse['image_url']); // Print the uploaded image URL
+    } else {
+      // If not successful, throw an error
+      throw Exception('Failed to upload profile picture');
+    }
+  } catch (e) {
+    // Handle errors
+    throw Exception('An error occurred while uploading profile picture: $e');
+  }
+}
 }

@@ -54,4 +54,5 @@ class StudentServices {
       throw Exception('An error occurred while retrieving attendance list');
     }
   }
+
 }

@@ -58,7 +58,22 @@ class AuthNotifier extends AsyncNotifier<User?> {
       return true;
     }).catchError((error, stackTrace) => false);
   }
+
+   Future<void> uploadProfilePicture(String filePath) async {
+    try {
+      await AuthServices.uploadProfilePicture(filePath);
+      // You might want to update the user object after the profile picture is uploaded
+      final updatedUser = await AuthServices.getUserProfile();
+      if (updatedUser != null) {
+        state = AsyncValue.data(updatedUser);
+      }
+    } catch (e) {
+      // Handle errors
+      throw Exception('An error occurred while uploading profile picture: $e');
+    }
+  }
 }
+
 
 final authProvider = AsyncNotifierProvider<AuthNotifier, User?>(() {
   return AuthNotifier();
