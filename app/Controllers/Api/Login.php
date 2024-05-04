@@ -121,19 +121,89 @@ class Login extends ResourceController
     }
 
     public function getUserProfile(): ResponseInterface
-    {
-        $token = $this->request->header('Authorization');
-        $token = str_replace('Bearer ', '', $token);
+{
+    $token = $this->request->header('Authorization');
+    $token = str_replace('Bearer ', '', $token);
 
-        try {
-            // Assuming 'auth()' can decode the token and fetch the user
-            $user = auth()->user();
+    try {
+        // Assuming 'auth()' can decode the token and fetch the user
+        $user = auth()->user();
 
-            if (!$user) {
-                return $this->respond(['status' => 'Failed', 'message' => 'User not found'], ResponseInterface::HTTP_NOT_FOUND);
+        if (!$user) {
+            return $this->respond(['status' => 'Failed', 'message' => 'User not found'], ResponseInterface::HTTP_NOT_FOUND);
+        }
+
+        // Fetch the profile image URL from the 'media' table
+        $profileImageUrl = null;
+        if ($user->profile_image) {
+            $mediaModel = new \App\Models\MediaModel(); // Replace with your actual Media model
+            $media = $mediaModel->find($user->profile_image);
+            if ($media) {
+                $profileImageUrl = base_url($media->url); // Assuming the media URL is relative
+            }
+        }
+
+        // Construct the user profile data including the profile image URL
+        $userData = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->getEmail(),
+            'phone' => $user->phone,
+            'dob' => $user->dob,
+            'gender' => $user->gender,
+            'profile_image_url' => $profileImageUrl, // Add the profile image URL here
+            // Add more fields as necessary
+        ];
+
+        return $this->respond([
+            'status' => 'Success',
+            'user' => $userData,
+        ]);
+    } catch (Exception $e) {
+        return $this->respond(['status' => 'Failed', 'message' => $e->getMessage()], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+public function updateUserProfile(): ResponseInterface
+{
+    try {
+        $user = auth()->user();
+
+        if (!$user) {
+            return $this->respond(['status' => 'Failed', 'message' => 'User not found'], ResponseInterface::HTTP_NOT_FOUND);
+        }
+
+        // Handle the uploaded image
+        $uploadedFile = $this->request->getFile('profile_image');
+
+        if ($uploadedFile && $uploadedFile->isValid()) {
+            // Upload the image and get the media ID
+            $mediaModel = new \App\Models\MediaModel();
+            $uploadResult = $mediaModel->uploadMedia($uploadedFile);
+
+            if (isset($uploadResult['errors'])) {
+                return $this->respond(['status' => 'Failed', 'message' => $uploadResult['errors']], ResponseInterface::HTTP_BAD_REQUEST);
             }
 
-            // Assuming the User entity or model has a method to expose necessary data safely
+            // Update the user's profile image with the new media ID
+            $user->profile_image = $uploadResult['media_id'];
+        }
+
+        // Update other user profile fields if necessary
+        $rules = (new ValidationRules())->getRegistrationRules();
+        unset($rules['password']);
+        unset($rules['password_confirm']);
+        $updatedData = $this->request->getPost(array_keys($rules));
+
+        if (!empty($updatedData)) {
+            $user->fill($updatedData);
+        }
+
+        // Save the updated user
+        $users = auth()->getProvider();
+        if ($users->save($user)) {
+            // Construct the response data
             $userData = [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -146,53 +216,16 @@ class Login extends ResourceController
 
             return $this->respond([
                 'status' => 'Success',
+                'message' => 'User profile updated successfully',
                 'user' => $userData,
             ]);
-        } catch (Exception $e) {
-            return $this->respond(['status' => 'Failed', 'message' => $e->getMessage()], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            return $this->respond(['status' => 'Failed', 'message' => 'Failed to update user profile'], ResponseInterface::HTTP_BAD_REQUEST);
         }
+    } catch (Exception $e) {
+        return $this->respond(['status' => 'Failed', 'message' => 'Internal server error.'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
     }
-
-    public function updateUserProfile(): ResponseInterface
-    {
-        try {
-            $user = auth()->user();
-
-            if (!$user) {
-                return $this->respond(['status' => 'Failed', 'message' => 'User not found'], ResponseInterface::HTTP_NOT_FOUND);
-            }
-
-            $rules = (new ValidationRules())->getRegistrationRules();
-            unset($rules['password']);
-            unset($rules['password_confirm']);
-            $updatedData = $this->request->getPost(array_keys($rules));
-
-            // Check if updatedData is empty
-            if (empty($updatedData)) {
-                return $this->respond(['status' => 'Failed', 'message' => 'No data provided for update'], ResponseInterface::HTTP_BAD_REQUEST);
-            }
-
-            if (!auth()->getProvider()->validate($updatedData)) {
-                return $this->respond(['status' => 'Failed', 'message' => 'Validation failed for user profile'], ResponseInterface::HTTP_BAD_REQUEST);
-            }
-
-            $updatedUser = auth()->getProvider()->findById($user->id);
-            $user->fill($updatedData);
-
-            if (auth()->getProvider()->save($user)) {
-                $user = auth()->user();
-                return $this->respond([
-                    'status' => 'Success',
-                    'message' => 'User profile updated successfully',
-                    'user' => [...$user->toArray(), 'email' => $user->getEmail()],
-                ]);
-            } else {
-                return $this->respond(['status' => 'Failed', 'message' => 'Failed to update user profile'], ResponseInterface::HTTP_BAD_REQUEST);
-            }
-        } catch (Exception $e) {
-            return $this->respond(['status' => 'Failed', 'message' => 'Internal server error.'], ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
+}
 
     public function checkPassword(): ResponseInterface
     {
