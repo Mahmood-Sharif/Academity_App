@@ -185,7 +185,7 @@ class AuthServices {
     }
 
     // Define the backend endpoint URL for uploading profile pictures
-    final url = Uri.parse('http://192.168.100.15:8080/api/profile-upload');
+    final url = Uri.parse('${Env.academityUrl}api/profile-upload');
 
     // Create a multipart request for uploading files
     var request = http.MultipartRequest('POST', url);
