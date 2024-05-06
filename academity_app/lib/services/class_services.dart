@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:academity_app/models/class_schedule.dart';
 import 'package:academity_app/services/academity_api.dart';
 import 'package:academity_app/models/class.dart';
-import 'package:academity_app/services/academy_services.dart';
+import 'package:academity_app/services/errors.dart';
 import 'package:intl/intl.dart'; // Adjust path
 
 class ClassServices {

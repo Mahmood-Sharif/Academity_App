@@ -29,13 +29,16 @@ class AuthNotifier extends AsyncNotifier<User?> {
   }
 
   Future<void> login(String email, String password) async {
-    final user = await AuthServices.login(email, password);
+    final user = await AuthServices.login(email, password)
+        .timeout(const Duration(seconds: 10));
     if (user.type == 'coach') canSwitchType = true;
     state = AsyncValue.data(user);
   }
 
   Future<void> logout() async {
-    await AuthServices.logout();
+    try {
+      await AuthServices.logout();
+    } catch (_) {}
     state = const AsyncValue.data(null);
     canSwitchType = false;
   }
@@ -59,21 +62,18 @@ class AuthNotifier extends AsyncNotifier<User?> {
     }).catchError((error, stackTrace) => false);
   }
 
-   Future<void> uploadProfilePicture(String filePath) async {
+  Future<void> uploadProfilePicture(String filePath) async {
     try {
       await AuthServices.uploadProfilePicture(filePath);
       // You might want to update the user object after the profile picture is uploaded
       final updatedUser = await AuthServices.getUserProfile();
-      if (updatedUser != null) {
-        state = AsyncValue.data(updatedUser);
-      }
+      state = AsyncValue.data(updatedUser);
     } catch (e) {
       // Handle errors
       throw Exception('An error occurred while uploading profile picture: $e');
     }
   }
 }
-
 
 final authProvider = AsyncNotifierProvider<AuthNotifier, User?>(() {
   return AuthNotifier();

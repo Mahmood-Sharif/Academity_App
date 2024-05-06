@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:academity_app/services/academity_api.dart';
+import 'package:academity_app/services/errors.dart';
 import '../models/academy.dart'; // Update with the correct path to your Academy model
-
-class NotFound extends Error {}
 
 class AcademyServices {
   // Fetches academies by sport ID
@@ -63,6 +62,7 @@ class AcademyServices {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((dynamic item) => Academy.fromJson(item)).toList();
     } else {
+      if (response.statusCode == 404) throw NotFound();
       throw Exception(
           'Failed to load Academies. Response status code: ${response.statusCode}');
     }

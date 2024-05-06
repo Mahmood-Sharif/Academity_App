@@ -1,5 +1,5 @@
 import 'package:academity_app/providers/auth_provider.dart';
-import 'package:academity_app/views/profile/widgets/delete_popup.dart';
+import 'package:academity_app/views/Profile/widgets/delete_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +32,6 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   Widget build(BuildContext context) {
     const Color customColor = Color(0xFF008B8B);
 
-    
     return Form(
       key: _formKey,
       child: Padding(
@@ -42,17 +41,18 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-            GestureDetector(
-  onTap: _selectImage,
-  child: CircleAvatar(
-    backgroundImage: _imageFile != null
-      ? FileImage(_imageFile!)
-      : widget.user.image != null
-        ? NetworkImage(widget.user.image!)
-        : AssetImage('lib/assets/images/pattern.jpg') as ImageProvider<Object>,
-    radius: 50,
-  ),
-),
+              GestureDetector(
+                onTap: _selectImage,
+                child: CircleAvatar(
+                  backgroundImage: _imageFile != null
+                      ? FileImage(_imageFile!)
+                      : widget.user.image != null
+                          ? NetworkImage(widget.user.image!)
+                          : const AssetImage('lib/assets/images/pattern.jpg')
+                              as ImageProvider<Object>,
+                  radius: 50,
+                ),
+              ),
               const SizedBox(height: 20),
               _buildUserInputField(
                   AppLocalizations.of(context)!.fullNameLabel,
@@ -136,34 +136,35 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
     );
   }
 
-Widget _buildDeleteButton(BuildContext context) { // Ensure to pass context
-  return Center(
-    child: ElevatedButton(
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return const DeletePopUp();
-          },
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFFFF3200), // Button background color
-        padding: const EdgeInsets.symmetric(
-            horizontal: 52, vertical: 10), // Makes the button a bit bigger
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4), // Slightly rounded edges
+  Widget _buildDeleteButton(BuildContext context) {
+    // Ensure to pass context
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const DeletePopUp();
+            },
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFFF3200), // Button background color
+          padding: const EdgeInsets.symmetric(
+              horizontal: 52, vertical: 10), // Makes the button a bit bigger
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4), // Slightly rounded edges
+          ),
+        ),
+        child: Text(
+          AppLocalizations.of(context)!.delectAccountActionTitle,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
-      child: Text(
-        AppLocalizations.of(context)!.absentButton,
-        style: const TextStyle(fontSize: 18, color: Colors.white),
-      ),
-    ),
-  );
-}
+    );
+  }
 
-void _saveUserProfile() async {
+  void _saveUserProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
       try {
@@ -173,16 +174,17 @@ void _saveUserProfile() async {
               .read(authProvider.notifier)
               .uploadProfilePicture(_imageFile!.path);
         }
-        final success = await ref
-            .read(authProvider.notifier)
-            .updateProfile(_editableUser);
+        final success =
+            await ref.read(authProvider.notifier).updateProfile(_editableUser);
         if (!context.mounted) return;
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
+              content:
+                  Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!.profileUpdateFailed)));
+              content:
+                  Text(AppLocalizations.of(context)!.profileUpdateFailed)));
         }
       } catch (e) {
         ScaffoldMessenger.of(context)
@@ -203,44 +205,45 @@ void _saveUserProfile() async {
       );
     });
   }
-void _selectImage() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Select Image"),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _getImage(ImageSource.camera);
-                },
-                child: ListTile(
-                  leading: Icon(Icons.camera),
-                  title: Text("Take a Photo"),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _getImage(ImageSource.gallery);
-                },
-                child: ListTile(
-                  leading: Icon(Icons.photo_library),
-                  title: Text("Choose from Gallery"),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
 
-void _getImage(ImageSource source) async {
+  void _selectImage() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Select Image"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    _getImage(ImageSource.camera);
+                  },
+                  child: const ListTile(
+                    leading: Icon(Icons.camera),
+                    title: Text("Take a Photo"),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    _getImage(ImageSource.gallery);
+                  },
+                  child: const ListTile(
+                    leading: Icon(Icons.photo_library),
+                    title: Text("Choose from Gallery"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _getImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: source);
 
@@ -250,8 +253,6 @@ void _getImage(ImageSource source) async {
       });
     }
   }
-
-
 
   String _formatDate(DateTime date) {
     // Formatting date as yyyy-MM-dd

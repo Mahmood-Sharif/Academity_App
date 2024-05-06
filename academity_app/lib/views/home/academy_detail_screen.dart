@@ -1,6 +1,6 @@
 import 'package:academity_app/models/class.dart';
-import 'package:academity_app/services/academy_services.dart';
 import 'package:academity_app/services/class_services.dart';
+import 'package:academity_app/services/errors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/models/academy.dart';

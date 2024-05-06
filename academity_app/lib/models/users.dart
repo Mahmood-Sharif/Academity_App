@@ -31,7 +31,7 @@ class User {
       dob: DateTime.parse(json['dob']),
       gender: json['gender'],
       type: json['type'] ?? 'user',
-      image: json['profile_image_url'] , // Parse the image property from JSON
+      image: json['profile_image_url'], // Parse the image property from JSON
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:academity_app/services/academy_services.dart';
+import 'package:academity_app/services/errors.dart';
 import 'package:academity_app/views/home/coach_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -92,6 +93,9 @@ class CoachAcademiesListWidget extends ConsumerWidget {
               },
             );
           } else if (asyncSnapshot.hasError) {
+            if (asyncSnapshot.error case NotFound()) {
+              return const Text('No Academies');
+            }
             final error = asyncSnapshot.error;
             return Text('Error: $error');
           } else {

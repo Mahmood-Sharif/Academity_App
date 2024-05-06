@@ -1,15 +1,18 @@
+import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/services/auth_services.dart';
+import 'package:academity_app/services/errors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Import the AuthServices
 
-class DeletePopUp extends StatefulWidget {
+class DeletePopUp extends ConsumerStatefulWidget {
   const DeletePopUp({super.key});
 
   @override
-  _DeletePopUpState createState() => _DeletePopUpState();
+  ConsumerState<DeletePopUp> createState() => _DeletePopUpState();
 }
 
-class _DeletePopUpState extends State<DeletePopUp> {
+class _DeletePopUpState extends ConsumerState<DeletePopUp> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isDeleteEnabled = false;
   String? _errorText;
@@ -33,34 +36,24 @@ class _DeletePopUpState extends State<DeletePopUp> {
     super.dispose();
   }
 
-void _deleteAccount() async {
-  try {
-    print("Password Submitted: ${_passwordController.text}");  // Debug: Log the submitted password
-    bool isValid = await AuthServices.checkPassword(_passwordController.text);
-    if (!isValid) {
-      print("Password validation failed");  // Debug: Log a failure
-      if (mounted) {
-        setState(() {
-          _errorText = 'Invalid password, please try again.';
-        });
-      }
-      return;
-    }
-    await AuthServices.deleteAccount();
-    print("Account deletion successful");  // Debug: Log success
-    if (mounted) {
-      Navigator.of(context).pop();
-    }
-  } catch (e) {
-    print("Error during account deletion: $e");  // Debug: Log exceptions
-    if (mounted) {
+  void _deleteAccount() async {
+    try {
+      await AuthServices.deleteAccount(_passwordController.text).then((_) {
+        Navigator.of(context)
+          ..pop()
+          ..pop();
+        ref.read(authProvider.notifier).logout();
+      }).whenComplete(() => FocusScope.of(context).unfocus());
+    } on LocalizedErrorMessage catch (e) {
       setState(() {
-        _errorText = e.toString();
+        _errorText = e.localizedMessage(context);
+      });
+    } catch (_) {
+      setState(() {
+        _errorText = CouldNotDeleteAccount().localizedMessage(context);
       });
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +77,7 @@ void _deleteAccount() async {
                 labelStyle: const TextStyle(fontSize: 14),
                 border: const OutlineInputBorder(),
                 errorText: _errorText,
+                errorMaxLines: 5,
               ),
             ),
           ],
