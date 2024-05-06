@@ -230,10 +230,20 @@ public function updateUserProfile(): ResponseInterface
     public function checkPassword(): ResponseInterface
     {
         $user = auth()->user();
+        if ($user->inGroup('admin')) {
+            return $this->fail([
+                'status' => 'cannot delete',
+                'reason' => 'academy owner',
+            ], 400);
+
+        }
+        log_message('critical', var_export($this->request->headers(), true));
+
         $credentials = [
             'email'    => $user->getEmail(),
             'password' => $this->request->getPost('password'),
         ];
+        log_message('critical', var_export($credentials, true));
 
         $loginAttempt = auth()->check($credentials);
 
@@ -257,7 +267,7 @@ public function updateUserProfile(): ResponseInterface
         $users = auth()->getProvider();
 
         try {
-            $result = auth()->getProvider()->delete($user->id, false)->getResult();
+            $result = $users->delete($user->id, false)->getResult();
         } catch (\Throwable $th) {
         }
 

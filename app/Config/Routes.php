@@ -66,21 +66,23 @@ $routes->get('change-locale/(:segment)', static function ($locale) {
 // all routes inside the function are prefixed with 'api'.
 // e.g. /api/test, /api/login
 $routes->group('api', static function ($routes) {
+    if (ENVIRONMENT == 'development') {
+        $routes->get('test', 'Api\Test::get');
+        $routes->post('test', 'Api\Test::post');
+    }
 
     // no token required
     $routes->post('login', 'Api\Login::loginUser');
     $routes->post('register', 'Api\Login::registerUser');
 
     $routes->group('', ['filter' => 'tokens'], static function ($routes) {
-        $routes->post('check-password', 'Api\Login::checkPassword');
-        $routes->post('delete-account', 'Api\Login::deleteAccount');
-
         // user profiles api
         $routes->get('login-test', 'Api\Login::loginTest');
         $routes->post('logout', 'Api\Login::logoutUser');
         $routes->get('user-profile', 'Api\Login::getUserProfile');
         $routes->post('profile-edit', 'Api\Login::updateUserProfile');
         $routes->post('profile-upload', 'Api\Students::uploadProfilePicture');
+        $routes->post('delete-account', 'Api\Login::deleteAccount');
 
         // users app academies api
         $routes->get('sport', 'Api\Sport::index');
