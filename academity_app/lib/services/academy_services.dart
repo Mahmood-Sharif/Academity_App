@@ -63,6 +63,7 @@ class AcademyServices {
       return data.map((dynamic item) => Academy.fromJson(item)).toList();
     } else {
       if (response.statusCode == 404) throw NotFound();
+
       throw Exception(
           'Failed to load Academies. Response status code: ${response.statusCode}');
     }

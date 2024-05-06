@@ -93,7 +93,7 @@ class CoachAcademiesListWidget extends ConsumerWidget {
               },
             );
           } else if (asyncSnapshot.hasError) {
-            if (asyncSnapshot.error case NotFound()) {
+            if (asyncSnapshot.error! is NotFound) {
               return const Text('No Academies');
             }
             final error = asyncSnapshot.error;
