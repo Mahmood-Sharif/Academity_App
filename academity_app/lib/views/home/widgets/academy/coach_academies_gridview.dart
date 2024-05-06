@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:academity_app/services/academy_services.dart';
 import 'package:academity_app/services/errors.dart';
 import 'package:academity_app/views/home/coach_classes.dart';
@@ -93,7 +95,8 @@ class CoachAcademiesListWidget extends ConsumerWidget {
               },
             );
           } else if (asyncSnapshot.hasError) {
-            if (asyncSnapshot.error! is NotFound) {
+            if (asyncSnapshot.error!.runtimeType == TimeoutException ||
+                asyncSnapshot.error!.runtimeType == NotFound) {
               return const Text('No Academies');
             }
             final error = asyncSnapshot.error;

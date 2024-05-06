@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:academity_app/models/student.dart';
 import 'package:academity_app/services/student_service.dart';
 import 'package:academity_app/views/home/widgets/sport/students_griview.dart';
@@ -26,7 +28,17 @@ class ClassStudentsPage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            final error = snapshot.error!;
+            if (error.runtimeType == TimeoutException) {
+              return const Center(
+                child: Text(
+                  'Connection Timeout.\nPlease check your internet connection.',
+                  maxLines: 5,
+                ),
+              );
+            } else {
+              return Center(child: Text('Error: $error'));
+            }
           } else {
             // final List<ClassWithTiming> students = snapshot.data ?? [];
             return StudentsListWidget(

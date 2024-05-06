@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:academity_app/models/class.dart';
 import 'package:academity_app/services/class_services.dart';
 import 'package:academity_app/services/errors.dart';
@@ -64,6 +66,8 @@ class AcademyDetailScreen extends ConsumerWidget {
                         return switch (snapshot.error) {
                           NotFound() => Text(
                               AppLocalizations.of(context)!.noClassesAvailable),
+                          TimeoutException() =>
+                            const Text('Connection Timeout'),
                           _ => Text('Error: ${snapshot.error}'),
                         };
                       } else if (snapshot.hasData) {

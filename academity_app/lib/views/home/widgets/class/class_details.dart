@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:academity_app/services/class_services.dart';
 import 'package:academity_app/views/home/widgets/class/register_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,17 @@ void showClassDetails(BuildContext context, int classId) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          final error = snapshot.error!;
+          if (error.runtimeType == TimeoutException) {
+            return const Center(
+              child: Text(
+                'Connection Timeout.\nPlease check your internet connection.',
+                maxLines: 5,
+              ),
+            );
+          } else {
+            return Center(child: Text('Error: $error'));
+          }
         } else if (snapshot.hasData) {
           final classItem = snapshot.data!;
           final hasTimings = classItem.timings.isNotEmpty;

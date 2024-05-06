@@ -22,7 +22,9 @@ class AcademityApi {
     return http.get(
         Uri.parse('${Env.academityUrl}api/$path')
             .replace(queryParameters: queryParameters),
-        headers: {'Authorization': 'Bearer $apiToken'});
+        headers: {
+          'Authorization': 'Bearer $apiToken'
+        }).timeout(const Duration(seconds: 15));
   }
 
   /// Perform an HTTP POST request to the Academity Api.
@@ -46,12 +48,14 @@ class AcademityApi {
     final mergedHeaders = {'Authorization': 'Bearer $apiToken'};
     if (headers != null) mergedHeaders.addAll(headers);
 
-    return http.post(
-      Uri.parse('${Env.academityUrl}api/$path'),
-      headers: mergedHeaders,
-      body: body,
-      encoding: encoding,
-    );
+    return http
+        .post(
+          Uri.parse('${Env.academityUrl}api/$path'),
+          headers: mergedHeaders,
+          body: body,
+          encoding: encoding,
+        )
+        .timeout(const Duration(seconds: 15));
   }
 
   /// Perform an HTTP POST request to the Academity Api.

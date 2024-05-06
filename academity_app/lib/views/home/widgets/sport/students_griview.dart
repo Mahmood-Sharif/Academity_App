@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:academity_app/services/student_service.dart';
 import 'package:academity_app/views/home/student_details.dart';
 import 'package:flutter/material.dart';
@@ -109,8 +111,17 @@ class StudentsListWidget extends ConsumerWidget {
               },
             );
           } else if (asyncSnapshot.hasError) {
-            final error = asyncSnapshot.error;
-            return Text('Error: $error');
+            final error = asyncSnapshot.error!;
+            if (error.runtimeType == TimeoutException) {
+              return const Center(
+                child: Text(
+                  'Connection Timeout.\nPlease check your internet connection.',
+                  maxLines: 5,
+                ),
+              );
+            } else {
+              return Center(child: Text('Error: $error'));
+            }
           } else {
             return const Center(child: CircularProgressIndicator());
           }
