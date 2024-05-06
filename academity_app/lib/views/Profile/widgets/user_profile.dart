@@ -20,7 +20,7 @@ class UserProfileWidget extends ConsumerStatefulWidget {
 class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   final _formKey = GlobalKey<FormState>();
   late User _editableUser;
-  File? _imageFile;
+  /* File? _imageFile; */
 
   @override
   void initState() {
@@ -40,19 +40,6 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: _selectImage,
-                child: CircleAvatar(
-                  backgroundImage: _imageFile != null
-                      ? FileImage(_imageFile!)
-                      : widget.user.image != null
-                          ? NetworkImage(widget.user.image!)
-                          : const AssetImage('lib/assets/images/pattern.jpg')
-                              as ImageProvider<Object>,
-                  radius: 50,
-                ),
-              ),
               const SizedBox(height: 20),
               _buildUserInputField(
                   AppLocalizations.of(context)!.fullNameLabel,
@@ -168,12 +155,12 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
       try {
-        if (_imageFile != null) {
-          // If a new image is selected, upload it before updating the profile
-          await ref
-              .read(authProvider.notifier)
-              .uploadProfilePicture(_imageFile!.path);
-        }
+        /* if (_imageFile != null) { */
+        /*   // If a new image is selected, upload it before updating the profile */
+        /*   await ref */
+        /*       .read(authProvider.notifier) */
+        /*       .uploadProfilePicture(_imageFile!.path); */
+        /* } */
         final success =
             await ref.read(authProvider.notifier).updateProfile(_editableUser);
         if (!context.mounted) return;
@@ -249,7 +236,7 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
 
     if (pickedImage != null) {
       setState(() {
-        _imageFile = File(pickedImage.path);
+        /* _imageFile = File(pickedImage.path); */
       });
     }
   }
