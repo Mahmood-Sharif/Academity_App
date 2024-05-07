@@ -1,6 +1,7 @@
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/views/Profile/widgets/section_card.dart';
 import 'package:academity_app/views/Profile/widgets/language_modal_sheet.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,8 +47,7 @@ class ProfilePage extends ConsumerWidget {
         title: AppLocalizations.of(context)!.profileActionTitle,
         showBackButton: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
+      body: AdaptivePadding(
         child: ListView(
           children: <Widget>[
             SectionCard(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:academity_app/models/attendance.dart';
 import 'package:academity_app/services/attendance_service.dart';
 import 'package:academity_app/views/home/widgets/sport/attendance_gridview.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -44,35 +45,37 @@ class _AttendancePageState extends State<AttendancePage> {
             onRefresh: () async {
               setState(() {});
             },
-            child: FutureBuilder<List<Attendance>>(
-              future: AttendanceServices()
-                  .fetchAttendance(widget.classId, widget.datetime),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  final error = snapshot.error!;
-                  if (error.runtimeType == TimeoutException) {
-                    return const Center(
-                      child: Text(
-                        'Connection Timeout.\nPlease check your internet connection.',
-                        maxLines: 5,
+            child: AdaptivePadding(
+              child: FutureBuilder<List<Attendance>>(
+                future: AttendanceServices()
+                    .fetchAttendance(widget.classId, widget.datetime),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    final error = snapshot.error!;
+                    if (error.runtimeType == TimeoutException) {
+                      return const Center(
+                        child: Text(
+                          'Connection Timeout.\nPlease check your internet connection.',
+                          maxLines: 5,
+                        ),
+                      );
+                    } else {
+                      return Center(child: Text('Error: $error'));
+                    }
+                  } else {
+                    final attendanceList = snapshot.data!;
+                    return Expanded(
+                      child: AttendanceListWidget(
+                        attendanceList: attendanceList,
+                        classId: widget.classId,
+                        datetime: widget.datetime,
                       ),
                     );
-                  } else {
-                    return Center(child: Text('Error: $error'));
                   }
-                } else {
-                  final attendanceList = snapshot.data!;
-                  return Expanded(
-                    child: AttendanceListWidget(
-                      attendanceList: attendanceList,
-                      classId: widget.classId,
-                      datetime: widget.datetime,
-                    ),
-                  );
-                }
-              },
+                },
+              ),
             ),
           );
         },

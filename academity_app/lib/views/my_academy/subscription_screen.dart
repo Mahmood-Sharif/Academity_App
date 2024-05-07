@@ -1,4 +1,5 @@
 import 'package:academity_app/views/my_academy/widgets/subscription_details.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/academy.dart';
@@ -14,8 +15,7 @@ class SubscriptionScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: academy.name,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: AdaptivePadding(
         child: MySubscriptionDetails(academy: academy),
       ),
     );

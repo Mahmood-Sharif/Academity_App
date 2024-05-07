@@ -5,6 +5,7 @@ import 'package:academity_app/views/Schedule/schedule_screen.dart';
 import 'package:academity_app/views/my_academy/my_academy_screen.dart';
 import 'package:academity_app/views/attendance/qr_scanner_page.dart';
 import 'package:academity_app/views/home/browse_sports_screen.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:academity_app/views/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,7 +44,10 @@ class MainScreenState extends ConsumerState<UsersBottomNavigation> {
           const SportsPage(),
           const MyAcademyPage(),
           QRScannerPage(active: _qrScannerActive),
-          SchedulePage(scheduleProvider: scheduleForStudentProvider),
+          SchedulePage(
+              daysBefore: 0,
+              daysAfter: 13,
+              scheduleProvider: scheduleForStudentProvider),
           const ProfilePage(),
         ],
       ),

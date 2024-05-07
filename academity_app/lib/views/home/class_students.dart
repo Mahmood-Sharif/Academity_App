@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:academity_app/models/student.dart';
 import 'package:academity_app/services/student_service.dart';
 import 'package:academity_app/views/home/widgets/sport/students_griview.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 
 class ClassStudentsPage extends StatelessWidget {
@@ -22,30 +23,32 @@ class ClassStudentsPage extends StatelessWidget {
         iconTheme: const IconThemeData(
             color: Colors.white), // Set the color of the back button to white
       ),
-      body: FutureBuilder<List<Student>>(
-        future: StudentServices().fetchStudentsByClassId(classId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            final error = snapshot.error!;
-            if (error.runtimeType == TimeoutException) {
-              return const Center(
-                child: Text(
-                  'Connection Timeout.\nPlease check your internet connection.',
-                  maxLines: 5,
-                ),
-              );
+      body: AdaptivePadding(
+        child: FutureBuilder<List<Student>>(
+          future: StudentServices().fetchStudentsByClassId(classId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              final error = snapshot.error!;
+              if (error.runtimeType == TimeoutException) {
+                return const Center(
+                  child: Text(
+                    'Connection Timeout.\nPlease check your internet connection.',
+                    maxLines: 5,
+                  ),
+                );
+              } else {
+                return Center(child: Text('Error: $error'));
+              }
             } else {
-              return Center(child: Text('Error: $error'));
+              // final List<ClassWithTiming> students = snapshot.data ?? [];
+              return StudentsListWidget(
+                  classId:
+                      classId); // Pass the students data to the StudentListWidget
             }
-          } else {
-            // final List<ClassWithTiming> students = snapshot.data ?? [];
-            return StudentsListWidget(
-                classId:
-                    classId); // Pass the students data to the StudentListWidget
-          }
-        },
+          },
+        ),
       ),
     );
   }

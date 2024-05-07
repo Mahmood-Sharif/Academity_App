@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:academity_app/services/sports_services.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:academity_app/views/home/widgets/sport/sports_griview.dart';
@@ -24,38 +25,40 @@ class _SportsPageState extends State<SportsPage> {
         title: AppLocalizations.of(context)!.exploreTitle,
         showBackButton: false, // Ensures the back button is not shown
       ),
-      body: FutureBuilder<List<Sport>>(
-        future: _sportsService.fetchSports(),
-        builder: (BuildContext context, AsyncSnapshot<List<Sport>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            final error = snapshot.error!;
-            if (error.runtimeType == TimeoutException) {
-              return const Center(
-                child: Text(
-                  'Connection Timeout.\nPlease check your internet connection.',
-                  maxLines: 5,
-                ),
+      body: AdaptivePadding(
+        child: FutureBuilder<List<Sport>>(
+          future: _sportsService.fetchSports(),
+          builder: (BuildContext context, AsyncSnapshot<List<Sport>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              final error = snapshot.error!;
+              if (error.runtimeType == TimeoutException) {
+                return const Center(
+                  child: Text(
+                    'Connection Timeout.\nPlease check your internet connection.',
+                    maxLines: 5,
+                  ),
+                );
+              } else {
+                return Center(child: Text('Error: $error'));
+              }
+            } else if (snapshot.hasData) {
+              return ListView(
+                children: [
+                  // const SizedBox(height: 20),
+                  SportsListWidget(sports: snapshot.data!),
+                  // const SizedBox(height: 20),
+                  // const TwoCardsSideBySide(),
+                ],
               );
             } else {
-              return Center(child: Text('Error: $error'));
+              // This case handles empty data
+              return Center(
+                  child: Text(AppLocalizations.of(context)!.noSportsAvailable));
             }
-          } else if (snapshot.hasData) {
-            return ListView(
-              children: [
-                // const SizedBox(height: 20),
-                SportsListWidget(sports: snapshot.data!),
-                // const SizedBox(height: 20),
-                // const TwoCardsSideBySide(),
-              ],
-            );
-          } else {
-            // This case handles empty data
-            return Center(
-                child: Text(AppLocalizations.of(context)!.noSportsAvailable));
-          }
-        },
+          },
+        ),
       ),
     );
   }

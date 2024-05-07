@@ -28,6 +28,8 @@ class _CoachesBottomNavigationState
         index: _selectedIndex,
         children: [
           SchedulePage(
+            daysBefore: 7,
+            daysAfter: 7,
             scheduleProvider: scheduleForCoachProvider,
             onTap: (schedule) {
               final now = DateTime.now();

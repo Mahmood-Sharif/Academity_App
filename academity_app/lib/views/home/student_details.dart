@@ -1,3 +1,4 @@
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/student.dart';
@@ -12,8 +13,7 @@ class StudentDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
           title: AppLocalizations.of(context)!.studentDetailsTitle),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: AdaptivePadding(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:academity_app/providers/auth_provider.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,22 +51,12 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
           children: [
             Align(
               alignment: Alignment.bottomRight,
-              child: Container(
-                height: 180,
-                width: 200,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("lib/assets/images/logo1.png"),
-                  ),
-                ),
+              child: Image.asset(
+                "lib/assets/images/logo_L.png",
+                opacity: const AlwaysStoppedAnimation(.5),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: 150,
-                left: 20,
-                right: 20,
-              ),
+            AdaptivePadding(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

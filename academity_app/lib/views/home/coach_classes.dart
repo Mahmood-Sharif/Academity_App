@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:academity_app/models/class.dart';
 import 'package:academity_app/services/class_services.dart';
 import 'package:academity_app/views/home/widgets/class/coach_class_list.dart';
+import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 
 class CoachClassesPage extends StatelessWidget {
@@ -21,31 +22,33 @@ class CoachClassesPage extends StatelessWidget {
         iconTheme: const IconThemeData(
             color: Colors.white), // Set the color of the back button to white
       ),
-      body: FutureBuilder<List<Classes>>(
-        future: ClassServices().fetchClassesByAcademyId(
-            academyId), // Replace 2 with the actual class ID
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            final error = snapshot.error!;
-            if (error.runtimeType == TimeoutException) {
-              return const Center(
-                child: Text(
-                  'Connection Timeout.\nPlease check your internet connection.',
-                  maxLines: 5,
-                ),
-              );
+      body: AdaptivePadding(
+        child: FutureBuilder<List<Classes>>(
+          future: ClassServices().fetchClassesByAcademyId(
+              academyId), // Replace 2 with the actual class ID
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              final error = snapshot.error!;
+              if (error.runtimeType == TimeoutException) {
+                return const Center(
+                  child: Text(
+                    'Connection Timeout.\nPlease check your internet connection.',
+                    maxLines: 5,
+                  ),
+                );
+              } else {
+                return Center(child: Text('Error: $error'));
+              }
             } else {
-              return Center(child: Text('Error: $error'));
+              return CoachClassListWidget(
+                academyId: academyId,
+                academyName: academyName,
+              ); // Pass the students data to the StudentListWidget
             }
-          } else {
-            return CoachClassListWidget(
-              academyId: academyId,
-              academyName: academyName,
-            ); // Pass the students data to the StudentListWidget
-          }
-        },
+          },
+        ),
       ),
     );
   }
