@@ -35,6 +35,8 @@ class Schedule extends ResourceController
         $fromDate = $this->request->getGetPost('from_date');
         $toDate = $this->request->getGetPost('to_date');
 
+        log_message('critical', "from $fromDate to $toDate");
+
         $schedule = $this->model->getScheduleForCoach($coach_id, $fromDate, $toDate);
 
         if ($schedule) {
