@@ -22,6 +22,7 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <link href="/css/academity-custom.css" rel="stylesheet">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
   <script id="bootstrapScript" defer src="/js/bootstrap.bundle.min.js"></script>
   <script>
     /*!
