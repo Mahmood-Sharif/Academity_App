@@ -67,11 +67,16 @@ class EnrollmentModel extends Model
     {
         $class = (new ClassModel())
             ->includeClassesPerWeek()
-            ->includeNumEnrollments()
             ->where('reg_code', $regCode)
             ->first();
 
-        if ($class == null || $class->num_enrollments >= $class->max_capacity) {
+        $numEnrollments = (new ClassModel())
+            ->includeNumEnrollments()
+            ->where('reg_code', $regCode)
+            ->first()
+            ->num_enrollments;
+
+        if ($class == null || $numEnrollments >= $class->max_capacity) {
             return false;
         }
 
