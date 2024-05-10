@@ -1,5 +1,6 @@
 import 'package:academity_app/models/class_schedule.dart';
 import 'package:academity_app/views/utils/adaptive_padding.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/views/widgets/app_bar.dart'; // Adjust the path as needed
@@ -34,7 +35,9 @@ class SchedulePage extends ConsumerStatefulWidget {
 }
 
 class _SchedulePageState extends ConsumerState<SchedulePage> {
+  final listKey = GlobalKey();
   DateTime _selectedDay = DateTime.now();
+  ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
       fromDate: DateTime(startDate.year, startDate.month, startDate.day),
       toDate: DateTime(endDate.year, endDate.month, endDate.day),
     )));
+    const dateButtonWidth = 70.0;
+    const dateButtonGap = 16;
 
     return Scaffold(
       appBar: CustomAppBar(title: AppLocalizations.of(context)!.scheduleTitle),
@@ -54,6 +59,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
             SizedBox(
               height: 80,
               child: ListView.builder(
+                key: listKey,
+                controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.daysBefore + widget.daysAfter + 1,
                 itemBuilder: (context, index) {
@@ -64,6 +71,20 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                       _selectedDay.month == date.month &&
                       _selectedDay.day == date.day;
 
+                  if (isSelected) {
+                    final center = listKey.currentContext!
+                            .findRenderObject()!
+                            .paintBounds
+                            .width /
+                        2;
+                    const totalWidth = dateButtonWidth + dateButtonGap;
+                    scrollController.animateTo(
+                      index * totalWidth - center + (totalWidth / 2),
+                      duration: const Duration(seconds: 1),
+                      curve: Curves.fastOutSlowIn,
+                    );
+                  }
+
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -71,7 +92,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                       });
                     },
                     child: Container(
-                      margin: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(dateButtonGap / 2),
                       decoration: BoxDecoration(
                         color:
                             isSelected ? const Color(0xFF008B8B) : Colors.white,
@@ -85,7 +106,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                           ),
                         ],
                       ),
-                      width: 70,
+                      width: dateButtonWidth,
                       alignment: Alignment.center,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
