@@ -5,7 +5,7 @@ import 'package:academity_app/models/student.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StudentDetailsScreen extends StatelessWidget {
-  const StudentDetailsScreen({Key? key}) : super(key: key);
+  const StudentDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

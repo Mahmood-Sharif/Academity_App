@@ -5,8 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class MySubscriptionDetails extends StatelessWidget {
   final Academy academy;
 
-  const MySubscriptionDetails({Key? key, required this.academy})
-      : super(key: key);
+  const MySubscriptionDetails({super.key, required this.academy});
 
   @override
   Widget build(BuildContext context) {

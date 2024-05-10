@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CoachesBottomNavigation extends ConsumerStatefulWidget {
-  const CoachesBottomNavigation({Key? key}) : super(key: key);
+  const CoachesBottomNavigation({super.key});
 
   @override
   ConsumerState<CoachesBottomNavigation> createState() =>

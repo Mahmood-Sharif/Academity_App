@@ -36,10 +36,10 @@ class CardWithShadow extends StatelessWidget {
   final String body;
 
   const CardWithShadow({
-    Key? key,
+    super.key,
     required this.header,
     required this.body,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

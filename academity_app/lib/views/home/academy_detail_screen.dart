@@ -17,8 +17,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AcademyDetailScreen extends ConsumerWidget {
   final Academy academy;
 
-  const AcademyDetailScreen({Key? key, required this.academy})
-      : super(key: key);
+  const AcademyDetailScreen({super.key, required this.academy});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

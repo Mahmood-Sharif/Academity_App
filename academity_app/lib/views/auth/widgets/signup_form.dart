@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum Gender { male, female }
 
 class SignupForm extends ConsumerStatefulWidget {
-  const SignupForm({Key? key}) : super(key: key);
+  const SignupForm({super.key});
 
   @override
   ConsumerState<SignupForm> createState() => _SignupFormState();

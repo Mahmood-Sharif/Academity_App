@@ -4,8 +4,7 @@ class SectionCard extends StatelessWidget {
   final String title;
   final List<Map<String, dynamic>> items;
 
-  const SectionCard({Key? key, required this.title, required this.items})
-      : super(key: key);
+  const SectionCard({super.key, required this.title, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class SectionCard extends StatelessWidget {
                         },
                 );
               },
-            ).toList(),
+            ),
           ],
         ),
       ),

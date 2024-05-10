@@ -10,8 +10,7 @@ class ClassStudentsPage extends StatelessWidget {
   final int classId;
   final String className;
   const ClassStudentsPage(
-      {Key? key, required this.classId, required this.className})
-      : super(key: key);
+      {super.key, required this.classId, required this.className});
 
   @override
   Widget build(BuildContext context) {

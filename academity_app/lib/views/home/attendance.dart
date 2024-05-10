@@ -11,8 +11,7 @@ class AttendancePage extends StatefulWidget {
   final int classId;
   final DateTime datetime;
   const AttendancePage(
-      {Key? key, required this.classId, required this.datetime})
-      : super(key: key);
+      {super.key, required this.classId, required this.datetime});
 
   @override
   State<AttendancePage> createState() => _AttendancePageState();

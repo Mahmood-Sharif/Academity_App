@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class StudentsListWidget extends ConsumerWidget {
   final int classId;
-  const StudentsListWidget({Key? key, required this.classId}) : super(key: key);
+  const StudentsListWidget({super.key, required this.classId});
 
   String formatTime(String? time) {
     if (time == null) return '';

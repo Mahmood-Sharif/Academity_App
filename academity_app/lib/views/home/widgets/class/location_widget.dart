@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class LocationWidget extends StatelessWidget {
   final Academy academy;
 
-  const LocationWidget({Key? key, required this.academy}) : super(key: key);
+  const LocationWidget({super.key, required this.academy});
 
   @override
   Widget build(BuildContext context) {

@@ -10,8 +10,7 @@ class CoachClassesPage extends StatelessWidget {
   final int academyId;
   final String academyName;
   const CoachClassesPage(
-      {Key? key, required this.academyId, required this.academyName})
-      : super(key: key);
+      {super.key, required this.academyId, required this.academyName});
 
   @override
   Widget build(BuildContext context) {

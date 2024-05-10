@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SportsListWidget extends StatelessWidget {
   final List<Sport> sports;
 
-  const SportsListWidget({Key? key, required this.sports}) : super(key: key);
+  const SportsListWidget({super.key, required this.sports});
 
   @override
   Widget build(BuildContext context) {

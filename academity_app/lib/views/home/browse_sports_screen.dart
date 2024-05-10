@@ -9,7 +9,7 @@ import 'package:academity_app/models/sport.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SportsPage extends StatefulWidget {
-  const SportsPage({Key? key}) : super(key: key);
+  const SportsPage({super.key});
 
   @override
   State<SportsPage> createState() => _SportsPageState();

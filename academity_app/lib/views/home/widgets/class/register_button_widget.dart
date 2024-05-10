@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterButtonWidget extends StatelessWidget {
-  const RegisterButtonWidget({Key? key}) : super(key: key);
+  const RegisterButtonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

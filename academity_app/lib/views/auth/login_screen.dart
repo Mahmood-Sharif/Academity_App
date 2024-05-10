@@ -1,8 +1,5 @@
-import 'dart:ui';
-
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/views/utils/adaptive_padding.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,7 +29,7 @@ class LoginScreen extends ConsumerWidget {
 }
 
 class _LoginScreenBody extends StatefulWidget {
-  const _LoginScreenBody({Key? key}) : super(key: key);
+  const _LoginScreenBody();
 
   @override
   _LoginScreenBodyState createState() => _LoginScreenBodyState();

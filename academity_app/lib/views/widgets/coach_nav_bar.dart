@@ -6,10 +6,10 @@ class CoachBottomNavBar extends StatelessWidget {
   final Function(int) onItemSelected;
 
   const CoachBottomNavBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onItemSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

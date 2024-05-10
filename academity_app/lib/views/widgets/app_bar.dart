@@ -8,14 +8,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton; // Add this line
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.backgroundColor =
         const Color(0xFF8B0000), // Default to dark red if not specified
     this.height = kToolbarHeight + 20, // You might adjust this for more space
     this.showBackButton =
         true, // Add this line, default is true to show the back button
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

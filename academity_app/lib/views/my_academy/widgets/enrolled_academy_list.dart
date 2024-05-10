@@ -7,7 +7,7 @@ import 'package:academity_app/providers/academy_provider.dart'; // Make sure thi
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EnrolledAcademiesListWidget extends ConsumerWidget {
-  const EnrolledAcademiesListWidget({Key? key}) : super(key: key);
+  const EnrolledAcademiesListWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

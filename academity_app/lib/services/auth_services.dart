@@ -185,6 +185,7 @@ class AuthServices {
         // If successful, parse the response
         final responseBody = await response.stream.bytesToString();
         final parsedResponse = jsonDecode(responseBody);
+        final _ = parsedResponse;
       } else {
         // If not successful, throw an error
         throw Exception('Failed to upload profile picture');

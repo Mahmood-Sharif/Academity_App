@@ -7,8 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AcademiesListWidget extends ConsumerWidget {
   final int sportId;
 
-  const AcademiesListWidget({Key? key, required this.sportId})
-      : super(key: key);
+  const AcademiesListWidget({super.key, required this.sportId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

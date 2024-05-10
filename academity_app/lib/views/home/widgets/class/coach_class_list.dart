@@ -9,8 +9,7 @@ class CoachClassListWidget extends ConsumerWidget {
   final int academyId;
   final String? academyName;
   const CoachClassListWidget(
-      {Key? key, required this.academyId, this.academyName})
-      : super(key: key);
+      {super.key, required this.academyId, this.academyName});
 
   String formatTime(String? time) {
     if (time == null) return '';

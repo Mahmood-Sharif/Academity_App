@@ -9,11 +9,10 @@ class AttendanceListWidget extends StatefulWidget {
   final DateTime datetime;
 
   const AttendanceListWidget(
-      {Key? key,
+      {super.key,
       required this.attendanceList,
       required this.classId,
-      required this.datetime})
-      : super(key: key);
+      required this.datetime});
 
   @override
   State<AttendanceListWidget> createState() => _AttendanceListWidgetState();

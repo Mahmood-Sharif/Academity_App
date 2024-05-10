@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 
 class UserProfileWidget extends ConsumerStatefulWidget {
   final User user;
 
-  const UserProfileWidget({Key? key, required this.user}) : super(key: key);
+  const UserProfileWidget({super.key, required this.user});
 
   @override
   ConsumerState<UserProfileWidget> createState() => _UserProfileWidgetState();
@@ -154,16 +153,16 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   void _saveUserProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      try {
-        /* if (_imageFile != null) { */
-        /*   // If a new image is selected, upload it before updating the profile */
-        /*   await ref */
-        /*       .read(authProvider.notifier) */
-        /*       .uploadProfilePicture(_imageFile!.path); */
-        /* } */
-        final success =
-            await ref.read(authProvider.notifier).updateProfile(_editableUser);
-        if (!context.mounted) return;
+      /* if (_imageFile != null) { */
+      /*   // If a new image is selected, upload it before updating the profile */
+      /*   await ref */
+      /*       .read(authProvider.notifier) */
+      /*       .uploadProfilePicture(_imageFile!.path); */
+      /* } */
+      await ref
+          .read(authProvider.notifier)
+          .updateProfile(_editableUser)
+          .then((success) {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content:
@@ -173,10 +172,10 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
               content:
                   Text(AppLocalizations.of(context)!.profileUpdateFailed)));
         }
-      } catch (e) {
+      }).catchError((e) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Error: $e')));
-      }
+      });
     }
   }
 

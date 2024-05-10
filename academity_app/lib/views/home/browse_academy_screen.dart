@@ -9,9 +9,9 @@ class BrowseAcademyScreen extends StatelessWidget {
   final Sport sport; // Holds the Sport object for the selected sport
 
   const BrowseAcademyScreen({
-    Key? key,
+    super.key,
     required this.sport,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

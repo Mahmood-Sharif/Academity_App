@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart'; // Adjust path
 class DescriptionWidget extends StatelessWidget {
   final Academy academy;
 
-  const DescriptionWidget({Key? key, required this.academy}) : super(key: key);
+  const DescriptionWidget({super.key, required this.academy});
 
   @override
   Widget build(BuildContext context) {

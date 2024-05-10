@@ -8,8 +8,8 @@ class ClassesWidget extends StatelessWidget {
   final Academy academy;
   final List<Classes> classes;
 
-  const ClassesWidget({Key? key, required this.academy, required this.classes})
-      : super(key: key);
+  const ClassesWidget(
+      {super.key, required this.academy, required this.classes});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import 'package:academity_app/models/academy.dart';
 class SubscriptionScreen extends StatelessWidget {
   final Academy academy;
 
-  const SubscriptionScreen({Key? key, required this.academy}) : super(key: key);
+  const SubscriptionScreen({super.key, required this.academy});
 
   @override
   Widget build(BuildContext context) {

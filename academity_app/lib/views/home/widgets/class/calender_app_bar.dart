@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CalendarAppBar extends StatelessWidget {
-  const CalendarAppBar({Key? key}) : super(key: key);
+  const CalendarAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

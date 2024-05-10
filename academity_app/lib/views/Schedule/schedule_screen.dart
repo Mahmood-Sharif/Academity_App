@@ -1,6 +1,5 @@
 import 'package:academity_app/models/class_schedule.dart';
 import 'package:academity_app/views/utils/adaptive_padding.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/views/widgets/app_bar.dart'; // Adjust the path as needed
@@ -23,12 +22,11 @@ class SchedulePage extends ConsumerStatefulWidget {
   final int daysAfter;
 
   const SchedulePage(
-      {Key? key,
+      {super.key,
       required this.scheduleProvider,
       required this.daysBefore,
       required this.daysAfter,
-      this.onTap})
-      : super(key: key);
+      this.onTap});
 
   @override
   ConsumerState<SchedulePage> createState() => _SchedulePageState();
