@@ -14,10 +14,10 @@ $this->section('content');
   <li>By email:
     <ul>
       <li>
-        <a href="mailto:mahmood.acadmity@gmail.com">mahmood.acadmity@gmail.com</a>
+        <a href="mailto:mahmood.academity@gmail.com">mahmood.academity@gmail.com</a>
       </li>
       <li>
-        <a href="mailto:yara.academity@gmail.com">yara.acadmity@gmail.com</a>
+        <a href="mailto:yara.academity@gmail.com">yara.academity@gmail.com</a>
       </li>
     </ul>
   </li>
