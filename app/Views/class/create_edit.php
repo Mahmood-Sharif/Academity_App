@@ -123,13 +123,11 @@ $url = match($type) {
       </div>
 
       <div class="col">
-                <class-schedule-editor name="timings" data-class-counters="min_duration"
-                    <?php if($type == 'edit'): ?>
-                    data-coach-endpoint="<?=url_to('AdminPortal\Classes::getCoachSchedule', $class->class_id)?>"
-                    data-csrf-token="<?=csrf_hash()?>"
-                    data-coach-select="#coach"
-                    <?php endif ?>
-                >
+        <class-schedule-editor name="timings" data-class-counters="min_duration"
+            data-coach-endpoint="<?=url_to('AdminPortal\Classes::getCoachSchedule', $class?->class_id ?? 0)?>"
+            data-csrf-token="<?=csrf_hash()?>"
+            data-coach-select="#coach"
+        >
           <?= $classTimingsJson ?? '' ?>
         </class-schedule-editor>
 

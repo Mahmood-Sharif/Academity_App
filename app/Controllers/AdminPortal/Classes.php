@@ -9,7 +9,6 @@ use App\Models\ClassTimingModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
-use DateTime;
 
 class Classes extends ResourcePresenter
 {
@@ -326,7 +325,10 @@ class Classes extends ResourcePresenter
             ->select()
             ->select('classes.class_name')
             ->where('coach_id', $coachId)
-            ->where('class_timings.class_id !=', $classId)
+            ->when(
+                $classId > 0,
+                fn ($b) => $b->where('class_timings.class_id !=', $classId)
+            )
             ->findAll();
 
         $classTimingsMap =
