@@ -223,8 +223,11 @@ class Enrollment extends ResourcePresenter
         $class = (new ClassModel())
             ->includeOwnerId()
             ->includeClassesPerWeek()
-            ->includeNumEnrollments()
             ->find((int)$classId);
+        $numEnrollments = (new ClassModel())
+            ->includeNumEnrollments()
+            ->find((int)$classId)
+            ->num_enrollments;
 
         if (!auth()->user()->can('enrollments.create') || $class === null || auth()->id() !== $class->owner_id) {
             return redirect()
@@ -233,7 +236,7 @@ class Enrollment extends ResourcePresenter
                 ->with('error', lang('Security.disallowedAction'));
         }
 
-        if ($class->num_enrollments >= $class->max_capacity) {
+        if ($numEnrollments >= $class->max_capacity) {
             return redirect()
                 ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
                 ->withInput()
