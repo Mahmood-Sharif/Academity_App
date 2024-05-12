@@ -4,7 +4,7 @@
 /// your machine only.
 class Env {
   /// The host of the Academity server.
-  static const academityHost = 'academity.azurewebsites.net';
+  static const academityHost = 'academity.app';
 
   /// The base url of the Academity server.
   static const academityUrl = 'http://$academityHost/';
