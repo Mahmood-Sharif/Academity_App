@@ -1,9 +1,12 @@
 <?php /* @var CodeIgniter\View\View $this */
 /* @var string $errorCode */
 /* @var string $message */
+$locale = service('request')->getLocale();
+$dir = $locale == 'ar' ? 'rtl' : 'ltr';
+$tab = ($this->sections['sidebarTab'] ?? [''])[0];
 ?>
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="<?=$locale?>" dir="<?=$dir?>">
 
 <head>
     <meta charset="UTF-8">
@@ -48,7 +51,7 @@
         </h1>
 
         <p class="lead">
-            <?= isset($message) ? $message : lang('Errors.weHitASnag') ?>
+            <?= lang('Errors.weHitASnag') ?>
         </p>
 
         <a href="javascript:history.back()">
