@@ -236,7 +236,7 @@ $this->section('content');
 <h2>Contact Us</h2>
 <p><?=lang('Home.contact_us.privacy')?></p>
 <ul>
-  <li>By email: <a href="mailto:mahmood.acadmity@gmail.com">mahmood.acadmity@gmail.com</a></li>
+  <li>By email: <a href="mailto:mahmood.academity@gmail.com">mahmood.academity@gmail.com</a></li>
 </ul>
 
 
