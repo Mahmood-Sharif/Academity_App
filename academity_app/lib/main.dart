@@ -22,6 +22,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(languageProvider);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Academity',
       theme: ThemeData(
         textTheme: GoogleFonts.montserratTextTheme(

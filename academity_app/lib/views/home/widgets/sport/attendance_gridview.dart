@@ -1,6 +1,7 @@
 import 'package:academity_app/models/attendance.dart';
 import 'package:academity_app/services/attendance_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AttendanceListWidget extends StatefulWidget {
@@ -44,30 +45,15 @@ class _AttendanceListWidgetState extends State<AttendanceListWidget> {
                 mainAxisAlignment: MainAxisAlignment
                     .spaceBetween, // Align children to the start and end of the row
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        attendance.studentName.toString(),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  Flexible(
+                    child: Text(
+                      attendance.studentName.toString(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
                       ),
-                      if (attendance.isUpdateSuccess !=
-                          null) // Show message only when isUpdateSuccess is not null
-                        Text(
-                          attendance.isUpdateSuccess!
-                              ? 'Attendance updated successfully'
-                              : 'Failed to update attendance',
-                          style: TextStyle(
-                            color: attendance.isUpdateSuccess!
-                                ? Colors.green
-                                : Colors.red,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                    ],
+                      maxLines: 3,
+                    ),
                   ),
                   Row(
                     children: [

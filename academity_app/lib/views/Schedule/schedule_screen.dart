@@ -151,7 +151,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                           child: ListTile(
                             title: Text(classDetails.className),
                             subtitle: Text(
-                                '${AppLocalizations.of(context)!.timeLabel} ${classDetails.startTime} - ${classDetails.endTime}\n${AppLocalizations.of(context)!.locationLabel(classDetails.location)}'),
+                                '${AppLocalizations.of(context)!.timeLabel} ${classDetails.startTime} - ${classDetails.endTime}\n${classDetails.location}'),
                           ),
                         ),
                       );
