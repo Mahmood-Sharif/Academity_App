@@ -51,7 +51,7 @@
     "classesTitle": "اسم الفئة",
     "classNameTitle": "اسم الفئة:",
     "priceTitle": "السعر: دينار بحريني {price}",
-    "sportTitle": "{sportTitle, select, basketball{كرة السلة} football{كرة القدم} boxing{الملاكمة} taekwondo{التايكوندو} fencing{المبارزة} tennis{التنس} other{الرياضة}}",
+    "sportTitle": "{sportTitle, select, basketball{كرة السلة} football{كرة القدم} boxing{الملاكمة} taekwondo{التايكوندو} fencing{المبارزة} swimming{السباحة} tennis{التنس} other{الرياضة}}",
     "customerSupportLabel": "دعم العملاء",
     "playerLabel": "لاعب",
     "swapToLabel": "مبادلة إلى",
