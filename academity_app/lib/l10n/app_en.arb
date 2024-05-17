@@ -152,7 +152,7 @@
     "@loadingSports": {
         "description": "Text displayed while sports are being loaded"
     },
-    "noAcademiesAvailable": "No academies available",
+    "noAcademiesAvailable": "Coming Soon",
     "@noAcademiesAvailable": {
         "description": "Text displayed when no academies data is available to show"
     },
@@ -168,7 +168,7 @@
     "@loadingClasses": {
         "description": "Text displayed while the classes data is being loaded"
     },
-    "noClassesAvailable": "No classes available",
+    "noClassesAvailable": "Coming Soon",
     "@noClassesAvailable": {
         "description": "Text displayed when no classes data is available to show"
     },

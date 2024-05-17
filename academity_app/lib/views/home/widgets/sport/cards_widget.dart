@@ -12,16 +12,20 @@ class TwoCardsSideBySide extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: CardWithShadow(
-                header: "Upcoming Class",
-                body: "SoccerStars Academy",
+              child: IntrinsicHeight(
+                child: CardWithShadow(
+                  header: "Upcoming Class",
+                  body: "SoccerStars Academy",
+                ),
               ),
             ),
             SizedBox(width: 16), // Space between the cards
             Expanded(
-              child: CardWithShadow(
-                header: "Subscription Ends",
-                body: "27 Days",
+              child: IntrinsicHeight(
+                child: CardWithShadow(
+                  header: "Subscription Ends",
+                  body: "27 Days",
+                ),
               ),
             ),
           ],
@@ -44,37 +48,45 @@ class CardWithShadow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: const BoxConstraints(
+        minHeight: 80, // Set minimum height for the card
+        maxHeight: 100, // Set maximum height for the card
+        maxWidth: 150,  // Set maximum width for the card
+      ),
       decoration: BoxDecoration(
         color: Colors.white, // Card background color
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color(0xFF008B8B),
-            spreadRadius: 0,
-            blurRadius: 2,
-            offset: Offset(0, 1.5), // Changes position of shadow
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 4), // Changes position of shadow
           ),
         ],
-        borderRadius: BorderRadius.circular(8), // Rounded corners
+        borderRadius: BorderRadius.circular(12), // Rounded corners
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0), // Reduced padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               header,
-              style: const TextStyle(
-                fontSize: 16.0,
+              style: TextStyle(
+                fontSize: 12.0, // Reduced font size
                 fontWeight: FontWeight.bold,
+                color: Colors.teal[700],
               ),
             ),
-            const SizedBox(height: 8.0), // Space between header and body
+            const SizedBox(height: 4.0), // Reduced space between header and body
             Text(
               body,
               style: const TextStyle(
-                fontSize: 14.0,
+                fontSize: 12.0, // Reduced font size
+                color: Colors.black54,
               ),
             ),
+            const SizedBox(height: 8.0), // Reduced space before action button
           ],
         ),
       ),

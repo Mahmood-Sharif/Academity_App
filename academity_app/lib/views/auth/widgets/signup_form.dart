@@ -26,11 +26,11 @@ class _SignupFormState extends ConsumerState<SignupForm> {
   Gender? _gender = Gender.male;
   int selectedDay = DateTime.now().day;
   int selectedMonth = DateTime.now().month;
-  int selectedYear = DateTime.now().year;
+  int selectedYear = DateTime.now().year - 3;
   final List<int> days = List.generate(31, (index) => index + 1);
   final List<int> months = List.generate(12, (index) => index + 1);
   final List<int> years =
-      List.generate(101, (index) => DateTime.now().year - index);
+      List.generate(80, (index) => DateTime.now().year - 3 - index);
 
   String? emailError;
   String? nameError;
@@ -154,28 +154,25 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                 ElevatedButton(
                   onPressed: details.onStepContinue,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(
-                        255, 0, 139, 139), // Button background color
+                    backgroundColor: const Color.fromARGB(255, 0, 139, 139),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 22,
-                        vertical: 10), // Makes the button a bit bigger
+                        horizontal: 22, vertical: 10),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(4), // Slightly rounded edges
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                   child: Text(
-                      isLastStep
-                          ? AppLocalizations.of(context)!.signUpButton
-                          : AppLocalizations.of(context)!.continueButtonText,
-                      style: const TextStyle(color: Colors.white)),
+                    isLastStep
+                        ? AppLocalizations.of(context)!.signUpButton
+                        : AppLocalizations.of(context)!.continueButtonText,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
                 const SizedBox(width: 10),
                 if (_currentStep > 0)
                   TextButton(
                     onPressed: details.onStepCancel,
-                    child:
-                        Text(AppLocalizations.of(context)!.continueButtonText),
+                    child: Text(AppLocalizations.of(context)!.backButtonText),
                   ),
               ],
             );
@@ -189,10 +186,10 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                   children: [
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.fullNameLabel,
-                          errorText: nameError,
-                          errorMaxLines: 2),
+                        labelText: AppLocalizations.of(context)!.fullNameLabel,
+                        errorText: nameError,
+                        errorMaxLines: 2,
+                      ),
                       onChanged: (value) => name = value,
                       validator: (value) => value!.isEmpty
                           ? AppLocalizations.of(context)!.signupFailureMessage
@@ -200,20 +197,18 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.phoneNumberLabel,
-                          errorText: phoneError,
-                          errorMaxLines: 2),
+                        labelText:
+                            AppLocalizations.of(context)!.phoneNumberLabel,
+                        errorText: phoneError,
+                        errorMaxLines: 2,
+                      ),
                       keyboardType: TextInputType.phone,
                       onChanged: (value) => phone = value,
                       validator: (value) => value!.isEmpty
                           ? AppLocalizations.of(context)!.phoneNumberError
                           : null,
                     ),
-                    // Add Gender and Date of Birth fields here
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -261,63 +256,76 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: DropdownButtonFormField<int>(
-                            value: selectedDay,
-                            decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.dayLabel),
-                            items: days.map<DropdownMenuItem<int>>((int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text(value.toString()),
-                              );
-                            }).toList(),
-                            onChanged: (int? newValue) {
-                              setState(() => selectedDay = newValue!);
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 8), // Add some spacing
-                        Expanded(
-                          child: DropdownButtonFormField<int>(
-                            value: selectedMonth,
-                            decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.monthLabel),
-                            items:
-                                months.map<DropdownMenuItem<int>>((int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text(value.toString()),
-                              );
-                            }).toList(),
-                            onChanged: (int? newValue) {
-                              setState(() => selectedMonth = newValue!);
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 8), // Add some spacing
-                        Expanded(
-                          child: DropdownButtonFormField<int>(
-                            value: selectedYear,
-                            decoration: InputDecoration(
-                                labelText:
-                                    AppLocalizations.of(context)!.yearLabel),
-                            items:
-                                years.map<DropdownMenuItem<int>>((int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text(value.toString()),
-                              );
-                            }).toList(),
-                            onChanged: (int? newValue) {
-                              setState(() => selectedYear = newValue!);
-                            },
-                          ),
+                        Text(AppLocalizations.of(context)!.dobLabel,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            textAlign: TextAlign.left),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: DropdownButtonFormField<int>(
+                                value: selectedDay,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.dayLabel,
+                                ),
+                                items: days
+                                    .map<DropdownMenuItem<int>>((int value) {
+                                  return DropdownMenuItem<int>(
+                                    value: value,
+                                    child: Text(value.toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (int? newValue) {
+                                  setState(() => selectedDay = newValue!);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: DropdownButtonFormField<int>(
+                                value: selectedMonth,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.monthLabel,
+                                ),
+                                items: months
+                                    .map<DropdownMenuItem<int>>((int value) {
+                                  return DropdownMenuItem<int>(
+                                    value: value,
+                                    child: Text(value.toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (int? newValue) {
+                                  setState(() => selectedMonth = newValue!);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: DropdownButtonFormField<int>(
+                                value: selectedYear,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      AppLocalizations.of(context)!.yearLabel,
+                                ),
+                                items: years
+                                    .map<DropdownMenuItem<int>>((int value) {
+                                  return DropdownMenuItem<int>(
+                                    value: value,
+                                    child: Text(value.toString()),
+                                  );
+                                }).toList(),
+                                onChanged: (int? newValue) {
+                                  setState(() => selectedYear = newValue!);
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -337,9 +345,10 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!.emailLabel,
-                          errorText: emailError,
-                          errorMaxLines: 2),
+                        labelText: AppLocalizations.of(context)!.emailLabel,
+                        errorText: emailError,
+                        errorMaxLines: 2,
+                      ),
                       onChanged: (value) => email = value,
                       validator: (value) => value!.isEmpty
                           ? AppLocalizations.of(context)!.emailError
@@ -347,10 +356,10 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.passwordLabel,
-                          errorText: passwordError,
-                          errorMaxLines: 2),
+                        labelText: AppLocalizations.of(context)!.passwordLabel,
+                        errorText: passwordError,
+                        errorMaxLines: 2,
+                      ),
                       obscureText: true,
                       onChanged: (value) => password = value,
                       validator: (value) => value!.isEmpty
@@ -359,10 +368,11 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context)!
-                              .confirmPasswordLabel,
-                          errorText: passwordConfirmError,
-                          errorMaxLines: 2),
+                        labelText:
+                            AppLocalizations.of(context)!.confirmPasswordLabel,
+                        errorText: passwordConfirmError,
+                        errorMaxLines: 2,
+                      ),
                       obscureText: true,
                       onChanged: (value) => passwordConfirm = value,
                       validator: (value) => value != password

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:academity_app/services/sports_services.dart';
+import 'package:academity_app/views/home/widgets/sport/cards_widget.dart';
+import 'package:academity_app/views/home/widgets/sport/offers_widget.dart';
 import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
@@ -45,13 +47,35 @@ class _SportsPageState extends State<SportsPage> {
               }
             } else if (snapshot.hasData) {
               return ListView(
-                children: [
-                  // const SizedBox(height: 20),
-                  SportsListWidget(sports: snapshot.data!),
-                  // const SizedBox(height: 20),
-                  // const TwoCardsSideBySide(),
-                ],
-              );
+      padding: const EdgeInsets.all(16.0), // Add padding around the entire list
+      children: [
+        const Text(
+          'Select Your Next Journey',
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SportsListWidget(sports: snapshot.data!),
+        const Text(
+          'Your Upcoming Classes',
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const TwoCardsSideBySide(),
+        const SizedBox(height: 8,),
+        const Text(
+          'Offers and Discounts',
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const OffersWidget(),
+      ],
+    );
             } else {
               // This case handles empty data
               return Center(

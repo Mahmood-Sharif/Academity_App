@@ -7,3 +7,5 @@ final enrolledAcademiesProvider = FutureProvider<List<Academy>>((ref) async {
   // Use the academyServiceProvider to access AcademyServices
   return AcademyServices().getEnrolledAcademiesDetails();
 });
+
+
