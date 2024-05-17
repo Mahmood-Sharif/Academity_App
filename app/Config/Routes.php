@@ -14,11 +14,12 @@ $routes->group('{locale}', static function ($routes) {
     $routes->view('about', 'home/about', ['as' => 'home_about']);
     $routes->view('privacy-policy', 'home/privacy', ['as' => 'home_privacy']);
     $routes->view('contact-us', 'home/contact', ['as' => 'home_contact']);
+
+    $routes->view('error', 'errors/html/production.php');
 });
 
 $routes->group('{locale}/admin-portal', static function ($routes) {
     // Admin portal Auth routes: login*, register, logout, auth/a*
-    $routes->get('/', 'AdminPortal\Academy::index', ['as' => 'admin_portal_home']);
     service('auth')->routes($routes, ['except' => ['register']]);
     $routes->get('register/', 'AdminPortal\Shield\Register::registerView', ['as' => 'register', 'filter' => 'group:superadmin']);
     $routes->post('register/', 'AdminPortal\Shield\Register::registerAction', ['filter' => 'group:superadmin']);
