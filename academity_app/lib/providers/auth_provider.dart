@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:academity_app/models/users.dart';
+import 'package:academity_app/providers/academy_provider.dart';
+import 'package:academity_app/providers/class_provider.dart';
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -41,6 +43,10 @@ class AuthNotifier extends AsyncNotifier<User?> {
     } catch (_) {}
     state = const AsyncValue.data(null);
     canSwitchType = false;
+    // invalidate user specific data
+    ref.invalidate(enrolledAcademiesProvider);
+    ref.invalidate(scheduleForStudentProvider);
+    ref.invalidate(scheduleForCoachProvider);
   }
 
   void changeUserType() {
