@@ -102,7 +102,8 @@ class ProfilePage extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             FutureBuilder(
-                future: PackageInfo.fromPlatform(),
+                future: PackageInfo.fromPlatform(
+                    baseUrl: 'https://academity.app/app/'),
                 builder: (context, asyncSnapshot) {
                   if (asyncSnapshot.hasData) {
                     final version = asyncSnapshot.requireData.version;
