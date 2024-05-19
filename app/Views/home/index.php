@@ -126,6 +126,10 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
       background: linear-gradient(0deg, transparent, var(--bs-body-bg) 20%, #00000080);
       border-radius: 3em;
     }
+
+    .navbar-nav .dropdown-menu {
+      position: absolute !important;
+    }
   </style>
 </head>
 
@@ -147,9 +151,10 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center gap-3">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-3 d-grid d-md-flex mt-3 mt-md-0"
+          style="grid-template-columns: 1fr 1fr;">
           <li class="nav-item" data-bs-theme="dark">
-            <a href="#" class="btn btn-secondary rounded-pill shadow" onclick="alert('Coming Soon!')">
+            <a href="#download" class="btn btn-secondary rounded-pill shadow">
               <?=lang('Home.download_app')?>
             </a>
           </li>
@@ -162,6 +167,9 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
               <svg width="20" height="20" viewBox="0 0 16 16" class="me-1" style="vertical-align: -.275em;">
                 <use href="#whistle"></use>
               </svg>
+              <span class="d-md-none">
+                <?=lang('Home.academity')?>
+              </span>
             </a>
             <ul class="dropdown-menu">
               <li class="nav-item">
@@ -186,6 +194,9 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
               title="<?=lang('App.language')?>">
               <!-- <?=$locale == 'en' ? lang('App.language.english') : lang('App.language.arabic')?> -->
               <i class="bi bi-globe2"></i>
+              <span class="d-md-none">
+                <?=lang('App.language')?>
+              </span>
             </a>
             <ul class="dropdown-menu">
               <li>
@@ -204,7 +215,9 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
             <a href="#" class="nav-link dropdown-toggle" id="bd-theme" data-bs-toggle="dropdown" aria-expanded="false"
               role="button" title="<?=lang('App.theme')?>">
               <i id="theme-icon-active" class="bi bi-circle-half"></i>
-              <span class="d-none" id="bd-theme-text">Toggle theme</span>
+              <span class="d-md-none" id="bd-theme-text">
+                <?=lang('App.theme')?>
+              </span>
             </a>
             <ul class="dropdown-menu dropdown-menu-start">
               <li>
@@ -232,79 +245,168 @@ $dir = $locale == 'ar' ? 'rtl' : 'ltr';
     </div>
   </nav>
 
-  <div class="container mb-5">
-    <section class="mb-5" style="min-height: 45dvh;">
-      <div class="hero d-flex pt-5 px-5">
-        <div class="hero-text me-auto">
-          <span class="fw-bold d-inline-block mt-5" style="font-size: 4rem;">
-            <?=lang('Home.home_about')?>
-          </span>
-          <p class="fs-3 mt-3">
-            <?=lang('Home.home_about.more')?>
-          </p>
+  <div style="overflow-x: clip;">
+    <div class="container mb-5">
+      <section class="mb-5" style="min-height: 45dvh;">
+        <div class="hero row pt-md-5 px-md-5 p-sm-0">
+          <div class="col-12 col-sm-6 col-md-6 me-auto">
+            <div class="hero-text">
+              <span class="fw-bold d-inline-block mt-5 text-center text-sm-start" style="font-size: 4rem;">
+                <?=lang('Home.home_about')?>
+              </span>
+              <p class="fs-3 mt-3 text-sm-center text-md-start">
+                <?=lang('Home.home_about.more')?>
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-md-6">
+            <img src="<?=base_url('images/home/academity_phones_1.png')?>" alt="">
+          </div>
+      </section>
+      <section class="d-flex mb-5">
+        <img src="<?=base_url('images/home/academity_info.png')?>" class="img-fluid m-auto"
+          style="max-width: 850px; width: 100%" alt="">
+      </section>
+      <section id="download">
+        <h2 class="mb-4">
+          <?=lang('Home.download_app')?>
+        </h2>
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-dWeb" data-bs-toggle="tab" data-bs-target="#dWeb" type="button"
+              role="tab" aria-controls="Web" aria-selected="true">
+              <i class="bi bi-globe me-2"></i>
+              Web
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-diOS" data-bs-toggle="tab" data-bs-target="#diOS" type="button" role="tab"
+              aria-controls="Web" aria-selected="false">
+              <i class="bi bi-apple me-2"></i>
+              iOS
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-dAndroid" data-bs-toggle="tab" data-bs-target="#dAndroid" type="button"
+              role="tab" aria-controls="Web" aria-selected="false">
+              <i class="bi bi-android me-2"></i>
+              Android
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content p-3" id="download-tabs">
+          <div class="tab-pane fade show active" id="dWeb" role="tabpanel" aria-labelledby="tab-dWeb" tabindex="0">
+            <?= lang('Home.download_pwa') ?>
+            <ul class="mt-3">
+              <li class="mb-2">
+                <?= lang('Home.download_pwa.1') ?>
+              </li>
+              <li class="mb-2">
+                <?= lang('Home.download_pwa.2') ?>
+              </li>
+              <li class="mb-2">
+                <?= lang('Home.download_pwa.3') ?>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-pane fade" id="diOS" role="tabpanel" aria-labelledby="tab-diOS" tabindex="0">
+            <?= lang('Home.download_ios') ?>
+            <div class="d-flex mt-3">
+              <a href="https://apps.apple.com/bh/app/academity/id6502606802" class="mx-auto">
+                <img src="<?=base_url('images/home/Download_on_the_App_Store_Badge_'.$locale.'.svg')?>"
+                  alt="download from app store" style="width: 10rem;">
+              </a>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="dAndroid" role="tabpanel" aria-labelledby="tab-dAndroid" tabindex="0">
+            <?= lang('Home.download_android') ?>
+
+            <div class="d-flex my-3">
+              <a href="<?=base_url('uploads/Academity.apk')?>" class="btn btn-secondary rounded-pill mx-auto">
+                <i class="bi bi-download me-1"></i>
+                <?=lang('Home.download_android.1')?>
+              </a>
+            </div>
+
+            <?= lang('Home.download_android.2') ?>
+          </div>
         </div>
-        <img src="<?=base_url('images/home/academity_phones_1.png')?>" alt="">
-    </section>
-    <section class="d-flex">
-      <img src="<?=base_url('images/home/academity_info.png')?>" class="img-fluid m-auto" style="max-width: 936px;"
-        alt="">
-    </section>
 
-    <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-4 py-5 my-5 border-top">
-      <div class="col mb-3">
-        <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
-          <svg height="24" viewBox="0 0 500 93.333336">
-            <use href="#svg1" />
-          </svg>
-        </a>
-        <p class="text-body-secondary">© 2024 Academity</p>
-      </div>
+      </section>
 
-      <div class="col mb-3"></div>
+      <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-4 py-5 my-5 border-top">
+        <div class="col mb-3">
+          <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
+            <svg height="24" viewBox="0 0 500 93.333336">
+              <use href="#svg1" />
+            </svg>
+          </a>
+          <p class="text-body-secondary">© 2024 Academity</p>
+        </div>
 
-      <div class="col mb-3">
-        <h5>
-          <?=lang('Home.academity')?>
-        </h5>
-        <ul class="nav flex-column gap-2">
-          <li class="nav-item">
-            <a href="<?=url_to('home')?>" class="nav-link p-0 text-body-secondary">
-              <?=lang('Home.home')?>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="<?=url_to('home_about')?>" class="nav-link p-0 text-body-secondary">
-              <?=lang('Home.about')?>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="<?=url_to('home_privacy')?>" class="nav-link p-0 text-body-secondary">
-              <?=lang('Home.privacy_policy')?>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="<?=url_to('home_contact')?>" class="nav-link p-0 text-body-secondary">
-              <?=lang('Home.contact_us')?>
-            </a>
-          </li>
-        </ul>
-      </div>
+        <div class="col mb-3"></div>
 
-      <div class="col mb-3">
-        <h5>
-          <?=lang('Home.business')?>
-        </h5>
-        <ul class="nav flex-column gap-2">
-          <li class="nav-item">
-            <a href="<?=url_to('login')?>" class="nav-link p-0 text-body-secondary">
-              <?=lang('Home.login_admin_portal')?>
-            </a>
-          </li>
-        </ul>
-      </div>
+        <div class="col mb-3">
+          <h5>
+            <?=lang('Home.academity')?>
+          </h5>
+          <ul class="nav flex-column gap-2">
+            <li class="nav-item">
+              <a href="<?=url_to('home')?>" class="nav-link p-0 text-body-secondary">
+                <?=lang('Home.home')?>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?=url_to('home_about')?>" class="nav-link p-0 text-body-secondary">
+                <?=lang('Home.about')?>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?=url_to('home_privacy')?>" class="nav-link p-0 text-body-secondary">
+                <?=lang('Home.privacy_policy')?>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<?=url_to('home_contact')?>" class="nav-link p-0 text-body-secondary">
+                <?=lang('Home.contact_us')?>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-    </footer>
+        <div class="col mb-3">
+          <h5>
+            <?=lang('Home.business')?>
+          </h5>
+          <ul class="nav flex-column gap-2">
+            <li class="nav-item">
+              <a href="<?=url_to('login')?>" class="nav-link p-0 text-body-secondary">
+                <?=lang('Home.login_admin_portal')?>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </footer>
+    </div>
   </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const mobile = /Mobile|mini|Fennec|Android|iP(ad|od|hone)/.test(navigator.appVersion);
+      if (mobile) {
+        let tab;
+        if (/Android/.test(navigator.userAgent)) {
+          tab = 'tab-dAndroid';
+        } else if (/(iPhone|iPad|iPod)/.test(navigator.userAgent)) {
+          tab = 'tab-diOS';
+        } else {
+          tab = 'tab-dWeb';
+        }
+        bootstrap.Tab.getOrCreateInstance(document.getElementById(tab)).show();
+      }
+    });
+  </script>
 </body>
 
 </html>
