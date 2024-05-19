@@ -55,10 +55,12 @@ class CustomBottomNavBar extends StatelessWidget {
       onTap: onItemSelected,
       selectedLabelStyle: GoogleFonts.montserrat(
         // Montserrat for selected labels
+        fontSize: 10,
         fontWeight: FontWeight.w300,
       ),
       unselectedLabelStyle: GoogleFonts.montserrat(
         // Montserrat for unselected labels
+        fontSize: 10,
         fontWeight: FontWeight.w200,
       ),
     );

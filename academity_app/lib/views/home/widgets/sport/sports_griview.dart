@@ -16,7 +16,7 @@ class SportsListWidget extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+          crossAxisCount: 3,
           childAspectRatio: 1,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
@@ -51,7 +51,7 @@ class SportsListWidget extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.white,
                     backgroundColor: Colors.black.withOpacity(0.8),
-                    fontSize: 18),
+                    fontSize: 14),
               ),
             ),
           );
