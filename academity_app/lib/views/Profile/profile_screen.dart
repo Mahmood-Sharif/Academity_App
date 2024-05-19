@@ -112,7 +112,8 @@ class ProfilePage extends ConsumerWidget {
                   } else {
                     return const SizedBox();
                   }
-                })
+                }),
+            const SizedBox(height: 16),
           ],
         ),
       ),

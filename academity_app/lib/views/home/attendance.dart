@@ -65,12 +65,10 @@ class _AttendancePageState extends State<AttendancePage> {
                     }
                   } else {
                     final attendanceList = snapshot.data!;
-                    return Expanded(
-                      child: AttendanceListWidget(
-                        attendanceList: attendanceList,
-                        classId: widget.classId,
-                        datetime: widget.datetime,
-                      ),
+                    return AttendanceListWidget(
+                      attendanceList: attendanceList,
+                      classId: widget.classId,
+                      datetime: widget.datetime,
                     );
                   }
                 },
