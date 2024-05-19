@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -79,12 +80,6 @@ class ProfilePage extends ConsumerWidget {
                 },
               ],
             ),
-            // const SectionCard(
-            //   title: 'Support & About',
-            //   items: [
-            //     {'title': 'My Subscriptions', 'icon': Icons.subscriptions},
-            //   ],
-            // ),
             SectionCard(
               title: AppLocalizations.of(context)!.actionsSectionTitle,
               items: [
@@ -105,6 +100,19 @@ class ProfilePage extends ConsumerWidget {
                 },
               ],
             ),
+            const SizedBox(height: 16),
+            FutureBuilder(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, asyncSnapshot) {
+                  if (asyncSnapshot.hasData) {
+                    final version = asyncSnapshot.requireData.version;
+                    return Center(
+                        child: Text(
+                            AppLocalizations.of(context)!.appVersion(version)));
+                  } else {
+                    return const SizedBox();
+                  }
+                })
           ],
         ),
       ),

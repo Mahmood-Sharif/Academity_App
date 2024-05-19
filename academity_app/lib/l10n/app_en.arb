@@ -407,6 +407,16 @@
     "@dayOfWeekSun": {
         "description": "Abbreviation for Sunday"
     },
+    "appVersion": "Version {versionNumber}",
+    "@appVersion": {
+        "description": "Display the current version of the app",
+        "placeholders": {
+            "versionNumber": {
+                "type": "String",
+                "example": "Unknown"
+            }
+        }
+    },
     "errorUnknown": "Unknown Error Occured",
     "@errorUnknown": {
         "description": "Help message for an generic error."

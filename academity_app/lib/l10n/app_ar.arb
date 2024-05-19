@@ -95,6 +95,7 @@
     "dayOfWeekFri": "الجمعة",
     "dayOfWeekSat": "السبت",
     "dayOfWeekSun": "الأحد",
+    "appVersion": "اصدار {versionNumber}",
     "errorUnknown": "حدث خلل غير معروف",
     "errorCannotDeleteAccount": "لا يمكن حذف حساب مالك الأكاديمية من خلال التطبيق. يرجى التواصل مع خدمة العملاء للإزالة.",
     "errorCouldNotDeleteAccount": "خلل: لم يتم حذف الحساب.",
