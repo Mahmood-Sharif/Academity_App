@@ -23,4 +23,14 @@ return [
   'coaches_app.info'   => 'The Coach Application is a comprehensive tool tailored for coaches within the Academity ecosystem. This application aims to empower coaches with digital capabilities to manage attendance, track student progress, view academy schedules, and maintain up-to-date student records easily.',
   'admin_portal'       => 'Academity Admin Portal',
   'admin_portal.info'  => 'The admin portal is a comprehensive management tool aimed at empowering academy owners. This portal is a one-stop solution for overseeing various facets of an academy’s administration, from student enrollment to financial management. The portal is envisioned to be intuitive, robust, and versatile, catering to the diverse needs of sports academy administration.',
+
+  // download
+  'download_pwa'       => 'You can download the Academity app straight from your browser!',
+  'download_pwa.1'     => 'Go to <a href="https://academity.app/app" class="btn btn-secondary rounded-pill ms-2">academity.app/app</a>',
+  'download_pwa.2'     => 'On <i class="bi bi-android mx-2"></i> Android tap <code class="px-2"><i class="bi bi-three-dots-vertical"></i></code> then tap "<b>Install app</b>".',
+  'download_pwa.3'     => 'On <i class="bi bi-apple mx-2"></i> iOS tap <code class="px-2"><i class="bi bi-box-arrow-up"></i></code> then tap "<b>Add To Home Screen</b>".',
+  'download_ios'       => 'You can get the Academity app from the App Store:',
+  'download_android'   => 'You can download the Academity app here:',
+  'download_android.1' => 'Download (.apk)',
+  'download_android.2' => 'Coming soon to the Play Store.',
 ];

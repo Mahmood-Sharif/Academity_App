@@ -24,4 +24,13 @@ return [
   'admin_portal'       => 'بوابة الإدارة',
   'admin_portal.info'  => 'The admin portal is a comprehensive management tool aimed at empowering academy owners. This portal is a one-stop solution for overseeing various facets of an academy’s administration, from student enrollment to financial management. The portal is envisioned to be intuitive, robust, and versatile, catering to the diverse needs of sports academy administration.',
 
+  // download
+  'download_pwa'       => 'يمكنكم تحميل تطبيق أكاديميتي مباشرةً من المتصفح!',
+  'download_pwa.1'     => 'اذهب إلى <a href="https://academity.app/app" class="btn btn-secondary rounded-pill ms-2">academity.app/app</a>',
+  'download_pwa.2'     => 'لأجهزة ال <i class="bi bi-android mx-2"></i> Android قم بالضغط على <code class="px-2"><i class="bi bi-three-dots-vertical"></i></code> ثم قم بالضغط على "<b>Install app</b>".',
+  'download_pwa.3'     => 'لأجهزة ال <i class="bi bi-apple mx-2"></i> iOS قم بالضغط على <code class="px-2"><i class="bi bi-box-arrow-up"></i></code> ثم قم بالضغط على "<b>Add To Home Screen</b>".',
+  'download_ios'       => 'يمكنكم الحصول على تطبيق أكاديميتي من متجر التطبيقات:',
+  'download_android'   => 'يمكنكم تحميل تطبيق أكاديميتي من هنا:',
+  'download_android.1' => 'تحميل (.apk)',
+  'download_android.2' => 'سيصدر قريباً في متجر Play Store.',
 ];
