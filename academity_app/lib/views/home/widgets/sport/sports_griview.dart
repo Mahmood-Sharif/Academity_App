@@ -11,12 +11,12 @@ class SportsListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(12.0),
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
+          crossAxisCount: 2,
           childAspectRatio: 1,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
@@ -51,7 +51,7 @@ class SportsListWidget extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.white,
                     backgroundColor: Colors.black.withOpacity(0.8),
-                    fontSize: 14),
+                    fontSize: 16),
               ),
             ),
           );
