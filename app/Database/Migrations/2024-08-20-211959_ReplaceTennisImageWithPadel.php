@@ -8,7 +8,7 @@ class ReplaceTennisImageWithPadel extends Migration
 {
     public function up()
     {
-        $this->db->table('media')->update(['url' => 'images/Tennis.jpg'], ['sport_id' => 6]);
+        $this->db->table('media')->update(['url' => 'images/Padel.jpg'], ['media_id' => 6]);
     }
 
     public function down()
