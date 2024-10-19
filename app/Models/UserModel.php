@@ -104,4 +104,17 @@ class UserModel extends CodeIgniterUserModel
             ->findAll();
     }
 
+    public function createGhostStudent(string $name, string $dob, string $phone, string $gender): array
+    {
+        $this->request->getPost('studentName');
+
+        log_message('debug', 'making new user without email');
+        return $this->insert([
+            $data['name']=$name,
+            $data['dob']=$dob,
+            $data['phone']=$phone,
+            $data['gender']=$gender,
+            ], true);
+    }
+
 }

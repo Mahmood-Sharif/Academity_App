@@ -3,16 +3,19 @@
 namespace App\Controllers\AdminPortal;
 
 use App\Entities\Enrollment as AppEnrollment;
+use App\Controllers\User;
+use App\Entities\Student;
 use App\Models\AcademyModel;
 use App\Models\ClassModel;
-use App\Models\EnrollmentModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
+use CodeIgniter\RESTful\ResourceController;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use Exception;
 
 class Enrollment extends ResourcePresenter
 {
@@ -216,7 +219,7 @@ class Enrollment extends ResourcePresenter
     // perform create
     public function create(): ResponseInterface|string
     {
-        $email = $this->request->getPost('email');
+        $email = $this->request->getPost('email'); //make optional
         $classId = $this->request->getPost('class_id');
         $enrollmentDuration = $this->request->getPost('min_duration');
 
@@ -264,7 +267,6 @@ class Enrollment extends ResourcePresenter
             return redirect()
                 ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
                 ->with('error', lang('App.enrol_student.exists'));
-
         }
 
         $insertId = $this->model->insert([
@@ -284,6 +286,54 @@ class Enrollment extends ResourcePresenter
                 ->withInput()
                 ->with('error', lang('App.enrol_student.error'));
         }
+    }
+
+    public function enrollUserWithoutEmail(): ResponseInterface
+    {
+        $classId = $this->request->getPost('class_id');
+        $enrollmentDuration = $this->request->getPost('min_duration');
+        
+        $class = (new ClassModel())
+        ->includeOwnerId()
+        ->includeClassesPerWeek()
+        ->find((int)$classId);
+        // $numEnrollments = (new ClassModel())
+        //     ->includeNumEnrollments()
+        //     ->find((int)$classId)
+        //     ->num_enrollments;
+        
+        $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+        // $weeks = ceil($enrollmentDuration / $class->classes_per_week);
+        $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
+        if (!$end_date) {
+            $end_date = null;
+        }
+
+        // create a user record and link it to enrollment
+         
+        // $student = (new User())->addGhostUser();
+        $studentID = 2;
+
+        $insertId = $this->model->insert([
+            'student_id' => $studentID,
+            'class_id' => $classId,
+            'start_date' => $start_date->format(DateTimeImmutable::ATOM),
+            'end_date' => $end_date->format(DateTimeImmutable::ATOM),
+        ], true);
+
+        if ($insertId) {
+            return redirect()
+                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $insertId))
+                ->with('message', lang('App.enrol_student.success', [$student->name, $class->class_name]));
+        } else {
+            return redirect()
+                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+                ->withInput()
+                ->with('error', lang('App.enrol_student.error'));
+        }
+            return redirect()
+                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', 10))
+                ->with('message', lang('App.enrol_student.success', ['test', $class->class_name]));
     }
 
     /** AJAX remove confirm modal */

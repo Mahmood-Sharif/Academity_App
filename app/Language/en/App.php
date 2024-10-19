@@ -103,6 +103,9 @@ return [
   'registration_code.help' => 'This is the registration code for this class. Give it to existing students to allow them to register into this class in the app <i>without paying</i>.',
 
   // manage enrollments
+  'student_gender'         => 'Student Gender',
+  'student_age'            => 'Student Age',
+  'student_phone'          => 'Student Phone',
   'student_name'           => 'Student Name',
   'all_classes'            => 'All Classes',
   'show_past'              => 'Show past enrollments',
@@ -172,6 +175,8 @@ return [
 
   'price'                  => 'Price',
   'price.help'             => 'Consider changing the price in Offers',
+
+  'optional'               => 'Optional',
 
   // danger zone
   'advanced_options'          => 'Advanced Options',

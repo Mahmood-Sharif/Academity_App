@@ -103,6 +103,9 @@ return [
   'registration_code.help' => 'هذا رمز التسجيل لهذا الصف. أعطه للطلاب المسجلين ليتمكنوا من التسجيل في التطبيق بدون دفع.',
 
   // manage enrollments
+  'student_gender'         => 'جنس الطالب',
+  'student_age'            => 'عمر الطالب',
+  'student_phone'          => 'رقم الطالب',
   'student_name'           => 'اسم الطالب',
   'all_classes'            => 'جميع الصفوف',
   'show_past'              => 'أظهر التسجيلات السابقة',
@@ -172,6 +175,8 @@ return [
 
   'price'                  => 'السعر',
   'price.help'             => 'فكر في تغيير السعر في صفحة العروض.',
+
+  'optional'               => 'خياري',
 
   // danger zone
   'advanced_options'          => 'الإعدادات المتقدمة',

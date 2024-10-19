@@ -9,6 +9,7 @@ use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourcePresenter;
 use CodeIgniter\Shield\Validation\ValidationRules;
+use CodeIgniter\RESTful\ResourceController;
 use Exception;
 
 class User extends ResourcePresenter
@@ -307,6 +308,48 @@ class User extends ResourcePresenter
         } catch (\Throwable $th) {
             return redirect()->route('change_password')->with('error', lang('Auth.error.change'));
         }
+    }
+
+    public function addGhostUser(): ResponseInterface
+    {
+        // get data from request
+        $data = [
+            'name'             => $this->request->getPost('studentName'),
+            'phone'            => $this->request->getPost('studentPhone'),
+            'dob'              => $this->request->getPost('dob'),
+            'gender'           => $this->request->getPost('gender'),
+            // 'email'            => $this->request->getPost('email'),
+            // 'password'         => $this->request->getPost('password'),
+            // 'password_confirm' => $this->request->getPost('password_confirm'),
+        ];
+
+        if (!$this->validateData($data, 'registration')) {
+            return $this->respond([
+                'status' => 'Register failed',
+                'errors' => $this->validator->getErrors()
+            ], 400);
+        }
+
+        $users = auth()->getProvider();
+        $user = new User($data);
+        $user->username = null;
+
+        try {
+            $users->save($user);
+        } catch (Exception $e) {
+            return $this->respond([
+                'status' => 'Register failed',
+                'errors' => $users->errors()
+            ], 400);
+        }
+
+        $user = $users->findById($users->getInsertID());
+        $users->addToDefaultGroup($user);
+
+        $student = auth()->getProvider()->findById($user->id);
+
+        return $student->id;
+        
     }
 
 }

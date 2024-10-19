@@ -56,6 +56,7 @@ class Filters extends CodeIgniterFilters
             /* 'session' => ['except' => ['login*', 'register', 'auth/a/*', 'logout', 'api/*']], */
         ],
         'after' => [
+            'toolbar',
             // 'honeypot',
             // 'secureheaders',
         ],
