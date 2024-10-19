@@ -79,7 +79,7 @@ this.ifd0Offset: ${this.ifd0Offset}, file.byteLength: ${e.byteLength}`),e.tiff&&
     #lightbox .modal-media {
       pointer-events: auto;
     }
-    </style>
+    </style>u
     <div class="card">
       <div class="card-header d-flex align-items-center">
         <span>${this.i18n.academyGallery}</span>
@@ -93,7 +93,7 @@ this.ifd0Offset: ${this.ifd0Offset}, file.byteLength: ${e.byteLength}`),e.tiff&&
         <div id="uppy" class="${this.isUppyShown?"":"d-none"}"></div>
       </div>
       <div class="card-footer">
-        <button id="submitBtn" class="btn btn-success">${this.i18n.submit}</button>
+        <button id="submitBtn" class="btn btn-sccess">${this.i18n.submit}</button>
         <button id="resetBtn" class="btn btn-secondary">${this.i18n.reset}</button>
       </div>
     </div>

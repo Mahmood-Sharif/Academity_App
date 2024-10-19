@@ -44,7 +44,7 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
     </div>
   </div>
 
-  <form hx-post="<?=url_to('AdminPortal\Enrollment::create')?>" hx-swap="outerHTML" class="col-12 col-md col-lg-7">
+  <form hx-post="<?=url_to('AdminPortal\Enrollment::enrollUserWithoutEmail')?>" hx-swap="outerHTML" class="col-12 col-md col-lg-7">
     <?=csrf_field()?>
 
     <?php if (session('error')): ?>
@@ -54,28 +54,68 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
     <?php endif ?>
 
 
-    <div class="mb-4">
-      <?=validated_form_input(
-          'studentEmail',
-          'email',
-          lang('App.student_email'),
-          set_value('email'),
-          'email'
-      )?>
+    <div class="row">
+      <div class="mb-4 col-12">
+        <?=validated_form_input(
+            'studentName',
+            'name',
+            lang('App.student_name'),
+            set_value('name'),
+            'name'
+        )?>
+      </div>
+      <div class="mb-4 col-6">
+        <?=validated_form_input(
+            'studentPhone',
+            'phone',
+            lang('App.student_phone'),
+            set_value('phone'),
+            'phone'
+        )?>
+      </div>
+      
+      <div class="mb-4 col-6">
+        <?=validated_form_input(
+            'studentDob',
+            'dob',
+            lang('Auth.dob'),
+            set_value('dob'),
+            'date',
+        )?>
+      </div>
+      <div class="mb-4 col-12">
+          <legend class="text-body fs-6 mb-2">
+            <?=lang('Auth.gender')?>
+          </legend>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="Male" checked="checked" required>
+            <label class="form-check-label" for="inlineRadio1">
+              <?=lang('Auth.gender.male')?>
+            </label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="Female" required>
+            <label class="form-check-label" for="inlineRadio2">
+              <?=lang('Auth.gender.female')?>
+            </label>
+          </div>
+      </div>
     </div>
-
-    <div class="row mb-4">
+          
+    <div class="mb-3"></div>
+    <span class="col-12"><?=lang('App.optional'); echo ':'?></span>
+    
+    <div class="row mt-2 mb-4">
       <div class="col">
-        <?php
-                                                                                                                                                                                                                                    $url = url_to('AdminPortal\Classes::selectInput');
-echo validated_form_select(
-    'academy_id',
-    'academy_id',
-    lang('App.select.academy'),
-    $academies,
-    $academyId ?? set_value('academy_id'),
-    attributes: "hx-get='$url' hx-vals=\"js:{academy_id: event.target.value}\" hx-target='#class_id' hx-swap='innerHTML'"
-)?>
+        <?php                                                                                                                                                                                                               $url = url_to('AdminPortal\Classes::selectInput');
+          echo validated_form_select(
+              'academy_id',
+              'academy_id',
+              lang('App.select.academy'),
+              $academies,
+              $academyId ?? set_value('academy_id'),
+              attributes: "hx-get='$url' hx-vals=\"js:{academy_id: event.target.value}\" hx-target='#class_id' hx-swap='innerHTML'"
+          )?>
       </div>
       <div class="col">
         <?=validated_form_select(
