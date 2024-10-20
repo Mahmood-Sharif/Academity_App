@@ -56,6 +56,15 @@ $this->endSection('sidebarTab');
       <div class="mb-3">
         <?=validated_form_input('', '', lang('App.class_name'), $enrollment->class_name, 'text', [], true)?>
       </div>
+      <div class="mb-3">
+        <?=validated_form_input('', '', lang('App.student_gender'), $enrollment->student_gender, 'text', [], true)?>
+      </div>
+      <div class="mb-3">
+        <?=validated_form_input('', '', lang('Auth.dob'), $enrollment->student_dob, 'text', [], true)?>
+      </div>
+      <div class="mb-3">
+        <?=validated_form_input('', '', lang('App.student_phone'), $enrollment->student_phone, 'text', [], true)?>
+      </div>
       <div class="row mb-4">
         <div class="col">
           <?=validated_form_input('', '', lang('App.enrollment_start'), $enrollment->start_date, 'text', [], true)?>

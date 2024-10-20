@@ -31,7 +31,20 @@ class EnrollmentModel extends Model
     {
         return $this
             ->join('users', 'enrollments.student_id = users.id')
-            ->select('users.name as student_name')
+            ->select('users.name as student_name')  
+        ;
+    }
+
+    public function includeStudentDetails(): EnrollmentModel
+    {
+        return $this
+            ->join('users', 'enrollments.student_id = users.id')
+            ->select('users.name as student_name')  
+            // ->select('users.email as email')   
+            // ->select('users.name as student_name')       
+            ->select('users.dob as student_dob')         
+            ->select('users.gender as student_gender')   
+            ->select('users.phone as student_phone') 
         ;
     }
 
