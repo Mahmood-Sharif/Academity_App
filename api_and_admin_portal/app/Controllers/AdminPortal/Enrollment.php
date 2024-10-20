@@ -28,8 +28,8 @@ class Enrollment extends ResourcePresenter
     {
         if (! auth()->user()->can('students.access')) {
             return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
+                'errorCode' => lang('App.unauthorized'),
+                'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -62,8 +62,8 @@ class Enrollment extends ResourcePresenter
         $userId = auth()->id();
         if (($class?->owner_id ?? $userId) !== $userId || ($academy?->owner_id ?? $userId) !== $userId) {
             return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
+                'errorCode' => lang('App.unauthorized'),
+                'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -84,7 +84,7 @@ class Enrollment extends ResourcePresenter
         }
 
         $academies = key_array(
-            fn ($a) => [$a['academy_id'], $a['name']],
+            fn($a) => [$a['academy_id'], $a['name']],
             [
                 ['academy_id' => null, 'name' => lang('App.all_academies')],
                 ...(new AcademyModel())->asArray()->findAcademiesForOwner(auth()->id())
@@ -92,12 +92,12 @@ class Enrollment extends ResourcePresenter
         );
 
         $classes = key_array(
-            fn ($a) => [$a['class_id'], $a['class_name']],
+            fn($a) => [$a['class_id'], $a['class_name']],
             [
                 ['class_id' => null, 'class_name' => lang('App.all_classes')],
                 ...(new ClassModel())->includeOwnerId()
                     ->where('owner_id', auth()->id())
-                    ->when($academyId !== null, fn ($builder) => $builder->where('classes.academy_id', $academyId))
+                    ->when($academyId !== null, fn($builder) => $builder->where('classes.academy_id', $academyId))
                     ->asArray()
                     ->findAll()
             ]
@@ -127,8 +127,8 @@ class Enrollment extends ResourcePresenter
         $class = (new ClassModel())->includeOwnerId()->find($enrollment?->class_id);
         if (! auth()->user()->can('enrollments.edit') || auth()->id() !== $class?->owner_id) {
             return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
+                'errorCode' => lang('App.unauthorized'),
+                'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -136,7 +136,7 @@ class Enrollment extends ResourcePresenter
 
         return view('enrollment/create_edit', [
             'type' => 'edit',
-            'classes' => key_array(fn ($class) => [$class->class_id, $class->class_name], $classes),
+            'classes' => key_array(fn($class) => [$class->class_id, $class->class_name], $classes),
             'enrollment' => $enrollment,
             'errors' => [],
         ]);
@@ -150,8 +150,8 @@ class Enrollment extends ResourcePresenter
         $class = (new ClassModel())->includeOwnerId()->find($enrollment?->class_id);
         if (! auth()->user()->can('enrollments.edit') || auth()->id() !== $class?->owner_id) {
             return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
+                'errorCode' => lang('App.unauthorized'),
+                'message' => lang('Security.disallowedAction')
             ]);
         }
 
@@ -160,7 +160,7 @@ class Enrollment extends ResourcePresenter
 
             return view('enrollment/create_edit', [
                 'type' => 'edit',
-                'classes' => key_array(fn ($class) => [$class->class_id, $class->class_name], $classes),
+                'classes' => key_array(fn($class) => [$class->class_id, $class->class_name], $classes),
                 'enrollment' => $enrollment,
                 'errors' => $this->validator->getErrors(),
             ]);
@@ -189,19 +189,19 @@ class Enrollment extends ResourcePresenter
 
         if (! auth()->user()->can('enrollments.create') || !empty($classId) && (auth()->id() !== $class?->owner_id)) {
             return view('errors/html/production', [
-              'errorCode' => lang('App.unauthorized'),
-              'message' => lang('Security.disallowedAction')
+                'errorCode' => lang('App.unauthorized'),
+                'message' => lang('Security.disallowedAction')
             ]);
         }
 
         $academies = key_array(
-            fn ($academy) => [$academy->academy_id, $academy->name],
+            fn($academy) => [$academy->academy_id, $academy->name],
             (new AcademyModel())->findAcademiesForOwner(auth()->id())
         );
 
         $classes = (new ClassModel())->limitByOwner(auth()->id())->includeClassesPerWeek()->findAll();
         $classesMap = key_array(
-            fn ($class) => [$class->class_id, [
+            fn($class) => [$class->class_id, [
                 'text' => $class->class_name,
                 'attributes' => "data-classes-per-week=\"$class->classes_per_week\"",
             ]],
@@ -260,10 +260,10 @@ class Enrollment extends ResourcePresenter
         $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
 
         $existingEnrollment = $this->model
-        ->where('student_id', $student->id)
-        ->where('class_id', $classId)
-        ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
-        ->first();
+            ->where('student_id', $student->id)
+            ->where('class_id', $classId)
+            ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
+            ->first();
         if ($existingEnrollment) {
             return redirect()
                 ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
@@ -290,11 +290,23 @@ class Enrollment extends ResourcePresenter
     }
 
     public function enrollUserWithoutEmail(): ResponseInterface
-    {   
+    {
 
         $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
-        
+
         log_message("debug", "attempting to enroll user without email");
+
+        // Fetch and sanitize inputs
+        $name = trim($this->request->getPost('student_name'));
+        $phone = trim($this->request->getPost('student_phone'));
+        $dob = trim($this->request->getPost('student_dob'));
+        $gender = trim($this->request->getPost('student_gender'));
+        $classId = (int) $this->request->getPost('class_id');
+        $enrollmentDuration = (int) $this->request->getPost('min_duration');
+
+        if (empty($name) || empty($phone) || empty($dob) || empty($gender) || !$classId || !$enrollmentDuration) {
+            return redirect()->back()->with('error', lang('App.enrol_student.invalid_input'));
+        }
         
         $name = $this->request->getPost('student_name');
         log_message("debug", $name);
@@ -304,14 +316,9 @@ class Enrollment extends ResourcePresenter
         log_message("debug", $dob);
         $gender = $this->request->getPost('student_gender');
         log_message("debug", $gender);
-        
-        //sanitize entries
-
 
         $uniqeID = "{$name}{$phone}";
         log_message("debug", $uniqeID);
-
-        
 
         log_message("debug", "getting users table");
         /** @var UserModel $users */
@@ -319,14 +326,14 @@ class Enrollment extends ResourcePresenter
 
         //find user
         $student = auth()->getProvider()->findByCredentials(['email' => $uniqeID]);
-        
+
         //if no user, create new user
         if ($student === null) {
             log_message("debug", "user does not exist..\ncreating new");
-            
+
             $user = new UserEntity([
                 'username' => $uniqeID, //concat phone and name
-                'email'    => $uniqeID, 
+                'email'    => $uniqeID,
                 'password' => $uniqeID, //concat phone and name
                 'name'     => $name,    //name
                 'dob'      => $dob,     //dob
@@ -334,37 +341,38 @@ class Enrollment extends ResourcePresenter
                 'phone'    => $phone,   //phone
             ]);
             $users->save($user);
-            $user->addGroup('user');
-            $student = $user;
+            $user = $users->findById($users->getInsertID());
+            $users->addToDefaultGroup($user);
+            $student = auth()->getProvider()->findById($user->id);
         }
-        
+
         //get user 
         // $student = $users->findByCredentials(['email' => $uniqeID]);
-        
+
         $studentID = $student->id;
         log_message("debug", "user id: " . $studentID);
-        
+
         $classId = $this->request->getPost('class_id');
         $enrollmentDuration = $this->request->getPost('min_duration');
 
-        
+
         //get class model
         $class = (new ClassModel())
             ->includeOwnerId()
             ->includeClassesPerWeek()
             ->find((int)$classId);
-        
-        log_message("debug", "class id: " . $classId);        
+
+        log_message("debug", "class id: " . $classId);
         //get active enrollments
-        log_message("debug", "finding enrollments that end after: " . $start_date->format('Y-m-d'));    
-        log_message("debug", "date unformatted: " . $start_date->format(DateTimeImmutable::ATOM));    
+        log_message("debug", "finding enrollments that end after: " . $start_date->format('Y-m-d'));
+        log_message("debug", "date unformatted: " . $start_date->format(DateTimeImmutable::ATOM));
 
         $numEnrollments = $this->model
             ->where('class_id', $classId)
             ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
             ->countAllResults();
 
-        log_message("debug", "active enrollments: " . $numEnrollments);    
+        log_message("debug", "active enrollments: " . $numEnrollments);
 
         //check if user has an enrollment already
         $existingEnrollment = $this->model
@@ -425,8 +433,8 @@ class Enrollment extends ResourcePresenter
         }
 
         return view('enrollment/ajax_unenrol_modal', [
-          'error'   => false,
-          'enrollment' => $enrollment
+            'error'   => false,
+            'enrollment' => $enrollment
         ]);
     }
 
@@ -437,8 +445,8 @@ class Enrollment extends ResourcePresenter
         $class = (new ClassModel())->includeOwnerId()->find($enrollment?->class_id);
         if (! auth()->user()->can('enrollments.unenrol') || $class?->owner_id !== auth()->id()) {
             return view('ajax_message_modal', [
-              'title' => lang('App.unenrol'),
-              'body'  => lang('Security.disallowedAction')
+                'title' => lang('App.unenrol'),
+                'body'  => lang('Security.disallowedAction')
             ]);
         }
 
@@ -447,10 +455,10 @@ class Enrollment extends ResourcePresenter
 
         if ($result) {
             return view('ajax_message_modal', [
-              'title'     => lang('App.unenrol'),
-              'body'      => lang('App.unenrol.success', [$enrollment->student_name, $enrollment->class_name]),
-              'action'    => lang('App.back.students'),
-              'actionUrl' => url_to('AdminPortal\Enrollment::index'),
+                'title'     => lang('App.unenrol'),
+                'body'      => lang('App.unenrol.success', [$enrollment->student_name, $enrollment->class_name]),
+                'action'    => lang('App.back.students'),
+                'actionUrl' => url_to('AdminPortal\Enrollment::index'),
             ]);
         } else {
             return view('ajax_message_modal', [
