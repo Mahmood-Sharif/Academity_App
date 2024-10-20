@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use DateTimeImmutable;
+use DateTimeZone;
 
 /* @method $this selectSubquery(BaseBuilder $subquery, string $as) */
 /* @method $this distinct() */
@@ -50,12 +52,15 @@ class AcademyModel extends Model
 
     public function includeStatistics(int $id): AcademyModel
     {
+      $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+
         $classes = $this->db->table('classes')
                             ->where('academy_id', $id)
                             ->selectCount('class_id');
         $students = $this->db->table('classes')
                              ->where('academy_id', $id)
                              ->join('enrollments', 'enrollments.class_id = classes.class_id')
+                             ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")                 
                              ->selectCount('student_id');
         return $this
           ->select('academies.*')
