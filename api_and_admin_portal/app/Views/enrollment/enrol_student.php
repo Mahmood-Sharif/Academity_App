@@ -57,27 +57,27 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
     <div class="row">
       <div class="mb-4 col-12">
         <?=validated_form_input(
-            'studentName',
-            'name',
+            'student_name',
+            'student_name',
             lang('App.student_name'),
             set_value('name'),
-            'name'
+            'text'
         )?>
       </div>
       <div class="mb-4 col-6">
         <?=validated_form_input(
-            'studentPhone',
-            'phone',
+            'student_phone',
+            'student_phone',
             lang('App.student_phone'),
-            set_value('phone'),
-            'phone'
+            set_value('student_phone'),
+            'number'
         )?>
       </div>
       
       <div class="mb-4 col-6">
         <?=validated_form_input(
-            'studentDob',
-            'dob',
+            'student_dob',
+            'student_dob',
             lang('Auth.dob'),
             set_value('dob'),
             'date',
@@ -88,13 +88,13 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
             <?=lang('Auth.gender')?>
           </legend>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="Male" checked="checked" required>
+            <input class="form-check-input" type="radio" name="student_gender" id="inlineRadio1" value="Male" checked="checked" required>
             <label class="form-check-label" for="inlineRadio1">
               <?=lang('Auth.gender.male')?>
             </label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="Female" required>
+            <input class="form-check-input" type="radio" name="student_gender" id="inlineRadio2" value="Female" required>
             <label class="form-check-label" for="inlineRadio2">
               <?=lang('Auth.gender.female')?>
             </label>
