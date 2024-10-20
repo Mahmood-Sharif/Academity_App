@@ -335,10 +335,11 @@ class Enrollment extends ResourcePresenter
             ]);
             $users->save($user);
             $user->addGroup('user');
+            $student = $user;
         }
         
         //get user 
-        $student = $users->findByCredentials(['email' => $uniqeID]);
+        // $student = $users->findByCredentials(['email' => $uniqeID]);
         
         $studentID = $student->id;
         log_message("debug", "user id: " . $studentID);
@@ -361,7 +362,7 @@ class Enrollment extends ResourcePresenter
         $numEnrollments = $this->model
             ->where('class_id', $classId)
             ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
-            ->num_rows();
+            ->countAllResults();
 
         log_message("debug", "active enrollments: " . $numEnrollments);    
 
