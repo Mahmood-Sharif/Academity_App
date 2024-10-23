@@ -90,7 +90,6 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
             lang('Auth.dob'),
             set_value('dob'),
             'date',
-            'format',
         )?>
       </div>
       <div class="mb-4 col-12">
