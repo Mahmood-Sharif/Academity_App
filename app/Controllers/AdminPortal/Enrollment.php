@@ -297,27 +297,24 @@ class Enrollment extends ResourcePresenter
         log_message("debug", "attempting to enroll user without email");
 
         // Fetch and sanitize inputs
-        $name = trim($this->request->getPost('student_name'));
+        $firstName = trim($this->request->getPost('student_first_name'));
+        $lastName = trim($this->request->getPost('student_last_name'));
         $phone = trim($this->request->getPost('student_phone'));
         $dob = trim($this->request->getPost('student_dob'));
         $gender = trim($this->request->getPost('student_gender'));
         $classId = (int) $this->request->getPost('class_id');
         $enrollmentDuration = (int) $this->request->getPost('min_duration');
 
-        if (empty($name) || empty($phone) || empty($dob) || empty($gender) || !$classId || !$enrollmentDuration) {
-            return redirect()->back()->with('error', lang('App.enrol_student.invalid_input'));
+        if (empty($lastName) || empty($firstName) || empty($phone) || empty($dob) || empty($gender) || !$classId || !$enrollmentDuration) {
+            // return redirect()->back()->with('error', lang('App.enrol_student.invalid_input'));
+            return redirect()
+                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new'))
+                ->with('error', lang('App.enrol_student.invalid_input'));
         }
         
-        $name = $this->request->getPost('student_name');
-        log_message("debug", $name);
-        $phone = $this->request->getPost('student_phone');
-        log_message("debug", $phone);
-        $dob = $this->request->getPost('student_dob');
-        log_message("debug", $dob);
-        $gender = $this->request->getPost('student_gender');
-        log_message("debug", $gender);
+        $name = "{$firstName} {$lastName}";
 
-        $uniqeID = "{$name}{$phone}";
+        $uniqeID = "{$firstName}{$lastName}{$phone}";
         log_message("debug", $uniqeID);
 
         log_message("debug", "getting users table");
@@ -383,8 +380,8 @@ class Enrollment extends ResourcePresenter
         if ($existingEnrollment) {
             return redirect()
                 ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
-                ->with('error', lang('App.enrol_student.exists'));
-        }
+                ->with('error', lang('App.enrol_student.exists'));                
+            }
 
         // $weeks = ceil($enrollmentDuration / $class->classes_per_week);
         $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
