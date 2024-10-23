@@ -55,12 +55,21 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
 
 
     <div class="row">
-      <div class="mb-4 col-12">
+      <div class="mb-4 col-6">
         <?=validated_form_input(
-            'student_name',
-            'student_name',
-            lang('App.student_name'),
-            set_value('name'),
+            'student_first_name',
+            'student_first_name',
+            lang('Auth.fName'),
+            set_value('fname'),
+            'text'
+        )?>
+      </div>
+      <div class="mb-4 col-6">
+        <?=validated_form_input(
+            'student_last_name',
+            'student_last_name',
+            lang('Auth.lName'),
+            set_value('lname'),
             'text'
         )?>
       </div>
@@ -68,7 +77,7 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
         <?=validated_form_input(
             'student_phone',
             'student_phone',
-            lang('App.student_phone'),
+            lang('Auth.phone'),
             set_value('student_phone'),
             'number'
         )?>
@@ -81,6 +90,7 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
             lang('Auth.dob'),
             set_value('dob'),
             'date',
+            'format',
         )?>
       </div>
       <div class="mb-4 col-12">

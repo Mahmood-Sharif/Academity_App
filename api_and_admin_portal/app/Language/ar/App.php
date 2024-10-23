@@ -126,6 +126,7 @@ return [
   'enrol_student.max'      => 'لم يتم تسجيل الطالب: الصف وصل السعة القصوى.',
   'enrol_student.help'     => 'لا يوجد حساب مسجل بهذا العنوان. خوّل الطالب بإنشاء حساب ثم حاول مرة أخرى.',
   'enrol_student.exists'   => 'الطالب مسجل بهذا الصف حالياً',
+  'enrol_student.invalid_input'   => 'يجب ملء الحقول بمدخلات صالحة',
 
   // user profiles
   'profile.view.owner'     => 'عرض حساب المستخدم',

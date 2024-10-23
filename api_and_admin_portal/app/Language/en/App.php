@@ -126,6 +126,7 @@ return [
   'enrol_student.max'      => 'Could not enrol student in class: class has reached maximum capacity.',
   'enrol_student.help'     => 'A user with this email does not exist. Let the student create an Academity account first, then try again.',
   'enrol_student.exists'   => 'The student already has an ongoing enrollment in this class',
+  'enrol_student.invalid_input'   => 'All fields must be filled with valid inputs',
 
   // user profiles
   'profile.view.owner'     => 'View Profile',
