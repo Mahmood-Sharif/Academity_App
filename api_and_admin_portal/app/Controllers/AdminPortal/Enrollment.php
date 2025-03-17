@@ -291,133 +291,83 @@ class Enrollment extends ResourcePresenter
 
     public function enrollUserWithoutEmail(): ResponseInterface
     {
-
         $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
-
-        log_message("debug", "attempting to enroll user without email");
+        log_message("debug", "attempting to enroll users without email");
 
         // Fetch and sanitize inputs
-        $name = trim($this->request->getPost('student_name'));
-        $phone = trim($this->request->getPost('student_phone'));
-        $dob = trim($this->request->getPost('student_dob'));
-        $gender = trim($this->request->getPost('student_gender'));
+        $students = $this->request->getPost('students'); // Array of student data
         $classId = (int) $this->request->getPost('class_id');
         $enrollmentDuration = (int) $this->request->getPost('min_duration');
 
-        if (empty($name) || empty($phone) || empty($dob) || empty($gender) || !$classId || !$enrollmentDuration) {
+        if (empty($students) || !$classId || !$enrollmentDuration) {
             return redirect()->back()->with('error', lang('App.enrol_student.invalid_input'));
         }
-        
-        $name = $this->request->getPost('student_name');
-        log_message("debug", $name);
-        $phone = $this->request->getPost('student_phone');
-        log_message("debug", $phone);
-        $dob = $this->request->getPost('student_dob');
-        log_message("debug", $dob);
-        $gender = $this->request->getPost('student_gender');
-        log_message("debug", $gender);
 
-        $uniqeID = "{$name}{$phone}";
-        log_message("debug", $uniqeID);
-
-        log_message("debug", "getting users table");
-        /** @var UserModel $users */
-        $users = auth()->getProvider();
-
-        //find user
-        $student = auth()->getProvider()->findByCredentials(['email' => $uniqeID]);
-
-        //if no user, create new user
-        if ($student === null) {
-            log_message("debug", "user does not exist..\ncreating new");
-
-            $user = new UserEntity([
-                'username' => $uniqeID, //concat phone and name
-                'email'    => $uniqeID,
-                'password' => $uniqeID, //concat phone and name
-                'name'     => $name,    //name
-                'dob'      => $dob,     //dob
-                'gender'   => $gender,  //gender
-                'phone'    => $phone,   //phone
-            ]);
-            $users->save($user);
-            $user = $users->findById($users->getInsertID());
-            $users->addToDefaultGroup($user);
-            $student = auth()->getProvider()->findById($user->id);
-        }
-
-        //get user 
-        // $student = $users->findByCredentials(['email' => $uniqeID]);
-
-        $studentID = $student->id;
-        log_message("debug", "user id: " . $studentID);
-
-        $classId = $this->request->getPost('class_id');
-        $enrollmentDuration = $this->request->getPost('min_duration');
-
-
-        //get class model
         $class = (new ClassModel())
             ->includeOwnerId()
             ->includeClassesPerWeek()
-            ->find((int)$classId);
+            ->find($classId);
 
-        log_message("debug", "class id: " . $classId);
-        //get active enrollments
-        log_message("debug", "finding enrollments that end after: " . $start_date->format('Y-m-d'));
-        log_message("debug", "date unformatted: " . $start_date->format(DateTimeImmutable::ATOM));
-
-        $numEnrollments = $this->model
-            ->where('class_id', $classId)
-            ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
-            ->countAllResults();
-
-        log_message("debug", "active enrollments: " . $numEnrollments);
-
-        //check if user has an enrollment already
-        $existingEnrollment = $this->model
-            ->where('student_id', $studentID)
-            ->where('class_id', $classId)
-            ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
-            ->first();
-        if ($existingEnrollment) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
-                ->with('error', lang('App.enrol_student.exists'));
+        if (!auth()->user()->can('enrollments.create') || !$class || auth()->id() !== $class->owner_id) {
+            return redirect()->back()->with('error', lang('Security.disallowedAction'));
         }
 
-        // $weeks = ceil($enrollmentDuration / $class->classes_per_week);
-        $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
-        if (!$end_date) {
-            $end_date = null;
+        $errors = [];
+        foreach ($students as $studentData) {
+            $name = trim($studentData['student_name']);
+            $phone = trim($studentData['student_phone']);
+            $dob = trim($studentData['student_dob']);
+            $gender = trim($studentData['student_gender']);
+
+            if (empty($name) || empty($phone) || empty($dob) || empty($gender)) {
+                $errors[] = lang('App.enrol_student.invalid_input') . " ({$name})";
+                continue;
+            }
+
+            $uniqueID = "{$name}{$phone}";
+            $users = auth()->getProvider();
+            $student = $users->findByCredentials(['email' => $uniqueID]);
+
+            if (!$student) {
+                $user = new UserEntity([
+                    'username' => $uniqueID,
+                    'email'    => $uniqueID,
+                    'password' => $uniqueID,
+                    'name'     => $name,
+                    'dob'      => $dob,
+                    'gender'   => $gender,
+                    'phone'    => $phone,
+                ]);
+                $users->save($user);
+                $users->addToDefaultGroup($user);
+                $student = $users->findById($users->getInsertID());
+            }
+
+            $existingEnrollment = $this->model
+                ->where('student_id', $student->id)
+                ->where('class_id', $classId)
+                ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
+                ->first();
+
+            if ($existingEnrollment) {
+                $errors[] = lang('App.enrol_student.exists') . " ({$name})";
+                continue;
+            }
+
+            $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
+            $this->model->insert([
+                'student_id' => $student->id,
+                'class_id' => $classId,
+                'start_date' => $start_date->format(DateTimeImmutable::ATOM),
+                'end_date' => $end_date->format(DateTimeImmutable::ATOM),
+            ]);
         }
 
-        //if active enrollments are past class capacity
-        if ($numEnrollments >= $class->max_capacity) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.max'));
+        if (!empty($errors)) {
+            return redirect()->back()->with('error', implode('<br>', $errors));
         }
 
-        log_message("debug", "got start and end date.. inserting now");
-        $insertId = $this->model->insert([
-            'student_id' => $studentID,
-            'class_id' => $classId,
-            'start_date' => $start_date->format(DateTimeImmutable::ATOM),
-            'end_date' => $end_date->format(DateTimeImmutable::ATOM),
-        ], true);
-
-        if ($insertId) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $insertId))
-                ->with('message', lang('App.enrol_student.success', [$student->name, $class->class_name]));
-        } else {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.error'));
-        }
+        return redirect()->back()->with('message', lang('App.enrol_student.success_bulk'));
     }
 
     /** AJAX remove confirm modal */
