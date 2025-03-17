@@ -2,6 +2,8 @@
 
 return [
     'name'             => 'Full Name',
+    'fName'             => 'First Name',
+    'lName'             => 'Last Name',
     'phone'            => 'Mobile Number',
     'dob'              => 'Date of Birth',
     'gender'           => 'Gender',
