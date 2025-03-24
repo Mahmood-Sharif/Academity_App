@@ -99,6 +99,23 @@ $this->endSection('sidebarTab');
               <label for="excelFile" class="form-label"><?=lang('App.select_excel_file')?></label>
               <input type="file" class="form-control" id="excelFile" name="excel_file" accept=".xlsx, .xls" required>
             </div>
+            <div class="mb-3">
+              <label for="classDropdown" class="form-label"><?=lang('App.select.class')?></label>
+              <select class="form-select" id="classDropdown" name="class_id" required>
+                <?php foreach ($classes as $classId => $className): ?>
+                  <option value="<?=$classId?>" <?= $classId == ($selectedClassId ?? '') ? 'selected' : '' ?>>
+                  <?=$className?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="durationWeeks" class="form-label"><?=lang('App.duration_in_weeks')?></label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="durationWeeks" name="min_duration" min="1" required>
+                <span class="input-group-text"><?=lang('App.weeks')?></span>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?=lang('App.close')?></button>
