@@ -290,7 +290,7 @@ class Enrollment extends ResourcePresenter
         }
     }
 
-    public function enrollUserWithoutEmail(): ResponseInterface
+    public function enrollUserWithoutEmail(): ResponseInterface|string
     {
         $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
         log_message("debug", "attempting to enroll users without email");
@@ -332,14 +332,15 @@ class Enrollment extends ResourcePresenter
             if (!$student) {
                 $user = new UserEntity([
                     'username' => $uniqueID,
-                    'email'    => $uniqueID,
+                    'email' => $uniqueID,
                     'password' => $uniqueID,
-                    'name'     => $name,
-                    'dob'      => $dob,
-                    'gender'   => $gender,
-                    'phone'    => $phone,
+                    'name' => $name,
+                    'dob' => $dob,
+                    'gender' => $gender,
+                    'phone' => $phone,
                 ]);
                 $users->save($user);
+                $user->id = $users->getInsertID();
                 $users->addToDefaultGroup($user);
                 $student = $users->findById($users->getInsertID());
             }
@@ -365,10 +366,14 @@ class Enrollment extends ResourcePresenter
         }
 
         if (!empty($errors)) {
-            return redirect()->back()->with('error', implode('<br>', $errors));
+            // view('enrollment/enrollment', ['enrollment' => $enrollment]);
+            return redirect()
+                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new'))
+                ->with('error', implode('<br>', $errors));
         }
 
-        return redirect()->back()->with('message', lang('App.enrol_student.success_bulk'));
+
+        return redirect()->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment'));
     }
 
     public function importStudents(): ResponseInterface

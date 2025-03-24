@@ -42,8 +42,9 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
     </div>
   </div>
 
-  <form hx-post="<?=url_to('AdminPortal\Enrollment::enrollUserWithoutEmail')?>" hx-swap="outerHTML" class="col-12 col-md col-lg-7">
-    <?=csrf_field()?>
+  <form hx-post="<?= url_to('AdminPortal\Enrollment::enrollUserWithoutEmail')?>"
+    class="col-12 col-md col-lg-7">
+    <?= csrf_field() ?>
 
     <?php if (session('error')): ?>
     <div class="alert alert-danger mb-4">
@@ -53,26 +54,27 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
 
     <div id="students-container">
       <div class="student-form mb-4">
-        <h5><?=lang('App.student_details')?></h5>
+        <h5><?= lang(line: 'App.student_details') ?></h5>
         <div class="row">
           <div class="mb-4 col-12">
-            <?=validated_form_input('students[0][student_name]', 'student_name', lang('App.student_name'), '', 'text')?>
+            <?= validated_form_input(name: 'students[0][student_name]', id: 'student_name', labelText: lang(line: 'App.student_name'), value: '', type: 'text') ?>
           </div>
           <div class="mb-4 col-6">
-            <?=validated_form_input('students[0][student_phone]', 'student_phone', lang('App.student_phone'), '', 'number')?>
+            <?= validated_form_input(name: 'students[0][student_phone]', id: 'student_phone', labelText: lang(line: 'App.student_phone'), value: '', type: 'number') ?>
           </div>
           <div class="mb-4 col-6">
-            <?=validated_form_input('students[0][student_dob]', 'student_dob', lang('Auth.dob'), '', 'date')?>
+            <?= validated_form_input(name: 'students[0][student_dob]', id: 'student_dob', labelText: lang(line: 'Auth.dob'), value: '', type: 'date') ?>
           </div>
           <div class="mb-4 col-12">
-            <legend class="text-body fs-6 mb-2"><?=lang('Auth.gender')?></legend>
+            <legend class="text-body fs-6 mb-2"><?= lang(line: 'Auth.gender') ?></legend>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="students[0][student_gender]" value="Male" checked required>
-              <label class="form-check-label"><?=lang('Auth.gender.male')?></label>
+              <input class="form-check-input" type="radio" name="students[0][student_gender]" value="Male" checked
+required>
+              <label class="form-check-label"><?= lang(line: 'Auth.gender.male') ?></label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="students[0][student_gender]" value="Female" required>
-              <label class="form-check-label"><?=lang('Auth.gender.female')?></label>
+              <label class="form-check-label"><?= lang(line: 'Auth.gender.female') ?></label>
             </div>
           </div>
         </div>
@@ -127,26 +129,26 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
     const newForm = document.createElement('div');
     newForm.classList.add('student-form', 'mb-4');
     newForm.innerHTML = `
-      <h5><?=lang('App.student_details')?> (${studentIndex + 1})</h5>
+      <h5><?= lang('App.student_details') ?> (${studentIndex + 1})</h5>
       <div class="row">
         <div class="mb-4 col-12">
-          <?=validated_form_input('students[${studentIndex}][student_name]', 'student_name', lang('App.student_name'), '', 'text')?>
+          <input type="text" name="students[${studentIndex}][student_name]" class="form-control" placeholder="<?= lang('App.student_name') ?>" required>
         </div>
         <div class="mb-4 col-6">
-          <?=validated_form_input('students[${studentIndex}][student_phone]', 'student_phone', lang('App.student_phone'), '', 'number')?>
+          <input type="text" name="students[${studentIndex}][student_phone]" class="form-control" placeholder="<?= lang('App.student_phone') ?>" required>
         </div>
         <div class="mb-4 col-6">
-          <?=validated_form_input('students[${studentIndex}][student_dob]', 'student_dob', lang('Auth.dob'), '', 'date')?>
+          <input type="date" name="students[${studentIndex}][student_dob]" class="form-control" required>
         </div>
         <div class="mb-4 col-12">
-          <legend class="text-body fs-6 mb-2"><?=lang('Auth.gender')?></legend>
+          <legend class="text-body fs-6 mb-2"><?= lang('Auth.gender') ?></legend>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="students[${studentIndex}][student_gender]" value="Male" checked required>
-            <label class="form-check-label"><?=lang('Auth.gender.male')?></label>
+            <label class="form-check-label"><?= lang('Auth.gender.male') ?></label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="students[${studentIndex}][student_gender]" value="Female" required>
-            <label class="form-check-label"><?=lang('Auth.gender.female')?></label>
+            <label class="form-check-label"><?= lang('Auth.gender.female') ?></label>
           </div>
         </div>
       </div>
