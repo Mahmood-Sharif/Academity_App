@@ -53,7 +53,6 @@ return [
   'empty.coaches'          => 'No coaches are registered with this academy.',
   'empty.students'         => 'No students.',
 
-
   // manage academies
   'academy.status'         => 'Academy Status',
   'academy.status.running' => 'Status: Running',
@@ -201,4 +200,12 @@ return [
   'delete_class.confirm'      => 'Are you sure you want to delete the class <b class="user-select-none">{0}</b>? <br> This action is permanent and can not be reversed. <br>',
   'delete_class.success'      => 'Successfully deleted class <b>{0}</b>.',
   'delete_class.error'        => 'Error: could not delete class.',
+
+  'select_excel_file'         => 'Select Excel File',
+  'import_students'           => 'Import Students',
+  'import'                    => 'Import',
+  'import_success'            => 'Students imported successfully.',
+  'import_error'              => 'An error occurred during import.',
+  'invalid_row'               => 'Invalid data in row {row}.',
+  'file_upload_error'         => 'File upload failed.',
 ];

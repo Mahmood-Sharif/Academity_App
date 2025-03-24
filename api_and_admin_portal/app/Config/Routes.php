@@ -52,6 +52,7 @@ $routes->group('{locale}/admin-portal', static function ($routes) {
         $routes->post('edit-profile/', 'AdminPortal\User::updateProfile');
         $routes->post('password-change/', 'AdminPortal\User::changePassword');
         $routes->get('ajax-class-input', 'AdminPortal\Classes::selectInput');
+        $routes->post('import-students/', 'AdminPortal\Enrollment::importStudents', ['as' => 'import_students']);
     });
 });
 

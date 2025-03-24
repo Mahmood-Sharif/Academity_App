@@ -17,6 +17,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
+use PhpOffice\PhpSpreadsheet\IOFactory; // Add this import for handling Excel files
 
 class Enrollment extends ResourcePresenter
 {
@@ -368,6 +369,129 @@ class Enrollment extends ResourcePresenter
         }
 
         return redirect()->back()->with('message', lang('App.enrol_student.success_bulk'));
+    }
+
+    public function importStudents(): ResponseInterface
+    {
+        if (!auth()->user()->can('enrollments.create')) {
+            return $this->response->setJSON(['error' => lang('Security.disallowedAction')])->setStatusCode(403);
+        }
+
+        $file = $this->request->getFile('excel_file');
+        if (!$file->isValid()) {
+            return $this->response->setJSON(['error' => lang('App.file_upload_error')])->setStatusCode(400);
+        }
+
+        // Log file details for debugging
+        log_message('debug', 'Uploaded file details:');
+        log_message('debug', 'Client Name: ' . $file->getClientName());
+        log_message('debug', 'Client Extension: ' . $file->getClientExtension());
+        log_message('debug', 'Mime Type: ' . $file->getMimeType());
+        log_message('debug', 'Temporary Path: ' . $file->getTempName());
+        log_message('debug', 'File Size: ' . $file->getSize());
+
+        // Validate file extension
+        if (!in_array($file->getClientExtension(), ['xlsx', 'xls'])) {
+            return $this->response->setJSON(['error' => lang('App.file_upload_error') . ': Invalid file format'])->setStatusCode(400);
+        }
+
+        try {
+            // Detect file type and load the spreadsheet
+            $fileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($file->getTempName());
+            log_message('debug', 'Detected file type: ' . $fileType);
+
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($fileType);
+            $spreadsheet = $reader->load($file->getTempName());
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray();
+
+            log_message('debug', 'Excel file loaded successfully. Rows: ' . count($rows));
+
+            $classId = $this->request->getGet('class_id');
+            $enrollmentDuration = $this->request->getGet('min_duration');
+            $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+
+            $errors = [];
+            foreach ($rows as $index => $row) {
+                if ($index === 0) {
+                    // Skip header row
+                    continue;
+                }
+
+                // Filter out rows with null values
+                if (array_filter($row, fn($value) => $value === null) !== []) {
+                    log_message('debug', "Skipping row {$index}: contains null values.");
+                    continue;
+                }
+
+                log_message('debug', "Processing row {$index}: " . json_encode($row));
+
+                // Ensure the row has the required number of columns
+                if (count($row) < 4) {
+                    log_message('debug', "Skipping row {$index}: insufficient columns.");
+                    continue;
+                }
+
+                [$name, $phone, $dob, $gender] = $row;
+
+                // Validate the row data
+                if (empty($name) || empty($phone) || empty($dob) || empty($gender)) {
+                    $errors[] = lang('App.invalid_row', ['row' => $index + 1]);
+                    log_message('debug', "Invalid data in row {$index}: " . json_encode($row));
+                    continue;
+                }
+
+                $uniqueID = "{$name}{$phone}";
+                $users = auth()->getProvider();
+                $student = $users->findByCredentials(['email' => $uniqueID]);
+
+                if (!$student) {
+                    $user = new UserEntity([
+                        'username' => $uniqueID,
+                        'email'    => $uniqueID,
+                        'password' => $uniqueID,
+                        'name'     => $name,
+                        'dob'      => $dob,
+                        'gender'   => $gender,
+                        'phone'    => $phone,
+                    ]);
+                    $users->save($user);
+                    $users->addToDefaultGroup($user);
+                    $student = $users->findById($users->getInsertID());
+                    log_message('debug', "New user created: {$uniqueID}");
+                }
+
+                $existingEnrollment = $this->model
+                    ->where('student_id', $student->id)
+                    ->where('class_id', $classId)
+                    ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
+                    ->first();
+
+                if ($existingEnrollment) {
+                    $errors[] = lang('App.enrol_student.exists', ['name' => $name]);
+                    log_message('debug', "Student already enrolled: {$name}");
+                    continue;
+                }
+
+                $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
+                $this->model->insert([
+                    'student_id' => $student->id,
+                    'class_id' => $classId,
+                    'start_date' => $start_date->format(DateTimeImmutable::ATOM),
+                    'end_date' => $end_date->format(DateTimeImmutable::ATOM),
+                ]);
+                log_message('debug', "Student enrolled: {$name}");
+            }
+
+            if (!empty($errors)) {
+                return $this->response->setJSON(['error' => implode('<br>', $errors)])->setStatusCode(400);
+            }
+
+            return $this->response->setJSON(['message' => lang('App.import_success')])->setStatusCode(200);
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            log_message('error', 'Error during import: ' . $e->getMessage());
+            return $this->response->setJSON(['error' => lang('App.import_error') . ': ' . $e->getMessage()])->setStatusCode(500);
+        }
     }
 
     /** AJAX remove confirm modal */

@@ -78,8 +78,36 @@ $this->endSection('sidebarTab');
         class="btn btn-outline-success ms-auto">
         <?=lang('App.enrol_student')?>
       </a>
+      <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#importModal">
+        <?=lang('App.import_students')?>
+      </button>
     </div>
   </form>
+
+  <!-- Import Modal -->
+  <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="<?=url_to('AdminPortal\Enrollment::importStudents')?>" method="post" enctype="multipart/form-data">
+          <?=csrf_field()?>
+          <div class="modal-header">
+            <h5 class="modal-title" id="importModalLabel"><?=lang('App.import_students')?></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="excelFile" class="form-label"><?=lang('App.select_excel_file')?></label>
+              <input type="file" class="form-control" id="excelFile" name="excel_file" accept=".xlsx, .xls" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?=lang('App.close')?></button>
+            <button type="submit" class="btn btn-primary"><?=lang('App.import')?></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <table class="table">
     <thead>
@@ -124,5 +152,32 @@ $this->endSection('sidebarTab');
 
 
 </div>
+
+<script>
+  document.querySelector('#importModal form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const url = this.action;
+
+    fetch(url, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          alert(data.error); // Display error message
+        } else {
+          alert(data.message); // Display success message
+          location.reload(); // Reload the page to reflect changes
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
+      });
+  });
+</script>
 
 <?= $this->endSection('content'); ?>
