@@ -474,13 +474,20 @@ class Enrollment extends ResourcePresenter
                 }
 
                 $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
-                $this->model->insert([
+                $insertData = [
                     'student_id' => $student->id,
                     'class_id' => $classId,
                     'start_date' => $start_date->format(DateTimeImmutable::ATOM),
                     'end_date' => $end_date->format(DateTimeImmutable::ATOM),
-                ]);
-                log_message('debug', "Student enrolled: {$name}");
+                ];
+
+                if (!$this->model->insert($insertData)) {
+                    log_message('error', 'Database insert failed: ' . json_encode($this->model->errors()));
+                    $errors[] = lang('App.enrol_student.error') . " ({$name})";
+                    continue;
+                }
+
+                log_message('debug', "Student enrolled successfully: {$name}");
             }
 
             if (!empty($errors)) {
