@@ -9,7 +9,71 @@ class InitialMigration extends Migration
     public function up(): void
     {
         $this->forge->createDatabase('academity', true);
-
+        //Users Table
+        $this->forge->addField([
+          'id' => [
+              'type'           => 'INT',
+              'unsigned'       => true,
+              'auto_increment' => true,
+          ],
+          'email' => [
+              'type'       => 'VARCHAR',
+              'constraint' => '100',
+              'unique'     => true,
+          ],
+          'password' => [
+              'type'       => 'VARCHAR',
+              'constraint' => '255',
+          ],
+          'active' => [
+              'type' => 'TINYINT',
+              'default' => 1,
+          ],
+          'name' => [
+              'type' => 'VARCHAR',
+              'constraint' => 100,
+              'null' => true,
+          ],
+          'dob' => [
+              'type' => 'DATE',
+              'null' => true,
+          ],
+          'phone' => [
+              'type' => 'VARCHAR',
+              'constraint' => 15,
+              'null' => true,
+          ],
+          'profile_image' => [
+              'type' => 'INT',
+              'unsigned' => true,
+              'null' => true,
+          ],
+          'gender' => [
+              'type' => 'ENUM("Male", "Female")',
+              'null' => true,
+          ],
+          'medical_condition' => [
+              'type' => 'VARCHAR',
+              'constraint' => 100,
+              'null' => true,
+          ],
+          'parent_id' => [
+              'type' => 'INT',
+              'unsigned' => true,
+              'null' => true,
+          ],
+          'created_at' => [
+              'type' => 'DATETIME',
+              'null' => true,
+          ],
+          'updated_at' => [
+              'type' => 'DATETIME',
+              'null' => true,
+          ],
+      ]);
+      $this->forge->addKey('id', true);
+      $this->forge->createTable('users', true);
+      
         // Media table
         $this->forge->addField([
           'media_id' => [
