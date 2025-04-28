@@ -8,7 +8,7 @@ class RemoveUniqueUsernameConstraint extends Migration
 {
     public function up(): void
     {
-        $this->forge->dropKey('users', 'username');
+        // $this->forge->dropKey('users', 'username');
     }
 
     public function down(): void

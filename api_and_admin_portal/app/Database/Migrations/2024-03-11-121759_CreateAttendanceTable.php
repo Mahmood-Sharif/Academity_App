@@ -33,6 +33,7 @@ class CreateAttendanceTable extends Migration
             CREATE FUNCTION DOW(
                 day_of_week ENUM('SUN','MON','TUE','WED','THU','FRI','SAT')
             ) RETURNS int(11)
+             DETERMINISTIC
             RETURN day_of_week+0;");
 
         $this->db->simpleQuery("DROP PROCEDURE IF EXISTS getAttendance;");
