@@ -217,77 +217,82 @@ class Enrollment extends ResourcePresenter
         ]);
     }
 
-    // perform create
-    public function create(): ResponseInterface|string
-    {
-        $email = $this->request->getPost('email');
-        $classId = $this->request->getPost('class_id');
-        $enrollmentDuration = $this->request->getPost('min_duration');
+   // perform create
+public function create(): ResponseInterface|string
+{
+    $email = $this->request->getPost('email');
+    $classId = $this->request->getPost('class_id');
+    $enrollmentDuration = $this->request->getPost('min_duration');
+    $priceValue = $this->request->getPost('price_value'); // 🆕 Get price_value from POST
 
-        $class = (new ClassModel())
-            ->includeOwnerId()
-            ->includeClassesPerWeek()
-            ->find((int)$classId);
-        $numEnrollments = (new ClassModel())
-            ->includeNumEnrollments()
-            ->find((int)$classId)
-            ->num_enrollments;
+    $class = (new ClassModel())
+        ->includeOwnerId()
+        ->includeClassesPerWeek()
+        ->find((int)$classId);
 
-        if (!auth()->user()->can('enrollments.create') || $class === null || auth()->id() !== $class->owner_id) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('Security.disallowedAction'));
-        }
+    $numEnrollments = (new ClassModel())
+        ->includeNumEnrollments()
+        ->find((int)$classId)
+        ->num_enrollments;
 
-        if ($numEnrollments >= $class->max_capacity) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.max'));
-        }
-
-        $student = auth()->getProvider()->findByCredentials(['email' => $email]);
-        if ($student === null) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.help'));
-        }
-
-        $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
-        $weeks = ceil($enrollmentDuration / $class->classes_per_week);
-        $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
-
-        $existingEnrollment = $this->model
-            ->where('student_id', $student->id)
-            ->where('class_id', $classId)
-            ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
-            ->first();
-        if ($existingEnrollment) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
-                ->with('error', lang('App.enrol_student.exists'));
-        }
-
-        $insertId = $this->model->insert([
-            'student_id' => $student->id,
-            'class_id' => $classId,
-            'start_date' => $start_date->format(DateTimeImmutable::ATOM),
-            'end_date' => $end_date->format(DateTimeImmutable::ATOM),
-        ], true);
-
-        if ($insertId) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $insertId))
-                ->with('message', lang('App.enrol_student.success', [$student->name, $class->class_name]));
-        } else {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.error'));
-        }
+    if (!auth()->user()->can('enrollments.create') || $class === null || auth()->id() !== $class->owner_id) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('Security.disallowedAction'));
     }
+
+    if ($numEnrollments >= $class->max_capacity) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('App.enrol_student.max'));
+    }
+
+    $student = auth()->getProvider()->findByCredentials(['email' => $email]);
+    if ($student === null) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('App.enrol_student.help'));
+    }
+
+    $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+    $weeks = ceil($enrollmentDuration / $class->classes_per_week);
+    $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
+
+    $existingEnrollment = $this->model
+        ->where('student_id', $student->id)
+        ->where('class_id', $classId)
+        ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
+        ->first();
+
+    if ($existingEnrollment) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
+            ->with('error', lang('App.enrol_student.exists'));
+    }
+
+    $insertId = $this->model->insert([
+        'student_id'   => $student->id,
+        'class_id'     => $classId,
+        'start_date'   => $start_date->format(DateTimeImmutable::ATOM),
+        'end_date'     => $end_date->format(DateTimeImmutable::ATOM),
+        'price_value'  => $priceValue, // 🆕 Save price_value
+    ], true);
+
+    if ($insertId) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $insertId))
+            ->with('message', lang('App.enrol_student.success', [$student->name, $class->class_name]));
+    } else {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('App.enrol_student.error'));
+    }
+}
+
 
     public function enrollUserWithoutEmail(): ResponseInterface
     {
