@@ -5,7 +5,7 @@ import 'package:academity_app/views/home/widgets/class/register_button_widget.da
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/class.dart'; // Adjust path as necessary
 import 'package:intl/intl.dart'; // Ensure this is correctly imported
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 void showClassDetails(BuildContext context, int classId) {
   final academityApi = ClassServices()

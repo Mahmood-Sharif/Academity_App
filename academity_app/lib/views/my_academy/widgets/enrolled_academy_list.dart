@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/models/academy.dart';
 import 'package:academity_app/providers/academy_provider.dart'; // Make sure this is the correct path
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class EnrolledAcademiesListWidget extends ConsumerWidget {
   const EnrolledAcademiesListWidget({super.key});
@@ -45,6 +45,18 @@ class EnrolledAcademiesListWidget extends ConsumerWidget {
                         width: double.infinity,
                         height: 200,
                         fit: BoxFit.cover,
+                        webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                        errorBuilder: (_, __, ___) => Container(
+                          width: double.infinity,
+                          height: 200,
+                          color: const Color(0xFFEDEDED),
+                          alignment: Alignment.center,
+                          child: const Icon(
+                            Icons.school_rounded,
+                            size: 48,
+                            color: Colors.black38,
+                          ),
+                        ),
                       ),
                     ),
                     Padding(

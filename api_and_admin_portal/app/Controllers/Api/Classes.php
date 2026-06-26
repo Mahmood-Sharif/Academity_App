@@ -8,6 +8,7 @@ use App\Models\AcademyModel;
 use App\Models\EnrollmentModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Config\Database;
 
 class Classes extends ResourceController
 {
@@ -104,21 +105,29 @@ class Classes extends ResourceController
     // get class prices and timings
     public function getClassesWithPrices($classId)
     {
-        $classModel = new ClassModel();
         $timingModel = new ClassTimingModel();
 
-        // Fetch class by ID and include price information
-        $classWithPrice = $classModel->includePrice()->find($classId);
+        $classWithPrice = Database::connect()->table('classes')
+            ->select('classes.class_id, classes.class_name, classes.min_age, classes.max_age, classes.academy_id')
+            ->select('classes.max_capacity, classes.min_duration, classes.max_duration, classes.coach_id, classes.reg_code')
+            ->select('prices.price')
+            ->join('prices', 'prices.class_id = classes.class_id AND prices.end_time IS NULL', 'left')
+            ->where('classes.class_id', $classId)
+            ->orderBy('prices.start_time', 'DESC')
+            ->limit(1)
+            ->get()
+            ->getRowArray();
 
-        // Check if the class is found
         if (!$classWithPrice) {
             return $this->failNotFound("No class found with ID: $classId");
         }
 
-        // Enhance class information with timing details
-        // Since we are dealing with a single class, direct property access is used
-        $timings = $timingModel->getTimingsForClass($classWithPrice->class_id);
-        $classWithPrice->timings = $timings;
+        $classWithPrice['class_id'] = (int) $classWithPrice['class_id'];
+        $classWithPrice['min_age'] = (int) $classWithPrice['min_age'];
+        $classWithPrice['max_age'] = (int) $classWithPrice['max_age'];
+        $classWithPrice['academy_id'] = (int) $classWithPrice['academy_id'];
+        $classWithPrice['price'] ??= 'Price Unavailable';
+        $classWithPrice['timings'] = $timingModel->getTimingsForClass($classWithPrice['class_id']);
 
         return $this->respond($classWithPrice);
     }

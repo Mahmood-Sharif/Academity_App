@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class TransactionModel extends Model
 {
-    protected $table = 'transaction';
+    protected $table = 'transactions';
     protected $primaryKey = 'transaction_id';
 
     protected $allowedFields = [

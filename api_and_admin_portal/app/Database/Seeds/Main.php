@@ -8,10 +8,6 @@ class Main extends Seeder
 {
     public function run(): void
     {
-        $this->call('UserSeeder');
-        $this->call('SportsSeeder');
-        $this->call('AcademySeeder');
-        $this->call('ClassSeeder');
-        $this->call('EnrollmentsSeeder');
+        $this->call('DemoSeeder');
     }
 }

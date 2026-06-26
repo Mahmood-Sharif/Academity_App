@@ -27,6 +27,7 @@ class Filters extends CodeIgniterFilters
         'forcehttps'    => \CodeIgniter\Filters\ForceHTTPS::class,
         'pagecache'     => \CodeIgniter\Filters\PageCache::class,
         'performance'   => \CodeIgniter\Filters\PerformanceMetrics::class,
+        'cors' => \App\Filters\Cors::class,
     ];
 
     /**
@@ -47,6 +48,8 @@ class Filters extends CodeIgniterFilters
              * authorized, otherwise the site will be suceptible to CSRF.
              */
             'csrf' => ['except' => ['api/*']],
+                    'cors',
+
 
             // 'honeypot',
             // 'invalidchars',

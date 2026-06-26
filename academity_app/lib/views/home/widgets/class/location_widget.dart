@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/academy.dart'; // Adjust path
 import 'package:google_fonts/google_fonts.dart'; // Make sure this path is correct
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class LocationWidget extends StatelessWidget {
   final Academy academy;

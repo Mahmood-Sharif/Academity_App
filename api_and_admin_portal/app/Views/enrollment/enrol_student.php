@@ -1,7 +1,6 @@
 <?php
 
 use App\Entities\ClassEntity;
-
 use App\Entities\Academy;
 
 /* @var CodeIgniter\View\View $this */
@@ -110,7 +109,21 @@ $enrolDuration = set_value('min_duration') ? ('value="'.set_value('min_duration'
           </div>
       </div>
     </div>
-          
+
+    <div class="mb-4 col-12">
+  <?=validated_form_input(
+      'price_value',
+      'price_value',
+      lang('App.price'),
+      set_value('price_value'),
+      'number',
+      [
+          'step' => '0.01',
+          'min'  => '0'
+      ]
+  )?>
+</div>
+
     <div class="mb-3"></div>
     <span class="col-12"><?=lang('App.optional'); echo ':'?></span>
     

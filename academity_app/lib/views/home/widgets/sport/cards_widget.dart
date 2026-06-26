@@ -51,13 +51,13 @@ class CardWithShadow extends StatelessWidget {
       constraints: const BoxConstraints(
         minHeight: 80, // Set minimum height for the card
         maxHeight: 100, // Set maximum height for the card
-        maxWidth: 150,  // Set maximum width for the card
+        maxWidth: 150, // Set maximum width for the card
       ),
       decoration: BoxDecoration(
         color: Colors.white, // Card background color
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             spreadRadius: 1,
             blurRadius: 8,
             offset: const Offset(0, 4), // Changes position of shadow
@@ -78,7 +78,8 @@ class CardWithShadow extends StatelessWidget {
                 color: Colors.teal[700],
               ),
             ),
-            const SizedBox(height: 4.0), // Reduced space between header and body
+            const SizedBox(
+                height: 4.0), // Reduced space between header and body
             Text(
               body,
               style: const TextStyle(

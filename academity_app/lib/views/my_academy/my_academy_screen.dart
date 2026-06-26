@@ -2,7 +2,7 @@ import 'package:academity_app/views/my_academy/widgets/enrolled_academy_list.dar
 import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class MyAcademyPage extends StatelessWidget {
   const MyAcademyPage({super.key});

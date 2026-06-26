@@ -2,7 +2,7 @@ import 'package:academity_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Ensure this path is correct
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 enum Gender { male, female }
 
@@ -268,7 +268,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                           children: [
                             Expanded(
                               child: DropdownButtonFormField<int>(
-                                value: selectedDay,
+                                initialValue: selectedDay,
                                 decoration: InputDecoration(
                                   labelText:
                                       AppLocalizations.of(context)!.dayLabel,
@@ -288,7 +288,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: DropdownButtonFormField<int>(
-                                value: selectedMonth,
+                                initialValue: selectedMonth,
                                 decoration: InputDecoration(
                                   labelText:
                                       AppLocalizations.of(context)!.monthLabel,
@@ -308,7 +308,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: DropdownButtonFormField<int>(
-                                value: selectedYear,
+                                initialValue: selectedYear,
                                 decoration: InputDecoration(
                                   labelText:
                                       AppLocalizations.of(context)!.yearLabel,

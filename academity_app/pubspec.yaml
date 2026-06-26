@@ -1,5 +1,5 @@
 name: academity_app
-description: A new Flutter project.
+description: Sports academy discovery, enrollment, scheduling, and attendance app.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -38,7 +38,7 @@ dependencies:
   google_fonts: ^6.1.0
   http: ^1.1.0
   image_picker: ^1.0.8
-  intl: ^0.19.0
+  intl: 0.20.2
   mobile_scanner: ^5.1.0
   package_info_plus: ^8.0.0
   qr_flutter: ^4.1.0

@@ -18,6 +18,7 @@ class AddColumnSport extends Migration
 
     public function down(): void
     {
+        $this->forge->dropForeignKey('academies', 'academies_sport_id_foreign');
         $this->forge->dropColumn('academies', ['sport_id']);
     }
 }

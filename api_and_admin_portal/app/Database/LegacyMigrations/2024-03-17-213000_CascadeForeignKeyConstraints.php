@@ -21,7 +21,7 @@ class CascadeForeignKeyConstraints extends Migration
         $this->forge->processIndexes('offer_classes');
 
         $this->forge->dropForeignKey('academy_coaches', 'academy_coaches_academy_id_foreign');
-        $this->forge->addForeignKey('academy_id', 'classes', 'class_id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('academy_id', 'academies', 'academy_id', 'RESTRICT', 'CASCADE');
         $this->forge->processIndexes('academy_coaches');
     }
 

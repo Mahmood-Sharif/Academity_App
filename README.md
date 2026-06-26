@@ -1,20 +1,65 @@
-# Development Guide
+# Academity
 
-## Dart
+Academity is a sports academy platform for discovering academies, enrolling in
+classes, managing schedules, and recording attendance with QR scanning. The
+repository contains a Flutter mobile app plus a CodeIgniter-based API/admin
+portal.
 
-In `academity_app/lib/`, **copy `env.dart` to `.env.dart`** and change the
-variables for your environment (e.g. IP address).
+## Why This Project Matters
 
-Remember to run `> flutter gen-l10n` every time you change localizations or
-start in a fresh clone.
+- Player and parent experience for browsing sports academies.
+- Coach/admin workflows for classes, students, enrollments, and attendance.
+- API-backed mobile features with authentication, localization, and profile
+  management.
+- Portfolio-friendly demo mode in the Flutter app, so reviewers can open the
+  product experience even without a live backend.
 
-## PHP
+## Project Structure
 
-In `api_and_admin_portal/`, **copy `env` to `.env`** and change the variables
-for your environment (e.g. IP address).
+- `academity_app/` - Flutter mobile app.
+- `api_and_admin_portal/` - PHP API and admin portal.
+- `api_and_admin_portal/app/Database/` - migrations and seeders.
+- `api_and_admin_portal/public/images/` - portal and sports media assets.
 
-Run `> composer i` to install the necessary libraries, and
-`> php spark serve --host 0.0.0.0` to start the development server.
+## Run The Flutter App
 
-It is also a good idea to run `> php spark cache:clear` every time you change
-the `.env` file to clear any cached responses with the wrong IP address.
+```bash
+cd academity_app
+flutter pub get
+flutter gen-l10n
+flutter run
+```
+
+The committed `academity_app/lib/env.dart` points at the default Academity API
+host. Change it for local development if you are running the backend yourself.
+
+For a quick portfolio review, launch the app and tap **Preview app** on the
+welcome screen. The preview uses graceful demo data when the API is unavailable.
+
+## Run The API/Admin Portal
+
+```bash
+cd api_and_admin_portal
+composer install
+cp env .env
+php spark serve --host 0.0.0.0
+```
+
+After changing `.env`, clear cached configuration:
+
+```bash
+php spark cache:clear
+```
+
+## Quality Checks
+
+```bash
+cd academity_app
+flutter analyze
+flutter test
+```
+
+```bash
+cd api_and_admin_portal
+composer test
+```

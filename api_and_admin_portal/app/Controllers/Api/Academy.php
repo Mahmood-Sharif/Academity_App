@@ -2,11 +2,9 @@
 
 namespace App\Controllers\Api;
 
-use App\Models\AcademyModel;
-use App\Models\ClassModel;
-use App\Models\EnrollmentModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Config\Database;
 use DateTimeImmutable;
 use DateTimeZone;
 
@@ -14,7 +12,7 @@ class Academy extends ResourceController
 {
     public function index(): ResponseInterface
     {
-        $model = new AcademyModel();
+        $model = new \App\Models\AcademyModel();
         $data = [];
         $data['academy'] = $model->orderBy('name')->findAll();
         return $this->respond($data);
@@ -22,7 +20,7 @@ class Academy extends ResourceController
 
     public function show($id = null): ResponseInterface
     {
-        $model = new AcademyModel();
+        $model = new \App\Models\AcademyModel();
         $data = $model->find($id);
         if ($data) {
             return $this->respond($data);
@@ -38,7 +36,7 @@ class Academy extends ResourceController
             return $this->failNotFound('Sport ID is required');
         }
 
-        $model = new AcademyModel();
+        $model = new \App\Models\AcademyModel();
         $academies = $model->includeImageUrl()->getAcademiesBySportId($sportId);
         if (empty($academies)) {
             return $this->failNotFound("No academies found for sport ID: $sportId");
@@ -49,7 +47,7 @@ class Academy extends ResourceController
 
     public function getClassDetails($academyId): ResponseInterface
     {
-        $model = new ClassModel();
+        $model = new \App\Models\ClassModel();
         $classes = $model->where('academy_id', $academyId)->findAll();
 
         if (empty($classes)) {
@@ -61,43 +59,59 @@ class Academy extends ResourceController
 
     public function getEnrolledAcademiesDetails(): ResponseInterface
     {
-        $academyModel = new AcademyModel();
-        $classModel = new ClassModel();
-        $enrollmentModel = new EnrollmentModel();
-
-        // Assuming this retrieves the currently logged-in user's ID correctly
-        $student_id = auth()->id();
-
-        $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
-
-        $academies = $academyModel->includeImageUrl()
-            ->join('classes', 'classes.academy_id = academies.academy_id')
-            ->join('enrollments', 'enrollments.class_id = classes.class_id')
-            ->where('enrollments.student_id', $student_id)
-            ->where("enrollments.end_date >= '$date'")
-            ->findAll();
-
-        // Assuming EnrollmentModel is related to Classes and Academies, and you have a method to join user details
-        $enrollments = array_map(fn ($e) => $e->toArray(), $classModel
-            ->includePrice()
-            ->join('enrollments', 'enrollments.class_id = classes.class_id')
-            ->where('enrollments.student_id', $student_id)
-            ->where("enrollments.end_date >= '$date'")
-            ->select('enrollments.*')
-            ->findAll());
-
-        if (empty($enrollments)) {
-            return $this->failNotFound('No enrollments found for this user.');
+        $studentId = auth()->id();
+        if ($studentId === null) {
+            return $this->failUnauthorized('A valid API token is required.');
         }
 
-        $enrollmentsGrouped = array_group_by($enrollments, ['academy_id']);
+        $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
+        $db = Database::connect();
 
+        $rows = $db->table('enrollments')
+            ->select('enrollments.enrollment_id, enrollments.start_date, enrollments.end_date, enrollments.price_value')
+            ->select('classes.class_id, classes.class_name, classes.min_age, classes.max_age, classes.academy_id')
+            ->select('academies.location, academies.name, academies.phone, academies.description')
+            ->select('prices.price')
+            ->select('CONCAT(' . $db->escape(base_url()) . ', media.url) AS image_url', false)
+            ->join('classes', 'classes.class_id = enrollments.class_id')
+            ->join('academies', 'academies.academy_id = classes.academy_id')
+            ->join('media', 'media.media_id = academies.media_id', 'left')
+            ->join('prices', 'prices.class_id = classes.class_id AND prices.end_time IS NULL', 'left')
+            ->where('enrollments.student_id', $studentId)
+            ->where('enrollments.end_date >=', $date)
+            ->orderBy('academies.name', 'ASC')
+            ->orderBy('classes.class_name', 'ASC')
+            ->get()
+            ->getResultArray();
 
-        // Assuming you need to format the data into a structured array
         $structuredData = [];
-        foreach ($academies as $academy) {
-            $structuredData[$academy->academy_id] = $academy->toArray();
-            $structuredData[$academy->academy_id]['classes'] = $enrollmentsGrouped[$academy->academy_id];
+        foreach ($rows as $row) {
+            $academyId = (int) $row['academy_id'];
+
+            if (! isset($structuredData[$academyId])) {
+                $structuredData[$academyId] = [
+                    'academy_id'  => $academyId,
+                    'location'    => $row['location'],
+                    'name'        => $row['name'],
+                    'phone'       => $row['phone'],
+                    'description' => $row['description'],
+                    'image_url'   => $row['image_url'] ?? '',
+                    'classes'     => [],
+                ];
+            }
+
+            $structuredData[$academyId]['classes'][] = [
+                'enrollment_id' => (int) $row['enrollment_id'],
+                'class_id'      => (int) $row['class_id'],
+                'class_name'    => $row['class_name'],
+                'min_age'       => (int) $row['min_age'],
+                'max_age'       => (int) $row['max_age'],
+                'academy_id'    => $academyId,
+                'price'         => $row['price_value'] ?? $row['price'] ?? 'Price Unavailable',
+                'start_date'    => $row['start_date'],
+                'end_date'      => $row['end_date'],
+                'timings'       => [],
+            ];
         }
 
         return $this->respond(['academiesDetails' => array_values($structuredData)]);

@@ -3,7 +3,7 @@ import 'package:academity_app/views/home/widgets/academy/academy_list_widget.dar
 import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class BrowseAcademyScreen extends StatelessWidget {
   final Sport sport; // Holds the Sport object for the selected sport

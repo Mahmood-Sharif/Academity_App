@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:academity_app/.env.dart';
+import 'package:academity_app/env.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:academity_app/services/academity_api.dart';
 import 'package:academity_app/services/errors.dart';
@@ -25,11 +25,10 @@ class AuthServices {
     // here we are not using AcademityApi.get because we don't have a token
     // and /api/login does not need one
     debugPrint('${Env.academityUrl}api/login');
-    final response =
-        await http.post(Uri.parse('${Env.academityUrl}api/login'), body: {
-      'email': email,
-      'password': password,
-    });
+    final response = await http.post(
+      Uri.parse('${Env.academityUrl}api/login'),
+      body: {'email': email, 'password': password},
+    );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -47,7 +46,8 @@ class AuthServices {
   }
 
   static Future<RegisterResponse> registerUser(
-      Map<String, dynamic> data) async {
+    Map<String, dynamic> data,
+  ) async {
     final response = await http.post(
       Uri.parse('${Env.academityUrl}api/register'),
       body: data,
@@ -64,7 +64,7 @@ class AuthServices {
     }
     return (
       success: false,
-      errors: json.decode(response.body)['errors'] as Map<String, dynamic>
+      errors: json.decode(response.body)['errors'] as Map<String, dynamic>,
     );
   }
 
@@ -76,7 +76,8 @@ class AuthServices {
   static Future<User> getUserProfile() async {
     try {
       final response = await AcademityApi.get(
-          'user-profile'); // Use your actual API call mechanism
+        'user-profile',
+      ); // Use your actual API call mechanism
       if (response.statusCode == 200) {
         // Assuming the response body is directly the JSON representation of the user
         final data = json.decode(response.body);
@@ -85,7 +86,8 @@ class AuthServices {
       } else {
         // This throws an exception if the status code is not 200
         throw Exception(
-            'Failed to fetch user profile with status code: ${response.statusCode}');
+          'Failed to fetch user profile with status code: ${response.statusCode}',
+        );
       }
     } catch (e) {
       // Rethrows an exception if there was an error in fetching or parsing the user profile data
@@ -125,7 +127,8 @@ class AuthServices {
       } else {
         // Handle non-200 responses
         throw Exception(
-            'Failed to edit user profile with status code: ${response.statusCode}');
+          'Failed to edit user profile with status code: ${response.statusCode}',
+        );
       }
     } catch (e) {
       // Handle errors in making the request
@@ -134,8 +137,10 @@ class AuthServices {
   }
 
   static Future<void> deleteAccount(String password) async {
-    final response =
-        await AcademityApi.post('delete-account', body: {'password': password});
+    final response = await AcademityApi.post(
+      'delete-account',
+      body: {'password': password},
+    );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

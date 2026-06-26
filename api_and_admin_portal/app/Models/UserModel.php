@@ -15,17 +15,17 @@ class UserModel extends CodeIgniterUserModel
         parent::initialize();
 
         $this->allowedFields = [
-          ...$this->allowedFields,
+            ...$this->allowedFields,
 
-          'name',
-          'dob',
-          'phone',
-          'profile_image',
+            'name',
+            'dob',
+            'phone',
+            'profile_image',
 
-          // student fields
-          'gender',
-          'medical_condition',
-          'parent_id',
+            // student fields
+            'gender',
+            'medical_condition',
+            'parent_id',
         ];
     }
 
@@ -37,48 +37,54 @@ class UserModel extends CodeIgniterUserModel
     public function includeImageUrl(): UserModel
     {
         $baseUrl = base_url();
+
         return $this
-          ->join('media', 'media.media_id = users.profile_image')
-          ->select()
-          ->select("CONCAT('$baseUrl', url) as image_url");
+            ->join('media', 'media.media_id = users.profile_image', 'left')
+            ->select('users.*')
+            ->select("CONCAT('$baseUrl', media.url) as image_url", false);
     }
 
     public function whereEnrolledInClass(int $classId): UserModel
     {
-        $date = (new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain')))->format('Y-m-d');
         return $this
             ->join('enrollments', 'enrollments.student_id = users.id', 'inner')
             ->join('classes', 'enrollments.class_id = classes.class_id', 'left')
             ->where('classes.class_id', $classId)
-            ->where("enrollments.end_date >= '$date'")
-            ->select()
-            ->select('enrollments.enrollment_id')
-            ->select('enrollments.start_date')
-            ->select('enrollments.end_date')
-        ;
+            ->select('users.*')
+            ->select('MAX(enrollments.enrollment_id) AS enrollment_id', false)
+            ->select('MAX(enrollments.start_date) AS start_date', false)
+            ->select('MAX(enrollments.end_date) AS end_date', false)
+            ->select('GROUP_CONCAT(DISTINCT classes.class_name SEPARATOR ", ") as classes', false)
+            ->groupBy($this->userGroupByColumns());
     }
 
     public function whereEnrolledInAcademy(int $academyId): UserModel
     {
         return $this
-            ->join('enrollments', 'enrollments.student_id = users.id', 'left')
+            ->join('enrollments', 'enrollments.student_id = users.id', 'inner')
             ->join('classes', 'enrollments.class_id = classes.class_id', 'left')
-            ->where('academy_id', $academyId)
-            ->groupBy('users.id')
-            ->select()
-            ->select('group_concat(classes.class_name SEPARATOR ", ") as classes');
+            ->where('classes.academy_id', $academyId)
+            ->select('users.*')
+            ->select('MAX(enrollments.enrollment_id) AS enrollment_id', false)
+            ->select('MAX(enrollments.start_date) AS start_date', false)
+            ->select('MAX(enrollments.end_date) AS end_date', false)
+            ->select('GROUP_CONCAT(DISTINCT classes.class_name SEPARATOR ", ") as classes', false)
+            ->groupBy($this->userGroupByColumns());
     }
 
     public function whereInOwnerAcademies(int $userId): UserModel
     {
         return $this
-            ->join('enrollments', 'enrollments.student_id = users.id', 'left')
+            ->join('enrollments', 'enrollments.student_id = users.id', 'inner')
             ->join('classes', 'enrollments.class_id = classes.class_id', 'left')
             ->join('academies', 'academies.academy_id = classes.academy_id', 'left')
             ->where('academies.owner_id', $userId)
-            ->groupBy('users.id')
-            ->select()
-            ->select('group_concat(classes.class_name SEPARATOR ", ") as classes');
+            ->select('users.*')
+            ->select('MAX(enrollments.enrollment_id) AS enrollment_id', false)
+            ->select('MAX(enrollments.start_date) AS start_date', false)
+            ->select('MAX(enrollments.end_date) AS end_date', false)
+            ->select('GROUP_CONCAT(DISTINCT classes.class_name SEPARATOR ", ") as classes', false)
+            ->groupBy($this->userGroupByColumns());
     }
 
     public function coaches(): UserModel
@@ -87,10 +93,10 @@ class UserModel extends CodeIgniterUserModel
             ->join('auth_groups_users', 'auth_groups_users.user_id = users.id', 'left')
             ->join('academy_coaches', 'academy_coaches.coach_id = users.id', 'left')
             ->join('academies', 'academy_coaches.academy_id = academies.academy_id', 'left')
-            ->groupBy('users.id')
-            ->select()
-            ->select('group_concat(academies.name SEPARATOR ", ") as academies')
-            ->where('group', 'coach');
+            ->where('auth_groups_users.group', 'coach')
+            ->select('users.*')
+            ->select('GROUP_CONCAT(DISTINCT academies.name SEPARATOR ", ") as academies', false)
+            ->groupBy($this->userGroupByColumns());
     }
 
     public function academiesOfCoach(int $coachId, int $ownerId): array
@@ -104,4 +110,25 @@ class UserModel extends CodeIgniterUserModel
             ->findAll();
     }
 
+    private function userGroupByColumns(): array
+    {
+        return [
+            'users.id',
+            'users.username',
+            'users.status',
+            'users.status_message',
+            'users.active',
+            'users.last_active',
+            'users.created_at',
+            'users.updated_at',
+            'users.deleted_at',
+            'users.name',
+            'users.dob',
+            'users.phone',
+            'users.profile_image',
+            'users.gender',
+            'users.medical_condition',
+            'users.parent_id',
+        ];
+    }
 }

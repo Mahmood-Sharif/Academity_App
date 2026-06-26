@@ -40,7 +40,7 @@ class CoachAcademiesListWidget extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
+                            color: Colors.grey.withValues(alpha: 0.3),
                             blurRadius: 6,
                             offset: const Offset(0, 3),
                           ),
@@ -52,11 +52,24 @@ class CoachAcademiesListWidget extends ConsumerWidget {
                             width: 100,
                             height: 100,
                             alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(academies[index].imageUrl),
+                            child: ClipOval(
+                              child: Image.network(
+                                academies[index].imageUrl,
+                                width: 100,
+                                height: 100,
                                 fit: BoxFit.cover,
+                                webHtmlElementStrategy:
+                                    WebHtmlElementStrategy.prefer,
+                                errorBuilder: (_, __, ___) => Container(
+                                  width: 100,
+                                  height: 100,
+                                  color: const Color(0xFFEDEDED),
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.school_rounded,
+                                    color: Colors.black38,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

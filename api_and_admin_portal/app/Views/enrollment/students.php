@@ -81,6 +81,13 @@ $this->endSection('sidebarTab');
     </div>
   </form>
 
+  <?php if (session('error') !== null): ?>
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <?= session('error') ?>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <?php endif ?>
+
   <table class="table">
     <thead>
       <th scope="col">
@@ -102,13 +109,19 @@ $this->endSection('sidebarTab');
         <td>
           <?= $student->name ?>
         </td>
-        <td><?=$student->classes?></td>
-        <td><?=$student->start_date . '&ensp;' . lang('App.to') . '&ensp;' . $student->end_date?></td>
+        <td><?=$student->classes ?? ''?></td>
         <td>
+          <?php if (! empty($student->start_date) && ! empty($student->end_date)): ?>
+          <?=$student->start_date . '&ensp;' . lang('App.to') . '&ensp;' . $student->end_date?>
+          <?php endif ?>
+        </td>
+        <td>
+          <?php if (! empty($student->enrollment_id)): ?>
           <a href="<?=url_to('AdminPortal\Enrollment::show', $student->enrollment_id)?>"
             class="btn btn-outline-success ms-auto">
             <?=lang('App.view')?>
           </a>
+          <?php endif ?>
         </td>
       </tr>
       <?php endforeach ?>

@@ -1,8 +1,7 @@
 import 'package:academity_app/providers/auth_provider.dart';
-import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -38,69 +37,112 @@ class _LoginScreenBody extends StatefulWidget {
 class _LoginScreenBodyState extends State<_LoginScreenBody> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Using ConsumerWidget to access ref in a StatefulWidget
     return Consumer(
       builder: (context, ref, child) {
-        return Stack(
-          children: [
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Image.asset(
-                "lib/assets/images/logo_L.png",
-                opacity: const AlwaysStoppedAnimation(.5),
-              ),
-            ),
-            AdaptivePadding(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.emailLabel,
-                      border: const UnderlineInputBorder(),
-                    ),
-                    autofillHints: const [AutofillHints.email],
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: passwordController,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.passwordLabel,
-                      border: const UnderlineInputBorder(),
-                    ),
-                    autofillHints: const [AutofillHints.password],
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () => _login(context, ref, emailController.text,
-                        passwordController.text),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF3200),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 92, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
+        return _AuthBackdrop(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 440),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Image.asset('lib/assets/images/MainLogo.jpg', height: 76),
+                      const SizedBox(height: 22),
+                      Text(
+                        AppLocalizations.of(context)!.enterCredentials,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge
+                            ?.copyWith(fontWeight: FontWeight.w800),
                       ),
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.loginButton,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
+                      const SizedBox(height: 22),
+                      TextField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.emailLabel,
+                          prefixIcon: const Icon(Icons.mail_outline_rounded),
+                        ),
+                        autofillHints: const [AutofillHints.email],
+                      ),
+                      const SizedBox(height: 14),
+                      TextField(
+                        controller: passwordController,
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.passwordLabel,
+                          prefixIcon: const Icon(Icons.lock_outline_rounded),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                            ),
+                          ),
+                        ),
+                        autofillHints: const [AutofillHints.password],
+                        obscureText: _obscurePassword,
+                        onSubmitted: (_) => _login(
+                          context,
+                          ref,
+                          emailController.text,
+                          passwordController.text,
+                        ),
+                      ),
+                      const SizedBox(height: 22),
+                      ElevatedButton(
+                        onPressed: _isLoading
+                            ? null
+                            : () => _login(
+                                  context,
+                                  ref,
+                                  emailController.text,
+                                  passwordController.text,
+                                ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF3200),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Text(AppLocalizations.of(context)!.loginButton),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ],
+          ),
         );
       },
     );
@@ -108,11 +150,67 @@ class _LoginScreenBodyState extends State<_LoginScreenBody> {
 
   Future<void> _login(BuildContext context, WidgetRef ref, String email,
       String password) async {
-    ref.read(authProvider.notifier).login(email, password).then((_) {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await ref.read(authProvider.notifier).login(email.trim(), password);
+      if (!context.mounted) return;
       Navigator.of(context).pop();
-    }, onError: (_) {
+    } catch (_) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Login failed')));
-    });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+}
+
+class _AuthBackdrop extends StatelessWidget {
+  final Widget child;
+
+  const _AuthBackdrop({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFFFFFBF8),
+                  const Color(0xFFFF3200).withValues(alpha: .08),
+                  const Color(0xFF008B8B).withValues(alpha: .12),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          right: -44,
+          bottom: -28,
+          child: Opacity(
+            opacity: .06,
+            child: Image.asset('lib/assets/images/logo_L.png', width: 240),
+          ),
+        ),
+        SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
+            child: child,
+          ),
+        ),
+      ],
+    );
   }
 }

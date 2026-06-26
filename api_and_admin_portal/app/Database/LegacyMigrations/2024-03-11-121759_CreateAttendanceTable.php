@@ -28,14 +28,6 @@ class CreateAttendanceTable extends Migration
             return;
         }
 
-        $this->db->simpleQuery("DROP FUNCTION IF EXISTS DOW;");
-        $this->db->simpleQuery("
-            CREATE FUNCTION DOW(
-                day_of_week ENUM('SUN','MON','TUE','WED','THU','FRI','SAT')
-            ) RETURNS int(11)
-             DETERMINISTIC
-            RETURN day_of_week+0;");
-
         $this->db->simpleQuery("DROP PROCEDURE IF EXISTS getAttendance;");
         $this->db->simpleQuery(
             "
@@ -54,7 +46,17 @@ WITH RECURSIVE calendar_w (d) AS (
     d <= to_date
 )
 SELECT
-    ci.d + INTERVAL DOW(ct.day_of_week) DAY + INTERVAL ct.start_time HOUR_SECOND as date_time,
+    ci.d + INTERVAL (
+        CASE ct.day_of_week
+            WHEN 'SUN' THEN 1
+            WHEN 'MON' THEN 2
+            WHEN 'TUE' THEN 3
+            WHEN 'WED' THEN 4
+            WHEN 'THU' THEN 5
+            WHEN 'FRI' THEN 6
+            WHEN 'SAT' THEN 7
+        END
+    ) DAY + INTERVAL ct.start_time HOUR_SECOND as date_time,
     en.student_id,
     st.name as student_name,
     IFNULL(at.status, 'Absent') as status
@@ -62,11 +64,44 @@ FROM calendar_w as ci
 CROSS JOIN class_timings as ct
 CROSS JOIN enrollments as en ON (en.class_id = l_class_id)
 LEFT JOIN users as st ON (st.id = en.student_id)
-LEFT JOIN attendance as at ON (at.student_id = en.student_id AND at.date_time = ci.d + INTERVAL DOW(ct.day_of_week) DAY + INTERVAL ct.start_time HOUR_SECOND )
+LEFT JOIN attendance as at ON (
+    at.student_id = en.student_id
+    AND at.date_time = ci.d + INTERVAL (
+        CASE ct.day_of_week
+            WHEN 'SUN' THEN 1
+            WHEN 'MON' THEN 2
+            WHEN 'TUE' THEN 3
+            WHEN 'WED' THEN 4
+            WHEN 'THU' THEN 5
+            WHEN 'FRI' THEN 6
+            WHEN 'SAT' THEN 7
+        END
+    ) DAY + INTERVAL ct.start_time HOUR_SECOND
+)
 where
-    ci.d  + INTERVAL DOW(ct.day_of_week) DAY BETWEEN en.start_date AND en.end_date
+    ci.d + INTERVAL (
+        CASE ct.day_of_week
+            WHEN 'SUN' THEN 1
+            WHEN 'MON' THEN 2
+            WHEN 'TUE' THEN 3
+            WHEN 'WED' THEN 4
+            WHEN 'THU' THEN 5
+            WHEN 'FRI' THEN 6
+            WHEN 'SAT' THEN 7
+        END
+    ) DAY BETWEEN en.start_date AND en.end_date
     AND ct.class_id = l_class_id
-    AND ci.d  + INTERVAL DOW(ct.day_of_week) DAY BETWEEN from_date AND to_date;"
+    AND ci.d + INTERVAL (
+        CASE ct.day_of_week
+            WHEN 'SUN' THEN 1
+            WHEN 'MON' THEN 2
+            WHEN 'TUE' THEN 3
+            WHEN 'WED' THEN 4
+            WHEN 'THU' THEN 5
+            WHEN 'FRI' THEN 6
+            WHEN 'SAT' THEN 7
+        END
+    ) DAY BETWEEN from_date AND to_date;"
         );
     }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/academy.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class MySubscriptionDetails extends StatelessWidget {
   final Academy academy;
@@ -16,6 +16,18 @@ class MySubscriptionDetails extends StatelessWidget {
           width: double.infinity,
           height: 200,
           fit: BoxFit.cover,
+          webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+          errorBuilder: (_, __, ___) => Container(
+            width: double.infinity,
+            height: 200,
+            color: const Color(0xFFEDEDED),
+            alignment: Alignment.center,
+            child: const Icon(
+              Icons.school_rounded,
+              size: 48,
+              color: Colors.black38,
+            ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),

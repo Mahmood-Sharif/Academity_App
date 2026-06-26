@@ -1,3 +1,4 @@
+import 'package:academity_app/env.dart';
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/views/Profile/widgets/section_card.dart';
 import 'package:academity_app/views/Profile/widgets/language_modal_sheet.dart';
@@ -5,7 +6,7 @@ import 'package:academity_app/views/utils/adaptive_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,15 +24,11 @@ class ProfilePage extends ConsumerWidget {
   }
 
   void _navigateToUserProfile(BuildContext context) {
-    // Define navigation logic here. For example:
-    Navigator.of(context)
-        .pushNamed('/userProfile'); // Adjust route as necessary
+    Navigator.of(context).pushNamed('/userProfile');
   }
 
   void navigateToCustomerSupport(BuildContext context) async {
-    const String waWebUrl = "https://wa.link/qbcghz"; // Your WhatsApp link
-
-    // Launch the URL
+    const String waWebUrl = "https://wa.link/qbcghz";
 
     await launchUrl(Uri.parse(waWebUrl)).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -43,6 +40,9 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.read(authProvider.notifier);
+
     return Scaffold(
       appBar: CustomAppBar(
         title: AppLocalizations.of(context)!.profileActionTitle,
@@ -54,18 +54,17 @@ class ProfilePage extends ConsumerWidget {
             SectionCard(
               title: AppLocalizations.of(context)!.accountSectionTitle,
               items: [
-                if (ref.read(authProvider.notifier).canSwitchType)
+                if (authNotifier.canSwitchType && authState.hasValue)
                   {
                     'title':
-                        '${AppLocalizations.of(context)!.swapToLabel} ${ref.read(authProvider).requireValue!.type == 'coach' ? AppLocalizations.of(context)!.playerLabel : AppLocalizations.of(context)!.coachLabel}',
+                        '${AppLocalizations.of(context)!.swapToLabel} ${authState.requireValue!.type == 'coach' ? AppLocalizations.of(context)!.playerLabel : AppLocalizations.of(context)!.coachLabel}',
                     'icon': Icons.swap_horiz_rounded,
-                    'onTap': () =>
-                        ref.read(authProvider.notifier).changeUserType()
+                    'onTap': () => authNotifier.changeUserType(),
                   },
                 {
                   'title': AppLocalizations.of(context)!.profileActionTitle,
                   'icon': Icons.person,
-                  'onTap': () => _navigateToUserProfile(context)
+                  'onTap': () => _navigateToUserProfile(context),
                 },
                 {
                   'title': AppLocalizations.of(context)!
@@ -73,8 +72,7 @@ class ProfilePage extends ConsumerWidget {
                   'icon': Icons.lock,
                 },
                 {
-                  'title': AppLocalizations.of(context)!
-                      .switchLanguageLabel, // Add a title for your language switcher, make sure to define it in your localization files
+                  'title': AppLocalizations.of(context)!.switchLanguageLabel,
                   'icon': Icons.language,
                   'onTap': () => showLanguageSelectionBottomSheet(context, ref),
                 },
@@ -86,34 +84,38 @@ class ProfilePage extends ConsumerWidget {
                 {
                   'title':
                       AppLocalizations.of(context)!.reportAProblemActionTitle,
-                  'icon': Icons.report_problem
+                  'icon': Icons.report_problem,
                 },
                 {
                   'title': AppLocalizations.of(context)!.customerSupportLabel,
                   'icon': Icons.support_agent,
-                  'onTap': () => navigateToCustomerSupport(context)
+                  'onTap': () => navigateToCustomerSupport(context),
                 },
                 {
                   'title': AppLocalizations.of(context)!.logoutActionTitle,
                   'icon': Icons.logout,
-                  'onTap': () => _logout(context, ref), // Updated logout call
+                  'onTap': () => _logout(context, ref),
                 },
               ],
             ),
             const SizedBox(height: 16),
-            FutureBuilder(
-                future: PackageInfo.fromPlatform(
-                    baseUrl: 'https://academity.app/app/'),
-                builder: (context, asyncSnapshot) {
-                  if (asyncSnapshot.hasData) {
-                    final version = asyncSnapshot.requireData.version;
-                    return Center(
-                        child: Text(
-                            AppLocalizations.of(context)!.appVersion(version)));
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(
+                baseUrl: '${Env.academityUrl}app/',
+              ),
+              builder: (context, asyncSnapshot) {
+                if (asyncSnapshot.hasData) {
+                  final version = asyncSnapshot.requireData.version;
+                  return Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.appVersion(version),
+                    ),
+                  );
+                }
+
+                return const SizedBox();
+              },
+            ),
             const SizedBox(height: 16),
           ],
         ),

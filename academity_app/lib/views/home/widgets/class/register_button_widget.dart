@@ -2,7 +2,7 @@ import 'package:academity_app/providers/academy_provider.dart';
 import 'package:academity_app/services/academy_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class RegisterButtonWidget extends StatelessWidget {
   const RegisterButtonWidget({super.key});

@@ -76,8 +76,6 @@ class Enrollment extends ResourcePresenter
             $students = $students->whereInOwnerAcademies($userId);
         }
 
-        $students = $students->select('enrollments.enrollment_id, enrollments.start_date, enrollments.end_date');
-
         if (!$showPast) {
             $date = new DateTime('now', new DateTimeZone('Asia/Bahrain'));
             $students = $students->where("enrollments.end_date > '{$date->format('Y-m-d')}'");
@@ -114,16 +112,41 @@ class Enrollment extends ResourcePresenter
         ]);
     }
 
-    public function show($id = null): string
+    public function show($id = null): ResponseInterface|string
     {
-        $enrollment = $this->model->select()->includeStudentDetails()->includeClassName()->find($id);
+        $enrollment = $this->model
+            ->select('enrollments.*')
+            ->includeStudentDetails()
+            ->includeClassName()
+            ->find($id);
+
+        if ($enrollment === null) {
+            return redirect()
+                ->route('AdminPortal\Enrollment::index')
+                ->with('error', 'Enrollment not found.');
+        }
+
+        $class = (new ClassModel())->includeOwnerId()->find($enrollment->class_id);
+        if (! auth()->user()->can('enrollments.access') || auth()->id() !== $class?->owner_id) {
+            return view('errors/html/production', [
+                'errorCode' => lang('App.unauthorized'),
+                'message' => lang('Security.disallowedAction')
+            ]);
+        }
+
         return view('enrollment/enrollment', ['enrollment' => $enrollment]);
     }
 
     // show edit form
-    public function edit($id = null): string
+    public function edit($id = null): ResponseInterface|string
     {
-        $enrollment = $this->model->select()->includeStudentName()->includeClassName()->find($id);
+        $enrollment = $this->model->select('enrollments.*')->includeStudentName()->includeClassName()->find($id);
+        if ($enrollment === null) {
+            return redirect()
+                ->route('AdminPortal\Enrollment::index')
+                ->with('error', 'Enrollment not found.');
+        }
+
         $class = (new ClassModel())->includeOwnerId()->find($enrollment?->class_id);
         if (! auth()->user()->can('enrollments.edit') || auth()->id() !== $class?->owner_id) {
             return view('errors/html/production', [
@@ -146,7 +169,13 @@ class Enrollment extends ResourcePresenter
     public function update($id = null): ResponseInterface|string
     {
         /** @var AppEnrollment $enrollment */
-        $enrollment = $this->model->select()->includeStudentName()->includeClassName()->find($id);
+        $enrollment = $this->model->select('enrollments.*')->includeStudentName()->includeClassName()->find($id);
+        if ($enrollment === null) {
+            return redirect()
+                ->route('AdminPortal\Enrollment::index')
+                ->with('error', 'Enrollment not found.');
+        }
+
         $class = (new ClassModel())->includeOwnerId()->find($enrollment?->class_id);
         if (! auth()->user()->can('enrollments.edit') || auth()->id() !== $class?->owner_id) {
             return view('errors/html/production', [
@@ -217,77 +246,82 @@ class Enrollment extends ResourcePresenter
         ]);
     }
 
-    // perform create
-    public function create(): ResponseInterface|string
-    {
-        $email = $this->request->getPost('email');
-        $classId = $this->request->getPost('class_id');
-        $enrollmentDuration = $this->request->getPost('min_duration');
+   // perform create
+public function create(): ResponseInterface|string
+{
+    $email = $this->request->getPost('email');
+    $classId = $this->request->getPost('class_id');
+    $enrollmentDuration = $this->request->getPost('min_duration');
+    $priceValue = $this->request->getPost('price_value'); // 🆕 Get price_value from POST
 
-        $class = (new ClassModel())
-            ->includeOwnerId()
-            ->includeClassesPerWeek()
-            ->find((int)$classId);
-        $numEnrollments = (new ClassModel())
-            ->includeNumEnrollments()
-            ->find((int)$classId)
-            ->num_enrollments;
+    $class = (new ClassModel())
+        ->includeOwnerId()
+        ->includeClassesPerWeek()
+        ->find((int)$classId);
 
-        if (!auth()->user()->can('enrollments.create') || $class === null || auth()->id() !== $class->owner_id) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('Security.disallowedAction'));
-        }
+    $numEnrollments = (new ClassModel())
+        ->includeNumEnrollments()
+        ->find((int)$classId)
+        ->num_enrollments;
 
-        if ($numEnrollments >= $class->max_capacity) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.max'));
-        }
-
-        $student = auth()->getProvider()->findByCredentials(['email' => $email]);
-        if ($student === null) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.help'));
-        }
-
-        $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
-        $weeks = ceil($enrollmentDuration / $class->classes_per_week);
-        $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
-
-        $existingEnrollment = $this->model
-            ->where('student_id', $student->id)
-            ->where('class_id', $classId)
-            ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
-            ->first();
-        if ($existingEnrollment) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
-                ->with('error', lang('App.enrol_student.exists'));
-        }
-
-        $insertId = $this->model->insert([
-            'student_id' => $student->id,
-            'class_id' => $classId,
-            'start_date' => $start_date->format(DateTimeImmutable::ATOM),
-            'end_date' => $end_date->format(DateTimeImmutable::ATOM),
-        ], true);
-
-        if ($insertId) {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $insertId))
-                ->with('message', lang('App.enrol_student.success', [$student->name, $class->class_name]));
-        } else {
-            return redirect()
-                ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
-                ->withInput()
-                ->with('error', lang('App.enrol_student.error'));
-        }
+    if (!auth()->user()->can('enrollments.create') || $class === null || auth()->id() !== $class->owner_id) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('Security.disallowedAction'));
     }
+
+    if ($numEnrollments >= $class->max_capacity) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('App.enrol_student.max'));
+    }
+
+    $student = auth()->getProvider()->findByCredentials(['email' => $email]);
+    if ($student === null) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('App.enrol_student.help'));
+    }
+
+    $start_date = new DateTimeImmutable('now', new DateTimeZone('Asia/Bahrain'));
+    $weeks = ceil($enrollmentDuration / $class->classes_per_week);
+    $end_date = $start_date->add(new DateInterval("P{$enrollmentDuration}W"));
+
+    $existingEnrollment = $this->model
+        ->where('student_id', $student->id)
+        ->where('class_id', $classId)
+        ->where("end_date > '{$start_date->format(DateTimeImmutable::ATOM)}'")
+        ->first();
+
+    if ($existingEnrollment) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $existingEnrollment->enrollment_id))
+            ->with('error', lang('App.enrol_student.exists'));
+    }
+
+    $insertId = $this->model->insert([
+        'student_id'   => $student->id,
+        'class_id'     => $classId,
+        'start_date'   => $start_date->format(DateTimeImmutable::ATOM),
+        'end_date'     => $end_date->format(DateTimeImmutable::ATOM),
+        'price_value'  => $priceValue, // 🆕 Save price_value
+    ], true);
+
+    if ($insertId) {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::show', $insertId))
+            ->with('message', lang('App.enrol_student.success', [$student->name, $class->class_name]));
+    } else {
+        return redirect()
+            ->setHeader('HX-Redirect', url_to('AdminPortal\Enrollment::new') . '?class_id=' . $classId)
+            ->withInput()
+            ->with('error', lang('App.enrol_student.error'));
+    }
+}
+
 
     public function enrollUserWithoutEmail(): ResponseInterface
     {
@@ -420,7 +454,14 @@ class Enrollment extends ResourcePresenter
     /** AJAX remove confirm modal */
     public function remove($id = null): string
     {
-        $enrollment = $this->model->select()->includeClassName()->includeStudentName()->find($id);
+        $enrollment = $this->model->select('enrollments.*')->includeClassName()->includeStudentName()->find($id);
+        if ($enrollment === null) {
+            return view('ajax_message_modal', [
+                'title' => lang('App.unenrol'),
+                'body'  => 'Enrollment not found.',
+            ]);
+        }
+
         $class = (new ClassModel())->includeOwnerId()->find($enrollment?->class_id);
         if (! auth()->user()->can('enrollments.unenrol') || $class?->owner_id !== auth()->id()) {
             return view('ajax_message_modal', [
@@ -438,7 +479,14 @@ class Enrollment extends ResourcePresenter
     /** AJAX delete and respond with modal */
     public function delete($id = null): string
     {
-        $enrollment = $this->model->select()->includeClassName()->includeStudentName()->find($id);
+        $enrollment = $this->model->select('enrollments.*')->includeClassName()->includeStudentName()->find($id);
+        if ($enrollment === null) {
+            return view('ajax_message_modal', [
+                'title' => lang('App.unenrol'),
+                'body'  => 'Enrollment not found.',
+            ]);
+        }
+
         $class = (new ClassModel())->includeOwnerId()->find($enrollment?->class_id);
         if (! auth()->user()->can('enrollments.unenrol') || $class?->owner_id !== auth()->id()) {
             return view('ajax_message_modal', [

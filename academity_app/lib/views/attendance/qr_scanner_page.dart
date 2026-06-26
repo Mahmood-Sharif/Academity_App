@@ -22,11 +22,12 @@ class _QRScannerPageState extends State<QRScannerPage> {
     detectionSpeed: DetectionSpeed.noDuplicates,
   );
   bool resultShown = false;
+  bool scanInProgress = false;
 
   @override
   void didUpdateWidget(covariant QRScannerPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.active && !resultShown) {
+    if (widget.active && !resultShown && !scanInProgress) {
       unawaited(controller.start());
     } else {
       unawaited(controller.stop());
@@ -65,33 +66,60 @@ class _QRScannerPageState extends State<QRScannerPage> {
           child: MobileScanner(
               controller: controller,
               fit: BoxFit.cover,
-              onDetect: (capture) {
-                final Barcode barcode = capture.barcodes.first;
-                Route route = MaterialPageRoute(
-                  builder: buildResultPage,
-                  settings: RouteSettings(arguments: barcode),
-                );
-                route.popped.whenComplete(() {
-                  unawaited(controller.start());
-                  resultShown = false;
-                });
-                unawaited(controller.stop());
-                Navigator.of(context).push(route);
-                resultShown = true;
-              }),
+              onDetect: (capture) => _handleScan(context, capture)),
         ),
       ),
     );
   }
 
+  void _handleScan(BuildContext context, BarcodeCapture capture) {
+    if (scanInProgress || resultShown) return;
+
+    final barcode = _firstReadableBarcode(capture);
+    if (barcode == null) return;
+
+    scanInProgress = true;
+    resultShown = true;
+
+    final route = MaterialPageRoute(
+      builder: buildResultPage,
+      settings: RouteSettings(arguments: barcode),
+    );
+
+    route.popped.whenComplete(() {
+      if (!mounted) return;
+
+      scanInProgress = false;
+      resultShown = false;
+      if (widget.active) {
+        unawaited(controller.start());
+      }
+    });
+
+    unawaited(controller.stop());
+    Navigator.of(context).push(route);
+  }
+
+  Barcode? _firstReadableBarcode(BarcodeCapture capture) {
+    for (final barcode in capture.barcodes) {
+      if ((barcode.rawValue ?? '').trim().isNotEmpty) {
+        return barcode;
+      }
+    }
+
+    return null;
+  }
+
   Widget buildResultPage(BuildContext context) {
     final barcode = ModalRoute.of(context)!.settings.arguments as Barcode;
-    final json = jsonDecode(barcode.rawValue!);
-    Map<String, String> body = {
-      'class_id': (json['class_id']).toString(),
-      'datetime': DateTime.now().toIso8601String(),
-      /* 'datetime': DateTime(2024, 03, 12, 8, 1).toIso8601String(), */
-    };
+    final body = _attendanceBody(barcode.rawValue);
+
+    if (body == null) {
+      return const _ScanErrorPage(
+        message: 'This QR code is not a valid attendance code.',
+      );
+    }
+
     final future = AcademityApi.post('log-attendance', body: body);
     return Scaffold(
       appBar: const CustomAppBar(title: 'Scan Attendance QR'),
@@ -177,9 +205,75 @@ class _QRScannerPageState extends State<QRScannerPage> {
     );
   }
 
+  Map<String, String>? _attendanceBody(String? rawValue) {
+    if (rawValue == null || rawValue.trim().isEmpty) {
+      return null;
+    }
+
+    try {
+      final decoded = jsonDecode(rawValue);
+      final classId = decoded is Map<String, dynamic>
+          ? decoded['class_id']?.toString()
+          : decoded.toString();
+
+      if (classId == null || classId.trim().isEmpty) {
+        return null;
+      }
+
+      return {
+        'class_id': classId,
+        'datetime': DateTime.now().toIso8601String(),
+      };
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
-  void dispose() async {
-    super.dispose();
+  void dispose() {
     controller.dispose();
+    super.dispose();
+  }
+}
+
+class _ScanErrorPage extends StatelessWidget {
+  final String message;
+
+  const _ScanErrorPage({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'Scan Attendance QR'),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.qr_code_2_rounded,
+                color: Color(0xFF8B0000),
+                size: 56,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Scan Again'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

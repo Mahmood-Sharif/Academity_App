@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:academity_app/.env.dart';
+import 'package:academity_app/env.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,18 +13,20 @@ class AcademityApi {
   ///
   /// If thei api token does not exist, a blank response with code 401 is
   /// returned.
-  static Future<http.Response> get(String path,
-      [Map<String, dynamic>? queryParameters]) async {
+  static Future<http.Response> get(
+    String path, [
+    Map<String, dynamic>? queryParameters,
+  ]) async {
     const secureStorage = FlutterSecureStorage();
     final apiToken = await secureStorage.read(key: 'api_token');
     if (apiToken == null) return http.Response("", 401);
 
     return http.get(
-        Uri.parse('${Env.academityUrl}api/$path')
-            .replace(queryParameters: queryParameters),
-        headers: {
-          'Authorization': 'Bearer $apiToken'
-        }).timeout(const Duration(seconds: 15));
+      Uri.parse(
+        '${Env.academityUrl}api/$path',
+      ).replace(queryParameters: queryParameters),
+      headers: {'Authorization': 'Bearer $apiToken'},
+    ).timeout(const Duration(seconds: 15));
   }
 
   /// Perform an HTTP POST request to the Academity Api.
@@ -78,7 +80,9 @@ class AcademityApi {
     }
 
     final request = http.MultipartRequest(
-        'POST', Uri.parse('${Env.academityUrl}api/$path'));
+      'POST',
+      Uri.parse('${Env.academityUrl}api/$path'),
+    );
 
     request.headers.addAll({'Authorization': 'Bearer $apiToken'});
     if (body != null) {

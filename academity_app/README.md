@@ -1,16 +1,27 @@
-# academity_app
+# Academity Flutter App
 
-A new Flutter project.
+The mobile client for Academity, a sports academy discovery and enrollment
+platform. It includes authentication, localized English/Arabic copy, sports and
+academy browsing, QR attendance, class schedules, and user profile management.
 
-## Getting Started
+## Run
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter gen-l10n
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+Tap **Preview app** on the welcome screen to explore the portfolio demo without
+needing API credentials.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Configuration
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Edit `lib/env.dart` if you want the app to talk to a local API server.
+
+## Checks
+
+```bash
+flutter analyze
+flutter test
+```

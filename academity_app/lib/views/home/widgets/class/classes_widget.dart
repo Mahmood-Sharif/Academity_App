@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/academy.dart';
 import 'package:academity_app/models/class.dart'; // Verify this import path
 import 'package:academity_app/views/home/widgets/class/class_details.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class ClassesWidget extends StatelessWidget {
   final Academy academy;

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:academity_app/services/auth_services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 class UserProfileScreen extends ConsumerWidget {
   const UserProfileScreen({super.key});

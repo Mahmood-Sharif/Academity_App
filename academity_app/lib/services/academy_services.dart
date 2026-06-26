@@ -1,21 +1,27 @@
 import 'dart:convert';
 import 'package:academity_app/services/academity_api.dart';
+import 'package:academity_app/services/demo_data.dart';
 import 'package:academity_app/services/errors.dart';
 import '../models/academy.dart'; // Update with the correct path to your Academy model
 
 class AcademyServices {
   // Fetches academies by sport ID
   Future<List<Academy>> fetchAcademiesBySportId(int sportId) async {
-    final response = await AcademityApi.get('academies/sport/$sportId');
-    if (response.statusCode == 200) {
-      final List<dynamic> decodedJson = json.decode(response.body)['academies'];
-      final List<Academy> academies = decodedJson
-          .map((jsonItem) => Academy.fromJson(jsonItem as Map<String, dynamic>))
-          .toList();
-      return academies;
-    } else {
-      throw Exception('Failed to load academies');
+    try {
+      final response = await AcademityApi.get('academies/sport/$sportId');
+      if (response.statusCode == 200) {
+        final decodedJson = json.decode(response.body)['academies'] as List;
+        return decodedJson
+            .map(
+              (jsonItem) => Academy.fromJson(jsonItem as Map<String, dynamic>),
+            )
+            .toList();
+      }
+    } catch (_) {
+      return DemoData.academiesForSport(sportId);
     }
+
+    return DemoData.academiesForSport(sportId);
   }
 
   Future<List<Academy>> getEnrolledAcademiesDetails() async {
@@ -23,8 +29,9 @@ class AcademyServices {
 
     if (response.statusCode == 200) {
       // Parse the JSON response into a list of Academy objects
-      final List<dynamic> decodedResponse =
-          json.decode(response.body)['academiesDetails'];
+      final List<dynamic> decodedResponse = json.decode(
+        response.body,
+      )['academiesDetails'];
       List<Academy> academies =
           decodedResponse.map((json) => Academy.fromJson(json)).toList();
       return academies;
@@ -52,7 +59,8 @@ class AcademyServices {
         throw Exception('You are already enrolled in this class');
       }
       throw Exception(
-          'Enrollment failed. Please check the code and try again.');
+        'Enrollment failed. Please check the code and try again.',
+      );
     }
   }
 
@@ -65,7 +73,8 @@ class AcademyServices {
       if (response.statusCode == 404) throw NotFound();
 
       throw Exception(
-          'Failed to load Academies. Response status code: ${response.statusCode}');
+        'Failed to load Academies. Response status code: ${response.statusCode}',
+      );
     }
   }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Entities;
 
-use CodeIgniter\Shield\Entities\User as CodeIgniterUser;
+use CodeIgniter\Entity\Entity;
 
-class Sport extends CodeIgniterUser
+class Sport extends Entity
 {
     protected $casts = [
       'sport_id'          => 'integer',

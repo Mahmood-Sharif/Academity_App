@@ -1,9 +1,11 @@
+// ignore_for_file: unused_element
+
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/views/Profile/widgets/delete_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:academity_app/l10n/app_localizations.dart';
 
 import 'package:image_picker/image_picker.dart';
 
@@ -192,42 +194,42 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
     });
   }
 
-  void _selectImage() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Select Image"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _getImage(ImageSource.camera);
-                  },
-                  child: const ListTile(
-                    leading: Icon(Icons.camera),
-                    title: Text("Take a Photo"),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _getImage(ImageSource.gallery);
-                  },
-                  child: const ListTile(
-                    leading: Icon(Icons.photo_library),
-                    title: Text("Choose from Gallery"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void _selectImage() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text("Select Image"),
+  //         content: SingleChildScrollView(
+  //           child: ListBody(
+  //             children: [
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.of(context).pop();
+  //                   _getImage(ImageSource.camera);
+  //                 },
+  //                 child: const ListTile(
+  //                   leading: Icon(Icons.camera),
+  //                   title: Text("Take a Photo"),
+  //                 ),
+  //               ),
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.of(context).pop();
+  //                   _getImage(ImageSource.gallery);
+  //                 },
+  //                 child: const ListTile(
+  //                   leading: Icon(Icons.photo_library),
+  //                   title: Text("Choose from Gallery"),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   void _getImage(ImageSource source) async {
     final picker = ImagePicker();

@@ -10,6 +10,7 @@ class Enrollment extends Entity
       'enrollment_id' => 'integer',
       // 'start_date'    => 'datetime',
       // 'end_date'      => 'datetime',
+      'price_value'   => 'float', 
       'student_id'    => 'integer',
       'class_id'      => 'integer',
     ];

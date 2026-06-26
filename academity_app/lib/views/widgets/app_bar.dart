@@ -1,41 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // Import google_fonts
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final Color backgroundColor; // Custom background color
+  final Color backgroundColor;
   final double height;
-  final bool showBackButton; // Add this line
+  final bool showBackButton;
 
   const CustomAppBar({
     super.key,
     required this.title,
-    this.backgroundColor =
-        const Color(0xFF8B0000), // Default to dark red if not specified
-    this.height = kToolbarHeight + 20, // You might adjust this for more space
-    this.showBackButton =
-        true, // Add this line, default is true to show the back button
+    this.backgroundColor = const Color(0xFF8B0000),
+    this.height = kToolbarHeight + 18,
+    this.showBackButton = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      automaticallyImplyLeading: showBackButton, // Use the new parameter
-      title: Transform.translate(
-        offset: const Offset(
-            0, 10), // Adjust the offset value to lower the text as needed
+      automaticallyImplyLeading: showBackButton,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      title: Padding(
+        padding: const EdgeInsets.only(top: 8),
         child: Text(
           title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: GoogleFonts.montserrat(
-              // Use Montserrat font from google_fonts package
-              color: Colors.white,
-              fontWeight: FontWeight.bold // Set title text color to white
-              ),
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
-      centerTitle: true, // Centers the AppBar title
+      centerTitle: true,
       shape: CustomShapeBorder(),
-      backgroundColor: backgroundColor, // Use the provided custom color
+      backgroundColor: backgroundColor,
+      flexibleSpace: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              backgroundColor,
+              const Color(0xFFFF3200),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -46,7 +58,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 class CustomShapeBorder extends ContinuousRectangleBorder {
   @override
   Path getOuterPath(Rect rect, {TextDirection? textDirection}) {
-    double radius = 30; // Adjust the curve radius as needed
+    const double radius = 24;
 
     Path path = Path();
     path.lineTo(0, rect.height - radius);

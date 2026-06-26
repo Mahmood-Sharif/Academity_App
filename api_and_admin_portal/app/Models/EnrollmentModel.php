@@ -16,6 +16,7 @@ class EnrollmentModel extends Model
     protected $allowedFields = [
       'start_date',
       'end_date',
+      'price_value', 
       'student_id',
       'class_id',
     ];
