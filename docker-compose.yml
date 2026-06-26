@@ -1,0 +1,66 @@
+services:
+  academity-api:
+    build:
+      context: ./api_and_admin_portal
+    container_name: academity-api
+    depends_on:
+      academity-mysql:
+        condition: service_healthy
+    environment:
+      CI_ENVIRONMENT: development
+      app.baseURL: http://localhost:8080/
+      app.forceGlobalSecureRequests: "false"
+      database.default.hostname: academity-mysql
+      database.default.database: academitydb
+      database.default.username: academity_user
+      database.default.password: academity_password
+      database.default.DBDriver: MySQLi
+      database.default.port: "3306"
+      encryption.key: 9f9c7efb7d7b4c329d9e7158c41c8079
+    ports:
+      - "8080:80"
+    volumes:
+      - academity_writable:/var/www/html/writable
+    restart: unless-stopped
+
+  academity-mysql:
+    image: mysql:8.0
+    container_name: academity-mysql
+    environment:
+      MYSQL_DATABASE: academitydb
+      MYSQL_USER: academity_user
+      MYSQL_PASSWORD: academity_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - academity_mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -proot_password --silent",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:5-apache
+    container_name: academity-phpmyadmin
+    depends_on:
+      academity-mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: academity-mysql
+      PMA_PORT: 3306
+      PMA_USER: academity_user
+      PMA_PASSWORD: academity_password
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+
+volumes:
+  academity_mysql_data:
+  academity_writable:
