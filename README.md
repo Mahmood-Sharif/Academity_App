@@ -186,20 +186,36 @@ now has a clean fresh-database migration strategy, Dockerized MySQL/PHP runtime,
 seeded demo data, working admin portal routes, and Flutter integration for local
 development.
 
-## Screenshots
+## Flutter App Screenshots
 
 | Create Account | Explore Sports |
 |---|---|
-| ![Create Account](docs/screenshots/create-account.png) | ![Explore Sports](docs/screenshots/explore.png) |
+| <img src="docs/screenshots/create-account.png" width="260"> | <img src="docs/screenshots/explore.png" width="260"> |
 
 | Academy List | Academy Details |
 |---|---|
-| ![Academy List](docs/screenshots/academy-list.png) | ![Academy Details](docs/screenshots/academy-details.png) |
+| <img src="docs/screenshots/academy-list.png" width="260"> | <img src="docs/screenshots/academy-details.png" width="260"> |
 
 | Subscription | Schedule |
 |---|---|
-| ![Subscription](docs/screenshots/subscription.png) | ![Schedule](docs/screenshots/schedule.png) |
+| <img src="docs/screenshots/subscription.png" width="260"> | <img src="docs/screenshots/schedule.png" width="260"> |
 
-| Profile |
+---
+
+## Admin Portal Screenshots
+
+| My Academies |
 |---|
-| ![Profile](docs/screenshots/profile.png) |
+| <img src="docs/screenshots/admin-my-academies.png" width="720"> |
+
+| Academy Details |
+|---|
+| <img src="docs/screenshots/admin-academy-details.png" width="720"> |
+
+| Class Details |
+|---|
+| <img src="docs/screenshots/admin-class-details.png" width="720"> |
+
+| Students |
+|---|
+| <img src="docs/screenshots/admin-students.png" width="720"> |
