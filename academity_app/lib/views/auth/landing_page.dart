@@ -1,3 +1,4 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/l10n/app_localizations.dart';
 
@@ -103,7 +104,7 @@ class _HeroContent extends StatelessWidget {
               const Text(
                 'Academity',
                 style: TextStyle(
-                  color: Color(0xFF8B0000),
+                  color: AppColors.navy,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -139,7 +140,7 @@ class _HeroContent extends StatelessWidget {
             icon: const Icon(Icons.play_arrow_rounded),
             label: const Text('Preview app'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF3200),
+              backgroundColor: AppColors.brand,
               foregroundColor: Colors.white,
             ),
           ),
@@ -154,7 +155,7 @@ class _HeroContent extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF8B0000),
+                  foregroundColor: AppColors.navy,
                 ),
                 child: Text(AppLocalizations.of(context)!.loginButton),
               ),
@@ -253,7 +254,7 @@ class _PhonePreview extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(28),
         child: DecoratedBox(
-          decoration: const BoxDecoration(color: Color(0xFFFFFBF8)),
+          decoration: const BoxDecoration(color: AppColors.canvas),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -261,7 +262,7 @@ class _PhonePreview extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(18, 20, 18, 16),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF8B0000), Color(0xFFFF3200)],
+                    colors: [AppColors.navy, AppColors.slate],
                   ),
                 ),
                 child: Row(
@@ -351,10 +352,10 @@ class _PreviewMetric extends StatelessWidget {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: const Color(0xFFFF3200).withValues(alpha: .12),
+              color: AppColors.mist,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: const Color(0xFFFF3200)),
+            child: Icon(icon, color: AppColors.brand),
           ),
           const SizedBox(width: 12),
           Text(

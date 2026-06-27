@@ -66,10 +66,10 @@ class _Fallback extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFEAF2F4), Color(0xFFFFE7DF)],
+          colors: [Color(0xFFEAF6F7), Color(0xFFF7FAFC)],
         ),
       ),
-      child: Icon(icon, color: AppColors.brandDark.withValues(alpha: .5)),
+      child: Icon(icon, color: AppColors.brandDark.withValues(alpha: .52)),
     );
   }
 }

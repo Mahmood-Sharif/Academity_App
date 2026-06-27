@@ -55,7 +55,7 @@ class AppEmptyState extends StatelessWidget {
               width: 76,
               height: 76,
               decoration: BoxDecoration(
-                color: AppColors.brand.withValues(alpha: .1),
+                color: AppColors.mist,
                 borderRadius: BorderRadius.circular(AppRadii.lg),
               ),
               child: Icon(icon, color: AppColors.brand, size: 36),

@@ -1,7 +1,9 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'package:academity_app/providers/auth_provider.dart';
-import 'package:flutter/material.dart';
 import 'package:academity_app/services/auth_services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Ensure this path is correct
+import 'package:academity_app/views/widgets/app_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/l10n/app_localizations.dart';
 
 enum Gender { male, female }
@@ -17,6 +19,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   int _currentStep = 0;
+  bool _isSubmitting = false;
 
   String email = '';
   String password = '';
@@ -34,9 +37,7 @@ class _SignupFormState extends ConsumerState<SignupForm> {
 
   String? emailError;
   String? nameError;
-  String? genderError;
   String? phoneError;
-  String? selectedDateError;
   String? passwordError;
   String? passwordConfirmError;
 
@@ -44,346 +45,460 @@ class _SignupFormState extends ConsumerState<SignupForm> {
     final isForm1Valid = _formKey1.currentState?.validate() ?? false;
     final isForm2Valid = _formKey2.currentState?.validate() ?? false;
 
-    // Early validation checks to ensure we don't proceed with the API call unnecessarily
     if (!isForm1Valid || !isForm2Valid) {
       setState(() {
-        // Ensure user is navigated back to the correct form based on where the validation failed
         _currentStep = !isForm1Valid ? 0 : 1;
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(!isForm1Valid
+          content: Text(
+            !isForm1Valid
                 ? AppLocalizations.of(context)!.formErrorPersonalInfo
-                : AppLocalizations.of(context)!.formErrorAccountInfo)),
+                : AppLocalizations.of(context)!.formErrorAccountInfo,
+          ),
+        ),
       );
-      return; // Stop the sign-up process here if any form validation fails
+      return;
     }
 
-    // If both forms are valid, attempt the sign-up process
-    final RegisterResponse signUpSuccess = await AuthServices.registerUser({
-      'email': email,
-      'name': name,
-      'gender': _gender == Gender.male ? 'Male' : 'Female',
-      'phone': phone,
-      'dob':
-          DateTime(selectedYear, selectedMonth, selectedDay).toIso8601String(),
-      'password': password,
-      'password_confirm': passwordConfirm,
+    setState(() {
+      _isSubmitting = true;
     });
 
-    if (signUpSuccess.success) {
-      ref.read(authProvider.notifier).loginTest().then((_) {
+    try {
+      final RegisterResponse signUpSuccess = await AuthServices.registerUser({
+        'email': email,
+        'name': name,
+        'gender': _gender == Gender.male ? 'Male' : 'Female',
+        'phone': phone,
+        'dob': DateTime(selectedYear, selectedMonth, selectedDay)
+            .toIso8601String(),
+        'password': password,
+        'password_confirm': passwordConfirm,
+      });
+
+      if (signUpSuccess.success) {
+        await ref.read(authProvider.notifier).loginTest();
+        if (!mounted) return;
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.signupSuccessMessage)),
+            content: Text(AppLocalizations.of(context)!.signupSuccessMessage),
+          ),
         );
-      });
-    } else {
-      // Navigate back to Form 1 if the sign-up process fails
-      setState(() {
-        _currentStep = 0; // Move back to the first form for correction
-        // Update the UI to show server-side validation errors if provided by the API
-        emailError = signUpSuccess.errors?['email'];
-        nameError = signUpSuccess.errors?['name'];
-        phoneError = signUpSuccess.errors?['phone'];
-        passwordError = signUpSuccess.errors?['password'];
-        passwordConfirmError = signUpSuccess.errors?['password_confirm'];
-      });
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(content: Text('Failed to sign up. Please check your information and try again.')),
-      // );
+      } else {
+        setState(() {
+          _currentStep = 0;
+          emailError = signUpSuccess.errors?['email'];
+          nameError = signUpSuccess.errors?['name'];
+          phoneError = signUpSuccess.errors?['phone'];
+          passwordError = signUpSuccess.errors?['password'];
+          passwordConfirmError = signUpSuccess.errors?['password_confirm'];
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
   void _next() {
-    // Validate Form 1 regardless of the current step, to ensure navigation back if there are errors
-    final isForm1Valid = _formKey1.currentState?.validate() ?? false;
-
     if (_currentStep == 0) {
+      final isForm1Valid = _formKey1.currentState?.validate() ?? false;
       if (isForm1Valid) {
-        setState(() => _currentStep++);
+        setState(() => _currentStep = 1);
       }
-    } else if (_currentStep == 1) {
-      final isForm2Valid = _formKey2.currentState?.validate() ?? false;
-      if (isForm1Valid && isForm2Valid) {
-        attemptSignUp();
-      } else if (!isForm1Valid) {
-        // This handles the case where the user has moved to Form 2 but Form 1 becomes invalid
-        setState(() => _currentStep = 0);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.formErrorPersonalInfo)),
-        );
-      }
+      return;
     }
+
+    attemptSignUp();
   }
 
   void _back() {
     if (_currentStep > 0) {
-      setState(() {
-        _currentStep--;
-      });
+      setState(() => _currentStep = 0);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData.light().copyWith(
-        colorScheme: const ColorScheme.light(
-          primary: Color.fromARGB(255, 0, 139, 139),
-          onPrimary: Colors.white,
-          surface: Colors.white,
-          onSurface: Colors.black,
-        ),
-        dialogBackgroundColor: Colors.white,
-      ),
-      child: SingleChildScrollView(
-        child: Stepper(
-          physics: const ClampingScrollPhysics(),
-          currentStep: _currentStep,
-          onStepContinue: _next,
-          onStepCancel: _back,
-          controlsBuilder: (BuildContext context, ControlsDetails details) {
-            final isLastStep = _currentStep == 1;
-            return Row(
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: details.onStepContinue,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 0, 139, 139),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 22, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  child: Text(
-                    isLastStep
-                        ? AppLocalizations.of(context)!.signUpButton
-                        : AppLocalizations.of(context)!.continueButtonText,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                if (_currentStep > 0)
-                  TextButton(
-                    onPressed: details.onStepCancel,
+    final isAccountStep = _currentStep == 1;
+
+    return AppCard(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _StepHeader(currentStep: _currentStep),
+          const SizedBox(height: AppSpacing.lg),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 180),
+            child:
+                isAccountStep ? _accountForm(context) : _personalForm(context),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Row(
+            children: [
+              if (isAccountStep) ...[
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _isSubmitting ? null : _back,
                     child: Text(AppLocalizations.of(context)!.backButtonText),
                   ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
               ],
-            );
-          },
-          steps: [
-            Step(
-              title: Text(AppLocalizations.of(context)!.personalInfoTitle),
-              content: Form(
-                key: _formKey1,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.fullNameLabel,
-                        errorText: nameError,
-                        errorMaxLines: 2,
-                      ),
-                      onChanged: (value) => name = value,
-                      validator: (value) => value!.isEmpty
-                          ? AppLocalizations.of(context)!.signupFailureMessage
-                          : null,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText:
-                            AppLocalizations.of(context)!.phoneNumberLabel,
-                        errorText: phoneError,
-                        errorMaxLines: 2,
-                      ),
-                      keyboardType: TextInputType.phone,
-                      onChanged: (value) => phone = value,
-                      validator: (value) => value!.isEmpty
-                          ? AppLocalizations.of(context)!.phoneNumberError
-                          : null,
-                    ),
-                    const SizedBox(height: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(AppLocalizations.of(context)!.genderLabel,
-                            style: Theme.of(context).textTheme.titleMedium,
-                            textAlign: TextAlign.left),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Radio<Gender>(
-                                    value: Gender.male,
-                                    groupValue: _gender,
-                                    onChanged: (Gender? value) {
-                                      setState(() {
-                                        _gender = value;
-                                      });
-                                    },
-                                  ),
-                                  Text(
-                                      AppLocalizations.of(context)!.maleGender),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Radio<Gender>(
-                                    value: Gender.female,
-                                    groupValue: _gender,
-                                    onChanged: (Gender? value) {
-                                      setState(() {
-                                        _gender = value;
-                                      });
-                                    },
-                                  ),
-                                  Text(AppLocalizations.of(context)!
-                                      .femaleGender),
-                                ],
-                              ),
-                            ),
-                          ],
+              Expanded(
+                flex: isAccountStep ? 1 : 2,
+                child: ElevatedButton(
+                  onPressed: _isSubmitting ? null : _next,
+                  child: _isSubmitting
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text(
+                          isAccountStep
+                              ? AppLocalizations.of(context)!.signUpButton
+                              : AppLocalizations.of(context)!
+                                  .continueButtonText,
                         ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(AppLocalizations.of(context)!.dobLabel,
-                            style: Theme.of(context).textTheme.titleMedium,
-                            textAlign: TextAlign.left),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: DropdownButtonFormField<int>(
-                                initialValue: selectedDay,
-                                decoration: InputDecoration(
-                                  labelText:
-                                      AppLocalizations.of(context)!.dayLabel,
-                                ),
-                                items: days
-                                    .map<DropdownMenuItem<int>>((int value) {
-                                  return DropdownMenuItem<int>(
-                                    value: value,
-                                    child: Text(value.toString()),
-                                  );
-                                }).toList(),
-                                onChanged: (int? newValue) {
-                                  setState(() => selectedDay = newValue!);
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: DropdownButtonFormField<int>(
-                                initialValue: selectedMonth,
-                                decoration: InputDecoration(
-                                  labelText:
-                                      AppLocalizations.of(context)!.monthLabel,
-                                ),
-                                items: months
-                                    .map<DropdownMenuItem<int>>((int value) {
-                                  return DropdownMenuItem<int>(
-                                    value: value,
-                                    child: Text(value.toString()),
-                                  );
-                                }).toList(),
-                                onChanged: (int? newValue) {
-                                  setState(() => selectedMonth = newValue!);
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: DropdownButtonFormField<int>(
-                                initialValue: selectedYear,
-                                decoration: InputDecoration(
-                                  labelText:
-                                      AppLocalizations.of(context)!.yearLabel,
-                                ),
-                                items: years
-                                    .map<DropdownMenuItem<int>>((int value) {
-                                  return DropdownMenuItem<int>(
-                                    value: value,
-                                    child: Text(value.toString()),
-                                  );
-                                }).toList(),
-                                onChanged: (int? newValue) {
-                                  setState(() => selectedYear = newValue!);
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                  ],
                 ),
               ),
-              isActive: _currentStep >= 0,
-              state: _currentStep > 0 ? StepState.complete : StepState.indexed,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _personalForm(BuildContext context) {
+    return Form(
+      key: _formKey1,
+      child: Column(
+        key: const ValueKey('personal'),
+        children: [
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.fullNameLabel,
+              errorText: nameError,
+              errorMaxLines: 2,
+              prefixIcon: const Icon(Icons.person_outline_rounded),
             ),
-            Step(
-              title: Text(AppLocalizations.of(context)!.accountInfoTitle),
-              content: Form(
-                key: _formKey2,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.emailLabel,
-                        errorText: emailError,
-                        errorMaxLines: 2,
-                      ),
-                      onChanged: (value) => email = value,
-                      validator: (value) => value!.isEmpty
-                          ? AppLocalizations.of(context)!.emailError
-                          : null,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.passwordLabel,
-                        errorText: passwordError,
-                        errorMaxLines: 2,
-                      ),
-                      obscureText: true,
-                      onChanged: (value) => password = value,
-                      validator: (value) => value!.isEmpty
-                          ? AppLocalizations.of(context)!.passwordError
-                          : null,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText:
-                            AppLocalizations.of(context)!.confirmPasswordLabel,
-                        errorText: passwordConfirmError,
-                        errorMaxLines: 2,
-                      ),
-                      obscureText: true,
-                      onChanged: (value) => passwordConfirm = value,
-                      validator: (value) => value != password
-                          ? AppLocalizations.of(context)!.confirmPasswordError
-                          : null,
-                    ),
-                  ],
+            onChanged: (value) => name = value,
+            validator: (value) => value!.isEmpty
+                ? AppLocalizations.of(context)!.signupFailureMessage
+                : null,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.phoneNumberLabel,
+              errorText: phoneError,
+              errorMaxLines: 2,
+              prefixIcon: const Icon(Icons.phone_outlined),
+            ),
+            keyboardType: TextInputType.phone,
+            onChanged: (value) => phone = value,
+            validator: (value) => value!.isEmpty
+                ? AppLocalizations.of(context)!.phoneNumberError
+                : null,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              AppLocalizations.of(context)!.genderLabel,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.slate,
+                    fontWeight: FontWeight.w800,
+                  ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: _GenderOption(
+                  label: AppLocalizations.of(context)!.maleGender,
+                  selected: _gender == Gender.male,
+                  onTap: () => setState(() => _gender = Gender.male),
                 ),
               ),
-              isActive: _currentStep >= 1,
-              state: _currentStep > 1 ? StepState.complete : StepState.indexed,
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: _GenderOption(
+                  label: AppLocalizations.of(context)!.femaleGender,
+                  selected: _gender == Gender.female,
+                  onTap: () => setState(() => _gender = Gender.female),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              AppLocalizations.of(context)!.dobLabel,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.slate,
+                    fontWeight: FontWeight.w800,
+                  ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Row(
+            children: [
+              Expanded(
+                child: _dateDropdown(
+                  label: AppLocalizations.of(context)!.dayLabel,
+                  value: selectedDay,
+                  items: days,
+                  onChanged: (value) => setState(() => selectedDay = value),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                child: _dateDropdown(
+                  label: AppLocalizations.of(context)!.monthLabel,
+                  value: selectedMonth,
+                  items: months,
+                  onChanged: (value) => setState(() => selectedMonth = value),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              Expanded(
+                flex: 2,
+                child: _dateDropdown(
+                  label: AppLocalizations.of(context)!.yearLabel,
+                  value: selectedYear,
+                  items: years,
+                  onChanged: (value) => setState(() => selectedYear = value),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _accountForm(BuildContext context) {
+    return Form(
+      key: _formKey2,
+      child: Column(
+        key: const ValueKey('account'),
+        children: [
+          TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.emailLabel,
+              errorText: emailError,
+              errorMaxLines: 2,
+              prefixIcon: const Icon(Icons.alternate_email_rounded),
+            ),
+            onChanged: (value) => email = value,
+            validator: (value) => value!.isEmpty
+                ? AppLocalizations.of(context)!.emailError
+                : null,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.passwordLabel,
+              errorText: passwordError,
+              errorMaxLines: 2,
+              prefixIcon: const Icon(Icons.lock_outline_rounded),
+            ),
+            obscureText: true,
+            onChanged: (value) => password = value,
+            validator: (value) => value!.isEmpty
+                ? AppLocalizations.of(context)!.passwordError
+                : null,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.confirmPasswordLabel,
+              errorText: passwordConfirmError,
+              errorMaxLines: 2,
+              prefixIcon: const Icon(Icons.verified_user_outlined),
+            ),
+            obscureText: true,
+            onChanged: (value) => passwordConfirm = value,
+            validator: (value) => value != password
+                ? AppLocalizations.of(context)!.confirmPasswordError
+                : null,
+          ),
+        ],
+      ),
+    );
+  }
+
+  DropdownButtonFormField<int> _dateDropdown({
+    required String label,
+    required int value,
+    required List<int> items,
+    required ValueChanged<int> onChanged,
+  }) {
+    return DropdownButtonFormField<int>(
+      initialValue: value,
+      isExpanded: true,
+      decoration: InputDecoration(
+        labelText: label,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 13,
+        ),
+      ),
+      selectedItemBuilder: (context) => items
+          .map(
+            (int value) => Text(
+              value.toString(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+          .toList(),
+      items: items
+          .map(
+            (int value) => DropdownMenuItem<int>(
+              value: value,
+              child: Text(
+                value.toString(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          )
+          .toList(),
+      onChanged: (int? newValue) {
+        if (newValue != null) onChanged(newValue);
+      },
+    );
+  }
+}
+
+class _StepHeader extends StatelessWidget {
+  final int currentStep;
+
+  const _StepHeader({required this.currentStep});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _StepDot(label: '1', title: 'Profile', active: currentStep == 0),
+        Expanded(
+          child: Container(
+            height: 1,
+            color: AppColors.line,
+            margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+          ),
+        ),
+        _StepDot(label: '2', title: 'Account', active: currentStep == 1),
+      ],
+    );
+  }
+}
+
+class _StepDot extends StatelessWidget {
+  final String label;
+  final String title;
+  final bool active;
+
+  const _StepDot({
+    required this.label,
+    required this.title,
+    required this.active,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          width: 30,
+          height: 30,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: active ? AppColors.brand : AppColors.mist,
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              color: active ? Colors.white : AppColors.brandDark,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.xs),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: active ? AppColors.navy : AppColors.muted,
+                fontWeight: FontWeight.w800,
+              ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GenderOption extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _GenderOption({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadii.sm),
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 160),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.mist : const Color(0xFFF9FAFB),
+          borderRadius: BorderRadius.circular(AppRadii.sm),
+          border: Border.all(
+            color: selected ? AppColors.brand : AppColors.line,
+            width: selected ? 1.4 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              selected ? Icons.radio_button_checked : Icons.radio_button_off,
+              color: selected ? AppColors.brand : AppColors.muted,
+              size: 19,
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Flexible(
+              child: Text(
+                label,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: selected ? AppColors.brandDark : AppColors.slate,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ),
           ],
         ),

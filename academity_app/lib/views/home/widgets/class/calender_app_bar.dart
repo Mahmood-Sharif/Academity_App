@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:academity_app/design/app_theme.dart';
 
 class CalendarAppBar extends StatelessWidget {
   const CalendarAppBar({super.key});
@@ -7,7 +8,7 @@ class CalendarAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFF8B0000), // Background color of the calendar pages
+        color: AppColors.navy, // Background color of the calendar pages
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20), // Adjust border radius as needed
           bottomRight: Radius.circular(20), // Adjust border radius as needed

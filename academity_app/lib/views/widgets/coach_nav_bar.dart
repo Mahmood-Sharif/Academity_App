@@ -21,9 +21,9 @@ class CoachBottomNavBar extends StatelessWidget {
         border: Border(top: BorderSide(color: AppColors.line)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: .08),
-            blurRadius: 24,
-            offset: const Offset(0, -8),
+            color: AppColors.navy.withValues(alpha: .06),
+            blurRadius: 18,
+            offset: const Offset(0, -6),
           ),
         ],
       ),

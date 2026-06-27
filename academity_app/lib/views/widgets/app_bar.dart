@@ -13,7 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.backgroundColor = AppColors.navy,
-    this.height = 92,
+    this.height = 78,
     this.showBackButton = true,
     this.actions,
     this.subtitle,
@@ -33,42 +33,44 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       actions: actions,
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                ),
-          ),
-          if (subtitle != null) ...[
-            const SizedBox(height: 3),
+      title: Padding(
+        padding: const EdgeInsets.only(right: AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
             Text(
-              subtitle!,
+              title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white.withValues(alpha: .78),
-                    fontWeight: FontWeight.w600,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
                   ),
             ),
+            if (subtitle != null) ...[
+              const SizedBox(height: 3),
+              Text(
+                subtitle!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.white.withValues(alpha: .78),
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
       flexibleSpace: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              backgroundColor,
-              AppColors.brandDark,
-              AppColors.brand,
+              AppColors.navy,
+              AppColors.slate,
             ],
           ),
         ),
@@ -82,7 +84,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 height: 170,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: .08),
+                  color: AppColors.teal.withValues(alpha: .12),
                 ),
               ),
             ),
@@ -94,7 +96,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 height: 150,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: .05),
+                  color: Colors.white.withValues(alpha: .04),
                 ),
               ),
             ),

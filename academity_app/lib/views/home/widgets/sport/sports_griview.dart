@@ -1,3 +1,4 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'package:academity_app/views/home/browse_academy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/models/sport.dart';
@@ -45,7 +46,7 @@ class _SportCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppRadii.md),
         onTap: () {
           Navigator.push(
             context,
@@ -56,17 +57,17 @@ class _SportCard extends StatelessWidget {
         },
         child: Ink(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppRadii.md),
             boxShadow: [
               BoxShadow(
-                color: colors.first.withValues(alpha: .24),
+                color: AppColors.navy.withValues(alpha: .08),
                 blurRadius: 18,
-                offset: const Offset(0, 10),
+                offset: const Offset(0, 8),
               ),
             ],
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppRadii.md),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -88,34 +89,37 @@ class _SportCard extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withValues(alpha: .06),
-                        Colors.black.withValues(alpha: .72),
+                        AppColors.navy.withValues(alpha: .04),
+                        AppColors.navy.withValues(alpha: .76),
                       ],
                     ),
                   ),
                 ),
                 Positioned(
                   left: 14,
-                  right: 14,
+                  right: 12,
                   bottom: 14,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Text(
                           title,
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800,
+                                    fontSize: 15,
                                   ),
                         ),
                       ),
+                      const SizedBox(width: 6),
                       const Icon(
                         Icons.arrow_forward_rounded,
                         color: Colors.white,
-                        size: 20,
+                        size: 19,
                       ),
                     ],
                   ),
@@ -176,10 +180,10 @@ IconData _iconFor(String sportName) {
 }
 
 const _palette = [
-  [Color(0xFF9D1C1F), Color(0xFFFF6B35)],
-  [Color(0xFF006D77), Color(0xFF38B6A8)],
-  [Color(0xFF272640), Color(0xFF6D5DD3)],
-  [Color(0xFF7A4F01), Color(0xFFF0A202)],
-  [Color(0xFF274C77), Color(0xFF6096BA)],
-  [Color(0xFF3A5A40), Color(0xFF8CB369)],
+  [AppColors.navy, AppColors.brand],
+  [AppColors.brandDark, AppColors.teal],
+  [AppColors.slate, AppColors.coral],
+  [Color(0xFF23395D), AppColors.gold],
+  [Color(0xFF174A4F), Color(0xFF78D5D7)],
+  [Color(0xFF263238), Color(0xFF90A4AE)],
 ];

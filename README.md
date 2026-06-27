@@ -188,4 +188,18 @@ development.
 
 ## Screenshots
 
-Screenshots can be added here for the admin portal and Flutter app walkthrough.
+| Create Account | Explore Sports |
+|---|---|
+| ![Create Account](docs/screenshots/create-account.png) | ![Explore Sports](docs/screenshots/explore.png) |
+
+| Academy List | Academy Details |
+|---|---|
+| ![Academy List](docs/screenshots/academy-list.png) | ![Academy Details](docs/screenshots/academy-details.png) |
+
+| Subscription | Schedule |
+|---|---|
+| ![Subscription](docs/screenshots/subscription.png) | ![Schedule](docs/screenshots/schedule.png) |
+
+| Profile |
+|---|
+| ![Profile](docs/screenshots/profile.png) |

@@ -63,9 +63,13 @@ class _SportsPageState extends State<SportsPage> {
               Container(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 decoration: BoxDecoration(
-                  color: AppColors.navy,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [AppColors.navy, AppColors.slate],
+                  ),
                   borderRadius: BorderRadius.circular(AppRadii.lg),
-                  boxShadow: AppShadows.soft,
+                  boxShadow: AppShadows.tight,
                 ),
                 child: Row(
                   children: [
@@ -105,6 +109,9 @@ class _SportsPageState extends State<SportsPage> {
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: .12),
                         borderRadius: BorderRadius.circular(AppRadii.md),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: .12),
+                        ),
                       ),
                       child: const Icon(
                         Icons.sports_score_rounded,

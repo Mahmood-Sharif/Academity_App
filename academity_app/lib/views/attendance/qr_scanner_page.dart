@@ -201,7 +201,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
                     children: [
                       const Icon(
                         Icons.error_rounded,
-                        color: Color(0xFF8B0000),
+                        color: AppColors.danger,
                         size: 50,
                       ),
                       const SizedBox(height: 16),
@@ -317,7 +317,7 @@ class _ScanErrorPage extends StatelessWidget {
             children: [
               const Icon(
                 Icons.qr_code_2_rounded,
-                color: Color(0xFF8B0000),
+                color: AppColors.danger,
                 size: 56,
               ),
               const SizedBox(height: 16),
