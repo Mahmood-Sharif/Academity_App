@@ -13,6 +13,7 @@ class MyAcademyPage extends StatelessWidget {
       appBar: CustomAppBar(
         title: AppLocalizations.of(context)!.myAcademyTitle,
         showBackButton: false,
+        subtitle: 'Memberships and renewals',
       ),
       body: const AdaptivePadding(child: EnrolledAcademiesListWidget()),
     );

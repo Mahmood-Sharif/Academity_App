@@ -1,9 +1,9 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CoachBottomNavBar extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onItemSelected;
+  final ValueChanged<int> onItemSelected;
 
   const CoachBottomNavBar({
     super.key,
@@ -13,40 +13,45 @@ class CoachBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.schedule_outlined),
-          label: 'Schedule &\nAttendance',
-          activeIcon: Icon(Icons.schedule),
-        ),
-        /* BottomNavigationBarItem( */
-        /*   icon: Icon(Icons.checklist_outlined), */
-        /*   label: 'Attendance', */
-        /*   activeIcon: Icon(Icons.checklist), */
-        /* ), */
-        BottomNavigationBarItem(
-          icon: Icon(Icons.people_outline_rounded),
-          label: 'Students',
-          activeIcon: Icon(Icons.people_rounded),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'Profile',
-          activeIcon: Icon(Icons.person),
-        ),
-      ],
-      currentIndex: selectedIndex,
-      selectedItemColor: const Color(0xFF8B0000),
-      onTap: onItemSelected,
-      selectedLabelStyle: GoogleFonts.montserrat(
-        // Montserrat for selected labels
-        fontWeight: FontWeight.w300,
+    return Container(
+      margin: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+      padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: AppColors.line)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: .08),
+            blurRadius: 24,
+            offset: const Offset(0, -8),
+          ),
+        ],
       ),
-      unselectedLabelStyle: GoogleFonts.montserrat(
-        // Montserrat for unselected labels
-        fontWeight: FontWeight.w200,
+      child: NavigationBar(
+        height: 68,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        selectedIndex: selectedIndex,
+        indicatorColor: AppColors.teal.withValues(alpha: .13),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        onDestinationSelected: onItemSelected,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.calendar_today_outlined),
+            selectedIcon: Icon(Icons.calendar_today_rounded),
+            label: 'Schedule',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.groups_outlined),
+            selectedIcon: Icon(Icons.groups_rounded),
+            label: 'Classes',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

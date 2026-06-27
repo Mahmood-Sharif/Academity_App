@@ -1,3 +1,4 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -58,15 +59,78 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
   Widget buildScannerPage(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Scan Attendance QR'),
+      appBar: const CustomAppBar(
+        title: 'Scan Attendance QR',
+        subtitle: 'Point your camera at a class code',
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: MobileScanner(
-              controller: controller,
-              fit: BoxFit.cover,
-              onDetect: (capture) => _handleScan(context, capture)),
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadii.lg),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    MobileScanner(
+                      controller: controller,
+                      fit: BoxFit.cover,
+                      onDetect: (capture) => _handleScan(context, capture),
+                    ),
+                    IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: .86),
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(AppRadii.lg),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin: const EdgeInsets.all(AppSpacing.md),
+                        padding: const EdgeInsets.all(AppSpacing.md),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: .48),
+                          borderRadius: BorderRadius.circular(AppRadii.md),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.qr_code_scanner_rounded,
+                                color: Colors.white),
+                            SizedBox(width: AppSpacing.sm),
+                            Flexible(
+                              child: Text(
+                                'Align the QR code inside the frame',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              'Camera stays active only while this tab is open.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.muted,
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+          ],
         ),
       ),
     );
@@ -213,7 +277,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
     try {
       final decoded = jsonDecode(rawValue);
       final classId = decoded is Map<String, dynamic>
-          ? decoded['class_id']?.toString()
+          ? (decoded['class_id'] ?? decoded['classId'])?.toString()
           : decoded.toString();
 
       if (classId == null || classId.trim().isEmpty) {

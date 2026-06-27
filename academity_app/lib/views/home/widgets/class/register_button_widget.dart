@@ -1,3 +1,4 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'package:academity_app/providers/academy_provider.dart';
 import 'package:academity_app/services/academy_services.dart';
 import 'package:flutter/material.dart';
@@ -11,25 +12,12 @@ class RegisterButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer(
       builder: (context, ref, _) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 100),
-          child: Center(
-            child: ElevatedButton(
-              onPressed: () => _showReferralCodeDialog(context, ref),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:
-                    const Color(0xFFFF3200), // Button background color
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 42,
-                    vertical: 10), // Makes the button a bit bigger
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(4), // Slightly rounded edges
-                ),
-              ),
-              child: Text(AppLocalizations.of(context)!.registerButtonText,
-                  style: const TextStyle(fontSize: 18, color: Colors.white)),
-            ),
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: () => _showReferralCodeDialog(context, ref),
+            icon: const Icon(Icons.how_to_reg_rounded),
+            label: Text(AppLocalizations.of(context)!.registerButtonText),
           ),
         );
       },
@@ -40,14 +28,19 @@ class RegisterButtonWidget extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final TextEditingController controller = TextEditingController();
+        final controller = TextEditingController();
         return AlertDialog(
-          title:
-              Text(AppLocalizations.of(context)!.enterReferralCodeDialogTitle),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadii.lg),
+          ),
+          title: Text(
+            AppLocalizations.of(context)!.enterReferralCodeDialogTitle,
+          ),
           content: TextField(
             controller: controller,
             decoration: InputDecoration(
               hintText: AppLocalizations.of(context)!.referralCodeHint,
+              prefixIcon: const Icon(Icons.confirmation_number_outlined),
             ),
             keyboardType: TextInputType.visiblePassword,
             textCapitalization: TextCapitalization.characters,
@@ -55,31 +48,31 @@ class RegisterButtonWidget extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               child: Text(AppLocalizations.of(context)!.cancelButtonText),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
+              onPressed: () => Navigator.of(context).pop(),
             ),
-            TextButton(
+            FilledButton(
               child: Text(AppLocalizations.of(context)!.submitButtonText),
               onPressed: () async {
                 AcademyServices()
-                    .enrollStudentWithCode(controller.text)
+                    .enrollStudentWithCode(controller.text.trim())
                     .whenComplete(() {
                   if (!context.mounted) return;
                   Navigator.of(context)
                     ..pop()
-                    ..pop(); // Close the dialog
+                    ..pop();
                 }).then((_) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(AppLocalizations.of(context)!
-                            .successfullyEnrolledMessage(controller.text))),
+                      content: Text(
+                        AppLocalizations.of(context)!
+                            .successfullyEnrolledMessage(controller.text),
+                      ),
+                    ),
                   );
-                  ref.invalidate(
-                      enrolledAcademiesProvider); // refresh my academies provider
+                  ref.invalidate(enrolledAcademiesProvider);
                 }).catchError((error) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(error.message)),
+                    SnackBar(content: Text(error.toString())),
                   );
                 });
               },

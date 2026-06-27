@@ -1,12 +1,13 @@
 // ignore_for_file: unused_element
 
+import 'package:academity_app/design/app_theme.dart';
+import 'package:academity_app/models/users.dart';
 import 'package:academity_app/providers/auth_provider.dart';
 import 'package:academity_app/views/Profile/widgets/delete_popup.dart';
+import 'package:academity_app/views/widgets/app_card.dart';
 import 'package:flutter/material.dart';
-import 'package:academity_app/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:academity_app/l10n/app_localizations.dart';
-
 import 'package:image_picker/image_picker.dart';
 
 class UserProfileWidget extends ConsumerStatefulWidget {
@@ -21,133 +22,152 @@ class UserProfileWidget extends ConsumerStatefulWidget {
 class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   final _formKey = GlobalKey<FormState>();
   late User _editableUser;
-  /* File? _imageFile; */
 
   @override
   void initState() {
     super.initState();
-    _editableUser = widget.user; // No need to copy since User is immutable
+    _editableUser = widget.user;
   }
 
   @override
   Widget build(BuildContext context) {
-    const Color customColor = Color(0xFF008B8B);
-
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              _buildUserInputField(
+      child: ListView(
+        children: [
+          AppCard(
+            color: AppColors.navy,
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Colors.white.withValues(alpha: .16),
+                  child: Text(
+                    _editableUser.name.isEmpty
+                        ? 'A'
+                        : _editableUser.name.substring(0, 1).toUpperCase(),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                        ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _editableUser.name,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _editableUser.email ?? '',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          AppCard(
+            child: Column(
+              children: [
+                _buildUserInputField(
                   AppLocalizations.of(context)!.fullNameLabel,
                   _editableUser.name,
-                  Icons.person,
-                  customColor,
-                  (val) => _updateUserField('name', val)),
-              _buildUserInputField(
+                  Icons.person_outline_rounded,
+                  (val) => _updateUserField('name', val),
+                ),
+                _buildUserInputField(
                   AppLocalizations.of(context)!.emailLabel,
                   _editableUser.email ?? '',
-                  Icons.email,
-                  customColor,
-                  (val) => _updateUserField('email', val)),
-              _buildUserInputField(
+                  Icons.email_outlined,
+                  (val) => _updateUserField('email', val),
+                ),
+                _buildUserInputField(
                   AppLocalizations.of(context)!.phoneNumberLabel,
                   _editableUser.phone,
-                  Icons.phone,
-                  customColor,
-                  (val) => _updateUserField('phone', val)),
-              // For Date of Birth, consider using a DatePicker instead of a TextFormField
-              _buildUserInputField(
+                  Icons.phone_outlined,
+                  (val) => _updateUserField('phone', val),
+                ),
+                _buildUserInputField(
                   AppLocalizations.of(context)!.dobLabel,
                   _formatDate(_editableUser.dob),
-                  Icons.cake,
-                  customColor,
-                  (val) => _updateUserField('dob', val)),
-              _buildUserInputField(
+                  Icons.cake_outlined,
+                  (val) => _updateUserField('dob', val),
+                ),
+                _buildUserInputField(
                   AppLocalizations.of(context)!.genderLabel,
                   _editableUser.gender,
-                  Icons.male,
-                  customColor,
-                  (val) => _updateUserField('gender', val)),
-              const SizedBox(height: 20),
-              _buildSaveButton(),
-              const SizedBox(height: 20),
-              _buildDeleteButton(context),
-            ],
+                  Icons.badge_outlined,
+                  (val) => _updateUserField('gender', val),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _saveUserProfile,
+                    icon: const Icon(Icons.save_rounded),
+                    label: Text(AppLocalizations.of(context)!.saveButton),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUserInputField(String label, String initialValue, IconData icon,
-      Color customColor, Function(String) onSaved) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: TextFormField(
-          initialValue: initialValue,
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: TextStyle(color: customColor),
-            border: const OutlineInputBorder(),
-            prefixIcon: Icon(icon, color: customColor),
-          ),
-          onSaved: (val) => onSaved(val ?? ''),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter a valid $label';
-            }
-            return null;
-          },
-        ));
-  }
-
-  Widget _buildSaveButton() {
-    return Center(
-      child: ElevatedButton(
-        onPressed: _saveUserProfile,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF008B8B), // Button background color
-          padding: const EdgeInsets.symmetric(
-              horizontal: 42, vertical: 10), // Makes the button a bit bigger
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4), // Slightly rounded edges
-          ),
-        ),
-        child: Text(AppLocalizations.of(context)!.saveButton,
-            style: const TextStyle(fontSize: 18, color: Colors.white)),
-      ),
-    );
-  }
-
-  Widget _buildDeleteButton(BuildContext context) {
-    // Ensure to pass context
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const DeletePopUp();
+          const SizedBox(height: AppSpacing.md),
+          OutlinedButton.icon(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => const DeletePopUp(),
+              );
             },
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFF3200), // Button background color
-          padding: const EdgeInsets.symmetric(
-              horizontal: 52, vertical: 10), // Makes the button a bit bigger
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4), // Slightly rounded edges
+            icon: const Icon(Icons.delete_outline_rounded),
+            label: Text(
+              AppLocalizations.of(context)!.delectAccountActionTitle,
+            ),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.danger,
+            ),
           ),
+          const SizedBox(height: AppSpacing.xl),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUserInputField(
+    String label,
+    String initialValue,
+    IconData icon,
+    Function(String) onSaved,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      child: TextFormField(
+        initialValue: initialValue,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: AppColors.teal),
         ),
-        child: Text(
-          AppLocalizations.of(context)!.delectAccountActionTitle,
-          style: const TextStyle(fontSize: 18, color: Colors.white),
-        ),
+        onSaved: (val) => onSaved(val ?? ''),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter a valid $label';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -155,95 +175,52 @@ class _UserProfileWidgetState extends ConsumerState<UserProfileWidget> {
   void _saveUserProfile() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
-      /* if (_imageFile != null) { */
-      /*   // If a new image is selected, upload it before updating the profile */
-      /*   await ref */
-      /*       .read(authProvider.notifier) */
-      /*       .uploadProfilePicture(_imageFile!.path); */
-      /* } */
       await ref
           .read(authProvider.notifier)
           .updateProfile(_editableUser)
           .then((success) {
         if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.profileUpdatedSuccess)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.profileUpdatedSuccess,
+              ),
+            ),
+          );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.profileUpdateFailed)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.profileUpdateFailed,
+              ),
+            ),
+          );
         }
       }).catchError((e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
       });
     }
   }
 
   void _updateUserField(String field, String value) {
     setState(() {
-      // Assuming User has a copyWith method to handle immutability
       _editableUser = _editableUser.copyWith(
         name: field == 'name' ? value : _editableUser.name,
         email: field == 'email' ? value : _editableUser.email,
         phone: field == 'phone' ? value : _editableUser.phone,
         gender: field == 'gender' ? value : _editableUser.gender,
-        // Add other fields as necessary
       );
     });
   }
 
-  // void _selectImage() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text("Select Image"),
-  //         content: SingleChildScrollView(
-  //           child: ListBody(
-  //             children: [
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.of(context).pop();
-  //                   _getImage(ImageSource.camera);
-  //                 },
-  //                 child: const ListTile(
-  //                   leading: Icon(Icons.camera),
-  //                   title: Text("Take a Photo"),
-  //                 ),
-  //               ),
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.of(context).pop();
-  //                   _getImage(ImageSource.gallery);
-  //                 },
-  //                 child: const ListTile(
-  //                   leading: Icon(Icons.photo_library),
-  //                   title: Text("Choose from Gallery"),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   void _getImage(ImageSource source) async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: source);
-
-    if (pickedImage != null) {
-      setState(() {
-        /* _imageFile = File(pickedImage.path); */
-      });
-    }
+    await picker.pickImage(source: source);
   }
 
   String _formatDate(DateTime date) {
-    // Formatting date as yyyy-MM-dd
     return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 }

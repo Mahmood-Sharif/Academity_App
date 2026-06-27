@@ -3,18 +3,28 @@ import 'package:flutter/material.dart';
 class AdaptivePadding extends StatelessWidget {
   final Widget child;
   final double vertical;
-  const AdaptivePadding({super.key, required this.child, this.vertical = 8});
+  final double maxWidth;
+  const AdaptivePadding({
+    super.key,
+    required this.child,
+    this.vertical = 18,
+    this.maxWidth = 980,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final vw = MediaQuery.sizeOf(context).width;
-    final double padding = (vw > 532) ? vw * 0.2 : 16;
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: padding,
-        vertical: vertical,
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.sizeOf(context).width > 720 ? 24 : 16,
+            vertical: vertical,
+          ),
+          child: child,
+        ),
       ),
-      child: child,
     );
   }
 }

@@ -1,9 +1,10 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/l10n/app_localizations.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onItemSelected;
+  final ValueChanged<int> onItemSelected;
 
   const CustomBottomNavBar({
     super.key,
@@ -13,11 +14,12 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
     return Container(
+      margin: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+      padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
       decoration: BoxDecoration(
         color: Colors.white,
+        border: Border(top: BorderSide(color: AppColors.line)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: .08),
@@ -27,11 +29,11 @@ class CustomBottomNavBar extends StatelessWidget {
         ],
       ),
       child: NavigationBar(
-        height: 72,
+        height: 68,
         backgroundColor: Colors.white,
         elevation: 0,
         selectedIndex: selectedIndex,
-        indicatorColor: colors.primary.withValues(alpha: .12),
+        indicatorColor: AppColors.brand.withValues(alpha: .12),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         onDestinationSelected: onItemSelected,
         destinations: [

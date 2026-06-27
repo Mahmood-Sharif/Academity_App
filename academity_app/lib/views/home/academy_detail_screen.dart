@@ -1,17 +1,19 @@
 import 'dart:async';
 
+import 'package:academity_app/design/app_theme.dart';
+import 'package:academity_app/models/academy.dart';
 import 'package:academity_app/models/class.dart';
 import 'package:academity_app/services/class_services.dart';
 import 'package:academity_app/services/errors.dart';
+import 'package:academity_app/views/home/widgets/class/classes_widget.dart';
 import 'package:academity_app/views/utils/adaptive_padding.dart';
+import 'package:academity_app/views/widgets/app_bar.dart';
+import 'package:academity_app/views/widgets/app_card.dart';
+import 'package:academity_app/views/widgets/app_network_image.dart';
+import 'package:academity_app/views/widgets/app_state.dart';
+import 'package:academity_app/views/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:academity_app/models/academy.dart';
-import 'package:academity_app/views/widgets/app_bar.dart';
-import 'package:academity_app/views/home/widgets/class/classes_widget.dart';
-import 'package:academity_app/views/home/widgets/class/description_widget.dart';
-import 'package:academity_app/views/home/widgets/class/location_widget.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:academity_app/l10n/app_localizations.dart';
 
 class AcademyDetailScreen extends ConsumerWidget {
@@ -26,78 +28,94 @@ class AcademyDetailScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      appBar: CustomAppBar(title: academy.name),
+      appBar: CustomAppBar(
+        title: academy.name,
+        subtitle: academy.location,
+      ),
       body: AdaptivePadding(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: _AcademyHero(academy: academy),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${AppLocalizations.of(context)!.descriptionTitle}:',
-                      style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+        child: ListView(
+          children: [
+            _AcademyHero(academy: academy),
+            const SizedBox(height: AppSpacing.lg),
+            AppCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SectionHeader(
+                    title: AppLocalizations.of(context)!.descriptionTitle,
+                    subtitle: academy.description,
+                    trailing: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: AppColors.teal.withValues(alpha: .1),
+                        borderRadius: BorderRadius.circular(AppRadii.sm),
+                      ),
+                      child: const Icon(
+                        Icons.verified_rounded,
+                        color: AppColors.teal,
                       ),
                     ),
-                    DescriptionWidget(academy: academy),
-                    const SizedBox(height: 8),
-                    LocationWidget(academy: academy),
-                    const SizedBox(height: 8),
-                    Text(
-                      '${AppLocalizations.of(context)!.classesTitle}:',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                  ),
+                  const Divider(height: 1),
+                  const SizedBox(height: AppSpacing.md),
+                  _InfoRow(
+                    icon: Icons.location_on_outlined,
+                    label: AppLocalizations.of(context)!.locationLabel(
+                      academy.location,
                     ),
-                    FutureBuilder<List<Classes>>(
-                      future: classAsync,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          return switch (snapshot.error) {
-                            NotFound() => Text(
-                                AppLocalizations.of(context)!
-                                    .noClassesAvailable,
-                              ),
-                            TimeoutException() => const Text(
-                                'Connection Timeout',
-                              ),
-                            _ => Text('Error: ${snapshot.error}'),
-                          };
-                        } else if (snapshot.hasData) {
-                          return ClassesWidget(
-                            academy: academy,
-                            classes: snapshot.requireData,
-                          );
-                        } else {
-                          return Text(
-                            AppLocalizations.of(context)!.noClassesAvailable,
-                          );
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  _InfoRow(
+                    icon: Icons.phone_outlined,
+                    label: academy.phone,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            SectionHeader(
+              title: AppLocalizations.of(context)!.classesTitle,
+              subtitle:
+                  'Review age ranges, timings, and prices before registering.',
+            ),
+            FutureBuilder<List<Classes>>(
+              future: classAsync,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox(
+                    height: 220,
+                    child: AppLoadingState(label: 'Loading classes'),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return switch (snapshot.error) {
+                    NotFound() => AppEmptyState(
+                        icon: Icons.event_busy_rounded,
+                        title: AppLocalizations.of(context)!.noClassesAvailable,
+                        body: 'This academy has not published classes yet.',
+                      ),
+                    TimeoutException() => const AppEmptyState(
+                        icon: Icons.wifi_off_rounded,
+                        title: 'Connection timeout',
+                        body: 'Please check your connection and try again.',
+                      ),
+                    _ => AppErrorState(error: snapshot.error!),
+                  };
+                }
+                final classes = snapshot.data ?? [];
+                if (classes.isEmpty) {
+                  return AppEmptyState(
+                    icon: Icons.event_busy_rounded,
+                    title: AppLocalizations.of(context)!.noClassesAvailable,
+                    body: 'This academy has not published classes yet.',
+                  );
+                }
+                return ClassesWidget(academy: academy, classes: classes);
+              },
+            ),
+            const SizedBox(height: AppSpacing.xl),
+          ],
         ),
       ),
     );
@@ -111,57 +129,97 @@ class _AcademyHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fallback = Container(
-      width: double.infinity,
-      height: 250,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF8B0000), Color(0xFFFF6B35)],
+    return Stack(
+      children: [
+        AppNetworkImage(
+          url: academy.imageUrl,
+          width: double.infinity,
+          height: 270,
+          radius: AppRadii.lg,
+          fallbackIcon: Icons.emoji_events_rounded,
         ),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -22,
-            bottom: -24,
-            child: Icon(
-              Icons.emoji_events_rounded,
-              color: Colors.white.withValues(alpha: .2),
-              size: 160,
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                academy.name,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                    ),
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppRadii.lg),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  Colors.black.withValues(alpha: .72),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          left: 18,
+          right: 18,
+          bottom: 18,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: .16),
+                  borderRadius: BorderRadius.circular(AppRadii.pill),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: .24),
+                  ),
+                ),
+                child: const Text(
+                  'Featured academy',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                academy.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
+  }
+}
 
-    if (academy.imageUrl.isEmpty) return fallback;
+class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Image.network(
-        academy.imageUrl,
-        width: double.infinity,
-        height: 250,
-        fit: BoxFit.cover,
-        webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-        errorBuilder: (_, __, ___) => fallback,
-      ),
+  const _InfoRow({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: AppColors.brand),
+        const SizedBox(width: AppSpacing.sm),
+        Expanded(
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.muted,
+                  fontWeight: FontWeight.w700,
+                ),
+          ),
+        ),
+      ],
     );
   }
 }

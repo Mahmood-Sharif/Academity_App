@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:academity_app/design/app_theme.dart';
 import 'package:academity_app/services/academy_services.dart';
 import 'package:academity_app/services/errors.dart';
 import 'package:academity_app/views/home/coach_classes.dart';
+import 'package:academity_app/views/widgets/app_card.dart';
+import 'package:academity_app/views/widgets/app_network_image.dart';
+import 'package:academity_app/views/widgets/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,111 +16,95 @@ class CoachAcademiesListWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
-        future: AcademyServices().fetchAcademiesByCoachId(),
-        builder: (context, asyncSnapshot) {
-          if (asyncSnapshot.hasData) {
-            final academies = asyncSnapshot.requireData;
-            return ListView.builder(
-              itemCount: academies.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CoachClassesPage(
-                            academyId: academies[index].academyId,
-                            academyName: academies[index].name,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withValues(alpha: 0.3),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+      future: AcademyServices().fetchAcademiesByCoachId(),
+      builder: (context, asyncSnapshot) {
+        if (asyncSnapshot.hasData) {
+          final academies = asyncSnapshot.requireData;
+          if (academies.isEmpty) {
+            return const AppEmptyState(
+              icon: Icons.school_outlined,
+              title: 'No academies assigned',
+              body: 'Your coach academies will appear here.',
+            );
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 28),
+            itemCount: academies.length,
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: AppSpacing.md),
+            itemBuilder: (context, index) {
+              final academy = academies[index];
+              return AppCard(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CoachClassesPage(
+                        academyId: academy.academyId,
+                        academyName: academy.name,
                       ),
-                      child: Row(
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    AppNetworkImage(
+                      url: academy.imageUrl,
+                      width: 76,
+                      height: 76,
+                      radius: AppRadii.md,
+                      fallbackIcon: Icons.school_rounded,
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            alignment: Alignment.center,
-                            child: ClipOval(
-                              child: Image.network(
-                                academies[index].imageUrl,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                webHtmlElementStrategy:
-                                    WebHtmlElementStrategy.prefer,
-                                errorBuilder: (_, __, ___) => Container(
-                                  width: 100,
-                                  height: 100,
-                                  color: const Color(0xFFEDEDED),
-                                  alignment: Alignment.center,
-                                  child: const Icon(
-                                    Icons.school_rounded,
-                                    color: Colors.black38,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          Text(
+                            academy.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w900),
                           ),
-                          const SizedBox(
-                              width:
-                                  16), // Add some spacing between image and text
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  academies[index].name.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  academies[index].location.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    //fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(
-                                    height:
-                                        8), // Add spacing between class name and subtext
-                              ],
-                            ),
+                          const SizedBox(height: 4),
+                          Text(
+                            academy.location,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.muted,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              },
+                    const Icon(Icons.chevron_right_rounded,
+                        color: AppColors.muted),
+                  ],
+                ),
+              );
+            },
+          );
+        } else if (asyncSnapshot.hasError) {
+          if (asyncSnapshot.error!.runtimeType == TimeoutException ||
+              asyncSnapshot.error!.runtimeType == NotFound) {
+            return const AppEmptyState(
+              icon: Icons.school_outlined,
+              title: 'No academies',
+              body: 'Your academy assignments will appear here.',
             );
-          } else if (asyncSnapshot.hasError) {
-            if (asyncSnapshot.error!.runtimeType == TimeoutException ||
-                asyncSnapshot.error!.runtimeType == NotFound) {
-              return const Text('No Academies');
-            }
-            final error = asyncSnapshot.error;
-            return Text('Error: $error');
-          } else {
-            return const Center(child: CircularProgressIndicator());
           }
-        });
+          return AppErrorState(error: asyncSnapshot.error!);
+        } else {
+          return const AppLoadingState(label: 'Loading academies');
+        }
+      },
+    );
   }
 }

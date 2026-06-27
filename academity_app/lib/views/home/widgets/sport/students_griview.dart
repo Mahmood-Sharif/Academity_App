@@ -1,130 +1,110 @@
 import 'dart:async';
 
+import 'package:academity_app/design/app_theme.dart';
 import 'package:academity_app/services/student_service.dart';
 import 'package:academity_app/views/home/student_details.dart';
+import 'package:academity_app/views/widgets/app_card.dart';
+import 'package:academity_app/views/widgets/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class StudentsListWidget extends ConsumerWidget {
   final int classId;
-  const StudentsListWidget({super.key, required this.classId});
 
-  String formatTime(String? time) {
-    if (time == null) return '';
-    final parsedTime = DateTime.parse('2022-01-01 $time');
-    return '${parsedTime.hour.toString().padLeft(2, '0')}:${parsedTime.minute.toString().padLeft(2, '0')}';
-  }
+  const StudentsListWidget({super.key, required this.classId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FutureBuilder(
-        future: StudentServices().fetchStudentsByClassId(classId),
-        builder: (context, asyncSnapshot) {
-          if (asyncSnapshot.hasData) {
-            final students = asyncSnapshot.requireData;
-            return ListView.builder(
-              itemCount: students.length,
-              itemBuilder: (context, index) {
-                //final startTime = formatTime(classes[index]);
-                //final endTime = formatTime(classes[index].endTime);
-                //final timeRange = '$startTime - $endTime';
+      future: StudentServices().fetchStudentsByClassId(classId),
+      builder: (context, asyncSnapshot) {
+        if (asyncSnapshot.hasData) {
+          final students = asyncSnapshot.requireData;
+          if (students.isEmpty) {
+            return const AppEmptyState(
+              icon: Icons.person_search_rounded,
+              title: 'No students enrolled',
+              body: 'Students will appear here after enrollment.',
+            );
+          }
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const StudentDetailsScreen(),
-                          settings: RouteSettings(arguments: students[index]),
+          return ListView.separated(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 28),
+            itemCount: students.length,
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: AppSpacing.md),
+            itemBuilder: (context, index) {
+              final student = students[index];
+              return AppCard(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const StudentDetailsScreen(),
+                      settings: RouteSettings(arguments: student),
+                    ),
+                  );
+                },
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 28,
+                      backgroundColor: AppColors.brand.withValues(alpha: .1),
+                      child: Text(
+                        student.name.isEmpty
+                            ? '?'
+                            : student.name.substring(0, 1).toUpperCase(),
+                        style: const TextStyle(
+                          color: AppColors.brand,
+                          fontWeight: FontWeight.w900,
                         ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withValues(alpha: 0.3),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
                       ),
-                      child: Row(
+                    ),
+                    const SizedBox(width: AppSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              // Add image decoration if available
-                              // image: DecorationImage(
-                              //   image: NetworkImage(classes[index].imageUrl),
-                              //   fit: BoxFit.cover,
-                              // ),
-                            ),
+                          Text(
+                            student.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w900),
                           ),
-                          const SizedBox(
-                              width:
-                                  16), // Add some spacing between image and text
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  students[index].name.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  students[index].name.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    //fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(
-                                    height:
-                                        8), // Add spacing between class name and subtext
-                                /* Text(
-                            timeRange,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),*/
-                              ],
-                            ),
+                          const SizedBox(height: 4),
+                          Text(
+                            student.phone,
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: AppColors.muted,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              },
-            );
-          } else if (asyncSnapshot.hasError) {
-            final error = asyncSnapshot.error!;
-            if (error.runtimeType == TimeoutException) {
-              return const Center(
-                child: Text(
-                  'Connection Timeout.\nPlease check your internet connection.',
-                  maxLines: 5,
+                    const Icon(Icons.chevron_right_rounded,
+                        color: AppColors.muted),
+                  ],
                 ),
               );
-            } else {
-              return Center(child: Text('Error: $error'));
-            }
-          } else {
-            return const Center(child: CircularProgressIndicator());
+            },
+          );
+        } else if (asyncSnapshot.hasError) {
+          final error = asyncSnapshot.error!;
+          if (error.runtimeType == TimeoutException) {
+            return const AppEmptyState(
+              icon: Icons.wifi_off_rounded,
+              title: 'Connection timeout',
+              body: 'Please check your internet connection and try again.',
+            );
           }
-        });
+          return AppErrorState(error: error);
+        } else {
+          return const AppLoadingState(label: 'Loading students');
+        }
+      },
+    );
   }
 }

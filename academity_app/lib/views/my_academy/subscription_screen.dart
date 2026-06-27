@@ -14,6 +14,7 @@ class SubscriptionScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: academy.name,
+        subtitle: 'Subscription details',
       ),
       body: AdaptivePadding(
         child: MySubscriptionDetails(academy: academy),

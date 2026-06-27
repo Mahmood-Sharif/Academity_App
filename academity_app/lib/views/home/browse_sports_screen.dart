@@ -1,6 +1,9 @@
+import 'package:academity_app/design/app_theme.dart';
 import 'dart:async';
 
 import 'package:academity_app/services/sports_services.dart';
+import 'package:academity_app/views/widgets/app_state.dart';
+import 'package:academity_app/views/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:academity_app/views/widgets/app_bar.dart';
 import 'package:academity_app/views/home/widgets/sport/sports_griview.dart';
@@ -30,28 +33,24 @@ class _SportsPageState extends State<SportsPage> {
         future: _sportsService.fetchSports(),
         builder: (BuildContext context, AsyncSnapshot<List<Sport>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingState(label: 'Loading sports');
           }
 
           if (snapshot.hasError) {
             final error = snapshot.error!;
             if (error.runtimeType == TimeoutException) {
-              return const _BrowseMessage(
+              return const AppEmptyState(
                 icon: Icons.wifi_off_rounded,
                 title: 'Connection timeout',
                 body: 'Please check your internet connection and try again.',
               );
             }
-            return _BrowseMessage(
-              icon: Icons.error_outline_rounded,
-              title: 'Something went wrong',
-              body: error.toString(),
-            );
+            return AppErrorState(error: error);
           }
 
           final sports = snapshot.data ?? [];
           if (sports.isEmpty) {
-            return _BrowseMessage(
+            return AppEmptyState(
               icon: Icons.sports_soccer_rounded,
               title: AppLocalizations.of(context)!.noSportsAvailable,
               body: 'New academies will appear here once they are published.',
@@ -59,72 +58,73 @@ class _SportsPageState extends State<SportsPage> {
           }
 
           return ListView(
-            padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
             children: [
-              Text(
-                'Select your next journey',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF2B1D1A),
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                decoration: BoxDecoration(
+                  color: AppColors.navy,
+                  borderRadius: BorderRadius.circular(AppRadii.lg),
+                  boxShadow: AppShadows.soft,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Your sports marketplace',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  height: 1.08,
+                                ),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          Text(
+                            'Compare academies, classes, prices, and schedules in one place.',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Colors.white.withValues(alpha: .78),
+                                  height: 1.45,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Browse sports, compare academies, and keep training on schedule.',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.black54,
-                      height: 1.4,
+                    const SizedBox(width: AppSpacing.md),
+                    Container(
+                      width: 62,
+                      height: 62,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: .12),
+                        borderRadius: BorderRadius.circular(AppRadii.md),
+                      ),
+                      child: const Icon(
+                        Icons.sports_score_rounded,
+                        color: Colors.white,
+                        size: 34,
+                      ),
                     ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: AppSpacing.lg),
+              const SectionHeader(
+                title: 'Choose a sport',
+                subtitle:
+                    'Start with what you love. Academies are grouped by sport for quick browsing.',
+              ),
               SportsListWidget(sports: sports),
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _BrowseMessage extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String body;
-
-  const _BrowseMessage({
-    required this.icon,
-    required this.title,
-    required this.body,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: const Color(0xFFFF3200), size: 44),
-            const SizedBox(height: 14),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              body,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.black54,
-                    height: 1.35,
-                  ),
-            ),
-          ],
-        ),
       ),
     );
   }
